@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { qrApi } from '@/lib/api-client';
 import {
     QrCode,
     Smartphone,
@@ -34,16 +35,9 @@ export function MyQRCodes() {
 
     const fetchQrCodes = async () => {
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_QRSTUDIO_API_URL || 'http://localhost:3005';
-            const response = await fetch(`${apiUrl}/qrcodes?limit=4`, {
-                credentials: 'include',
-            });
-
-            if (response.ok) {
-                const result = await response.json();
-                if (result.success) {
-                    setQrcodes(result.data);
-                }
+            const response = await qrApi.list({ limit: 4 });
+            if (response.success && response.data) {
+                setQrcodes(response.data);
             }
         } catch (error) {
             console.error('Failed to fetch QR codes:', error);
@@ -53,7 +47,7 @@ export function MyQRCodes() {
     };
 
     const getTypeIcon = (type: string) => {
-        switch (type) {
+        switch (type.toLowerCase()) {
             case 'url': return <LinkIcon className="w-8 h-8 text-blue-500" />;
             case 'vcard': return <Smartphone className="w-8 h-8 text-purple-500" />;
             case 'wifi': return <Wifi className="w-8 h-8 text-orange-500" />;
@@ -72,11 +66,13 @@ export function MyQRCodes() {
             <div className="bg-white rounded-xl border border-gray-200 p-6">
                 <h2 className="text-xl font-bold text-gray-900 mb-4">My QR Codes</h2>
                 <div className="text-center py-8">
-                    <p className="text-gray-500">Loading...</p>
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mx-auto"></div>
                 </div>
             </div>
         );
     }
+
+    const qrStudioUrl = process.env.NEXT_PUBLIC_QRSTUDIO_URL || 'http://localhost:3001';
 
     return (
         <div className="bg-white rounded-xl border border-gray-200 p-6">
@@ -86,9 +82,7 @@ export function MyQRCodes() {
                     My QR Codes
                 </h2>
                 <a
-                    href={`${process.env.NEXT_PUBLIC_QRSTUDIO_URL || 'http://localhost:3001'}/create`}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href={`${qrStudioUrl}/create`}
                     className="text-sm text-purple-600 hover:text-purple-700 font-medium"
                 >
                     Create New →
@@ -101,8 +95,7 @@ export function MyQRCodes() {
                     <p className="text-gray-600 mb-2">No QR codes yet</p>
                     <p className="text-sm text-gray-500 mb-4">Create your first dynamic QR code</p>
                     <a
-                        href={`${process.env.NEXT_PUBLIC_QRSTUDIO_URL || 'http://localhost:3001'}/create`}
-                        target="_blank"
+                        href={`${qrStudioUrl}/create`}
                         className="inline-block px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:opacity-90 transition"
                     >
                         Create QR Code
@@ -113,9 +106,7 @@ export function MyQRCodes() {
                     {qrcodes.map((qr) => (
                         <a
                             key={qr.id}
-                            href={`${process.env.NEXT_PUBLIC_QRSTUDIO_URL || 'http://localhost:3001'}/qrcodes/${qr.id}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                            href={`${qrStudioUrl}/qrcodes/${qr.id}`}
                             className="group relative bg-gray-50 rounded-lg border border-gray-200 p-4 hover:border-purple-400 hover:shadow-md transition flex flex-col items-center text-center"
                         >
                             <div className="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center mb-3 group-hover:scale-110 transition">

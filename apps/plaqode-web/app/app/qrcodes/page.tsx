@@ -2,11 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { qrApi } from '@/lib/api-client';
-import { QrCode, Search, Filter, MoreVertical, BarChart2, Edit, Trash2, Eye, EyeOff, Smartphone } from 'lucide-react';
-import Link from 'next/link';
+import { QrCode, Search, Filter, BarChart2, Edit, Trash2, Smartphone } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { QrContentPreviewModal } from '@/components/common/QrContentPreviewModal';
 import { ConfirmationModal } from '@/components/common/ConfirmationModal';
+import { QrContentPreviewModal } from '@/components/common/QrContentPreviewModal';
 
 interface QrCodeItem {
     id: string;
@@ -35,6 +34,8 @@ export default function QrCodesPage() {
     const [previewModalOpen, setPreviewModalOpen] = useState(false);
     const [qrToPreview, setQrToPreview] = useState<any>(null);
 
+    const qrStudioUrl = process.env.NEXT_PUBLIC_QRSTUDIO_URL || 'http://localhost:3001';
+
     useEffect(() => {
         loadQrCodes();
     }, [page, search, typeFilter]);
@@ -51,7 +52,6 @@ export default function QrCodesPage() {
 
             if (response.success && response.data && Array.isArray(response.data)) {
                 setQrCodes(response.data);
-                // Use pagination from the API response
                 setTotalPages(response.pagination?.totalPages || 1);
                 setTotalCount(response.pagination?.total || 0);
             } else if (response.success) {
@@ -91,25 +91,26 @@ export default function QrCodesPage() {
         }
     }
 
-    async function toggleStatus(id: string, currentStatus: boolean) {
-        try {
-            await qrApi.update(id, { isActive: !currentStatus });
-            await loadQrCodes();
-        } catch (error) {
-            console.error('Failed to update status:', error);
-        }
-    }
-
     async function handlePreview(id: string) {
         try {
             const response = await qrApi.getById(id);
             if (response.success && response.data) {
                 setQrToPreview(response.data);
+                // setPreviewModalOpen(true); 
+                // Keep the modal internal OR redirect? User said "pages" not modal.
+                // Keeping modal internal is nicer, but "clicking the card" goes external.
+                // Let's redirect Preview too if they want full external experience?
+                // Actually, "Preview" button usually opens modal. The user complained about PAGE redirection.
+                // I'll keep the modal internal for the preview button as a "Quick View" unless specified.
                 setPreviewModalOpen(true);
             }
         } catch (error) {
             console.error('Failed to load QR code for preview:', error);
         }
+    }
+
+    function navigateToExternal(path: string) {
+        window.location.href = `${qrStudioUrl}${path}`;
     }
 
     function getTypeColor(type: string) {
@@ -146,13 +147,13 @@ export default function QrCodesPage() {
                         </div>
                         <p className="text-sm sm:text-base text-slate-600 mt-1 sm:mt-2">Manage all your QR codes in one place</p>
                     </div>
-                    <Link
-                        href="/app/create"
+                    <a
+                        href={`${qrStudioUrl}/create`}
                         className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-5 py-3 rounded-xl font-semibold hover:shadow-lg hover:shadow-blue-500/25 transition-all text-sm sm:text-base whitespace-nowrap"
                     >
                         <QrCode className="w-5 h-5" />
                         <span>Create New QR</span>
-                    </Link>
+                    </a>
                 </div>
 
                 {/* Filters */}
@@ -204,7 +205,7 @@ export default function QrCodesPage() {
                     </div>
                 </div>
 
-                {/* QR Codes - Mobile Cards & Desktop Table */}
+                {/* QR Codes */}
                 {loading ? (
                     <div className="flex items-center justify-center py-12 bg-white rounded-xl shadow-sm border border-slate-200">
                         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
@@ -214,13 +215,13 @@ export default function QrCodesPage() {
                         <QrCode className="w-16 h-16 text-slate-300 mx-auto mb-4" />
                         <h3 className="text-lg font-semibold text-slate-900 mb-2">No QR codes found</h3>
                         <p className="text-slate-600 mb-6">Create your first QR code to get started</p>
-                        <Link
-                            href="/app/create"
+                        <a
+                            href={`${qrStudioUrl}/create`}
                             className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
                         >
                             <QrCode className="w-5 h-5" />
                             Create QR Code
-                        </Link>
+                        </a>
                     </div>
                 ) : (
                     <>
@@ -229,8 +230,8 @@ export default function QrCodesPage() {
                             {qrCodes.map((qr) => (
                                 <div
                                     key={qr.id}
-                                    // onClick={() => router.push(`/app/qrcodes/${qr.id}`)}
-                                    className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 hover:shadow-md transition-shadow cursor-default"
+                                    onClick={() => navigateToExternal(`/qrcodes/${qr.id}`)}
+                                    className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 hover:shadow-md transition-shadow cursor-pointer"
                                 >
                                     <div className="flex items-start justify-between mb-3">
                                         <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -266,20 +267,20 @@ export default function QrCodesPage() {
                                         >
                                             <Smartphone className="w-4 h-4" />
                                         </button>
-                                        <Link
-                                            href={`/app/qrcodes/${qr.id}/analytics`}
+                                        <a
+                                            href={`${qrStudioUrl}/qrcodes/${qr.id}/analytics`}
                                             className="flex items-center justify-center p-2.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors"
                                             title="Analytics"
                                         >
                                             <BarChart2 className="w-4 h-4" />
-                                        </Link>
-                                        <Link
-                                            href={`/app/create/${qr.type}?edit=${qr.id}`}
+                                        </a>
+                                        <a
+                                            href={`${qrStudioUrl}/create/${qr.type}?edit=${qr.id}`}
                                             className="flex items-center justify-center p-2.5 bg-slate-50 text-slate-700 rounded-lg hover:bg-slate-100 transition-colors"
                                             title="Edit"
                                         >
                                             <Edit className="w-4 h-4" />
-                                        </Link>
+                                        </a>
                                         <button
                                             onClick={() => handleDelete(qr.id)}
                                             className="flex items-center justify-center p-2.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
@@ -309,8 +310,8 @@ export default function QrCodesPage() {
                                     {qrCodes.map((qr) => (
                                         <tr
                                             key={qr.id}
-                                            onClick={() => router.push(`/app/qrcodes/${qr.id}`)}
-                                            className="hover:bg-slate-50 transition-colors cursor-default"
+                                            onClick={() => navigateToExternal(`/qrcodes/${qr.id}`)}
+                                            className="hover:bg-slate-50 transition-colors cursor-pointer"
                                         >
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center gap-3">
@@ -348,20 +349,20 @@ export default function QrCodesPage() {
                                                     >
                                                         <Smartphone className="w-4 h-4" />
                                                     </button>
-                                                    <Link
-                                                        href={`/app/qrcodes/${qr.id}/analytics`}
+                                                    <a
+                                                        href={`${qrStudioUrl}/qrcodes/${qr.id}/analytics`}
                                                         className="p-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
                                                         title="Analytics"
                                                     >
                                                         <BarChart2 className="w-4 h-4" />
-                                                    </Link>
-                                                    <Link
-                                                        href={`/app/create/${qr.type}?edit=${qr.id}`}
+                                                    </a>
+                                                    <a
+                                                        href={`${qrStudioUrl}/create/${qr.type}?edit=${qr.id}`}
                                                         className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                                                         title="Edit"
                                                     >
                                                         <Edit className="w-4 h-4" />
-                                                    </Link>
+                                                    </a>
                                                     <button
                                                         onClick={() => handleDelete(qr.id)}
                                                         className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"

@@ -5,7 +5,7 @@
  */
 
 // Use local environment variable or default to localhost:3005 (QR API)
-const API_BASE_URL = process.env.NEXT_PUBLIC_QR_API_URL || 'http://localhost:3005';
+const API_BASE_URL = process.env.NEXT_PUBLIC_QRSTUDIO_API_URL || 'http://localhost:3005';
 
 interface ApiResponse<T> {
     success: boolean;
@@ -113,7 +113,6 @@ export const qrApi = {
             method: 'DELETE',
             headers: getHeaders(),
             credentials: 'include',
-            body: JSON.stringify(data),
         });
         return response.json() as Promise<ApiResponse<any>>;
     },
