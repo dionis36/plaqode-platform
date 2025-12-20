@@ -4,19 +4,31 @@ interface GradientButtonProps {
     href: string;
     text: string;
     className?: string;
+    size?: "sm" | "md" | "lg";
 }
 
-export default function GradientButton({ href, text, className = "" }: GradientButtonProps) {
+export default function GradientButton({ href, text, className = "", size = "md" }: GradientButtonProps) {
+    const sizeClasses = {
+        sm: "px-6 py-2 text-sm",
+        md: "px-8 py-3 text-base",
+        lg: "px-10 py-4 text-lg"
+    };
+
     return (
         <Link
             href={href}
-            className={`group relative inline-flex items-center justify-center p-[2px] overflow-hidden font-semibold rounded-full transition-all duration-300 hover:scale-105 ${className}`}
+            className={`group relative inline-flex items-center justify-center font-semibold rounded-full transition-transform duration-300 hover:scale-[1.02] ${className}`}
         >
-            {/* The Gradient Border Background */}
-            <span className="absolute inset-0 bg-gradient-to-r from-secondary to-primary rounded-full"></span>
+            {/* 1. The Gradient Border (Masked) */}
+            <span
+                className="absolute inset-0 rounded-full gradient-border-mask pointer-events-none"
+            />
 
-            {/* The Inner Button Body */}
-            <span className="relative px-8 py-4 transition-all duration-300 bg-[#0a0a0a] hover:bg-transparent rounded-full text-white">
+            {/* 2. Hover Fill (Fades in) */}
+            <span className="absolute inset-0 bg-gradient-to-r from-secondary to-primary rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+
+            {/* 3. Text */}
+            <span className={`relative z-10 text-white ${sizeClasses[size]}`}>
                 {text}
             </span>
         </Link>

@@ -29,6 +29,17 @@
     background-clip: text;
     color: transparent;
   }
+
+  .gradient-border-mask {
+    background: linear-gradient(to right, var(--color-secondary), var(--color-primary));
+    padding: 2px;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    border-radius: 9999px;
+    /* Ensure rounded-full */
+  }
 }
 
 :root {
