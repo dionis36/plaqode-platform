@@ -19,7 +19,7 @@ export const config = {
     cookieSecure: process.env.COOKIE_SECURE === 'true',
 
     // CORS
-    allowedOrigins: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000'],
+    allowedOrigins: process.env.ALLOWED_ORIGINS?.split(',').map(o => o.trim()) || ['http://localhost:3000'],
 
     // Rate Limiting
     rateLimitMax: parseInt(process.env.RATE_LIMIT_MAX || '100'),

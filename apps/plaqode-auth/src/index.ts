@@ -12,9 +12,12 @@ const app = Fastify({
     },
 });
 
+console.log('🔒 CORS Allowed Origins:', config.allowedOrigins);
+console.log('🍪 Cookie Domain:', config.cookieDomain);
+
 // Register plugins
 await app.register(cors, {
-    origin: ['http://localhost:3000', 'http://localhost:3002', 'http://localhost:3004'],
+    origin: config.allowedOrigins,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 });
