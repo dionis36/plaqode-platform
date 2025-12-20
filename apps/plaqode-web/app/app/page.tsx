@@ -2,11 +2,9 @@
 
 import { useAuth } from '@/lib/auth-context';
 import { StatsCard } from '@/components/dashboard/StatsCard';
-import { ProductCard } from '@/components/dashboard/ProductCard';
+
 import { RecentActivity } from '@/components/dashboard/RecentActivity';
-import { MyDesigns } from '@/components/dashboard/MyDesigns';
-import { MyQRCodes } from '@/components/dashboard/MyQRCodes';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function DashboardPage() {
     const { user } = useAuth();
@@ -105,6 +103,10 @@ export default function DashboardPage() {
                 <p className="text-gray-600">Here's an overview of your creative workspace</p>
             </div>
 
+
+
+
+
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <StatsCard
@@ -147,49 +149,6 @@ export default function DashboardPage() {
                     }
                     color="orange"
                 />
-            </div>
-
-            {/* My Designs Section */}
-            <div className="mb-8">
-                <MyDesigns />
-            </div>
-
-            {/* Products Section */}
-            <div className="mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">Your Products</h2>
-                <div className="grid md:grid-cols-2 gap-6">
-                    <ProductCard
-                        name="Cardify"
-                        description="Create beautiful, professional business cards"
-                        icon={
-                            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-                            </svg>
-                        }
-                        stats={{ total: stats.totalDesigns, recent: stats.thisWeek }}
-                        href={process.env.NEXT_PUBLIC_CARDIFY_URL || 'http://localhost:3002'}
-                        hasAccess={user?.products.includes('cardify') || false}
-                        gradient="bg-gradient-to-r from-purple-500 to-pink-500"
-                    />
-                    <ProductCard
-                        name="QR Studio"
-                        description="Generate dynamic QR codes for any purpose"
-                        icon={
-                            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
-                            </svg>
-                        }
-                        stats={{ total: qrStudioStats.totalQrCodes, recent: qrStudioStats.recentScans }}
-                        href={`${process.env.NEXT_PUBLIC_QRSTUDIO_URL || 'http://localhost:3004'}/qrcodes`}
-                        hasAccess={user?.products.includes('qrstudio') || false}
-                        gradient="bg-gradient-to-r from-blue-500 to-cyan-500"
-                    />
-                </div>
-            </div>
-
-            {/* My QR Codes Section */}
-            <div className="mb-8">
-                <MyQRCodes />
             </div>
 
             {/* Recent Activity & Account Info */}

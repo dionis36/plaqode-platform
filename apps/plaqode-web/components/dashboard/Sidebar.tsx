@@ -9,6 +9,7 @@ import {
     ChevronLeft,
     ChevronRight,
     UserCircle,
+    Layout
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -40,6 +41,11 @@ export function Sidebar({ isOpen, setIsOpen, isMobile, onCloseMobile }: SidebarP
             label: 'Profile',
             href: '/app/profile',
             icon: UserCircle
+        },
+        {
+            label: 'Saved Cards',
+            href: '/app/saved-cards',
+            icon: Layout
         },
     ];
 
