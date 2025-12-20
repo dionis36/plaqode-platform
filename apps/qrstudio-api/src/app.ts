@@ -2,9 +2,10 @@ import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import { config } from 'dotenv';
 import { routes } from './routes';
+import path from 'path';
 
-// Load environment variables
-config();
+// Load environment variables from the correct location
+config({ path: path.join(__dirname, '../.env') });
 
 const PORT = parseInt(process.env.PORT || '3005', 10);
 const HOST = process.env.HOST || '0.0.0.0';
