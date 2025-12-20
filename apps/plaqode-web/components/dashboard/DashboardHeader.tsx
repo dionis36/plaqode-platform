@@ -1,6 +1,6 @@
 'use client';
 
-import { Menu, Bell, Search } from 'lucide-react';
+import { Menu, Search, Home } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { useState, useRef, useEffect } from 'react';
@@ -58,13 +58,6 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
     return (
         <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30">
             <div className="flex items-center gap-4">
-                <button
-                    onClick={onMenuClick}
-                    className="p-2 -ml-2 text-gray-600 hover:bg-gray-100 rounded-lg lg:hidden transition-colors"
-                >
-                    <Menu size={24} />
-                </button>
-
                 <h1 className="text-xl font-semibold text-gray-800 tracking-tight">
                     {getPageTitle()}
                 </h1>
@@ -81,15 +74,19 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
                     />
                 </div>
 
-                {/* Notifications */}
-                <button className="p-2 text-gray-500 hover:bg-gray-100 rounded-full relative transition-colors">
-                    <Bell size={20} />
-                    <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
-                </button>
+                {/* Home Link */}
+                <a
+                    href="/"
+                    className="p-2 text-gray-500 hover:bg-gray-100 rounded-full transition-colors"
+                    title="Back to Website"
+                >
+                    <Home size={20} />
+                </a>
 
-                {/* User Avatar Dropdown */}
+
+                {/* User Avatar Dropdown - Hidden on Mobile */}
                 {user && (
-                    <div className="relative" ref={dropdownRef}>
+                    <div className="relative hidden lg:block" ref={dropdownRef}>
                         <button
                             onClick={() => setShowDropdown(!showDropdown)}
                             className="flex items-center gap-2 hover:opacity-80 transition"
@@ -157,6 +154,14 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
                         )}
                     </div>
                 )}
+
+                {/* Mobile Menu Button - Right Aligned */}
+                <button
+                    onClick={onMenuClick}
+                    className="p-2 -mr-2 text-gray-600 hover:bg-gray-100 rounded-lg lg:hidden transition-colors"
+                >
+                    <Menu size={24} />
+                </button>
             </div>
         </header>
     );

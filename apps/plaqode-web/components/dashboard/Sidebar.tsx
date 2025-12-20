@@ -74,12 +74,16 @@ export function Sidebar({ isOpen, setIsOpen, isMobile, onCloseMobile }: SidebarP
             {/* Sidebar Container */}
             <aside
                 className={`
-                    fixed top-0 left-0 z-50 h-screen bg-white border-r border-gray-200 transition-all duration-300 ease-in-out flex flex-col
-                    ${isMobile ? (isOpen ? 'translate-x-0 w-64' : '-translate-x-full w-64') : (isOpen ? 'w-64' : 'w-20')}
+                    fixed top-0 z-50 h-screen bg-white border-r border-gray-200 transition-all duration-300 ease-in-out flex flex-col shadow-xl md:shadow-none
+                    md:left-0 md:border-r
+                    ${isMobile
+                        ? (isOpen ? 'right-0 translate-x-0 w-80 border-l' : 'right-0 translate-x-full w-80')
+                        : (isOpen ? 'left-0 w-64' : 'left-0 w-20')
+                    }
                 `}
             >
                 {/* Header */}
-                <div className="h-16 flex items-center justify-between px-4 border-b border-gray-100">
+                <div className="h-16 flex items-center justify-between px-4 border-b border-gray-100 shrink-0">
                     <div className={`flex items-center gap-3 overflow-hidden transition-all duration-300 ${!isOpen && !isMobile ? 'w-0 opacity-0' : 'w-auto opacity-100'}`}>
                         <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-purple-600 to-pink-600 flex items-center justify-center text-white font-bold text-lg shrink-0">
                             P
@@ -103,10 +107,42 @@ export function Sidebar({ isOpen, setIsOpen, isMobile, onCloseMobile }: SidebarP
                             onClick={onCloseMobile}
                             className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 transition-colors"
                         >
-                            <ChevronLeft size={20} />
+                            <ChevronRight size={24} />
                         </button>
                     )}
                 </div>
+
+                {/* User Profile (Mobile Only) */}
+                {isMobile && user && (
+                    <div className="p-4 border-b border-gray-100 bg-gray-50/50">
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm shadow-md">
+                                {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <p className="text-sm font-semibold text-gray-900 truncate">{user.name}</p>
+                                <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
+                            {(user.roles.includes('admin') || user.roles.includes('superadmin')) && (
+                                <Link
+                                    href="/app/admin"
+                                    onClick={onCloseMobile}
+                                    className="px-3 py-2 text-xs font-medium text-center text-purple-700 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors"
+                                >
+                                    Admin Panel
+                                </Link>
+                            )}
+                            <button
+                                onClick={() => logout()}
+                                className="px-3 py-2 text-xs font-medium text-center text-red-600 bg-red-50 rounded-lg hover:bg-red-100 transition-colors col-span-2"
+                            >
+                                Logout
+                            </button>
+                        </div>
+                    </div>
+                )}
 
                 {/* Navigation */}
                 <nav className="flex-1 overflow-y-auto py-6 px-3 flex flex-col gap-2">
