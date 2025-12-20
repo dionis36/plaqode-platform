@@ -17,15 +17,12 @@ export default function GradientButton({ href, text, className = "", size = "md"
     return (
         <Link
             href={href}
-            className={`group relative inline-flex items-center justify-center font-semibold rounded-full transition-transform duration-300 hover:scale-[1.02] ${className}`}
+            className={`group relative inline-flex items-center justify-center font-semibold rounded-full transition-transform duration-300 ${className}`}
         >
             {/* 1. The Gradient Border (Masked) */}
             <span
                 className="absolute inset-0 rounded-full gradient-border-mask pointer-events-none"
             />
-
-            {/* 2. Hover Fill (Fades in) */}
-            <span className="absolute inset-0 bg-gradient-to-r from-secondary to-primary rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
             {/* 3. Text */}
             <span className={`relative z-10 text-white ${sizeClasses[size]}`}>

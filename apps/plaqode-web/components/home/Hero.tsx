@@ -17,13 +17,15 @@ export default function Hero() {
             {/* Hero Header (Static) */}
             <div className="absolute top-0 left-0 w-full z-20 px-8 py-4 flex justify-between items-center max-w-[1400px] mx-auto">
                 <Logo />
-                <nav className="hidden md:flex gap-8">
-                    <Link href="/" className="hover:text-secondary transition-colors">Home</Link>
-                    <Link href="/about" className="hover:text-secondary transition-colors">About</Link>
-                    <Link href="/services" className="hover:text-secondary transition-colors">Services</Link>
-                    <Link href="/contact" className="hover:text-secondary transition-colors">Contact</Link>
+                <div className="hidden md:flex items-center gap-8">
+                    <nav className="flex gap-8">
+                        <Link href="/" className="hover:text-secondary transition-colors">Home</Link>
+                        <Link href="/about" className="hover:text-secondary transition-colors">About</Link>
+                        <Link href="/services" className="hover:text-secondary transition-colors">Services</Link>
+                        <Link href="/contact" className="hover:text-secondary transition-colors">Contact</Link>
+                    </nav>
                     <GradientButton href="/auth/login" text="Login" size="sm" />
-                </nav>
+                </div>
             </div>
 
             {/* Content */}

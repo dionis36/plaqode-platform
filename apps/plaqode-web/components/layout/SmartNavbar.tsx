@@ -47,26 +47,35 @@ export default function SmartNavbar() {
                     <Logo />
 
                     {/* Desktop Nav */}
-                    <nav className="hidden md:flex gap-8">
-                        {["Home", "About", "Services", "Contact"].map((item) => (
-                            <Link
-                                key={item}
-                                href={item === "Home" ? "/" : `/${item.toLowerCase()}`}
-                                className="text-light hover:text-secondary transition-colors"
-                            >
-                                {item}
-                            </Link>
-                        ))}
-                        <GradientButton href="/auth/login" text="Login" size="sm" />
-                    </nav>
+                    {/* Right Side - Nav & Login & Mobile Toggle */}
+                    <div className="flex items-center gap-8">
+                        {/* Desktop Nav */}
+                        <nav className="hidden md:flex gap-8">
+                            {["Home", "About", "Services", "Contact"].map((item) => (
+                                <Link
+                                    key={item}
+                                    href={item === "Home" ? "/" : `/${item.toLowerCase()}`}
+                                    className="text-light hover:text-secondary transition-colors"
+                                >
+                                    {item}
+                                </Link>
+                            ))}
+                        </nav>
 
-                    {/* Mobile Toggle */}
-                    <button
-                        className="md:hidden text-light text-2xl"
-                        onClick={() => setIsMobileMenuOpen(true)}
-                    >
-                        <Menu />
-                    </button>
+                        <div className="hidden md:block">
+                            <GradientButton href="/auth/login" text="Login" size="sm" />
+                        </div>
+
+                        {/* Mobile Toggle */}
+                        <button
+                            className="md:hidden text-light text-2xl"
+                            onClick={() => setIsMobileMenuOpen(true)}
+                        >
+                            <Menu />
+                        </button>
+                    </div>
+
+
                 </div>
             </header>
 
