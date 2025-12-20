@@ -70,7 +70,7 @@ export default function LoginPage() {
             </div>
 
             {/* Right Side - Login Form */}
-            <div className="flex-1 h-full bg-white relative flex flex-col items-center justify-center">
+            <div className="flex-1 h-full bg-white relative flex flex-col items-center justify-center overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
 
                 {/* Mobile Top Bar - Removed as per request */}
                 <div className="absolute top-0 left-0 w-full p-6 flex justify-center lg:justify-end lg:pr-12">
@@ -92,27 +92,25 @@ export default function LoginPage() {
 
                         <div className="space-y-5">
                             <div>
-                                <label className="block text-sm font-medium text-dark mb-2 font-sans ml-1">Email</label>
                                 <input
                                     type="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
-                                    className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition text-dark placeholder-gray-400 font-sans"
-                                    placeholder="Enter your email"
+                                    className="w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition text-dark placeholder-gray-500 font-sans font-medium"
+                                    placeholder="Email Address"
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-dark mb-2 font-sans ml-1">Password</label>
                                 <div className="relative">
                                     <input
                                         type="password"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         required
-                                        className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition text-dark placeholder-gray-400 font-sans"
-                                        placeholder="••••••••"
+                                        className="w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition text-dark placeholder-gray-500 font-sans font-medium"
+                                        placeholder="Password"
                                     />
                                 </div>
                             </div>
