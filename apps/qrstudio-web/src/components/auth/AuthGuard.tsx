@@ -3,6 +3,10 @@
 import { useAuth } from '@/lib/auth-context';
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
+    // TEMPORARY: Auth disabled for testing
+    return <>{children}</>;
+
+    /* Original auth code - commented out for testing
     const { loading, user, hasQrStudioAccess } = useAuth();
 
     if (loading) {
@@ -21,4 +25,5 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     }
 
     return <>{children}</>;
+    */
 }
