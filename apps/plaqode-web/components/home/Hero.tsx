@@ -22,6 +22,7 @@ export default function Hero() {
                     <Link href="/about" className="hover:text-secondary transition-colors">About</Link>
                     <Link href="/services" className="hover:text-secondary transition-colors">Services</Link>
                     <Link href="/contact" className="hover:text-secondary transition-colors">Contact</Link>
+                    <Link href="/auth/login" className="hover:text-secondary transition-colors">Login</Link>
                 </nav>
             </div>
 

@@ -75,10 +75,10 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                     </div>
 
                     <nav className="flex flex-col gap-4">
-                        {["Home", "About", "Services", "Contact"].map((item) => (
+                        {["Home", "About", "Services", "Contact", "Login"].map((item) => (
                             <div key={item} className="border-b border-light/10 pb-4">
                                 <Link
-                                    href={item === "Home" ? "/" : `/${item.toLowerCase()}`}
+                                    href={item === "Home" ? "/" : item === "Login" ? "/auth/login" : `/${item.toLowerCase()}`}
                                     className="text-lg font-medium hover:text-secondary transition-colors block"
                                     onClick={onClose}
                                 >

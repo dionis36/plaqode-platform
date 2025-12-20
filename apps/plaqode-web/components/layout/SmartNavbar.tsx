@@ -47,10 +47,10 @@ export default function SmartNavbar() {
 
                     {/* Desktop Nav */}
                     <nav className="hidden md:flex gap-8">
-                        {["Home", "About", "Services", "Contact"].map((item) => (
+                        {["Home", "About", "Services", "Contact", "Login"].map((item) => (
                             <Link
                                 key={item}
-                                href={item === "Home" ? "/" : `/${item.toLowerCase()}`}
+                                href={item === "Home" ? "/" : item === "Login" ? "/auth/login" : `/${item.toLowerCase()}`}
                                 className="text-light hover:text-secondary transition-colors"
                             >
                                 {item}

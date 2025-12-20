@@ -1,7 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export default function Logo() {
+interface LogoProps {
+    color?: "white" | "dark";
+}
+
+export default function Logo({ color = "white" }: LogoProps) {
     return (
         <Link href="/" className="flex items-center gap-3">
             {/* Icon */}
@@ -17,7 +21,7 @@ export default function Logo() {
             </div>
 
             {/* Text Branding */}
-            <span className="font-merriweather text-2xl tracking-tight text-white">
+            <span className={`font-merriweather text-2xl tracking-tight ${color === "white" ? "text-white" : "text-dark"}`}>
                 PlaQode
             </span>
         </Link>
