@@ -54,7 +54,7 @@ export default function Hero() {
 
                 {/* Button */}
                 <div className="relative z-10 w-fit">
-                    <GradientButton href="/contact" text="Get Started" />
+                    <GradientButton href="/contact" text="Get Started" size="lg" />
                 </div>
             </div>
 

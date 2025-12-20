@@ -1,33 +1,48 @@
-import Link from 'next/link';
+import Link from "next/link";
+import clsx from "clsx";
 
 interface GradientButtonProps {
-    href: string;
-    text: string;
-    className?: string;
-    size?: "sm" | "md" | "lg";
+  href: string;
+  text: string;
+  className?: string;
+  size?: "sm" | "md" | "lg" | "xl";
+  bold?: boolean;
 }
 
-export default function GradientButton({ href, text, className = "", size = "md" }: GradientButtonProps) {
-    const sizeClasses = {
-        sm: "px-6 py-2 text-sm",
-        md: "px-8 py-3 text-base",
-        lg: "px-10 py-4 text-lg"
-    };
+const sizeStyles = {
+  sm: "h-8 px-3 text-sm",
+  md: "h-10 px-4 text-base",
+  lg: "h-12 px-6 text-base",
+  xl: "h-14 px-8 text-xl",
+};
 
-    return (
-        <Link
-            href={href}
-            className={`group relative inline-flex items-center justify-center font-semibold rounded-full transition-transform duration-300 ${className}`}
-        >
-            {/* 1. The Gradient Border (Masked) */}
-            <span
-                className="absolute inset-0 rounded-full gradient-border-mask pointer-events-none"
-            />
+export default function GradientButton({
+  href,
+  text,
+  className = "",
+  size = "md",
+  bold = false,
+}: GradientButtonProps) {
+  return (
+    <Link
+      href={href}
+      className={clsx(
+        "group relative inline-flex items-center justify-center",
+        "rounded-full transition-transform duration-300",
+        "hover:scale-[1.03]",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+        sizeStyles[size],
+        bold ? "font-bold" : "font-medium",
+        className
+      )}
+    >
+      {/* Gradient border */}
+      <span className="absolute inset-0 rounded-full gradient-border-mask pointer-events-none" />
 
-            {/* 3. Text */}
-            <span className={`relative z-10 text-white ${sizeClasses[size]}`}>
-                {text}
-            </span>
-        </Link>
-    );
+      {/* Text */}
+      <span className="relative z-10 whitespace-nowrap leading-none">
+        {text}
+      </span>
+    </Link>
+  );
 }

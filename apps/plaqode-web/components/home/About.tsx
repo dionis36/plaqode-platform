@@ -1,24 +1,34 @@
+import GradientButton from "@/components/ui/GradientButton";
+
 export default function AboutSection() {
     return (
         <section className="bg-light text-dark py-24 text-center">
-            <div className="max-w-[1200px] mx-auto px-8 relative">
-                <h2 className="text-3xl md:text-[3rem] font-serif font-bold mb-2">About Us</h2>
-                <p className="text-lg font-sans text-text leading-relaxed max-w-4xl mx-auto my-6">
-                    We are dedicated to providing the most secure and efficient QR code management platform.
-                    Connecting the physical and digital worlds seamlessly.
-                </p>
+            <div className="max-w-[1000px] mx-auto px-8 relative flex flex-col items-center">
+                <h2 className="text-4xl md:text-[3.5rem] font-merriweather font-bold mb-8 leading-tight">
+                    The Story So Far...
+                </h2>
 
-                <p className="text-xl font-bold my-8">
-                    <strong className="bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent">
-                        Powering the Future of Connectivity
-                    </strong>
-                </p>
+                <div className="space-y-6 text-lg md:text-xl font-sans text-text leading-relaxed mb-10">
+                    <p>
+                        We're a creative tech company in <span className="font-bold text-text">Tanzania</span>, passionate about helping people and organizations simplify how they share information. Our team blends design, strategy, and innovation to create QR codes that are not only functional—but memorable.
+                    </p>
 
-                <div className="mt-12">
-                    <button className="relative px-8 py-4 font-semibold text-lg text-dark bg-transparent rounded-full overflow-hidden transition-all duration-300 hover:scale-105">
-                        <span className="absolute inset-0 p-[2px] rounded-full bg-gradient-to-r from-secondary to-primary [-webkit-mask:linear-gradient(#fff_0_0)content-box,linear-gradient(#fff_0_0)] [-webkit-mask-composite:xor] [mask-composite:exclude] -z-10"></span>
-                        Learn More
-                    </button>
+                    <p>
+                        Whether you're launching a campaign, distributing learning materials, or printing business cards, we make sure your QR codes are clear, stylish, and built for impact. We believe in turning everyday interactions into digital opportunities.
+                    </p>
+
+                    <div className="pt-4 space-y-2">
+                        <p className="font-bold text-text">
+                            For us, a QR code is more than just a link, it's a door opening to new possibilities. We're here to help you.
+                        </p>
+                        <p className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-secondary to-primary italic">
+                            "Connect Smarter. Share Faster. Grow Bigger."
+                        </p>
+                    </div>
+                </div>
+
+                <div className="mt-4">
+                    <GradientButton href="/about" text="Learn More" size="lg" />
                 </div>
             </div>
         </section>

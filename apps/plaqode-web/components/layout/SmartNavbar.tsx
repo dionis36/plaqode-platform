@@ -70,7 +70,7 @@ export default function SmartNavbar() {
                             {user ? (
                                 <GradientAvatar user={user} />
                             ) : (
-                                <GradientButton href="/auth/login" text="Login" size="sm" />
+                                <GradientButton href="/auth/login" text="Login" size="sm" className="text-light" />
                             )}
                         </div>
 

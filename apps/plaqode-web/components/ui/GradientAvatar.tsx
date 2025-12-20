@@ -49,7 +49,7 @@ export default function GradientAvatar({ user, className = "" }: GradientAvatarP
                 />
 
                 {/* 2. Initials (Transparent Center) */}
-                <span className="relative z-10 text-white font-merriweather font-bold text-sm tracking-wider">
+                <span className="relative z-10 text-white font-inter font-bold text-sm tracking-wider">
                     {getInitials(user)}
                 </span>
             </button>
