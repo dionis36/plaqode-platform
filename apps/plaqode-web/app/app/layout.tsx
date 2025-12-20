@@ -47,9 +47,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 <DashboardHeader onMenuClick={() => setSidebarOpen(true)} />
 
                 <main className="flex-1 p-4 lg:p-8 overflow-x-hidden">
-                    <div className="max-w-7xl mx-auto">
-                        {children}
-                    </div>
+                    {children}
                 </main>
             </div>
         </div>
