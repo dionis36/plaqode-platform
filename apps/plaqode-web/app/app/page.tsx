@@ -5,6 +5,7 @@ import { StatsCard } from '@/components/dashboard/StatsCard';
 import { ProductCard } from '@/components/dashboard/ProductCard';
 import { RecentActivity } from '@/components/dashboard/RecentActivity';
 import { MyDesigns } from '@/components/dashboard/MyDesigns';
+import { MyQRCodes } from '@/components/dashboard/MyQRCodes';
 import { useEffect, useState } from 'react';
 
 export default function DashboardPage() {
@@ -186,72 +187,10 @@ export default function DashboardPage() {
                 </div>
             </div>
 
-            {/* QR Studio Quick Access - Only show if user has access and has QR codes */}
-            {user?.products.includes('qrstudio') && qrStudioStats.totalQrCodes > 0 && (
-                <div className="mb-8">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-4">QR Studio</h2>
-                    <div className="bg-white rounded-xl border border-gray-200 p-6">
-                        {/* Stats Row */}
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                            <div className="text-center">
-                                <div className="text-2xl font-bold text-blue-600">
-                                    {qrStudioStats.totalQrCodes}
-                                </div>
-                                <div className="text-sm text-gray-600">Total QR Codes</div>
-                            </div>
-                            <div className="text-center">
-                                <div className="text-2xl font-bold text-green-600">
-                                    {qrStudioStats.activeQrCodes}
-                                </div>
-                                <div className="text-sm text-gray-600">Active</div>
-                            </div>
-                            <div className="text-center">
-                                <div className="text-2xl font-bold text-purple-600">
-                                    {qrStudioStats.totalScans}
-                                </div>
-                                <div className="text-sm text-gray-600">Total Scans</div>
-                            </div>
-                            <div className="text-center">
-                                <div className="text-2xl font-bold text-orange-600">
-                                    {qrStudioStats.recentScans}
-                                </div>
-                                <div className="text-sm text-gray-600">Last 7 Days</div>
-                            </div>
-                        </div>
-
-                        {/* Quick Actions */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <a
-                                href={`${process.env.NEXT_PUBLIC_QRSTUDIO_URL || 'http://localhost:3004'}/create`}
-                                className="flex items-center gap-3 p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors border border-blue-200"
-                            >
-                                <svg className="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                                </svg>
-                                <span className="font-medium text-blue-900">Create QR Code</span>
-                            </a>
-                            <a
-                                href={`${process.env.NEXT_PUBLIC_QRSTUDIO_URL || 'http://localhost:3004'}/qrcodes`}
-                                className="flex items-center gap-3 p-4 bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors border border-slate-200"
-                            >
-                                <svg className="w-5 h-5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-                                </svg>
-                                <span className="font-medium text-slate-900">View All QR Codes</span>
-                            </a>
-                            <a
-                                href={`${process.env.NEXT_PUBLIC_QRSTUDIO_URL || 'http://localhost:3004'}/qrcodes?filter=active`}
-                                className="flex items-center gap-3 p-4 bg-green-50 hover:bg-green-100 rounded-lg transition-colors border border-green-200"
-                            >
-                                <svg className="w-5 h-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                <span className="font-medium text-green-900">Active QR Codes</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            )}
+            {/* My QR Codes Section */}
+            <div className="mb-8">
+                <MyQRCodes />
+            </div>
 
             {/* Recent Activity & Account Info */}
             <div className="grid md:grid-cols-3 gap-6">
