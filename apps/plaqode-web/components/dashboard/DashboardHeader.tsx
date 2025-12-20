@@ -3,6 +3,7 @@
 import { Menu, Search, Home } from 'lucide-react';
 
 import { useAuth } from '@/lib/auth-context';
+import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
 
 interface DashboardHeaderProps {
@@ -46,6 +47,16 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
     return (
         <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30">
             <div className="flex items-center gap-4">
+                {/* Mobile Logo */}
+                <Link href="/" className="md:hidden flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-purple-600 to-pink-600 flex items-center justify-center text-white font-bold text-lg shrink-0">
+                        P
+                    </div>
+                    <span className="font-bold text-xl bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                        PlaQode
+                    </span>
+                </Link>
+
                 {/* Search Bar (Hidden on mobile for now) */}
                 <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-lg w-64 focus-within:ring-2 focus-within:ring-purple-500/20 focus-within:border-purple-500 transition-all">
                     <Search size={18} className="text-gray-400" />

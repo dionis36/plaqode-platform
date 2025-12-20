@@ -9,7 +9,8 @@ import {
     ChevronLeft,
     ChevronRight,
     UserCircle,
-    Layout
+    Layout,
+    LogOut
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -23,6 +24,21 @@ interface SidebarProps {
 export function Sidebar({ isOpen, setIsOpen, isMobile, onCloseMobile }: SidebarProps) {
     const { user, logout } = useAuth();
     const pathname = usePathname();
+
+    // Helper to get initials (same as DashboardHeader)
+    const getInitials = (name?: string, email?: string) => {
+        if (name) {
+            const parts = name.split(' ');
+            if (parts.length >= 2) {
+                return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+            }
+            return name.substring(0, 2).toUpperCase();
+        }
+        if (email) {
+            return email.substring(0, 2).toUpperCase();
+        }
+        return 'U';
+    };
 
     const isActive = (path: string) => pathname === path;
 
@@ -112,40 +128,10 @@ export function Sidebar({ isOpen, setIsOpen, isMobile, onCloseMobile }: SidebarP
                     )}
                 </div>
 
-                {/* User Profile (Mobile Only) */}
-                {isMobile && user && (
-                    <div className="p-4 border-b border-gray-100 bg-gray-50/50">
-                        <div className="flex items-center gap-3 mb-4">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm shadow-md">
-                                {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                                <p className="text-sm font-semibold text-gray-900 truncate">{user.name}</p>
-                                <p className="text-xs text-gray-500 truncate">{user.email}</p>
-                            </div>
-                        </div>
-                        <div className="grid grid-cols-2 gap-2">
-                            {(user.roles.includes('admin') || user.roles.includes('superadmin')) && (
-                                <Link
-                                    href="/app/admin"
-                                    onClick={onCloseMobile}
-                                    className="px-3 py-2 text-xs font-medium text-center text-purple-700 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors"
-                                >
-                                    Admin Panel
-                                </Link>
-                            )}
-                            <button
-                                onClick={() => logout()}
-                                className="px-3 py-2 text-xs font-medium text-center text-red-600 bg-red-50 rounded-lg hover:bg-red-100 transition-colors col-span-2"
-                            >
-                                Logout
-                            </button>
-                        </div>
-                    </div>
-                )}
+
 
                 {/* Navigation */}
-                <nav className="flex-1 overflow-y-auto py-6 px-3 flex flex-col gap-2">
+                <nav className="flex-1 overflow-y-auto py-8 px-3 flex flex-col gap-2">
                     {navItems.map((item) => {
                         const active = isActive(item.href);
                         return (
@@ -185,6 +171,28 @@ export function Sidebar({ isOpen, setIsOpen, isMobile, onCloseMobile }: SidebarP
                         );
                     })}
                 </nav>
+
+                {/* User Profile (Mobile Only) - Bottom */}
+                {isMobile && user && (
+                    <div className="p-4 border-t border-gray-100 bg-gray-50/50 shrink-0 flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm shadow-md">
+                                {getInitials(user.name, user.email)}
+                            </div>
+                            <div className="min-w-0">
+                                <p className="text-sm font-semibold text-gray-900 truncate">{user.name}</p>
+                                <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                            </div>
+                        </div>
+                        <button
+                            onClick={() => logout()}
+                            className="p-2 text-red-500 hover:bg-red-50 rounded-full transition-colors"
+                            title="Logout"
+                        >
+                            <LogOut size={20} />
+                        </button>
+                    </div>
+                )}
             </aside>
         </>
     );
