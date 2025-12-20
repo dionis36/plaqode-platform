@@ -1,0 +1,218 @@
+{
+  "$schema": "./schema.json",
+  "id": "template_10",
+  "name": "Creative and Artistic Card",
+  "width": 1050,
+  "height": 600,
+  "orientation": "horizontal",
+  "background": {
+    "type": "solid",
+    "color1": "#0F172A",
+    "opacity": 1
+  },
+  "layers": [
+    {
+      "id": "node_rect_1764867957515",
+      "type": "Rect",
+      "props": {
+        "id": "node_rect_1764867957515",
+        "x": 352.121212121212,
+        "y": -422.12121212121207,
+        "width": 722,
+        "height": 989,
+        "fill": "#fff",
+        "cornerRadius": 70,
+        "rotation": 45,
+        "opacity": 1
+      },
+      "editable": true,
+      "locked": false
+    },
+    {
+      "id": "full_name",
+      "type": "Text",
+      "props": {
+        "id": "full_name",
+        "x": 673.9393939393933,
+        "y": 399.090909090909,
+        "width": 500,
+        "height": 70,
+        "text": "Full Name",
+        "fontSize": 75,
+        "fontFamily": "Impact",
+        "fill": "#FFFFFF",
+        "rotation": 0,
+        "opacity": 1,
+        "align": "left",
+        "fontStyle": "bold",
+        "letterSpacing": 1
+      },
+      "editable": true,
+      "locked": false
+    },
+    {
+      "id": "job_title",
+      "type": "Text",
+      "props": {
+        "id": "job_title",
+        "x": 718.4848484848479,
+        "y": 487.5757575757574,
+        "width": 500,
+        "height": 45,
+        "text": "CEO & Founder",
+        "fontSize": 34,
+        "fontFamily": "Poppins",
+        "fill": "#FFFFFF",
+        "rotation": 0,
+        "opacity": 1,
+        "align": "left"
+      },
+      "editable": true,
+      "locked": false
+    },
+    {
+      "id": "divider_line",
+      "type": "Rect",
+      "props": {
+        "id": "divider_line",
+        "x": 718.4848484848479,
+        "y": 549.5454545454543,
+        "width": 230,
+        "height": 7,
+        "fill": "#ffffff",
+        "rotation": 0,
+        "opacity": 1
+      },
+      "editable": true,
+      "locked": false
+    },
+    {
+      "id": "main_logo",
+      "type": "Image",
+      "props": {
+        "id": "main_logo",
+        "x": 177.87878787878782,
+        "y": 142.72727272727263,
+        "width": 120,
+        "height": 120,
+        "src": "/logos/LogoTaco_Logo-09/SVG/Logo9_Blue.svg",
+        "rotation": 0,
+        "opacity": 1,
+        "category": "Image",
+        "isLogo": true
+      },
+      "editable": true,
+      "locked": false
+    },
+    {
+      "id": "company_name",
+      "type": "Text",
+      "props": {
+        "id": "company_name",
+        "x": 37.878787878787826,
+        "y": 282.4242424242424,
+        "width": 400,
+        "height": 60,
+        "text": "LOGO TEXT HERE",
+        "fontSize": 48,
+        "fontFamily": "Impact",
+        "fill": "#0F172A",
+        "rotation": 0,
+        "opacity": 1,
+        "align": "center",
+        "fontStyle": "bold",
+        "letterSpacing": 1
+      },
+      "editable": true,
+      "locked": false
+    },
+    {
+      "id": "company_slogan",
+      "type": "Text",
+      "props": {
+        "id": "company_slogan",
+        "x": 37.878787878787826,
+        "y": 348.78787878787875,
+        "width": 400,
+        "height": 40,
+        "text": "SLOGAN HERE",
+        "fontSize": 25,
+        "fontFamily": "Inter",
+        "fill": "#0F172A",
+        "rotation": 0,
+        "opacity": 1,
+        "align": "center"
+      },
+      "editable": true,
+      "locked": false
+    },
+    {
+      "id": "node_rect_1764868398131",
+      "type": "Rect",
+      "props": {
+        "id": "node_rect_1764868398131",
+        "x": 1104.5454545454534,
+        "y": -109.09090909090959,
+        "width": 20,
+        "height": 422.424242424241,
+        "fill": "#FFFFFF",
+        "cornerRadius": 4,
+        "rotation": 45,
+        "opacity": 1
+      },
+      "editable": true,
+      "locked": false
+    },
+    {
+      "id": "node_rect_1764868458987",
+      "type": "Rect",
+      "props": {
+        "id": "node_rect_1764868458987",
+        "x": 529.3939393939387,
+        "y": 463.63636363636317,
+        "width": 20,
+        "height": 382.12121212121156,
+        "fill": "#FFFFFF",
+        "cornerRadius": 5,
+        "rotation": 45,
+        "opacity": 1
+      },
+      "editable": true,
+      "locked": false
+    },
+    {
+      "id": "node_rect_1764868548142",
+      "type": "Rect",
+      "props": {
+        "id": "node_rect_1764868548142",
+        "x": 1053.3333333333328,
+        "y": 47.878787878787755,
+        "width": 189.09090909090932,
+        "height": 189.0909090909092,
+        "fill": "#FFFFFF",
+        "cornerRadius": 33,
+        "rotation": 45,
+        "opacity": 1
+      },
+      "editable": true,
+      "locked": false
+    }
+  ],
+  "groups": [],
+  "thumbnail": "",
+  "preview": "",
+  "tags": [
+    "creative",
+    "artistic",
+    "modern",
+    "proffesional"
+  ],
+  "category": "creative",
+  "colors": [
+    "#fff",
+    "#FFFFFF",
+    "#ffffff",
+    "#0F172A"
+  ],
+  "features": []
+}

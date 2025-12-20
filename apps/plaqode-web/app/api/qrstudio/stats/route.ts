@@ -1,0 +1,49 @@
+import { NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
+
+export async function GET() {
+    try {
+        const cookieStore = await cookies();
+        const accessToken = cookieStore.get('accessToken');
+
+        if (!accessToken) {
+            return NextResponse.json(
+                { error: 'Unauthorized' },
+                { status: 401 }
+            );
+        }
+
+        // Fetch stats from QR Studio API
+        const qrStudioApiUrl = process.env.NEXT_PUBLIC_QRSTUDIO_URL?.replace('3004', '3001') || 'http://localhost:3001';
+        const response = await fetch(
+            `http://localhost:3005/dashboard/stats`,
+            {
+                headers: {
+                    Cookie: `accessToken=${accessToken.value}`,
+                },
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch QR Studio stats');
+        }
+
+        const data = await response.json();
+        return NextResponse.json(data);
+    } catch (error) {
+        console.error('QR Studio stats error:', error);
+        // Return default stats on error
+        return NextResponse.json(
+            {
+                success: true,
+                data: {
+                    totalQrCodes: 0,
+                    activeQrCodes: 0,
+                    totalScans: 0,
+                    recentScans: 0,
+                }
+            },
+            { status: 200 }
+        );
+    }
+}

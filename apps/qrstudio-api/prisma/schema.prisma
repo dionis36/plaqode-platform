@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model QrCode {
+  id        String   @id @default(cuid())
+  shortcode String   @unique
+  type      String
+  name      String
+  payload   Json
+  design    Json
+  userId    String   // Platform user ID (no foreign key)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  scans     Scan[]
+
+  @@index([userId])
+  @@index([shortcode])
+  @@index([createdAt])
+}
+
+model Scan {
+  id        String   @id @default(cuid())
+  qrCodeId  String
+  shortcode String?  // Denormalized for faster queries
+  scannedAt DateTime @default(now())
+  country   String?
+  city      String?
+  device    String?
+  os        String?
+  browser   String?
+  ipHash    String?
+  referrer  String?  // Referrer URL
+  qrCode    QrCode   @relation(fields: [qrCodeId], references: [id], onDelete: Cascade)
+
+  @@index([qrCodeId])
+  @@index([scannedAt])
+  @@index([shortcode])
+}

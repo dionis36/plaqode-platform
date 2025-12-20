@@ -1,0 +1,191 @@
+{
+  "$schema": "./schema.json",
+  "id": "template_07",
+  "name": "Cream Teal Diagonal Professional",
+  "width": 1050,
+  "height": 600,
+  "orientation": "horizontal",
+  "background": {
+    "type": "solid",
+    "color1": "#14171a"
+  },
+  "colorRoles": {
+    "diagonal_teal_shape": "primary-text",
+    "diagonal_white_stripe": "primary-text",
+    "logo_text": "primary-text",
+    "slogan_text": "primary-text",
+    "full_name_text": "background",
+    "title_text": "background",
+    "contact_text": "background"
+  },
+  "layers": [
+    {
+      "id": "diagonal_teal_shape",
+      "type": "Rect",
+      "editable": false,
+      "locked": true,
+      "props": {
+        "id": "diagonal_teal_shape",
+        "x": 692,
+        "y": -191,
+        "width": 983,
+        "height": 857,
+        "rotation": 14,
+        "opacity": 1,
+        "fill": "#75a5b8"
+      }
+    },
+    {
+      "id": "diagonal_white_stripe",
+      "type": "Rect",
+      "editable": false,
+      "locked": false,
+      "props": {
+        "id": "diagonal_white_stripe",
+        "x": 638,
+        "y": -96,
+        "width": 15,
+        "height": 800,
+        "rotation": 14,
+        "opacity": 1,
+        "fill": "#75a5b8"
+      }
+    },
+    {
+      "id": "logo_image",
+      "type": "Image",
+      "editable": true,
+      "locked": false,
+      "props": {
+        "id": "logo_image",
+        "x": 150,
+        "y": 140,
+        "width": 160,
+        "height": 160,
+        "rotation": 0,
+        "opacity": 1,
+        "src": "/logos/LogoTaco_Logo-18/SVG/Logo18_White.svg",
+        "isLogo": true,
+        "category": "Image"
+      }
+    },
+    {
+      "id": "logo_text",
+      "type": "Text",
+      "editable": true,
+      "locked": false,
+      "props": {
+        "id": "logo_text",
+        "x": 46.06060606060608,
+        "y": 323.6363636363629,
+        "width": 367.8787878787879,
+        "height": 66.36363636363713,
+        "rotation": 0,
+        "opacity": 1,
+        "text": "LOGO TEXT HERE",
+        "fontSize": 60,
+        "fill": "#75a5b8",
+        "fontFamily": "Ubuntu",
+        "align": "center",
+        "letterSpacing": 1
+      }
+    },
+    {
+      "id": "slogan_text",
+      "type": "Text",
+      "editable": true,
+      "locked": false,
+      "props": {
+        "id": "slogan_text",
+        "x": 80,
+        "y": 398.4848484848483,
+        "width": 300,
+        "height": 40,
+        "rotation": 0,
+        "opacity": 1,
+        "text": "SLOGAN HERE",
+        "fontSize": 27,
+        "fill": "#75a5b8",
+        "fontFamily": "Cinzel",
+        "align": "center",
+        "letterSpacing": 3
+      }
+    },
+    {
+      "id": "full_name_text",
+      "type": "Text",
+      "editable": true,
+      "locked": false,
+      "props": {
+        "id": "full_name_text",
+        "x": 629.9999999999985,
+        "y": 174.9999999999999,
+        "width": 383.9393939393952,
+        "height": 80.00000000000009,
+        "rotation": 0,
+        "opacity": 1,
+        "text": "FULL NAME",
+        "fontSize": 70,
+        "fill": "#14171A",
+        "fontFamily": "Ubuntu",
+        "align": "right",
+        "letterSpacing": 1
+      }
+    },
+    {
+      "id": "title_text",
+      "type": "Text",
+      "editable": true,
+      "locked": false,
+      "props": {
+        "id": "title_text",
+        "x": 663.9393939393938,
+        "y": 270,
+        "width": 350,
+        "height": 60,
+        "rotation": 0,
+        "opacity": 1,
+        "text": "FOUNDER & CEO",
+        "fontSize": 35,
+        "fill": "#14171A",
+        "fontFamily": "Cinzel",
+        "align": "right"
+      }
+    },
+    {
+      "id": "contact_text",
+      "type": "Text",
+      "editable": true,
+      "locked": false,
+      "props": {
+        "id": "contact_text",
+        "x": 841.2121212121195,
+        "y": 405.7575757575753,
+        "width": 172.72727272726874,
+        "height": 124.84848484848287,
+        "rotation": 0,
+        "opacity": 1,
+        "text": "Email\nPhone\nWebsite",
+        "fontSize": 27,
+        "fill": "#14171A",
+        "fontFamily": "Cinzel",
+        "align": "right",
+        "lineHeight": 1.4,
+        "letterSpacing": 0.5
+      }
+    }
+  ],
+  "groups": [],
+  "thumbnail": "",
+  "preview": "",
+  "tags": [
+    "clean",
+    "corporate"
+  ],
+  "category": "professional",
+  "colors": [
+    "#75a5b8",
+    "#14171A"
+  ],
+  "features": []
+}

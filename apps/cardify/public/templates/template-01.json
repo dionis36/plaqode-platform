@@ -1,0 +1,221 @@
+{
+  "id": "template_01",
+  "name": "Blue Professional",
+  "width": 1050,
+  "height": 600,
+  "orientation": "horizontal",
+  "category": "Professional",
+  "tags": [
+    "Business",
+    "Clean",
+    "Modern",
+    "Blue"
+  ],
+  "colors": [
+    "#FFFFFF",
+    "#2563EB",
+    "#1E293B"
+  ],
+  "features": [
+    "Logo",
+    "Contact Info",
+    "Vertical Divider"
+  ],
+  "thumbnail": "",
+  "preview": "",
+  "background": {
+    "type": "solid",
+    "color1": "#FFFFFF"
+  },
+  "layers": [
+    {
+      "id": "logo_icon",
+      "type": "Icon",
+      "props": {
+        "id": "logo_icon",
+        "x": 212,
+        "y": 180,
+        "width": 100,
+        "height": 100,
+        "data": "M12 2L4 6v4l8 4 8-4V6l-8-4zm0 2.18L17.82 6 12 8.82 6.18 6 12 4.18zM6 8.82v2.36L12 14l6-2.82V8.82L12 11.64 6 8.82z M8 14h2v8H8v-8zm6 0h2v8h-2v-8z",
+        "iconName": "Pillar",
+        "category": "Icon",
+        "fill": "#2563EB",
+        "rotation": 0,
+        "opacity": 1
+      },
+      "editable": true,
+      "locked": false
+    },
+    {
+      "id": "company_name",
+      "type": "Text",
+      "props": {
+        "id": "company_name",
+        "x": 62,
+        "y": 310,
+        "width": 400,
+        "height": 50,
+        "text": "LOGO TEXT HERE",
+        "fontSize": 36,
+        "fontFamily": "Playfair Display",
+        "fill": "#2563EB",
+        "rotation": 0,
+        "opacity": 1,
+        "align": "center",
+        "fontStyle": "bold",
+        "letterSpacing": 2,
+        "lineHeight": 1.2
+      },
+      "editable": true,
+      "locked": false
+    },
+    {
+      "id": "company_slogan",
+      "type": "Text",
+      "props": {
+        "id": "company_slogan",
+        "x": 62,
+        "y": 365,
+        "width": 400,
+        "height": 30,
+        "text": "SLOGAN HERE",
+        "fontSize": 18,
+        "fontFamily": "Lato",
+        "fill": "#64748B",
+        "rotation": 0,
+        "opacity": 1,
+        "align": "center",
+        "letterSpacing": 4,
+        "lineHeight": 1.2
+      },
+      "editable": true,
+      "locked": false
+    },
+    {
+      "id": "divider_line",
+      "type": "Rect",
+      "props": {
+        "id": "divider_line",
+        "x": 521,
+        "y": 100,
+        "width": 4,
+        "height": 400,
+        "fill": "#2563EB",
+        "rotation": 0,
+        "opacity": 1
+      },
+      "editable": true,
+      "locked": false
+    },
+    {
+      "id": "full_name",
+      "type": "Text",
+      "props": {
+        "id": "full_name",
+        "x": 610,
+        "y": 170,
+        "width": 450,
+        "height": 60,
+        "text": "FULL NAME",
+        "fontSize": 70,
+        "fontFamily": "Impact",
+        "fill": "#2563EB",
+        "rotation": 0,
+        "opacity": 1,
+        "align": "left",
+        "fontStyle": "bold",
+        "letterSpacing": 1,
+        "lineHeight": 1.2
+      },
+      "editable": true,
+      "locked": false
+    },
+    {
+      "id": "job_title",
+      "type": "Text",
+      "props": {
+        "id": "job_title",
+        "x": 610,
+        "y": 260,
+        "width": 450,
+        "height": 40,
+        "text": "FOUNDER & CEO",
+        "fontSize": 22,
+        "fontFamily": "Lato",
+        "fill": "#64748B",
+        "rotation": 0,
+        "opacity": 1,
+        "align": "left",
+        "letterSpacing": 1,
+        "lineHeight": 1.2
+      },
+      "editable": true,
+      "locked": false
+    },
+    {
+      "id": "email_label",
+      "type": "Text",
+      "props": {
+        "id": "email_label",
+        "x": 610,
+        "y": 372,
+        "width": 450,
+        "height": 30,
+        "text": "EMAIL",
+        "fontSize": 16,
+        "fontFamily": "Roboto",
+        "fill": "#2563EB",
+        "rotation": 0,
+        "opacity": 1,
+        "align": "left",
+        "fontStyle": "bold",
+        "lineHeight": 1.2
+      },
+      "editable": true,
+      "locked": false
+    },
+    {
+      "id": "phone_label",
+      "type": "Text",
+      "props": {
+        "id": "phone_label",
+        "x": 610,
+        "y": 417,
+        "width": 450,
+        "height": 30,
+        "text": "PHONE",
+        "fontSize": 16,
+        "fontFamily": "Roboto",
+        "fill": "#2563EB",
+        "rotation": 0,
+        "opacity": 1,
+        "align": "left",
+        "fontStyle": "bold"
+      },
+      "editable": true,
+      "locked": false
+    },
+    {
+      "id": "website_label",
+      "type": "Text",
+      "props": {
+        "id": "website_label",
+        "x": 610,
+        "y": 457,
+        "width": 450,
+        "height": 30,
+        "text": "WEBSITE",
+        "fontSize": 16,
+        "fontFamily": "Roboto",
+        "fill": "#2563EB",
+        "rotation": 0,
+        "opacity": 1,
+        "align": "left",
+        "fontStyle": "bold"
+      },
+      "editable": true,
+      "locked": false
+    }
+  ]
+}

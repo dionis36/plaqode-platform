@@ -1,0 +1,581 @@
+'use client';
+
+import { useAuth } from '@/lib/auth-context';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
+interface User {
+    id: string;
+    email: string;
+    name?: string;
+    roles: string[];
+    products: string[];
+    createdAt: string;
+}
+
+export default function AdminPage() {
+    const { user, isAdmin, isSuperAdmin, loading } = useAuth();
+    const router = useRouter();
+    const [users, setUsers] = useState<User[]>([]);
+    const [usersLoading, setUsersLoading] = useState(true);
+    const [selectedUser, setSelectedUser] = useState<User | null>(null);
+    const [showRoleModal, setShowRoleModal] = useState(false);
+    const [showProductModal, setShowProductModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [actionLoading, setActionLoading] = useState(false);
+    const [message, setMessage] = useState('');
+    const [error, setError] = useState('');
+    const [filter, setFilter] = useState<'all' | 'admins' | 'users'>('all');
+    const [openActionMenu, setOpenActionMenu] = useState<string | null>(null);
+
+    useEffect(() => {
+        // Wait for auth to load before checking admin status
+        if (loading) return;
+
+        if (!isAdmin) {
+            router.push('/app');
+            return;
+        }
+
+        fetchUsers();
+    }, [isAdmin, loading]);
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = () => {
+            if (openActionMenu) {
+                setOpenActionMenu(null);
+            }
+        };
+
+        if (openActionMenu) {
+            document.addEventListener('click', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, [openActionMenu]);
+
+    const fetchUsers = async () => {
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/users`, {
+                credentials: 'include',
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setUsers(data.users);
+            }
+        } catch (error) {
+            console.error('Failed to fetch users:', error);
+        } finally {
+            setUsersLoading(false);
+        }
+    };
+
+    const assignRole = async (userId: string, role: string) => {
+        setActionLoading(true);
+        setError('');
+        try {
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/users/${userId}/roles`,
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ role }),
+                }
+            );
+
+            if (response.ok) {
+                setMessage(`Role "${role}" assigned successfully!`);
+                fetchUsers();
+                setShowRoleModal(false);
+                setTimeout(() => setMessage(''), 3000);
+            } else {
+                const errorData = await response.json();
+                setError(errorData.error || 'Failed to assign role');
+                setTimeout(() => setError(''), 5000);
+            }
+        } catch (error) {
+            console.error('Failed to assign role:', error);
+            setError('Failed to assign role');
+            setTimeout(() => setError(''), 5000);
+        } finally {
+            setActionLoading(false);
+        }
+    };
+
+    const revokeRole = async (userId: string, role: string) => {
+        if (!confirm(`Revoke "${role}" role from this user?`)) return;
+
+        try {
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/users/${userId}/roles/${role}`,
+                {
+                    method: 'DELETE',
+                    credentials: 'include',
+                }
+            );
+
+            if (response.ok) {
+                setMessage(`Role "${role}" revoked successfully!`);
+                fetchUsers();
+                setTimeout(() => setMessage(''), 3000);
+            }
+        } catch (error) {
+            console.error('Failed to revoke role:', error);
+        }
+    };
+
+    const grantProduct = async (userId: string, product: string) => {
+        setActionLoading(true);
+        try {
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/users/${userId}/products`,
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ product }),
+                }
+            );
+
+            if (response.ok) {
+                setMessage(`Product "${product}" granted successfully!`);
+                fetchUsers();
+                setShowProductModal(false);
+                setTimeout(() => setMessage(''), 3000);
+            }
+        } catch (error) {
+            console.error('Failed to grant product:', error);
+        } finally {
+            setActionLoading(false);
+        }
+    };
+
+    const revokeProduct = async (userId: string, product: string) => {
+        if (!confirm(`Revoke ${product} access?`)) return;
+
+        try {
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/users/${userId}/products/${product}`,
+                {
+                    method: 'DELETE',
+                    credentials: 'include',
+                }
+            );
+
+            if (response.ok) {
+                setMessage(`Product "${product}" revoked successfully!`);
+                fetchUsers();
+                setTimeout(() => setMessage(''), 3000);
+            }
+        } catch (error) {
+            console.error('Failed to revoke product:', error);
+        }
+    };
+
+    const deleteUser = async (userId: string) => {
+        setActionLoading(true);
+        try {
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/users/${userId}`,
+                {
+                    method: 'DELETE',
+                    credentials: 'include',
+                }
+            );
+
+            if (response.ok) {
+                setMessage('User deleted successfully!');
+                fetchUsers();
+                setShowDeleteModal(false);
+                setSelectedUser(null);
+                setTimeout(() => setMessage(''), 3000);
+            } else {
+                const errorData = await response.json();
+                setError(errorData.error || 'Failed to delete user');
+                setTimeout(() => setError(''), 5000);
+            }
+        } catch (error) {
+            console.error('Failed to delete user:', error);
+            setError('Failed to delete user');
+            setTimeout(() => setError(''), 5000);
+        } finally {
+            setActionLoading(false);
+        }
+    };
+
+    // Filter users based on selected filter
+    const filteredUsers = users.filter(u => {
+        if (filter === 'admins') {
+            return u.roles.includes('admin') || u.roles.includes('superadmin');
+        } else if (filter === 'users') {
+            return !u.roles.includes('admin') && !u.roles.includes('superadmin');
+        }
+        return true; // 'all'
+    });
+
+    if (!isAdmin) {
+        return null;
+    }
+
+    return (
+        <div className="max-w-7xl mx-auto">
+            <div className="mb-8">
+                <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                    {isSuperAdmin ? 'Superadmin Panel' : 'Admin Panel'}
+                </h1>
+                <p className="text-gray-600">
+                    {isSuperAdmin
+                        ? 'Manage all users, roles, and permissions'
+                        : 'Manage user product access'}
+                </p>
+            </div>
+
+            {message && (
+                <div className="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
+                    {message}
+                </div>
+            )}
+
+            {error && (
+                <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                    {error}
+                </div>
+            )}
+
+            {usersLoading ? (
+                <div className="text-center py-12">
+                    <div className="text-gray-600">Loading users...</div>
+                </div>
+            ) : (
+                <>
+                    {/* Filter Tabs - Superadmin Only */}
+                    {isSuperAdmin && (
+                        <div className="mb-6 flex gap-2 border-b border-gray-200">
+                            <button
+                                onClick={() => setFilter('all')}
+                                className={`px-6 py-3 font-medium transition border-b-2 ${filter === 'all'
+                                    ? 'border-purple-600 text-purple-600'
+                                    : 'border-transparent text-gray-600 hover:text-gray-900'
+                                    }`}
+                            >
+                                All Users ({users.length})
+                            </button>
+                            <button
+                                onClick={() => setFilter('admins')}
+                                className={`px-6 py-3 font-medium transition border-b-2 ${filter === 'admins'
+                                    ? 'border-purple-600 text-purple-600'
+                                    : 'border-transparent text-gray-600 hover:text-gray-900'
+                                    }`}
+                            >
+                                Admins ({users.filter(u => u.roles.includes('admin') || u.roles.includes('superadmin')).length})
+                            </button>
+                            <button
+                                onClick={() => setFilter('users')}
+                                className={`px-6 py-3 font-medium transition border-b-2 ${filter === 'users'
+                                    ? 'border-purple-600 text-purple-600'
+                                    : 'border-transparent text-gray-600 hover:text-gray-900'
+                                    }`}
+                            >
+                                Regular Users ({users.filter(u => !u.roles.includes('admin') && !u.roles.includes('superadmin')).length})
+                            </button>
+                        </div>
+                    )}
+
+                    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                        <div className="overflow-x-auto">
+                            <table className="w-full">
+                                <thead className="bg-gray-50 border-b border-gray-200">
+                                    <tr>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            User
+                                        </th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Roles
+                                        </th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Products
+                                        </th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Created
+                                        </th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Actions
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-gray-200">
+                                    {filteredUsers.map((u) => (
+                                        <tr key={u.id} className="hover:bg-gray-50">
+                                            <td className="px-6 py-4">
+                                                <div className="text-sm font-medium text-gray-900">{u.name || u.email}</div>
+                                                <div className="text-sm text-gray-500">{u.email}</div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="flex gap-2 flex-wrap">
+                                                    {u.roles.map((role) => (
+                                                        <div key={role} className="flex items-center gap-1">
+                                                            <span
+                                                                className={`px-2 py-1 text-xs rounded-full ${role === 'superadmin'
+                                                                    ? 'bg-red-100 text-red-700'
+                                                                    : role === 'admin'
+                                                                        ? 'bg-purple-100 text-purple-700'
+                                                                        : 'bg-gray-100 text-gray-700'
+                                                                    }`}
+                                                            >
+                                                                {role}
+                                                            </span>
+                                                            {isSuperAdmin && (
+                                                                <button
+                                                                    onClick={() => revokeRole(u.id, role)}
+                                                                    className="text-red-600 hover:text-red-700 text-xs"
+                                                                    title="Revoke role"
+                                                                >
+                                                                    ×
+                                                                </button>
+                                                            )}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="flex gap-2 flex-wrap">
+                                                    {u.products && u.products.length > 0 ? (
+                                                        u.products
+                                                            .filter((product: string | null) => product) // Filter out null/undefined
+                                                            .map((product: string, index: number) => (
+                                                                <div key={`${product}-${index}`} className="flex items-center gap-1">
+                                                                    <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full">
+                                                                        {product}
+                                                                    </span>
+                                                                    <button
+                                                                        onClick={() => revokeProduct(u.id, product)}
+                                                                        className="text-red-600 hover:text-red-700 text-xs"
+                                                                        title="Revoke access"
+                                                                    >
+                                                                        ×
+                                                                    </button>
+                                                                </div>
+                                                            ))
+                                                    ) : (
+                                                        <span className="text-gray-400 text-sm">No products</span>
+                                                    )}
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4 text-sm text-gray-500">
+                                                {new Date(u.createdAt).toLocaleDateString()}
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="relative">
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setOpenActionMenu(openActionMenu === u.id ? null : u.id);
+                                                        }}
+                                                        className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition flex items-center gap-2"
+                                                    >
+                                                        <span className="text-sm font-medium text-gray-900">Actions</span>
+                                                        <svg className="w-4 h-4 text-gray-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                                        </svg>
+                                                    </button>
+
+                                                    {openActionMenu === u.id && (
+                                                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
+                                                            {isSuperAdmin && (
+                                                                <button
+                                                                    onClick={() => {
+                                                                        setSelectedUser(u);
+                                                                        setShowRoleModal(true);
+                                                                        setOpenActionMenu(null);
+                                                                    }}
+                                                                    className="w-full text-left px-4 py-2 text-sm text-gray-900 hover:bg-gray-50 flex items-center gap-2"
+                                                                >
+                                                                    <svg className="w-4 h-4 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                                                    </svg>
+                                                                    Assign Role
+                                                                </button>
+                                                            )}
+                                                            <button
+                                                                onClick={() => {
+                                                                    setSelectedUser(u);
+                                                                    setShowProductModal(true);
+                                                                    setOpenActionMenu(null);
+                                                                }}
+                                                                className="w-full text-left px-4 py-2 text-sm text-gray-900 hover:bg-gray-50 flex items-center gap-2"
+                                                            >
+                                                                <svg className="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                                                </svg>
+                                                                Grant Product
+                                                            </button>
+                                                            {isSuperAdmin && (
+                                                                <button
+                                                                    onClick={() => {
+                                                                        setSelectedUser(u);
+                                                                        setShowDeleteModal(true);
+                                                                        setOpenActionMenu(null);
+                                                                    }}
+                                                                    className="w-full text-left px-4 py-2 text-sm hover:bg-red-50 text-red-600 flex items-center gap-2 border-t border-gray-100"
+                                                                >
+                                                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                                    </svg>
+                                                                    Delete User
+                                                                </button>
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </>
+            )}
+
+            {/* Role Assignment Modal - Superadmin Only */}
+            {showRoleModal && selectedUser && isSuperAdmin && (
+                <div
+                    className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50"
+                    onClick={() => setShowRoleModal(false)}
+                >
+                    <div
+                        className="bg-white rounded-xl p-6 max-w-md w-full mx-4"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <h3 className="text-xl font-bold text-gray-900 mb-4">
+                            Assign Role to {selectedUser.name || selectedUser.email}
+                        </h3>
+                        <div className="space-y-3">
+                            <button
+                                onClick={() => assignRole(selectedUser.id, 'superadmin')}
+                                disabled={actionLoading || selectedUser.roles.includes('superadmin')}
+                                className="w-full px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {selectedUser.roles.includes('superadmin') ? 'Already Superadmin' : 'Make Superadmin'}
+                            </button>
+                            <button
+                                onClick={() => assignRole(selectedUser.id, 'admin')}
+                                disabled={actionLoading || selectedUser.roles.includes('admin')}
+                                className="w-full px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {selectedUser.roles.includes('admin') ? 'Already Admin' : 'Make Admin'}
+                            </button>
+                            <button
+                                onClick={() => assignRole(selectedUser.id, 'user')}
+                                disabled={actionLoading || selectedUser.roles.includes('user')}
+                                className="w-full px-4 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {selectedUser.roles.includes('user') ? 'Already User' : 'Make User'}
+                            </button>
+                            <button
+                                onClick={() => setShowRoleModal(false)}
+                                className="w-full px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition"
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Product Grant Modal */}
+            {showProductModal && selectedUser && (
+                <div
+                    className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50"
+                    onClick={() => setShowProductModal(false)}
+                >
+                    <div
+                        className="bg-white rounded-xl p-6 max-w-md w-full mx-4"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <h3 className="text-xl font-bold text-gray-900 mb-4">
+                            Grant Product Access to {selectedUser.name || selectedUser.email}
+                        </h3>
+                        <div className="space-y-3">
+                            <button
+                                onClick={() => grantProduct(selectedUser.id, 'cardify')}
+                                disabled={actionLoading || selectedUser.products.includes('cardify')}
+                                className="w-full px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {selectedUser.products.includes('cardify') ? 'Already has Cardify' : 'Grant Cardify'}
+                            </button>
+                            <button
+                                onClick={() => grantProduct(selectedUser.id, 'qrstudio')}
+                                disabled={actionLoading || selectedUser.products.includes('qrstudio')}
+                                className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {selectedUser.products.includes('qrstudio') ? 'Already has QR Studio' : 'Grant QR Studio'}
+                            </button>
+                            <button
+                                onClick={() => setShowProductModal(false)}
+                                className="w-full px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition"
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Delete User Modal - Superadmin Only */}
+            {showDeleteModal && selectedUser && isSuperAdmin && (
+                <div
+                    className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50"
+                    onClick={() => setShowDeleteModal(false)}
+                >
+                    <div
+                        className="bg-white rounded-xl p-6 max-w-md w-full mx-4"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                                <svg className="w-6 h-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 className="text-xl font-bold text-gray-900">Delete User</h3>
+                                <p className="text-sm text-gray-600">This action cannot be undone</p>
+                            </div>
+                        </div>
+
+                        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                            <p className="text-sm text-gray-700">
+                                Are you sure you want to delete <span className="font-semibold">{selectedUser.name || selectedUser.email}</span>?
+                            </p>
+                            <p className="text-sm text-gray-600 mt-2">
+                                All their data, designs, and access will be permanently removed.
+                            </p>
+                        </div>
+
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => deleteUser(selectedUser.id)}
+                                disabled={actionLoading}
+                                className="flex-1 px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+                            >
+                                {actionLoading ? 'Deleting...' : 'Delete User'}
+                            </button>
+                            <button
+                                onClick={() => setShowDeleteModal(false)}
+                                className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium"
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}
