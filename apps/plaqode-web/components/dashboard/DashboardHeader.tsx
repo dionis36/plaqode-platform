@@ -1,7 +1,7 @@
 'use client';
 
 import { Menu, Search, Home } from 'lucide-react';
-import { usePathname } from 'next/navigation';
+
 import { useAuth } from '@/lib/auth-context';
 import { useState, useRef, useEffect } from 'react';
 
@@ -10,7 +10,6 @@ interface DashboardHeaderProps {
 }
 
 export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
-    const pathname = usePathname();
     const { user, logout } = useAuth();
     const [showDropdown, setShowDropdown] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -42,28 +41,11 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    // Generate breadcrumbs or title based on path
-    const getPageTitle = () => {
-        const segments = pathname.split('/').filter(Boolean);
-        // Remove 'app' from segments for cleaner display
-        const displaySegments = segments.slice(1);
 
-        if (displaySegments.length === 0) return 'Dashboard';
-
-        return displaySegments
-            .map(segment => segment.charAt(0).toUpperCase() + segment.slice(1))
-            .join(' / ');
-    };
 
     return (
         <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30">
             <div className="flex items-center gap-4">
-                <h1 className="text-xl font-semibold text-gray-800 tracking-tight">
-                    {getPageTitle()}
-                </h1>
-            </div>
-
-            <div className="flex items-center gap-2 sm:gap-4">
                 {/* Search Bar (Hidden on mobile for now) */}
                 <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-lg w-64 focus-within:ring-2 focus-within:ring-purple-500/20 focus-within:border-purple-500 transition-all">
                     <Search size={18} className="text-gray-400" />
@@ -73,6 +55,10 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
                         className="bg-transparent border-none outline-none text-sm text-gray-600 w-full placeholder:text-gray-400"
                     />
                 </div>
+            </div>
+
+            <div className="flex items-center gap-2 sm:gap-4">
+
 
                 {/* Home Link */}
                 <a

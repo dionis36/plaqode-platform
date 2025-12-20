@@ -83,22 +83,22 @@ export function Sidebar({ isOpen, setIsOpen, isMobile, onCloseMobile }: SidebarP
                 `}
             >
                 {/* Header */}
-                <div className="h-16 flex items-center justify-between px-4 border-b border-gray-100 shrink-0">
-                    <div className={`flex items-center gap-3 overflow-hidden transition-all duration-300 ${!isOpen && !isMobile ? 'w-0 opacity-0' : 'w-auto opacity-100'}`}>
+                <div className={`h-16 flex items-center border-b border-gray-100 shrink-0 relative ${!isOpen && !isMobile ? 'justify-center px-0' : 'justify-between px-4'}`}>
+                    <Link href="/" className="flex items-center gap-3 overflow-hidden">
                         <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-purple-600 to-pink-600 flex items-center justify-center text-white font-bold text-lg shrink-0">
                             P
                         </div>
-                        <span className="font-bold text-xl bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent whitespace-nowrap">
+                        <span className={`font-bold text-xl bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent whitespace-nowrap transition-all duration-300 ${!isOpen && !isMobile ? 'w-0 opacity-0' : 'w-auto opacity-100'}`}>
                             PlaQode
                         </span>
-                    </div>
+                    </Link>
 
                     {!isMobile && (
                         <button
                             onClick={toggleSidebar}
-                            className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 transition-colors"
+                            className="absolute -right-3 top-16 p-1 bg-white border border-gray-200 rounded-full shadow-sm text-gray-500 hover:text-gray-700 hover:bg-gray-50 transition-colors z-50 transform -translate-y-1/2"
                         >
-                            {isOpen ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
+                            {isOpen ? <ChevronLeft size={14} /> : <ChevronRight size={14} />}
                         </button>
                     )}
 
