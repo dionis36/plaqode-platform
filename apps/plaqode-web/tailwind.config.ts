@@ -18,6 +18,7 @@ const config: Config = {
             fontFamily: {
                 sans: ["var(--font-inter)", "sans-serif"],
                 serif: ["var(--font-merriweather)", "serif"],
+                merriweather: ["var(--font-merriweather)", "serif"],
             },
             fontSize: {
                 "xlg": "4.5rem",

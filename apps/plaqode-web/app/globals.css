@@ -11,6 +11,7 @@
   /* Fonts */
   --font-sans: var(--font-inter), sans-serif;
   --font-serif: var(--font-merriweather), serif;
+  --font-merriweather: var(--font-merriweather), serif;
 
   /* Font Sizes */
   --text-xlg: 4.5rem;
@@ -31,11 +32,13 @@
 }
 
 :root {
-  background-color: var(--color-light); /* Default light bg, verified from checking source again (home-about uses light, hero uses dark) */
+  background-color: var(--color-light);
+  /* Default light bg, verified from checking source again (home-about uses light, hero uses dark) */
   color: var(--color-dark);
 }
 
 body {
-    background-color: var(--color-bg); /* Setting body bg to match Plaqode default */
-    font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  /* Setting body bg to match Plaqode default */
+  font-family: var(--font-sans);
 }
