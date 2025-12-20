@@ -6,8 +6,12 @@ import { Menu } from "lucide-react";
 import MobileMenu from "./MobileMenu";
 import Logo from "@/components/ui/Logo";
 import GradientButton from "@/components/ui/GradientButton";
+import GradientAvatar from "@/components/ui/GradientAvatar";
+
+import { useAuth } from "@/lib/auth-context";
 
 export default function SmartNavbar() {
+    const { user } = useAuth();
     const [isVisible, setIsVisible] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const lastScrollY = useRef(0);
@@ -63,7 +67,11 @@ export default function SmartNavbar() {
                         </nav>
 
                         <div className="hidden md:block">
-                            <GradientButton href="/auth/login" text="Login" size="sm" />
+                            {user ? (
+                                <GradientAvatar user={user} />
+                            ) : (
+                                <GradientButton href="/auth/login" text="Login" size="sm" />
+                            )}
                         </div>
 
                         {/* Mobile Toggle */}

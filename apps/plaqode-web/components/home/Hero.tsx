@@ -3,10 +3,14 @@
 import { useSplitText } from "@/lib/animations/useSplitText";
 import Link from "next/link";
 import GradientButton from "@/components/ui/GradientButton";
+import GradientAvatar from "@/components/ui/GradientAvatar";
 import Logo from "@/components/ui/Logo";
 import { ArrowRight } from "lucide-react";
 
+import { useAuth } from "@/lib/auth-context";
+
 export default function Hero() {
+    const { user } = useAuth();
     const elementRef = useSplitText<HTMLHeadingElement>({ type: "chars", delay: 0.2 });
 
     return (
@@ -24,7 +28,11 @@ export default function Hero() {
                         <Link href="/services" className="hover:text-secondary transition-colors">Services</Link>
                         <Link href="/contact" className="hover:text-secondary transition-colors">Contact</Link>
                     </nav>
-                    <GradientButton href="/auth/login" text="Login" size="sm" />
+                    {user ? (
+                        <GradientAvatar user={user} />
+                    ) : (
+                        <GradientButton href="/auth/login" text="Login" size="sm" />
+                    )}
                 </div>
             </div>
 
@@ -41,7 +49,7 @@ export default function Hero() {
 
                 {/* Subtitle */}
                 <p className="text-lg md:text-xl font-sans max-w-[42rem] mb-12 tracking-wide text-light/90">
-                    Next-generation QR code solutions making connections secure, fast, and reliable.
+                    We simplify and streamline data access with innovative QR code solutions for your business.
                 </p>
 
                 {/* Button */}
