@@ -1,21 +1,22 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Merriweather } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const merriweather = Merriweather({
+  variable: "--font-merriweather",
+  weight: ["300", "400", "700", "900"],
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Plaqode Platform",
-  description: "Unified platform for Cardify and QR Studio",
+  title: "Plaqode",
+  description: "Next Gen QR Code Solutions",
 };
 
 export default function RootLayout({
@@ -26,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${inter.variable} ${merriweather.variable} antialiased font-sans`}
       >
         <AuthProvider>
           {children}
