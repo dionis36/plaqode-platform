@@ -14,9 +14,9 @@
   --font-merriweather: var(--font-merriweather), serif;
 
   /* Font Sizes */
-  --text-xlg: 4.5rem;
-  --text-lg: 3rem;
-  --text-sm-heading: 2.5rem;
+  --text-display-xl: 4.5rem;
+  --text-display-lg: 3rem;
+  --text-display-md: 2.5rem;
 
   --background-image-hero-pattern: url('/img/hero-bg.jpg');
 }
