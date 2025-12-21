@@ -56,7 +56,7 @@ export default function GradientAvatar({ user, className = "" }: GradientAvatarP
 
             {/* Dropdown Menu */}
             {isOpen && (
-                <div className="absolute right-0 mt-3 w-56 bg-dark/80 backdrop-blur-3xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden origin-top-right animate-in fade-in zoom-in-95 duration-200 z-50">
+                <div className="absolute right-0 mt-3 w-56 bg-dark/80 backdrop-blur-md shadow-md border-b border-white/5 rounded-2xl overflow-hidden origin-top-right animate-in fade-in zoom-in-95 duration-200 z-50">
                     <div className="px-4 py-3 border-b border-white/5">
                         <p className="text-base font-medium text-white truncate font-merriweather">{user.name || "User"}</p>
                         <p className="text-xs text-white/70 truncate font-sans">{user.email}</p>
