@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Layout } from 'lucide-react';
+import GradientButton from '@/components/ui/GradientButton';
 
 interface SavedDesign {
     id: string;
@@ -52,24 +53,20 @@ export default function SavedCardsPage() {
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
                     <div>
                         <div className="flex items-center gap-3">
-                            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">Saved Cards</h1>
+                            <h1 className="text-2xl sm:text-3xl font-merriweather font-bold text-dark">Saved Cards</h1>
                             {!loading && designs.length > 0 && (
                                 <span className="text-2xl sm:text-3xl font-bold text-purple-600">
                                     {designs.length}
                                 </span>
                             )}
                         </div>
-                        <p className="text-sm sm:text-base text-slate-600 mt-1 sm:mt-2">Manage your saved business card designs</p>
+                        <p className="text-base text-text/70 font-sans mt-2">Manage your saved business card designs</p>
                     </div>
-                    <a
+                    <GradientButton
                         href={process.env.NEXT_PUBLIC_CARDIFY_URL || 'http://localhost:3002'}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-5 py-3 rounded-xl font-semibold hover:shadow-lg hover:shadow-purple-500/25 transition-all text-sm sm:text-base whitespace-nowrap"
-                    >
-                        <Layout className="w-5 h-5" />
-                        <span>Create New Card</span>
-                    </a>
+                        text="Create New Card"
+                        className="bg-gradient-to-r from-purple-600 to-pink-600 text-white"
+                    />
                 </div>
 
                 {designs.length === 0 ? (

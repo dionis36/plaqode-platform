@@ -98,7 +98,7 @@ export default function DashboardPage() {
             {/* Welcome Section */}
             <div className="mb-10 text-left">
                 <h1 className="text-4xl font-merriweather font-bold text-dark mb-3">
-                    Welcome back, {user?.name || user?.email}!
+                    Welcome back, <span className="bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent">{user?.name || user?.email}</span>!
                 </h1>
                 <p className="text-text/70 font-sans text-lg">Here's an overview of your creative workspace</p>
             </div>

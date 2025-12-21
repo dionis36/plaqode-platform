@@ -6,6 +6,7 @@ import { QrCode, Search, Filter, BarChart2, Edit, Trash2, Smartphone } from 'luc
 import { useRouter } from 'next/navigation';
 import { ConfirmationModal } from '@/components/common/ConfirmationModal';
 import { QrContentPreviewModal } from '@/components/common/QrContentPreviewModal';
+import GradientButton from '@/components/ui/GradientButton';
 
 interface QrCodeItem {
     id: string;
@@ -138,22 +139,20 @@ export default function QrCodesPage() {
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
                     <div>
                         <div className="flex items-center gap-3">
-                            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">QR Codes</h1>
+                            <h1 className="text-2xl sm:text-3xl font-merriweather font-bold text-dark">QR Codes</h1>
                             {!loading && totalCount > 0 && (
                                 <span className="text-2xl sm:text-3xl font-bold text-blue-600">
                                     {totalCount}
                                 </span>
                             )}
                         </div>
-                        <p className="text-sm sm:text-base text-slate-600 mt-1 sm:mt-2">Manage all your QR codes in one place</p>
+                        <p className="text-base text-text/70 font-sans mt-2">Manage all your QR codes in one place</p>
                     </div>
-                    <a
+                    <GradientButton
                         href={`${qrStudioUrl}/create`}
-                        className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-5 py-3 rounded-xl font-semibold hover:shadow-lg hover:shadow-blue-500/25 transition-all text-sm sm:text-base whitespace-nowrap"
-                    >
-                        <QrCode className="w-5 h-5" />
-                        <span>Create New QR</span>
-                    </a>
+                        text="Create New QR"
+                        className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white"
+                    />
                 </div>
 
                 {/* Filters */}
@@ -169,7 +168,7 @@ export default function QrCodesPage() {
                                 setSearch(e.target.value);
                                 setPage(1);
                             }}
-                            className="w-full pl-12 pr-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm sm:text-base shadow-sm hover:border-slate-300"
+                            className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-1 focus:ring-secondary focus:border-secondary transition-all text-sm sm:text-base text-dark placeholder:text-gray-500 font-sans font-medium"
                         />
                     </div>
 

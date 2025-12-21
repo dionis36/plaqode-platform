@@ -225,10 +225,10 @@ export default function AdminPage() {
     return (
         <div className="max-w-7xl mx-auto">
             <div className="mb-8">
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                <h1 className="text-3xl font-merriweather font-bold text-dark mb-2">
                     {isSuperAdmin ? 'Superadmin Panel' : 'Admin Panel'}
                 </h1>
-                <p className="text-gray-600">
+                <p className="text-text/70 font-sans">
                     {isSuperAdmin
                         ? 'Manage all users, roles, and permissions'
                         : 'Manage user product access'}
