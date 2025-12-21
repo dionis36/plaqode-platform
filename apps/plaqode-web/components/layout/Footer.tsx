@@ -19,8 +19,12 @@ export default function Footer() {
                 <div className="lg:pl-8">
                     <h4 className="text-lg font-bold text-text mb-6">Quick Links</h4>
                     <div className="flex flex-col gap-3">
-                        {["Home", "About", "Services", "Contact"].map(link => (
-                            <Link key={link} href="#" className="text-text/80 hover:text-secondary transition-colors text-md font-medium">
+                        {["Home", "About", "Services", "Contact"].map((link) => (
+                            <Link
+                                key={link}
+                                href={link === "Home" ? "/" : `/${link.toLowerCase()}`}
+                                className="text-text/80 hover:text-secondary transition-colors text-md font-medium"
+                            >
                                 {link}
                             </Link>
                         ))}
@@ -51,8 +55,8 @@ export default function Footer() {
                     <div className="flex gap-4 mb-6">
                         <a href="#" className="text-text/80 hover:text-secondary hover:scale-110 transition-all"><Facebook size={25} /></a>
                         <a href="#" className="text-text/80 hover:text-secondary hover:scale-110 transition-all"><Twitter size={25} /></a>
-                        <a href="#" className="text-text/80 hover:text-secondary hover:scale-110 transition-all"><Instagram size={25} /></a>
                         <a href="#" className="text-text/80 hover:text-secondary hover:scale-110 transition-all"><Linkedin size={25} /></a>
+                        <a href="#" className="text-text/80 hover:text-secondary hover:scale-110 transition-all"><Instagram size={25} /></a>
                     </div>
 
                     <p className="text-text/80 text-sm mt-8 lg:mt-0 font-medium">
