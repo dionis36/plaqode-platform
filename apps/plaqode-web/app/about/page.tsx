@@ -1,9 +1,8 @@
 import SmartNavbar from "@/components/layout/SmartNavbar";
 import Footer from "@/components/layout/Footer";
-import StorySection from "@/components/about/StorySection";
-import ValuesSection from "@/components/about/ValuesSection";
-import IntroSection from "@/components/about/IntroSection";
 import StaticNavbar from "@/components/layout/StaticNavbar";
+
+import AboutContent from "@/components/about/AboutContent";
 
 export default function AboutPage() {
     return (
@@ -12,7 +11,7 @@ export default function AboutPage() {
 
             {/* Page Header - Reusing Hero style but simpler */}
             <div className="relative h-[40vh] min-h-[400px] bg-dark flex flex-col justify-center items-center text-center px-4 overflow-hidden">
-                <div className="absolute inset-0 bg-hero-pattern bg-cover bg-center opacity-30 pointer-events-none" />
+                <div className="absolute inset-0 bg-hero-pattern bg-cover bg-center opacity-20 pointer-events-none" />
                 <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-dark z-0" />
 
                 <StaticNavbar />
@@ -25,9 +24,7 @@ export default function AboutPage() {
                 </div>
             </div>
 
-            <IntroSection />
-            <ValuesSection />
-            <StorySection />
+            <AboutContent />
 
             <Footer />
         </main>
