@@ -14,5 +14,24 @@
         "esModuleInterop": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true
-    }
+    },
+    "include": [],
+    "files": [],
+    "references": [
+        {
+            "path": "./apps/plaqode-web"
+        },
+        {
+            "path": "./apps/cardify"
+        },
+        {
+            "path": "./apps/qrstudio-web"
+        },
+        {
+            "path": "./apps/qrstudio-api"
+        },
+        {
+            "path": "./apps/plaqode-auth"
+        }
+    ]
 }

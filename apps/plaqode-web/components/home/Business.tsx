@@ -1,56 +1,84 @@
+"use client";
 import { Share2, Shield, TrendingUp, Zap } from "lucide-react";
-
-const solutions = [
-    {
-        title: "Dynamic QR Codes",
-        description: "Edit content anytime without reprinting. Perfect for marketing campaigns.",
-        icon: Zap,
-    },
-    {
-        title: "Secure Data",
-        description: "Enterprise-grade encryption keeping your analytics and user data safe.",
-        icon: Shield,
-    },
-    {
-        title: "Smart Analytics",
-        description: "Track scans, locations, and user behavior in real-time.",
-        icon: TrendingUp,
-    },
-    {
-        title: "Easy Sharing",
-        description: "Share contact details, wifi access, and files instantly.",
-        icon: Share2,
-    },
-];
+import { WobbleCard } from "@/components/ui/wobble-card";
+import Image from "next/image";
 
 export default function BusinessSection() {
     return (
-        <section className="bg-bg py-24 px-4 text-center">
-            <div className="max-w-[1200px] mx-auto">
-                <h2 className="text-3xl md:text-[3rem] font-serif font-bold mb-4 text-dark">Business Solutions</h2>
-                <p className="text-text max-w-2xl mx-auto mb-16">
-                    Everything you need to manage your QR codes in one powerful dashboard.
-                </p>
+        <section className="bg-bg py-24 px-4 relative overflow-hidden">
+            <div className="max-w-[1200px] mx-auto relative z-10">
+                <div className="text-center mb-16">
+                    <h2 className="text-3xl md:text-[3rem] font-merriweather font-bold mb-6 text-dark max-w-4xl mx-auto leading-tight">
+                        Everything you need to manage your QR codes in one <span className="text-secondary">powerful dashboard</span>.
+                    </h2>
+                    <p className="text-text/80 text-md max-w-2xl mx-auto font-sans">
+                        Streamline your workflow with tools designed for performance, security, and scale.
+                    </p>
+                </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    {solutions.map((item, i) => (
-                        <div key={i} className="relative bg-light p-8 rounded-lg shadow-light-shadow hover:shadow-box-shadow transform hover:-translate-y-2 transition-all duration-300 overflow-hidden group">
-                            {/* Gradient Top Border */}
-                            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-secondary to-primary transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
-
-                            <div className="mb-6">
-                                <item.icon className="w-12 h-12 text-secondary mx-auto" />
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto w-full">
+                    {/* Card 1: Dynamic QR Codes - Spans 2 columns */}
+                    <WobbleCard
+                        containerClassName="col-span-1 lg:col-span-2 h-full bg-pink-800 min-h-[300px]"
+                        className=""
+                    >
+                        <div className="max-w-xs">
+                            <div className="flex items-center gap-2 mb-2">
+                                <Zap className="text-white w-6 h-6" />
+                                <h2 className="text-left text-balance text-base md:text-xl lg:text-3xl font-semibold tracking-[-0.015em] text-white">
+                                    Dynamic QR Codes
+                                </h2>
                             </div>
-                            <h3 className="text-xl font-bold font-serif mb-4 text-dark">{item.title}</h3>
-                            <p className="text-text text-sm leading-relaxed mb-8">
-                                {item.description}
+                            <p className="mt-4 text-left text-base/6 text-neutral-200">
+                                Edit content anytime without reprinting. Perfect for marketing campaigns that evolve with your business.
                             </p>
-                            <button className="relative px-6 py-2 m-auto text-sm font-semibold text-dark bg-transparent rounded-full overflow-hidden transition-all duration-300 hover:text-white group-hover:bg-gradient-to-r from-secondary to-primary">
-                                <span className="absolute inset-0 p-[2px] rounded-full bg-gradient-to-r from-secondary to-primary [-webkit-mask:linear-gradient(#fff_0_0)content-box,linear-gradient(#fff_0_0)] [-webkit-mask-composite:xor] [mask-composite:exclude] -z-10 group-hover:opacity-0"></span>
-                                Learn More
-                            </button>
                         </div>
-                    ))}
+                        <div className="absolute -right-4 lg:-right-[40%] -bottom-10 object-contain rounded-2xl">
+                            {/* Placeholder visual - we can put an image here later */}
+                            <div className="w-[600px] h-[300px] bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20 backdrop-blur-sm border border-white/10 rounded-xl shadow-2xl skew-y-6 transform translate-x-10 translate-y-10" />
+                        </div>
+                    </WobbleCard>
+
+                    {/* Card 2: Secure Data - Spans 1 column */}
+                    <WobbleCard containerClassName="col-span-1 min-h-[300px] bg-indigo-800">
+                        <div className="flex items-center gap-2 mb-2">
+                            <Shield className="text-white w-6 h-6" />
+                            <h2 className="max-w-80 text-left text-balance text-base md:text-xl lg:text-3xl font-semibold tracking-[-0.015em] text-white">
+                                Enterprise Security
+                            </h2>
+                        </div>
+                        <p className="mt-4 max-w-[26rem] text-left text-base/6 text-neutral-200">
+                            Bank-grade encryption keeping your analytics and user data safe 24/7.
+                        </p>
+                    </WobbleCard>
+
+                    {/* Card 3: Smart Analytics - Spans 1 column */}
+                    <WobbleCard containerClassName="col-span-1 lg:col-span-2 min-h-[300px] bg-blue-900 lg:order-last">
+                        <div className="max-w-md">
+                            <div className="flex items-center gap-2 mb-2">
+                                <TrendingUp className="text-white w-6 h-6" />
+                                <h2 className="text-left text-balance text-base md:text-xl lg:text-3xl font-semibold tracking-[-0.015em] text-white">
+                                    Real-time Analytics
+                                </h2>
+                            </div>
+                            <p className="mt-4 text-left text-base/6 text-neutral-200">
+                                Track scans, locations, devices, and user behavior in real-time. Make data-driven decisions that grow your reach.
+                            </p>
+                        </div>
+                    </WobbleCard>
+
+                    {/* Card 4: Sharing - Spans 2 columns on mobile, 1 on LG (Wait, let's swap for Bento effect) */}
+                    <WobbleCard containerClassName="col-span-1 min-h-[300px] bg-slate-900">
+                        <div className="flex items-center gap-2 mb-2">
+                            <Share2 className="text-white w-6 h-6" />
+                            <h2 className="max-w-80 text-left text-balance text-base md:text-xl lg:text-3xl font-semibold tracking-[-0.015em] text-white">
+                                Instant Sharing
+                            </h2>
+                        </div>
+                        <p className="mt-4 max-w-[26rem] text-left text-base/6 text-neutral-200">
+                            Share wifi, contacts, and files instantly with a single scan.
+                        </p>
+                    </WobbleCard>
                 </div>
             </div>
         </section>
