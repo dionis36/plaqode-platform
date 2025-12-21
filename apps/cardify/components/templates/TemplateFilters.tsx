@@ -43,8 +43,8 @@ export default function TemplateFilters({ filters, onFilterChange }: TemplateFil
         (filters.tone && filters.tone !== 'All' ? 1 : 0);
 
     return (
-        <div className="w-full">
-            <div className="py-4">
+        <div className="w-full bg-white border-b border-gray-200">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
                 <div className="flex items-center justify-between gap-2 sm:gap-4">
                     {/* Search Bar - Always Visible */}
                     <div className="relative flex-1 w-full sm:max-w-md">

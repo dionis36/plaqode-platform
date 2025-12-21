@@ -19,7 +19,7 @@ export default function SmartNavbar() {
     useEffect(() => {
         const handleScroll = () => {
             const currentScrollY = window.scrollY;
-            const heroHeight = window.innerHeight; // Approx 100vh
+            const heroHeight = 100; // Trigger earlier since Templates page might not have a huge hero
 
             if (currentScrollY > heroHeight) {
                 if (currentScrollY > lastScrollY.current) {
