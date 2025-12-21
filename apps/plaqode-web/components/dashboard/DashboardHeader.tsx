@@ -65,7 +65,7 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
                 {/* Gradient Avatar */}
                 {user && (
                     <div className="hidden lg:block relative z-50">
-                        <GradientAvatar user={user} logout={logout} />
+                        <GradientAvatar user={user} textColor="text-dark" />
                     </div>
                 )}
 

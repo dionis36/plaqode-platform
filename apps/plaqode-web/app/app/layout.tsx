@@ -5,7 +5,7 @@ import { Sidebar } from '@/components/dashboard/Sidebar';
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
-    const [sidebarOpen, setSidebarOpen] = useState(true);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
 
     // Handle screen resize
@@ -15,8 +15,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             setIsMobile(mobile);
             if (mobile) {
                 setSidebarOpen(false);
-            } else {
-                setSidebarOpen(true);
             }
         };
 
