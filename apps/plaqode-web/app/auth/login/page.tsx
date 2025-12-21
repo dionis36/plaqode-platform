@@ -30,12 +30,6 @@ export default function LoginPage() {
 
     return (
         <div className="h-screen w-full bg-white p-2 md:p-4 flex overflow-hidden">
-
-            {/* Left Side - The "Image" / Artistic Panel 
-                - Takes 45% width as requested
-                - Reduced radius (rounded-3xl)
-                - Reduced margins (via parent p-2 md:p-4)
-            */}
             <div className="hidden lg:flex w-[50%] h-full bg-dark rounded-2xl relative overflow-hidden flex-col justify-between p-8 text-white">
 
                 {/* Background Art - Replicating the vibrant flow */}
@@ -44,9 +38,9 @@ export default function LoginPage() {
                     <div className="absolute inset-0 bg-hero-pattern bg-cover bg-center opacity-40 mix-blend-overlay"></div>
 
                     {/* Vibrant Gradients simulating the reference waves */}
-                    <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary blur-[120px] opacity-40 -translate-y-1/2 translate-x-1/2 rounded-full"></div>
-                    <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-secondary blur-[100px] opacity-30 translate-y-1/3 -translate-x-1/3 rounded-full"></div>
-                    <div className="absolute top-1/2 left-1/2 w-full h-[300px] bg-gradient-to-r from-secondary via-purple-500 to-primary blur-[80px] opacity-40 -translate-x-1/2 -translate-y-1/2 rotate-45 transform"></div>
+                    <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary blur-[120px] opacity-10 -translate-y-1/2 translate-x-1/2 rounded-full"></div>
+                    <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-secondary blur-[100px] opacity-10 translate-y-1/3 -translate-x-1/3 rounded-full"></div>
+                    <div className="absolute top-1/2 left-1/2 w-full h-[300px] bg-gradient-to-r from-secondary via-purple-500 to-primary blur-[80px] opacity-10 -translate-x-1/2 -translate-y-1/2 rotate-45 transform"></div>
                 </div>
 
                 {/* Top Content: Logo Placeholder or Brand Label */}
@@ -71,12 +65,6 @@ export default function LoginPage() {
 
             {/* Right Side - Login Form */}
             <div className="flex-1 h-full bg-white relative flex flex-col items-center justify-center overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-
-                {/* Mobile Top Bar - Removed as per request */}
-                <div className="absolute top-0 left-0 w-full p-6 flex justify-center lg:justify-end lg:pr-12">
-                    {/* Logo removed */}
-                </div>
-
                 <div className="w-full max-w-md px-8">
                     <div className="text-center mb-10">
                         <h2 className="font-merriweather text-4xl text-dark mb-3">Welcome Back</h2>
