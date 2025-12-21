@@ -32,44 +32,9 @@ const solutions = [
     },
 ];
 
-// Section 2 Data: Why Choose PlaQode
-const features = [
-    {
-        icon: ShieldCheck,
-        title: "Secure & Authentic",
-        desc: "Each QR code is uniquely encrypted with advanced security protocols, preventing fraud and ensuring complete authenticity for your business operations.",
-    },
-    {
-        icon: Settings,
-        title: "Customizable Solutions",
-        desc: "Tailor your QR codes to match your brand identity with custom colors, logos, and designs that reflect your business personality.",
-    },
-    {
-        icon: LineChart,
-        title: "Analytics & Insights",
-        desc: "Gain valuable data on scan rates, user demographics, location analytics, and behavioral patterns to optimize your business strategy.",
-    },
-    {
-        icon: Lock,
-        title: "Data Privacy",
-        desc: "We prioritize your data security with enterprise-grade encryption and strict adherence to international privacy standards and regulations.",
-    },
-    {
-        icon: Smartphone,
-        title: "Mobile-First Design",
-        desc: "Our solutions are optimized for mobile devices, ensuring seamless user experiences across all smartphones and tablets in Tanzania.",
-    },
-    {
-        icon: Headphones,
-        title: "Local Support",
-        desc: "Our dedicated Tanzanian support team provides assistance in both English and Swahili, ensuring you get help when you need it most.",
-    },
-];
-
 export default function ServicesContent() {
     return (
         <div className="w-full">
-
             {/* 1. Services Section (Dark Mode with Decor) */}
             <section className="relative bg-dark text-light pt-0 pb-24 px-4">
                 {/* Background Decor */}
@@ -105,37 +70,6 @@ export default function ServicesContent() {
                     </div>
                 </div>
             </section>
-
-            {/* 2. Why Choose Section (Light Mode) */}
-            <section className="bg-[#F5F5F7] text-dark py-24 px-4 overflow-visible">
-                <div className="max-w-[1200px] mx-auto">
-                    {/* Header */}
-                    <div className="text-center mb-16">
-                        <h2 className="text-4xl md:text-[3.5rem] font-merriweather font-bold mb-6">
-                            Why Choose <span className="text-secondary">PlaQode</span>?
-                        </h2>
-                        <p className="text-lg md:text-xl text-text/70 max-w-3xl mx-auto">
-                            Our platform combines cutting-edge technology with local expertise to deliver QR solutions that truly work for Tanzanian businesses.
-                        </p>
-                    </div>
-
-                    {/* Features Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {features.map((item, idx) => (
-                            <div key={idx} className="bg-white p-8 rounded-2xl shadow-sm border border-black/5 hover:shadow-md transition-shadow">
-                                <div className="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center mb-6 text-secondary">
-                                    <item.icon className="w-6 h-6" />
-                                </div>
-                                <h3 className="text-xl font-bold font-merriweather mb-4 text-dark">{item.title}</h3>
-                                <p className="text-text/70 leading-relaxed">
-                                    {item.desc}
-                                </p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
         </div>
     );
 }

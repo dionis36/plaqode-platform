@@ -4,7 +4,7 @@ import Logo from "../ui/Logo";
 
 export default function Footer() {
     return (
-        <footer className="bg-[#F5F5F7] py-16 px-8 text-dark font-sans border-t border-dark/5">
+        <footer className="bg-[#efefef] py-16 px-8 text-dark font-sans border-t border-dark/5">
             <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 text-left">
 
                 {/* Column 1: Logo & Intro */}
