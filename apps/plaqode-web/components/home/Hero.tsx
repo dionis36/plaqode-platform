@@ -19,7 +19,7 @@ export default function Hero() {
             <div className="absolute inset-0 bg-hero-pattern bg-cover bg-center opacity-30 z-[1] pointer-events-none" />
 
             {/* Hero Header (Static) */}
-            <div className="absolute top-0 left-0 w-full z-20 px-8 py-4 flex justify-between items-center max-w-[1400px] mx-auto">
+            <div className="absolute top-0 left-0 w-full z-20 px-4 md:px-8 py-4 flex justify-between items-center max-w-[1400px] mx-auto">
                 <Logo />
                 <div className="hidden md:flex items-center gap-8">
                     <nav className="flex gap-8">
@@ -31,7 +31,7 @@ export default function Hero() {
                     {user ? (
                         <GradientAvatar user={user} />
                     ) : (
-                        <GradientButton href="/auth/login" text="Login" size="sm" />
+                        <GradientButton href="/auth/login" text="Login" size="sm" className="text-light" />
                     )}
                 </div>
             </div>

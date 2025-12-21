@@ -46,7 +46,7 @@ export default function SmartNavbar() {
                 className={`fixed top-0 left-0 w-full z-[999] bg-dark shadow-md transition-transform duration-300 ease-in-out ${isVisible ? "translate-y-0" : "-translate-y-full"
                     }`}
             >
-                <div className="max-w-[1400px] mx-auto px-8 py-4 flex justify-between items-center">
+                <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-4 flex justify-between items-center">
                     {/* Logo */}
                     <Logo />
 
