@@ -2,11 +2,14 @@ import Link from "next/link";
 import clsx from "clsx";
 
 interface GradientButtonProps {
-  href: string;
+  href?: string;
   text: string;
   className?: string;
   size?: "sm" | "md" | "lg" | "xl";
   bold?: boolean;
+  onClick?: () => void;
+  type?: "button" | "submit" | "reset";
+  disabled?: boolean;
 }
 
 const sizeStyles = {
@@ -22,27 +25,43 @@ export default function GradientButton({
   className = "",
   size = "md",
   bold = false,
+  onClick,
+  type = "button",
+  disabled = false,
 }: GradientButtonProps) {
-  return (
-    <Link
-      href={href}
-      className={clsx(
-        "group relative inline-flex items-center justify-center",
-        "rounded-full transition-transform duration-300",
-        "hover:scale-[1.03]",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-        sizeStyles[size],
-        bold ? "font-bold" : "font-medium",
-        className
-      )}
-    >
+  const commonClasses = clsx(
+    "group relative inline-flex items-center justify-center",
+    "rounded-full transition-transform duration-300",
+    "hover:scale-[1.03]",
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+    sizeStyles[size],
+    bold ? "font-bold" : "font-medium",
+    disabled && "opacity-50 cursor-not-allowed hover:scale-100",
+    className
+  );
+
+  const content = (
+    <>
       {/* Gradient border */}
       <span className="absolute inset-0 rounded-full gradient-border-mask pointer-events-none" />
-
       {/* Text */}
       <span className="relative z-10 whitespace-nowrap leading-none">
         {text}
       </span>
-    </Link>
+    </>
+  );
+
+  if (href) {
+    return (
+      <Link href={href} className={commonClasses} onClick={onClick}>
+        {content}
+      </Link>
+    );
+  }
+
+  return (
+    <button type={type} className={commonClasses} onClick={onClick} disabled={disabled}>
+      {content}
+    </button>
   );
 }

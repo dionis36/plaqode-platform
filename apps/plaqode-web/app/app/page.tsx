@@ -96,11 +96,11 @@ export default function DashboardPage() {
     return (
         <div className="max-w-7xl mx-auto">
             {/* Welcome Section */}
-            <div className="mb-8">
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            <div className="mb-10 text-left">
+                <h1 className="text-4xl font-merriweather font-bold text-dark mb-3">
                     Welcome back, {user?.name || user?.email}!
                 </h1>
-                <p className="text-gray-600">Here's an overview of your creative workspace</p>
+                <p className="text-text/70 font-sans text-lg">Here's an overview of your creative workspace</p>
             </div>
 
 

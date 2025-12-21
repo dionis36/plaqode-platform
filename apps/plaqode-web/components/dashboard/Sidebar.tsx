@@ -13,6 +13,7 @@ import {
     LogOut
 } from 'lucide-react';
 import Link from 'next/link';
+import Logo from '@/components/ui/Logo';
 
 interface SidebarProps {
     isOpen: boolean;
@@ -50,7 +51,7 @@ export function Sidebar({ isOpen, setIsOpen, isMobile, onCloseMobile }: SidebarP
         },
         {
             label: 'My QR Codes',
-            href: '/app/qrcodes', // Assuming this route exists or will exist
+            href: '/app/qrcodes',
             icon: QrCode
         },
         {
@@ -82,7 +83,7 @@ export function Sidebar({ isOpen, setIsOpen, isMobile, onCloseMobile }: SidebarP
             {/* Mobile Overlay */}
             {isMobile && isOpen && (
                 <div
-                    className="fixed inset-0 bg-black/50 z-40"
+                    className="fixed inset-0 bg-black/50 z-40 backdrop-blur-sm"
                     onClick={onCloseMobile}
                 />
             )}
@@ -90,29 +91,40 @@ export function Sidebar({ isOpen, setIsOpen, isMobile, onCloseMobile }: SidebarP
             {/* Sidebar Container */}
             <aside
                 className={`
-                    fixed top-0 z-50 h-screen bg-white border-r border-gray-200 transition-all duration-300 ease-in-out flex flex-col shadow-xl md:shadow-none
+                    fixed top-0 z-50 h-screen bg-dark text-light border-r border-white/5 transition-all duration-300 ease-in-out flex flex-col shadow-2xl md:shadow-none
                     md:left-0 md:border-r
                     ${isMobile
-                        ? (isOpen ? 'right-0 translate-x-0 w-80 border-l' : 'right-0 translate-x-full w-80')
+                        ? (isOpen ? 'right-0 translate-x-0 w-80 border-l border-white/10' : 'right-0 translate-x-full w-80')
                         : (isOpen ? 'left-0 w-64' : 'left-0 w-20')
                     }
                 `}
             >
                 {/* Header */}
-                <div className={`h-16 flex items-center border-b border-gray-100 shrink-0 relative ${!isOpen && !isMobile ? 'justify-center px-0' : 'justify-between px-4'}`}>
-                    <Link href="/" className="flex items-center gap-3 overflow-hidden">
-                        <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-purple-600 to-pink-600 flex items-center justify-center text-white font-bold text-lg shrink-0">
-                            P
+                <div className={`h-20 flex items-center border-b border-white/5 shrink-0 relative ${!isOpen && !isMobile ? 'justify-center px-0' : 'justify-between px-6'}`}>
+
+                    {/* Consistent Logo (Hidden when collapsed on desktop) */}
+                    <div className={`transition-opacity duration-300 ${!isOpen && !isMobile ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'}`}>
+                        <Logo color="white" />
+                    </div>
+                    {/* Collapsed Icon when closed */}
+                    {(!isOpen && !isMobile) && (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="relative w-10 h-10">
+                                {/* Using image directly to match Logo.tsx style but without text */}
+                                <img
+                                    src="/img/qr-code-2.png"
+                                    alt="Plaqode Logo"
+                                    className="object-contain w-full h-full"
+                                />
+                            </div>
                         </div>
-                        <span className={`font-bold text-xl bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent whitespace-nowrap transition-all duration-300 ${!isOpen && !isMobile ? 'w-0 opacity-0' : 'w-auto opacity-100'}`}>
-                            PlaQode
-                        </span>
-                    </Link>
+                    )}
+
 
                     {!isMobile && (
                         <button
                             onClick={toggleSidebar}
-                            className="absolute -right-3 top-16 p-1 bg-white border border-gray-200 rounded-full shadow-sm text-gray-500 hover:text-gray-700 hover:bg-gray-50 transition-colors z-50 transform -translate-y-1/2"
+                            className="absolute -right-3 top-20 p-1 bg-dark border border-white/10 rounded-full shadow-lg text-light/70 transition-colors z-50 transform -translate-y-1/2"
                         >
                             {isOpen ? <ChevronLeft size={14} /> : <ChevronRight size={14} />}
                         </button>
@@ -121,7 +133,7 @@ export function Sidebar({ isOpen, setIsOpen, isMobile, onCloseMobile }: SidebarP
                     {isMobile && (
                         <button
                             onClick={onCloseMobile}
-                            className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 transition-colors"
+                            className="p-1.5 rounded-lg hover:bg-white/10 text-light/70 transition-colors"
                         >
                             <ChevronRight size={24} />
                         </button>
@@ -142,24 +154,24 @@ export function Sidebar({ isOpen, setIsOpen, isMobile, onCloseMobile }: SidebarP
                                     flex transition-all duration-200 group relative
                                     ${!isOpen && !isMobile
                                         ? 'flex-col items-center justify-center py-3 px-1 gap-1'
-                                        : 'items-center gap-3 px-3 py-2.5'
+                                        : 'items-center gap-3 px-3 py-3'
                                     }
-                                    rounded-lg
+                                    rounded-lg border border-transparent
                                     ${active
-                                        ? 'bg-purple-50 text-purple-700'
-                                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                                        ? 'bg-gradient-to-r from-secondary/10 to-primary/10 border-white/10 text-white'
+                                        : 'text-light/70 hover:bg-white/5 hover:text-white'
                                     }
                                 `}
                                 onClick={isMobile ? onCloseMobile : undefined}
                             >
                                 <item.icon
-                                    size={!isOpen && !isMobile ? 24 : 22}
-                                    className={`shrink-0 transition-colors ${active ? 'text-purple-600' : 'text-gray-400 group-hover:text-gray-600'}`}
+                                    size={!isOpen && !isMobile ? 24 : 20}
+                                    className={`shrink-0 transition-colors ${active ? 'text-secondary' : 'text-light/50 group-hover:text-light'}`}
                                 />
 
                                 {/* Label: Show normally if open, show small below if collapsed */}
                                 {(!isOpen && !isMobile) ? (
-                                    <span className="text-[10px] font-medium text-center leading-tight">
+                                    <span className="text-[10px] font-medium text-center leading-tight opacity-70">
                                         {item.label}
                                     </span>
                                 ) : (
@@ -174,19 +186,19 @@ export function Sidebar({ isOpen, setIsOpen, isMobile, onCloseMobile }: SidebarP
 
                 {/* User Profile (Mobile Only) - Bottom */}
                 {isMobile && user && (
-                    <div className="p-4 border-t border-gray-100 bg-gray-50/50 shrink-0 flex items-center justify-between">
+                    <div className="p-4 border-t border-white/10 bg-black/20 shrink-0 flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm shadow-md">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-r from-secondary to-primary flex items-center justify-center text-white font-bold text-sm shadow-md">
                                 {getInitials(user.name, user.email)}
                             </div>
                             <div className="min-w-0">
-                                <p className="text-sm font-semibold text-gray-900 truncate">{user.name}</p>
-                                <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                                <p className="text-sm font-semibold text-white truncate">{user.name}</p>
+                                <p className="text-xs text-light/50 truncate">{user.email}</p>
                             </div>
                         </div>
                         <button
                             onClick={() => logout()}
-                            className="p-2 text-red-500 hover:bg-red-50 rounded-full transition-colors"
+                            className="p-2 text-red-400 hover:bg-red-500/10 rounded-full transition-colors"
                             title="Logout"
                         >
                             <LogOut size={20} />

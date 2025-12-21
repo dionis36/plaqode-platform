@@ -11,9 +11,10 @@ interface GradientAvatarProps {
         email: string;
     };
     className?: string;
+    textColor?: "text-white" | "text-dark";
 }
 
-export default function GradientAvatar({ user, className = "" }: GradientAvatarProps) {
+export default function GradientAvatar({ user, className = "", textColor = "text-white" }: GradientAvatarProps) {
     const { logout } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -49,7 +50,7 @@ export default function GradientAvatar({ user, className = "" }: GradientAvatarP
                 />
 
                 {/* 2. Initials (Transparent Center) */}
-                <span className="relative z-10 text-white font-inter font-bold text-sm tracking-wider">
+                <span className={`relative z-10 font-inter font-bold text-sm tracking-wider ${textColor}`}>
                     {getInitials(user)}
                 </span>
             </button>

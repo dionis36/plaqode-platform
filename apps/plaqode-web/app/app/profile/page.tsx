@@ -2,6 +2,7 @@
 
 import { useAuth } from '@/lib/auth-context';
 import { useState } from 'react';
+import GradientButton from '@/components/ui/GradientButton';
 
 export default function ProfilePage() {
     const { user } = useAuth();
@@ -44,20 +45,20 @@ export default function ProfilePage() {
     if (!user) return null;
 
     return (
-        <div className="max-w-4xl mx-auto">
-            <div className="mb-8">
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">Profile</h1>
-                <p className="text-gray-600">Manage your account information</p>
+        <div className="max-w-4xl mr-auto">
+            <div className="mb-10 text-left">
+                <h1 className="text-4xl font-merriweather font-bold text-dark mb-3">Profile</h1>
+                <p className="text-text/70 font-sans text-lg">Manage your account information</p>
             </div>
 
             {message && (
-                <div className="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
+                <div className="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-left">
                     {message}
                 </div>
             )}
 
             {error && (
-                <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-left">
                     {error}
                 </div>
             )}
@@ -99,7 +100,7 @@ export default function ProfilePage() {
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition disabled:opacity-50"
+                                    className="px-6 py-2.5 bg-black text-white rounded-full font-bold hover:opacity-90 transition disabled:opacity-50 shadow-lg text-sm"
                                 >
                                     {loading ? 'Saving...' : 'Save Changes'}
                                 </button>
@@ -127,12 +128,11 @@ export default function ProfilePage() {
                                 <p className="text-gray-900">{user.email}</p>
                             </div>
 
-                            <button
+                            <GradientButton
+                                text="Edit Profile"
+                                size="sm"
                                 onClick={() => setEditing(true)}
-                                className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
-                            >
-                                Edit Profile
-                            </button>
+                            />
                         </div>
                     )}
                 </div>
