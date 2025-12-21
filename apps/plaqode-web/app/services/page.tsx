@@ -17,6 +17,9 @@ export default function ServicesPage() {
 
                 <div className="relative z-10">
                     <h1 className="text-5xl md:text-[4rem] font-merriweather font-bold text-light mb-4 bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent">Our Services</h1>
+                    <p className="text-light/70 font-sans max-w-xl mx-auto">
+                        Transforming Tanzanian businesses with innovative QR code solutions.
+                    </p>
                 </div>
             </div>
 

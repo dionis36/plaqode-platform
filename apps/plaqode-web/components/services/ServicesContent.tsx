@@ -1,7 +1,7 @@
 "use client";
 
 import GradientButton from "@/components/ui/GradientButton";
-import { Link, IdCard, Calendar, Share2, Printer, ShieldCheck, Settings, LineChart, Lock, Smartphone, Headphones } from "lucide-react";
+import { Link, IdCard, Calendar, Share2, Printer, Code, ShieldCheck, Settings, LineChart, Lock, Smartphone, Headphones } from "lucide-react";
 
 // Section 1 Data: Business Solutions
 const solutions = [
@@ -29,6 +29,11 @@ const solutions = [
         icon: Printer,
         title: "Printing & Marketing",
         desc: "Transform traditional marketing materials like banners and posters into interactive tools. Engage your audience with QR codes that lead to promotions and valuable information.",
+    },
+    {
+        icon: Code,
+        title: "Custom API Solutions",
+        desc: "Integrate powerful QR code generation capabilities directly into your own applications with our robust and scalable API.",
     },
 ];
 
