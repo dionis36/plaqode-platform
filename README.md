@@ -1,129 +1,140 @@
 # Plaqode Platform Monorepo
 
-Unified monorepo containing all Plaqode platform services and applications.
+Welcome to the **Plaqode Platform Repository**. This monorepo houses the complete ecosystem for **Plaqode**, a next-generation platform for digital connectivity solutions in Tanzania. It unifies multiple interconnected services including digital business cards, dynamic QR code management, and a central identity system.
 
-## 🏗️ Architecture
+## 🏗️ Architecture Overview
 
-This monorepo contains 5 applications:
+The platform is architected as a **high-performance monorepo** using **Turborepo** and **npm workspaces**. It consists of distinct, specialized applications that communicate to provide a seamless user experience.
 
-### Applications
+### 📦 Applications
 
-- **Cardify** (`apps/cardify`) - QR code and card generation platform
-- **QR Studio Web** (`apps/qrstudio-web`) - QR Studio frontend application
-- **QR Studio API** (`apps/qrstudio-api`) - QR Studio backend service
-- **Plaqode Web** (`apps/plaqode-web`) - Main platform frontend
-- **Plaqode Auth** (`apps/plaqode-auth`) - Central authentication service
+| Application | Service Name | Path | Tech Stack | Port | Description |
+|:--- |:--- |:--- |:--- |:--- |:--- |
+| **Plaqode Web** | `@plaqode-platform/plaqode-web` | `apps/plaqode-web` | Next.js 15, Tailwind v4, Framer Motion | **3000** | The main landing page, user dashboard, and central hub for the ecosystem. |
+| **QR Studio Web** | `@plaqode-platform/qrstudio-web` | `apps/qrstudio-web` | Next.js 14, React, Tailwind | **3001** | Dedicated frontend interface for advanced QR code generation and analytics. |
+| **Cardify** | `@plaqode-platform/cardify` | `apps/cardify` | Next.js 14, Prisma, PostgreSQL | **3002** | Digital Business Card platform allowing users to create, customize, and share smart profiles. |
+| **Plaqode Auth** | `@plaqode-platform/plaqode-auth` | `apps/plaqode-auth` | Fastify, Node.js, Prisma | **3003** | Centralized Authentication Service (SSO). Handles user identity, JWT issuance, and session management for all apps. |
+| **QR Studio API** | `@plaqode-platform/qrstudio-api` | `apps/qrstudio-api` | Fastify, Node.js, Prisma | **3005** | High-performance API backend for generating, tracking, and managing dynamic QR codes. |
 
-### Shared Packages
-
-- **TypeScript Config** (`packages/typescript-config`) - Shared TypeScript configurations
-- **ESLint Config** (`packages/eslint-config`) - Shared linting rules
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-- Node.js >= 20.0.0
-- npm >= 10.0.0
-
-### Installation
-
-```bash
-# Install all dependencies
-npm install
-```
-
-### Development
-
-```bash
-# Run all services concurrently
-npm run dev
-
-# Run individual services
-npm run cardify:dev
-npm run qrstudio-web:dev
-npm run qrstudio-api:dev
-npm run plaqode-web:dev
-npm run plaqode-auth:dev
-```
-
-### Build
-
-```bash
-# Build all applications
-npm run build
-
-# Lint all applications
-npm run lint
-```
-
-## 🌐 Port Assignments
-
-| Application | Port | URL |
-|------------|------|-----|
-| Plaqode Web | 3000 | http://localhost:3000 |
-| QR Studio Web | 3001 | http://localhost:3001 |
-| Cardify | 3002 | http://localhost:3002 |
-| Plaqode Auth | 4000 | http://localhost:4000 |
-| QR Studio API | 4001 | http://localhost:4001 |
-
-## 📝 Environment Setup
-
-Each application requires its own environment variables. Copy `.env.example` to `.env` in each app directory:
-
-```bash
-# For each app
-cd apps/[app-name]
-cp .env.example .env
-# Edit .env with your values
-```
-
-See `docs/ENVIRONMENT_SETUP.md` for detailed configuration.
-
-## 📚 Documentation
-
-- [Startup Guide](docs/STARTUP_GUIDE.md) - Detailed setup instructions
-- [Environment Setup](docs/ENVIRONMENT_SETUP.md) - Environment variable configuration
-- [Port Assignments](docs/PORT_ASSIGNMENTS.md) - Service port mappings
-- [Migration Notes](MIGRATION_NOTES.md) - Migration history and details
+---
 
 ## 🛠️ Technology Stack
 
-- **Frontend**: Next.js, React, TailwindCSS
-- **Backend**: Fastify, Node.js
-- **Database**: PostgreSQL, Prisma ORM
-- **Authentication**: JWT, bcrypt
-- **Build Tool**: Turborepo
-- **Package Manager**: npm workspaces
+We use a modern, robust, and scalable technology stack:
 
-## 📦 Project Structure
+*   **Frontend Ecosystem:**
+    *   **Frameworks:** Next.js (v14/v15), React 18/19
+    *   **Styling:** TailwindCSS (v3 & v4), PostCSS
+    *   **Animations:** GSAP, Framer Motion
+    *   **State Management:** React Context, custom hooks
 
-```
-plaqode-platform/
-├── apps/
-│   ├── cardify/          # QR/Card generation app
-│   ├── qrstudio-web/     # QR Studio frontend
-│   ├── qrstudio-api/     # QR Studio backend
-│   ├── plaqode-web/      # Platform frontend
-│   └── plaqode-auth/     # Auth service
-├── packages/
-│   ├── typescript-config/
-│   └── eslint-config/
-└── docs/
-```
+*   **Backend & Data:**
+    *   **Runtime:** Node.js (v20+)
+    *   **Framework:** Fastify (High performance)
+    *   **Database:** PostgreSQL
+    *   **ORM:** Prisma (Isolated clients per microservice)
+    *   **Auth:** JWT (JSON Web Tokens), HttpOnly Cookies
 
-## 🤝 Contributing
+*   **DevOps & Tooling:**
+    *   **Monorepo:** Turborepo
+    *   **Package Manager:** npm workspaces
+    *   **Language:** TypeScript (Strict mode)
 
-This is a monorepo managed with Turborepo and npm workspaces. When adding dependencies:
+---
+
+## 🚀 Getting Started
+
+Follow these instructions to set up the Plaqode Platform locally.
+
+### 1. Prerequisites
+
+Ensure you have the following installed:
+*   **Node.js** (v20.0.0 or higher) - [Download](https://nodejs.org/)
+*   **npm** (comes with Node.js)
+*   **PostgreSQL** (Running locally or a cloud URL)
+
+### 2. Installation
+
+Clone the repository and install dependencies from the root directory:
 
 ```bash
-# Add to root
-npm install <package> -w root
-
-# Add to specific app
-npm install <package> -w apps/[app-name]
+git clone https://github.com/your-username/plaqode-platform.git
+cd plaqode-platform
+npm install
 ```
+
+### 3. Environment Setup
+
+Access the `apps` directory and configure environment variables for each service.
+**Note:** You must set up a `.env` file in each application folder (`apps/cardify`, `apps/plaqode-auth`, etc.).
+
+Example `.env` structure for **Apps** (refer to `.env.example` in each folder):
+
+```env
+# Database
+DATABASE_URL="postgresql://user:password@localhost:5432/my_db?schema=public"
+
+# Auth
+NEXT_PUBLIC_AUTH_SERVICE_URL="http://localhost:3003"
+NEXT_PUBLIC_PLATFORM_URL="http://localhost:3000"
+```
+
+### 4. Database Setup
+
+To prevent conflicts, each service generates its own isolated Prisma Client.
+
+```bash
+# Generate clients for all services
+npx turbo run prisma:generate
+
+# OR migrate databases individually
+cd apps/cardify && npx prisma migrate dev
+cd apps/plaqode-auth && npx prisma migrate dev
+cd apps/qrstudio-api && npx prisma migrate dev
+```
+
+### 5. Running the Platform
+
+You can run the entire platform concurrently with a single command from the root:
+
+```bash
+npm run dev
+```
+
+This will start:
+*   **Plaqode Web** at [http://localhost:3000](http://localhost:3000)
+*   **QR Studio Web** at [http://localhost:3001](http://localhost:3001)
+*   **Cardify** at [http://localhost:3002](http://localhost:3002)
+*   **Auth Service** at [http://localhost:3003](http://localhost:3003)
+*   **QR API** at [http://localhost:3005](http://localhost:3005)
+
+---
+
+## 👨‍💻 Development Workflow
+
+### Adding Dependencies
+
+Since this is a monorepo, use the workspace flag to install packages:
+
+```bash
+# Install to valid workspace (e.g., cardify)
+npm install lucide-react -w apps/cardify
+
+# Install to root (shared dev dependencies)
+npm install turbo -w root
+```
+
+### Prisma Workflow
+
+We use **Isolated Prisma Clients** to manage multiple database schemas in a single repo.
+*   **Cardify Client:** Located in `apps/cardify/lib/generated/client`
+*   **Auth Client:** Located in `apps/plaqode-auth/src/generated/client`
+*   **QR API Client:** Located in `apps/qrstudio-api/src/generated/client`
+
+**Always** restart the development server after running `prisma generate`.
+
+---
 
 ## 📄 License
 
-ISC
+This project is proprietary software. All rights reserved by **Plaqode**.
