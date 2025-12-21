@@ -2,7 +2,7 @@ import GradientButton from "@/components/ui/GradientButton";
 
 export default function AboutSection() {
     return (
-        <section className="bg-light text-dark py-24 text-center">
+        <section className="bg-bg text-dark py-24 text-center">
             <div className="max-w-[1000px] mx-auto px-8 relative flex flex-col items-center">
                 <h2 className="text-4xl md:text-[3.5rem] font-merriweather font-bold mb-8 leading-tight">
                     The Story So Far...
