@@ -80,10 +80,6 @@ apps/*/keys/*.key
 # Prisma
 apps/*/prisma/migrations/
 
-# Generated Prisma Clients
-apps/*/src/generated/
-apps/*/lib/generated/
-
 # Optional: ignore local uploads
 public/uploads/*
 !public/uploads/.gitkeep
