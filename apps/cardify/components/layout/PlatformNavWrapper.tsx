@@ -2,9 +2,16 @@
 
 import { useAuth } from '@/lib/auth-context';
 import { PlatformNav } from './PlatformNav';
+import { usePathname } from 'next/navigation';
 
 export function PlatformNavWrapper() {
     const { user } = useAuth();
+    const pathname = usePathname();
+
+    // Hide PlatformNav (Dashboard Sidebar) on public templates page
+    if (pathname?.startsWith('/templates')) {
+        return null;
+    }
 
     const handleLogout = async () => {
         // Call logout endpoint

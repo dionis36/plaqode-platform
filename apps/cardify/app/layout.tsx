@@ -1,7 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import FontLoader from "@/components/FontLoader";
-import { Inter } from 'next/font/google';
+import { Inter, Merriweather } from 'next/font/google';
 import { AuthProvider } from '@/lib/auth-context';
 import { PlatformNav } from '@/components/layout/PlatformNav';
 import { PlatformNavWrapper } from '@/components/layout/PlatformNavWrapper';
@@ -12,6 +12,13 @@ const inter = Inter({
   variable: '--font-inter',
   display: 'swap',
   fallback: ['system-ui', 'arial']
+});
+
+const merriweather = Merriweather({
+  variable: "--font-merriweather",
+  weight: ["300", "400", "700", "900"],
+  subsets: ["latin"],
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
@@ -25,8 +32,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.variable}>
-      <body className="bg-background text-secondary">
+    <html lang="en" className={`${inter.variable} ${merriweather.variable}`}>
+      <body className="bg-bg text-text font-sans">
         <AuthProvider>
           <PlatformNavWrapper />
           <FontLoader />

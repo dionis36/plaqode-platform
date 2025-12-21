@@ -15,6 +15,7 @@ interface AuthContextType {
     loading: boolean;
     isAuthenticated: boolean;
     hasCardifyAccess: boolean;
+    logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -41,8 +42,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 setUser(userData);
                 setIsAuthenticated(true);
             } else {
-                // Don't redirect - just set as not authenticated
-                // Public users can still use Cardify
                 setUser(null);
                 setIsAuthenticated(false);
             }
@@ -55,10 +54,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
     };
 
+    const logout = async () => {
+        try {
+            await fetch(`${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/logout`, {
+                method: 'POST',
+                credentials: 'include',
+            });
+        } catch (error) {
+            console.error('Logout failed:', error);
+        }
+        setUser(null);
+        setIsAuthenticated(false);
+        // Redirect to platform login
+        window.location.href = `${process.env.NEXT_PUBLIC_PLATFORM_URL || 'http://localhost:3000'}/auth/login`;
+    };
+
     const hasCardifyAccess = user?.products.includes('cardify') || false;
 
     return (
-        <AuthContext.Provider value={{ user, loading, isAuthenticated, hasCardifyAccess }}>
+        <AuthContext.Provider value={{ user, loading, isAuthenticated, hasCardifyAccess, logout }}>
             {children}
         </AuthContext.Provider>
     );

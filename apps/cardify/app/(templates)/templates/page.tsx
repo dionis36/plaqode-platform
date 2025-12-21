@@ -8,6 +8,8 @@ import TemplateGrid from "@/components/templates/TemplateGrid";
 import TemplateFilters from "@/components/templates/TemplateFilters";
 import { TemplateFilterOptions } from "@/lib/templateRegistry";
 import { Pagination } from "@/components/ui/Pagination";
+import StaticNavbar from "@/components/layout/StaticNavbar";
+import SmartNavbar from "@/components/layout/SmartNavbar";
 
 const TemplatesPage = () => {
   const router = useRouter();
@@ -135,11 +137,8 @@ const TemplatesPage = () => {
 
     router.push(`?${params.toString()}`, { scroll: false });
 
-    // Scroll to top of the scrollable content area
-    const scrollableContainer = document.querySelector('.flex-1.overflow-y-auto');
-    if (scrollableContainer) {
-      scrollableContainer.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    // Scroll to top of the page
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleFilterChange = (newFilters: TemplateFilterOptions) => {
@@ -169,54 +168,55 @@ const TemplatesPage = () => {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 flex flex-col h-screen">
-      {/* Scrollable Content Area */}
-      <div className="flex-1 overflow-y-auto">
+    <main className="min-h-screen bg-bg relative">
+      <SmartNavbar />
 
-        {/* Header */}
-        <div className="bg-white border-b border-gray-200">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12">
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight mb-2">
-              Template Library
-            </h1>
-            <p className="text-base sm:text-lg text-gray-500 max-w-2xl">
-              Jumpstart your design with our professionally crafted templates.
-              Customize every detail to match your brand.
-            </p>
-          </div>
+      {/* Hero Section with Internal Static Nav */}
+      <div className="relative bg-dark text-center py-24 sm:py-32 px-4 overflow-hidden">
+        <StaticNavbar />
+
+        {/* Background Pattern/Gradient */}
+        <div className="absolute inset-0 bg-[url('/img/hero-bg.jpg')] bg-cover bg-center opacity-20 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-dark/90 pointer-events-none" />
+
+        <div className="relative z-10 max-w-4xl mx-auto pt-10">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-merriweather font-bold text-white mb-6">
+            Template Library
+          </h1>
+          <p className="text-lg sm:text-xl text-white/70 max-w-2xl mx-auto font-sans">
+            Jumpstart your design with our professionally crafted templates.
+            Customize every detail to match your brand.
+          </p>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">
+            {filters.category && filters.category !== 'All' ? `${filters.category} Templates` : 'All Templates'}
+          </h1>
+          <TemplateFilters filters={filters} onFilterChange={handleFilterChange} />
         </div>
 
-        {/* Sticky Filters */}
-        <TemplateFilters filters={filters} onFilterChange={handleFilterChange} />
-
-        {/* Grid Content */}
-        <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-          <div className="mb-6">
-            <h1 className="text-2xl font-bold text-gray-900">
-              {filters.category && filters.category !== 'All' ? `${filters.category} Templates` : 'All Templates'}
-            </h1>
+        {isLoading ? (
+          <div className="flex items-center justify-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
           </div>
+        ) : (
+          <>
+            <TemplateGrid templates={visibleTemplates} />
 
-          {isLoading ? (
-            <div className="flex items-center justify-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <div className="border-t border-gray-200 mt-12 pt-8">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+                totalItems={totalItems}
+                itemsPerPage={ITEMS_PER_PAGE}
+              />
             </div>
-          ) : (
-            <>
-              <TemplateGrid templates={visibleTemplates} />
-
-              <div className="border-t border-gray-200">
-                <Pagination
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  onPageChange={handlePageChange}
-                  totalItems={totalItems}
-                  itemsPerPage={ITEMS_PER_PAGE}
-                />
-              </div>
-            </>
-          )}
-        </div>
+          </>
+        )}
       </div>
     </main>
   );
