@@ -1,5 +1,7 @@
 "use client";
 
+const PLATFORM_URL = 'http://localhost:3000';
+
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { X, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
@@ -77,26 +79,26 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                     <nav className="flex flex-col gap-4">
                         {["Home", "About", "Services", "Contact"].map((item) => (
                             <div key={item} className="border-b border-light/10 pb-4">
-                                <Link
-                                    href={item === "Home" ? "/" : `/${item.toLowerCase()}`}
+                                <a
+                                    href={item === "Home" ? PLATFORM_URL : `${PLATFORM_URL}/${item.toLowerCase()}`}
                                     className="text-lg font-medium hover:text-secondary transition-colors block"
                                     onClick={onClose}
                                 >
                                     {item}
-                                </Link>
+                                </a>
                             </div>
                         ))}
                         <div className="pt-4">
-                            <Link
-                                href="/auth/login"
+                            <a
+                                href={`${PLATFORM_URL}/auth/login`}
                                 className="block w-full py-3 text-center rounded-full bg-gradient-to-r from-secondary to-primary text-white font-bold text-lg"
                                 onClick={onClose}
                             >
                                 Login
-                            </Link>
+                            </a>
                         </div>
                     </nav>
-                </div>
+                </div >
 
                 <div>
                     <p className="text-sm text-white/70 mb-6">
@@ -109,7 +111,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                         <a href="#" className="hover:text-secondary hover:scale-110 transition-all"><Linkedin /></a>
                     </div>
                 </div>
-            </div>
+            </div >
         </>
     );
 }

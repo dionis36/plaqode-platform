@@ -1,5 +1,7 @@
 "use client";
 
+const PLATFORM_URL = 'http://localhost:3000';
+
 import Link from 'next/link';
 import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '@/lib/auth-context';
@@ -64,23 +66,23 @@ export default function GradientAvatar({ user, className = "", textColor = "text
                     </div>
 
                     <div className="p-2 space-y-1">
-                        <Link
-                            href="/app"
+                        <a
+                            href={`${PLATFORM_URL}/app`}
                             className="flex items-center gap-3 px-3 py-2 text-sm text-light hover:bg-white/10 rounded-lg transition-colors group"
                             onClick={() => setIsOpen(false)}
                         >
                             <LayoutDashboard size={18} className="text-gray-400 group-hover:text-white transition-colors" />
                             Dashboard
-                        </Link>
+                        </a>
 
-                        <Link
-                            href="/app/qrcodes"
+                        <a
+                            href={`${PLATFORM_URL}/app/qrcodes`}
                             className="flex items-center gap-3 px-3 py-2 text-sm text-light hover:bg-white/10 rounded-lg transition-colors group"
                             onClick={() => setIsOpen(false)}
                         >
                             <Code size={18} className="text-gray-400 group-hover:text-white transition-colors" />
                             My QR Codes
-                        </Link>
+                        </a>
                     </div>
 
                     <div className="border-t border-white/10 p-2">

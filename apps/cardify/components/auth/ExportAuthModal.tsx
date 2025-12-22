@@ -1,5 +1,7 @@
 'use client';
 
+const PLATFORM_URL = 'http://localhost:3000';
+
 interface ExportAuthModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -20,7 +22,7 @@ export function ExportAuthModal({ isOpen, onClose, onSaveBeforeAuth }: ExportAut
         }
 
         const currentUrl = typeof window !== 'undefined' ? encodeURIComponent(window.location.href) : '';
-        window.location.href = `${process.env.NEXT_PUBLIC_PLATFORM_URL || 'http://localhost:3000'}/auth/login?redirect=${currentUrl}`;
+        window.location.href = `${PLATFORM_URL}/auth/login?redirect=${currentUrl}`;
     };
 
     const handleSignup = async () => {
@@ -34,7 +36,8 @@ export function ExportAuthModal({ isOpen, onClose, onSaveBeforeAuth }: ExportAut
         }
 
         // For signup, we don't include redirect - new users go to dashboard to see their saved design
-        window.location.href = `${process.env.NEXT_PUBLIC_PLATFORM_URL || 'http://localhost:3000'}/auth/signup`;
+        // For signup, we don't include redirect - new users go to dashboard to see their saved design
+        window.location.href = `${PLATFORM_URL}/auth/signup`;
     };
 
     return (

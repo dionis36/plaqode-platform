@@ -1,5 +1,8 @@
 "use client";
 
+// Explicitly pointing to the main Plaqode Platform application (Port 3000)
+const PLATFORM_URL = 'http://localhost:3000';
+
 import Link from "next/link";
 import GradientButton from "@/components/ui/GradientButton";
 import GradientAvatar from "@/components/ui/GradientAvatar";
@@ -24,10 +27,10 @@ export default function StaticNavbar() {
                         {/* Adjusting links to point to PlaQode main site if needed, or keeping local routes if they exist.
                             Assuming relative routes for now, user can correct if they need absolute URLs to plaqode-web.
                         */}
-                        <a href="/" className="text-light hover:text-secondary transition-colors">Home</a>
-                        <a href="/about" className="text-light hover:text-secondary transition-colors">About</a>
-                        <a href="/services" className="text-light hover:text-secondary transition-colors">Services</a>
-                        <a href="/contact" className="text-light hover:text-secondary transition-colors">Contact</a>
+                        <a href={PLATFORM_URL} className="text-light hover:text-secondary transition-colors">Home</a>
+                        <a href={`${PLATFORM_URL}/about`} className="text-light hover:text-secondary transition-colors">About</a>
+                        <a href={`${PLATFORM_URL}/services`} className="text-light hover:text-secondary transition-colors">Services</a>
+                        <a href={`${PLATFORM_URL}/contact`} className="text-light hover:text-secondary transition-colors">Contact</a>
                     </nav>
 
                     <div className="hidden md:block">
@@ -36,7 +39,7 @@ export default function StaticNavbar() {
                                 <GradientAvatar user={user} />
                             </div>
                         ) : (
-                            <GradientButton href="/auth/login" text="Login" size="sm" className="text-light" />
+                            <GradientButton href={`${PLATFORM_URL}/auth/login`} text="Login" size="sm" className="text-light" />
                         )}
                     </div>
 

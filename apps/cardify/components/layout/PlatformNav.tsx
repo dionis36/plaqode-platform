@@ -1,5 +1,9 @@
 'use client';
 
+// Explicitly pointing to the main Plaqode Platform application (Port 3000)
+// We hardcode this to ensure navigation always exits the Cardify app context
+const PLATFORM_URL = 'http://localhost:3000';
+
 import { usePathname } from 'next/navigation';
 import { useState, useRef, useEffect } from 'react';
 
@@ -54,7 +58,7 @@ export function PlatformNav({ user, onLogout }: PlatformNavProps) {
             onLogout();
         } else {
             // Default logout - redirect to platform
-            window.location.href = `${process.env.NEXT_PUBLIC_PLATFORM_URL}/auth/login`;
+            window.location.href = `${PLATFORM_URL}/auth/login`;
         }
     };
 
@@ -62,32 +66,32 @@ export function PlatformNav({ user, onLogout }: PlatformNavProps) {
         <header className="fixed top-0 w-full z-50 bg-black/80 backdrop-blur-sm border-b border-gray-800">
             <nav className="container mx-auto px-6 py-4 flex items-center justify-between">
                 {/* Logo */}
-                <a href={process.env.NEXT_PUBLIC_PLATFORM_URL || 'http://localhost:3000'} className="text-2xl font-bold bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+                <a href={PLATFORM_URL} className="text-2xl font-bold bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
                     PlaQode
                 </a>
 
                 {/* Navigation Links */}
                 <div className="hidden md:flex items-center gap-8">
                     <a
-                        href={process.env.NEXT_PUBLIC_PLATFORM_URL || 'http://localhost:3000'}
+                        href={PLATFORM_URL}
                         className="transition text-white hover:text-purple-400"
                     >
                         Home
                     </a>
                     <a
-                        href={`${process.env.NEXT_PUBLIC_PLATFORM_URL}/about`}
+                        href={`${PLATFORM_URL}/about`}
                         className="transition text-white hover:text-purple-400"
                     >
                         About
                     </a>
                     <a
-                        href={`${process.env.NEXT_PUBLIC_PLATFORM_URL}/services`}
+                        href={`${PLATFORM_URL}/services`}
                         className="transition text-white hover:text-purple-400"
                     >
                         Services
                     </a>
                     <a
-                        href={`${process.env.NEXT_PUBLIC_PLATFORM_URL}/contact`}
+                        href={`${PLATFORM_URL}/contact`}
                         className="transition text-white hover:text-purple-400"
                     >
                         Contact
@@ -128,10 +132,10 @@ export function PlatformNav({ user, onLogout }: PlatformNavProps) {
                                                     <span
                                                         key={role}
                                                         className={`px-2 py-0.5 text-xs rounded-full ${role === 'superadmin'
-                                                                ? 'bg-red-500/20 text-red-400'
-                                                                : role === 'admin'
-                                                                    ? 'bg-purple-500/20 text-purple-400'
-                                                                    : 'bg-gray-700 text-gray-300'
+                                                            ? 'bg-red-500/20 text-red-400'
+                                                            : role === 'admin'
+                                                                ? 'bg-purple-500/20 text-purple-400'
+                                                                : 'bg-gray-700 text-gray-300'
                                                             }`}
                                                     >
                                                         {role}
@@ -143,7 +147,7 @@ export function PlatformNav({ user, onLogout }: PlatformNavProps) {
                                         {/* Menu Items */}
                                         <div className="py-2">
                                             <a
-                                                href={`${process.env.NEXT_PUBLIC_PLATFORM_URL}/app`}
+                                                href={`${PLATFORM_URL}/app`}
                                                 className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 transition"
                                             >
                                                 <div className="flex items-center gap-3">
@@ -154,7 +158,7 @@ export function PlatformNav({ user, onLogout }: PlatformNavProps) {
                                                 </div>
                                             </a>
                                             <a
-                                                href={`${process.env.NEXT_PUBLIC_PLATFORM_URL}/app/profile`}
+                                                href={`${PLATFORM_URL}/app/profile`}
                                                 className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 transition"
                                             >
                                                 <div className="flex items-center gap-3">
@@ -166,7 +170,7 @@ export function PlatformNav({ user, onLogout }: PlatformNavProps) {
                                             </a>
                                             {(user.roles.includes('admin') || user.roles.includes('superadmin')) && (
                                                 <a
-                                                    href={`${process.env.NEXT_PUBLIC_PLATFORM_URL}/app/admin`}
+                                                    href={`${PLATFORM_URL}/app/admin`}
                                                     className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 transition"
                                                 >
                                                     <div className="flex items-center gap-3">
@@ -201,7 +205,7 @@ export function PlatformNav({ user, onLogout }: PlatformNavProps) {
                     ) : (
                         <>
                             <a
-                                href={`${process.env.NEXT_PUBLIC_PLATFORM_URL}/auth/login`}
+                                href={`${PLATFORM_URL}/auth/login`}
                                 className="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg hover:opacity-90 transition text-white font-medium"
                             >
                                 Get Started

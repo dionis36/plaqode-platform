@@ -1,3 +1,5 @@
+const PLATFORM_URL = 'http://localhost:3000';
+
 import Image from "next/image";
 import Link from "next/link";
 
@@ -7,7 +9,7 @@ interface LogoProps {
 
 export default function Logo({ color = "white" }: LogoProps) {
     return (
-        <Link href="/" className="flex items-center gap-3">
+        <a href={PLATFORM_URL} className="flex items-center gap-3">
             {/* Icon */}
             <div className="relative w-10 h-10">
                 {/* Using qr-code-2.png as the icon based on file analysis. 
@@ -24,6 +26,6 @@ export default function Logo({ color = "white" }: LogoProps) {
             <span className={`font-merriweather text-2xl tracking-tight ${color === "white" ? "text-white" : "text-dark"}`}>
                 PlaQode
             </span>
-        </Link>
+        </a>
     );
 }

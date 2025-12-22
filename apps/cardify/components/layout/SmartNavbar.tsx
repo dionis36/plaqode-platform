@@ -1,5 +1,7 @@
 "use client";
 
+const PLATFORM_URL = 'http://localhost:3000';
+
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { Menu } from "lucide-react";
@@ -58,7 +60,7 @@ export default function SmartNavbar() {
                             {["Home", "About", "Services", "Contact"].map((item) => (
                                 <a
                                     key={item}
-                                    href={item === "Home" ? "/" : `/${item.toLowerCase()}`}
+                                    href={item === "Home" ? PLATFORM_URL : `${PLATFORM_URL}/${item.toLowerCase()}`}
                                     className="text-light hover:text-secondary transition-colors"
                                 >
                                     {item}
@@ -70,7 +72,7 @@ export default function SmartNavbar() {
                             {user ? (
                                 <GradientAvatar user={user} />
                             ) : (
-                                <GradientButton href="/auth/login" text="Login" size="sm" className="text-light" />
+                                <GradientButton href={`${PLATFORM_URL}/auth/login`} text="Login" size="sm" className="text-light" />
                             )}
                         </div>
 
