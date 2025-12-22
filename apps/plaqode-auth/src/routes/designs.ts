@@ -61,7 +61,7 @@ export default async function designRoutes(fastify: FastifyInstance) {
                 thumbnail: true,
                 createdAt: true,
                 updatedAt: true,
-                // Don't send full designData in list view
+                designData: true,
             },
         });
 

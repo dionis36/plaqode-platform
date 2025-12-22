@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useReducer, useState } from "react";
-import { useParams } from "next/navigation";
+import { useRouter, useSearchParams, useParams } from "next/navigation";
 import Konva from "konva";
 import { produce } from "immer";
 
@@ -271,7 +271,9 @@ function reducer(state: State, action: Action): State {
 
 export default function Editor() {
     const params = useParams();
+    const searchParams = useSearchParams(); // NEW: Read query params
     const templateId = Array.isArray(params.templateId) ? params.templateId[0] : params.templateId;
+    const loadId = searchParams.get('loadId'); // NEW: Get saved design ID
     const stageRef = useRef<Konva.Stage | null>(null);
     const mainRef = useRef<HTMLElement>(null);
 
@@ -294,6 +296,37 @@ export default function Editor() {
     // Export & Print State
     const [exportModalOpen, setExportModalOpen] = useState(false);
     const [showExportAuthModal, setShowExportAuthModal] = useState(false);
+
+    // Load saved design effect
+    useEffect(() => {
+        if (!loadId || !isAuthenticated) return;
+
+        const fetchSavedDesign = async () => {
+            try {
+                console.log('Loading saved design:', loadId);
+                const response = await fetch(`${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/api/designs/${loadId}`, {
+                    credentials: 'include',
+                });
+
+                if (response.ok) {
+                    const savedDesign = await response.json();
+                    if (savedDesign.designData) {
+                        console.log('Hydrating editor with saved data:', savedDesign.designData);
+                        // Hydrate state
+                        dispatch({
+                            type: 'SET_PAGES',
+                            pages: savedDesign.designData.pages
+                        });
+                        // IMPORTANT: Set current page index too if needed, though usually 0
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to load design:', error);
+            }
+        };
+
+        fetchSavedDesign();
+    }, [loadId, isAuthenticated]);
 
     // Save State
     const [saving, setSaving] = useState(false);

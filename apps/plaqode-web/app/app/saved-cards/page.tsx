@@ -3,14 +3,17 @@
 import { useEffect, useState } from 'react';
 import { Layout } from 'lucide-react';
 import GradientButton from '@/components/ui/GradientButton';
+import SavedCard from '@/components/app/SavedCard';
 
 interface SavedDesign {
     id: string;
     name: string;
     templateId: string;
     thumbnail?: string;
+    designData?: any;
     createdAt: string;
     updatedAt: string;
+    userId: string;
 }
 
 export default function SavedCardsPage() {
@@ -85,35 +88,9 @@ export default function SavedCardsPage() {
                         </a>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-12">
                         {designs.map((design) => (
-                            <a
-                                key={design.id}
-                                href={`${process.env.NEXT_PUBLIC_CARDIFY_URL || 'http://localhost:3002'}/design/${design.templateId}?loadId=${design.id}`}
-                                className="group bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-all"
-                            >
-                                <div className="aspect-[3/2] bg-slate-100 overflow-hidden relative border-b border-slate-100">
-                                    {design.thumbnail ? (
-                                        <img
-                                            src={design.thumbnail}
-                                            alt={design.name}
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                        />
-                                    ) : (
-                                        <div className="w-full h-full flex items-center justify-center text-slate-300">
-                                            <Layout className="w-12 h-12" />
-                                        </div>
-                                    )}
-                                </div>
-                                <div className="p-4">
-                                    <h3 className="font-semibold text-slate-900 truncate group-hover:text-purple-600 transition-colors mb-1">
-                                        {design.name}
-                                    </h3>
-                                    <p className="text-xs text-slate-500">
-                                        Last updated: {new Date(design.updatedAt).toLocaleDateString()}
-                                    </p>
-                                </div>
-                            </a>
+                            <SavedCard key={design.id} design={design} />
                         ))}
                     </div>
                 )}
