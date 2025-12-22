@@ -24,7 +24,7 @@ const tools = [
 
 export default function ToolsCatalog() {
     return (
-        <section className="relative bg-dark text-light py-24 px-4 overflow-hidden">
+        <section className="relative bg-dark text-light pt-24 pb-36 px-4 overflow-hidden">
             {/* Background Decor */}
             <div className="absolute top-0 right-0 w-full h-full max-w-7xl pointer-events-none">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-900/10 rounded-full blur-[100px] opacity-40" />
@@ -34,7 +34,7 @@ export default function ToolsCatalog() {
                 {/* Intro */}
                 <div className="text-center mb-16 max-w-4xl mx-auto">
                     <h2 className="text-3xl md:text-5xl font-merriweather font-bold mb-6">
-                        Explore All <span className="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">QR Tools</span>
+                        Explore All <span className="bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent">QR Tools</span>
                     </h2>
                     <p className="text-lg md:text-xl text-light/70 leading-relaxed font-sans">
                         From simple links to complex business solutions, we have a specialized tool for every need. Browse our full catalog below.
@@ -47,9 +47,9 @@ export default function ToolsCatalog() {
                         <a
                             key={idx}
                             href={tool.href}
-                            className="group bg-white/5 backdrop-blur-sm border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition-all duration-300 flex flex-col items-center text-center cursor-pointer hover:-translate-y-1 hover:shadow-lg hover:border-purple-500/30 block"
+                            className="group bg-white/5 backdrop-blur-sm border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition-all duration-300 flex flex-col items-center text-center cursor-pointer hover:border-white/30 block"
                         >
-                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-white/10 to-transparent flex items-center justify-center mb-4 text-purple-300 group-hover:text-white group-hover:bg-purple-600 transition-colors">
+                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-secondary/10 to-primary/10 flex items-center justify-center mb-4 text-light group-hover:from-secondary group-hover:to-primary group-hover:text-white transition-all duration-300">
                                 <tool.icon size={24} />
                             </div>
                             <h3 className="font-semibold text-white text-sm sm:text-base mb-1">{tool.name}</h3>
@@ -61,14 +61,14 @@ export default function ToolsCatalog() {
                 </div>
 
                 {/* CTA */}
-                <div className="mt-16 text-center">
+                {/* <div className="mt-16 text-center">
                     <p className="text-light/60 mb-6">Ready to start creating?</p>
                     <GradientButton
                         href={`${process.env.NEXT_PUBLIC_QRSTUDIO_URL || 'http://localhost:3001'}/create`}
                         text="Open QR Studio"
                         size="lg"
                     />
-                </div>
+                </div> */}
             </div>
         </section>
     );
