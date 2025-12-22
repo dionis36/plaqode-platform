@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Layout } from 'lucide-react';
 import GradientButton from '@/components/ui/GradientButton';
 import SavedCard from '@/components/app/SavedCard';
+import ConfirmationModal from '@/components/ui/ConfirmationModal';
 
 interface SavedDesign {
     id: string;
@@ -19,6 +20,9 @@ interface SavedDesign {
 export default function SavedCardsPage() {
     const [designs, setDesigns] = useState<SavedDesign[]>([]);
     const [loading, setLoading] = useState(true);
+
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [cardToDelete, setCardToDelete] = useState<{ id: string; name: string } | null>(null);
 
     useEffect(() => {
         fetchDesigns();
@@ -41,6 +45,34 @@ export default function SavedCardsPage() {
         }
     };
 
+    const handleDeleteClick = (id: string, name: string) => {
+        setCardToDelete({ id, name });
+        setDeleteModalOpen(true);
+    };
+
+    const confirmDelete = async () => {
+        if (!cardToDelete) return;
+
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/api/designs/${cardToDelete.id}`, {
+                method: 'DELETE',
+                credentials: 'include',
+            });
+
+            if (response.ok) {
+                // Remove from state immediately
+                setDesigns(prev => prev.filter(d => d.id !== cardToDelete.id));
+            } else {
+                console.error('Failed to delete design');
+            }
+        } catch (error) {
+            console.error('Error deleting design:', error);
+        } finally {
+            setDeleteModalOpen(false);
+            setCardToDelete(null);
+        }
+    };
+
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-screen">
@@ -58,7 +90,7 @@ export default function SavedCardsPage() {
                         <div className="flex items-center gap-3">
                             <h1 className="text-2xl sm:text-3xl font-merriweather font-bold text-dark">Saved Cards</h1>
                             {!loading && designs.length > 0 && (
-                                <span className="text-2xl sm:text-3xl font-bold text-purple-600">
+                                <span className="text-2xl sm:text-3xl font-bold text-blue-600">
                                     {designs.length}
                                 </span>
                             )}
@@ -68,7 +100,6 @@ export default function SavedCardsPage() {
                     <GradientButton
                         href={`${process.env.NEXT_PUBLIC_CARDIFY_URL || 'http://localhost:3002'}/templates`}
                         text="Create New Card"
-                        className="bg-gradient-to-r from-purple-600 to-pink-600 text-white"
                     />
                 </div>
 
@@ -79,7 +110,6 @@ export default function SavedCardsPage() {
                         <p className="text-slate-600 mb-6">Start creating beautiful business cards</p>
                         <a
                             href={`${process.env.NEXT_PUBLIC_CARDIFY_URL || 'http://localhost:3002'}/templates`}
-                            target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-2 bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
                         >
@@ -90,11 +120,25 @@ export default function SavedCardsPage() {
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-12">
                         {designs.map((design) => (
-                            <SavedCard key={design.id} design={design} />
+                            <SavedCard
+                                key={design.id}
+                                design={design}
+                                onDelete={handleDeleteClick}
+                            />
                         ))}
                     </div>
                 )}
             </div>
+
+            <ConfirmationModal
+                isOpen={deleteModalOpen}
+                onClose={() => setDeleteModalOpen(false)}
+                onConfirm={confirmDelete}
+                title="Delete Design"
+                message={`Are you sure you want to delete "${cardToDelete?.name}"? This action cannot be undone.`}
+                confirmText="Delete"
+                variant="danger"
+            />
         </div>
     );
 }
