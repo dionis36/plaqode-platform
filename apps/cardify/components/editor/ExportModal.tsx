@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { X, FileImage, FileText, Download, Loader, Save, LayoutTemplate, Tag, List, Type, Palette, CheckCircle, Info } from "lucide-react";
+import SuccessModal from "@/components/ui/SuccessModal";
 import { ExportOptions, ExportFormat, TemplateExportMetadata } from "@/types/template";
 import { TEMPLATE_CATEGORIES, TemplateCategoryKey } from "@/lib/templateCategories";
 
@@ -171,30 +172,11 @@ export default function ExportModal({
             : 'Download Complete!';
 
         return (
-            <div
-                className="fixed inset-0 z-[100] flex items-center justify-center animate-fadeIn p-4"
-                style={{
-                    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-                    backdropFilter: 'blur(8px)',
-                    WebkitBackdropFilter: 'blur(8px)'
-                }}
-            >
-                <div className="bg-white rounded-2xl shadow-2xl p-8 flex flex-col items-center max-w-sm w-full animate-scaleIn">
-                    <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-green-600 mb-4">
-                        <CheckCircle size={32} />
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">{titleText}</h3>
-                    <p className="text-gray-500 text-center mb-6">
-                        {messageText}
-                    </p>
-                    <div className="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
-                        <div className="h-full bg-green-500 animate-[width_1.5s_linear_forwards]" style={{ width: '0%' }} />
-                    </div>
-                </div>
-                <style jsx>{`
-                    @keyframes width { from { width: 0%; } to { width: 100%; } }
-                `}</style>
-            </div>
+            <SuccessModal
+                isOpen={!!successMessage}
+                title={titleText}
+                message={messageText}
+            />
         );
     }
 

@@ -26,6 +26,7 @@ import ZoomControls from "@/components/editor/ZoomControls";
 import ConfirmationModal from "@/components/ui/ConfirmationModal";
 import ExportModal from "@/components/editor/ExportModal";
 import { ExportAuthModal } from "@/components/auth/ExportAuthModal";
+import SuccessModal from "@/components/ui/SuccessModal";
 
 // Auth
 import { useAuth } from '@/lib/auth-context';
@@ -331,6 +332,7 @@ export default function Editor() {
     // Save State
     const [saving, setSaving] = useState(false);
     const [saveMessage, setSaveMessage] = useState<string | null>(null);
+    const [saveSuccessOpen, setSaveSuccessOpen] = useState(false);
 
     // NEW: QR Code Mode State ('add' | 'update')
     const [qrCodeMode, setQrCodeMode] = useState<'add' | 'update'>('add');
@@ -899,7 +901,11 @@ export default function Editor() {
                 const result = await response.json();
                 console.log('Save successful:', result);
                 setSaveMessage('Design saved successfully!');
-                setTimeout(() => setSaveMessage(null), 3000);
+                setSaveSuccessOpen(true);
+                setTimeout(() => {
+                    setSaveMessage(null);
+                    setSaveSuccessOpen(false);
+                }, 2000);
             } else {
                 const error = await response.json();
                 console.error('Save failed:', error);
@@ -1458,6 +1464,13 @@ export default function Editor() {
                 isOpen={showExportAuthModal}
                 onClose={() => setShowExportAuthModal(false)}
                 onSaveBeforeAuth={handleSave}
+            />
+
+            <SuccessModal
+                isOpen={saveSuccessOpen}
+                title="Save Complete"
+                message="Your design has been saved successfully."
+                onClose={() => setSaveSuccessOpen(false)}
             />
         </div>
     );
