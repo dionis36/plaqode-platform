@@ -1,39 +1,55 @@
 "use client";
 
 import GradientButton from "@/components/ui/GradientButton";
-import { Link, IdCard, Calendar, Share2, Printer, Code, ShieldCheck, Settings, LineChart, Lock, Smartphone, Headphones } from "lucide-react";
+import { Link, IdCard, Share2, Smartphone, Utensils, Wifi, FileText, ArrowRight } from "lucide-react";
 
-// Section 1 Data: Business Solutions
+// Environment URLs
+const CARDIFY_URL = process.env.NEXT_PUBLIC_CARDIFY_URL || 'http://localhost:3002';
+const QRSTUDIO_URL = process.env.NEXT_PUBLIC_QRSTUDIO_URL || 'http://localhost:3001';
+
+// Section 1 Data: The "Power 6" High-Value Verticals
 const solutions = [
     {
-        icon: Link,
-        title: "Education & Information",
-        desc: "Provide instant access to educational resources, template files, and important documents. Our QR codes simplify information sharing for students and professionals alike.",
-    },
-    {
         icon: IdCard,
-        title: "Business Cards & Communication",
-        desc: "Elevate your networking with dynamic QR business cards. Instantly share your contact information, portfolio, and social media links with a simple scan.",
+        title: "Digital Business Cards",
+        desc: "Replace paper cards with dynamic identities. Share contact info, portfolios, and social links instantly with a single scan.",
+        cta: "Create Identity",
+        href: `${CARDIFY_URL}/templates` // Deep link to Cardify
     },
     {
-        icon: Calendar,
-        title: "Event Management",
-        desc: "Streamline your events from start to finish with QR codes for tickets, attendee check-ins, event schedules, and digital menus. Enhance the guest experience with seamless access.",
+        icon: Utensils,
+        title: "Smart Digital Menus",
+        desc: "Perfect for restaurants & cafes. Update items and prices instantly without re-printing QR codes. Contactless and efficient.",
+        cta: "Digitize Menu",
+        href: `${QRSTUDIO_URL}/create/menu`
     },
     {
         icon: Share2,
-        title: "Social & Digital Footprint",
-        desc: "Boost your online presence by connecting physical spaces to your digital world. Our QR codes link directly to your website and social media platforms.",
+        title: "Social Media Hub",
+        desc: "Consolidate your digital presence. Instagram, TikTok, LinkedIn, and more — accessible from one unified 'Link in Bio' page.",
+        cta: "Build Bio Page",
+        href: `${QRSTUDIO_URL}/create/socialmedia`
     },
     {
-        icon: Printer,
-        title: "Printing & Marketing",
-        desc: "Transform traditional marketing materials like banners and posters into interactive tools. Engage your audience with QR codes that lead to promotions and valuable information.",
+        icon: Wifi,
+        title: "Instant WiFi Access",
+        desc: "Improve guest experience by eliminating complex passwords. One scan connects guests directly to your secure network.",
+        cta: "Create WiFi QR",
+        href: `${QRSTUDIO_URL}/create/wifi`
     },
     {
-        icon: Code,
-        title: "Custom API Solutions",
-        desc: "Integrate powerful QR code generation capabilities directly into your own applications with our robust and scalable API.",
+        icon: Smartphone,
+        title: "App Store Growth",
+        desc: "Smart routing for your app. One QR code detects the user's device (iOS/Android) and directs them to the correct store.",
+        cta: "Boost Downloads",
+        href: `${QRSTUDIO_URL}/create/appstore`
+    },
+    {
+        icon: FileText,
+        title: "Document Distribution",
+        desc: "Securely share menus, whitepapers, and guides. Support for PDF, Docx, and Images with trackable scan analytics.",
+        cta: "Share Files",
+        href: `${QRSTUDIO_URL}/create/file`
     },
 ];
 
@@ -68,7 +84,7 @@ export default function ServicesContent() {
                                     {item.desc}
                                 </p>
                                 <div className="mt-auto">
-                                    <GradientButton href="/contact" text="Order Now" size="sm" />
+                                    <GradientButton href={item.href} text={item.cta} size="sm" />
                                 </div>
                             </div>
                         ))}
