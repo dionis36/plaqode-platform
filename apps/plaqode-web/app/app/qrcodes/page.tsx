@@ -151,7 +151,7 @@ export default function QrCodesPage() {
                     <GradientButton
                         href={`${qrStudioUrl}/create`}
                         text="Create New QR"
-                        className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white"
+                        // className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white"
                     />
                 </div>
 
