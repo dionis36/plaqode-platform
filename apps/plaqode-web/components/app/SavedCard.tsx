@@ -30,9 +30,9 @@ export default function SavedCard({ design }: SavedCardProps) {
             href={`${EDITOR_URL}/design/${design.templateId}?loadId=${design.id}`}
             className="block group"
         >
-            <div className="relative bg-white rounded-xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-2xl hover:border-gray-300 transition-all duration-300 transform hover:-translate-y-1">
+            <div className="relative bg-transparent rounded-xl overflow-hidden shadow-sm transition-all duration-300">
                 {/* Thumbnail Container - Aspect Ratio 1.75:1 (Standard Business Card) */}
-                <div className="relative aspect-[1.75/1] w-full bg-gray-100 overflow-hidden border-b border-slate-100">
+                <div className="relative aspect-[1.75/1] w-full bg-gray-100 overflow-hidden rounded-xl">
                     {template ? (
                         <TemplatePreview template={template} />
                     ) : design.thumbnail ? (
@@ -47,28 +47,7 @@ export default function SavedCard({ design }: SavedCardProps) {
                         </div>
                     )}
 
-                    {/* Hover Overlay - Subtle tint matching TemplateCard */}
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300 pointer-events-none" />
-                </div>
-
-                {/* Footer with User Details (Requested Feature) */}
-                <div className="p-4 bg-white">
-                    <h3 className="font-semibold text-slate-900 truncate group-hover:text-purple-600 transition-colors mb-2 text-base font-merriweather">
-                        {design.name}
-                    </h3>
-
-                    <div className="flex items-center justify-between text-xs text-slate-500 font-sans">
-                        <div className="flex items-center gap-1.5">
-                            <Calendar size={12} />
-                            <span>{new Date(design.updatedAt).toLocaleDateString()}</span>
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                            {/* Assuming current user context, but just generic 'Saved' label or user ID if needed */}
-                            <span className="px-2 py-0.5 bg-slate-100 rounded-full text-slate-600 font-medium">
-                                Saved
-                            </span>
-                        </div>
-                    </div>
+                    {/* Hover Overlay - Removed as per request */}
                 </div>
             </div>
         </a>
