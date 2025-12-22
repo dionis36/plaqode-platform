@@ -1,6 +1,7 @@
 import SmartNavbar from "@/components/layout/SmartNavbar";
 import Footer from "@/components/layout/Footer";
 import ServicesContent from "@/components/services/ServicesContent";
+import ToolsCatalog from "@/components/services/ToolsCatalog";
 import WhyChooseSection from "@/components/services/WhyChooseSection";
 import StaticNavbar from "@/components/layout/StaticNavbar";
 
@@ -24,6 +25,7 @@ export default function ServicesPage() {
             </div>
 
             <ServicesContent />
+            <ToolsCatalog />
             <WhyChooseSection />
 
             <Footer />
