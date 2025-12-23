@@ -47,7 +47,7 @@ export default function ToolsCatalog() {
                         <a
                             key={idx}
                             href={tool.href}
-                            className="group bg-white/5 backdrop-blur-sm border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition-all duration-300 flex flex-col items-center text-center cursor-pointer hover:border-white/30 block"
+                            className="group bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-2xl hover:bg-white/10 transition-colors"
                         >
                             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-secondary/10 to-primary/10 flex items-center justify-center mb-4 text-light group-hover:from-secondary group-hover:to-primary group-hover:text-white transition-all duration-300">
                                 <tool.icon size={24} />
