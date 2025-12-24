@@ -55,7 +55,7 @@ export function MyDesigns() {
                     href={process.env.NEXT_PUBLIC_CARDIFY_URL || 'http://localhost:3002'}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-purple-600 hover:text-purple-700 font-medium"
+                    className="text-sm"
                 >
                     Create New →
                 </a>
@@ -70,7 +70,7 @@ export function MyDesigns() {
                     <p className="text-sm text-gray-500 mb-4">Start creating beautiful business cards</p>
                     <a
                         href={process.env.NEXT_PUBLIC_CARDIFY_URL || 'http://localhost:3002'}
-                        className="inline-block px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:opacity-90 transition"
+                        className="inline-block px-4 py-2"
                     >
                         Create Your First Design
                     </a>
