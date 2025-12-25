@@ -108,7 +108,7 @@ export function Sidebar({ isOpen, setIsOpen, isMobile, onCloseMobile }: SidebarP
                     </div>
                     {/* Collapsed Icon when closed */}
                     {(!isOpen && !isMobile) && (
-                        <div className="absolute inset-0 flex items-center justify-center">
+                        <Link href="/" className="absolute inset-0 flex items-center justify-center">
                             <div className="relative w-10 h-10">
                                 {/* Using image directly to match Logo.tsx style but without text */}
                                 <img
@@ -117,7 +117,7 @@ export function Sidebar({ isOpen, setIsOpen, isMobile, onCloseMobile }: SidebarP
                                     className="object-contain w-full h-full"
                                 />
                             </div>
-                        </div>
+                        </Link>
                     )}
 
 
