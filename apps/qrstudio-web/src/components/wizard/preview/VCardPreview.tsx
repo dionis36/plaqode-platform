@@ -44,10 +44,7 @@ export function VCardPreview({ data }: { data: any }) {
     const personal = {
         first_name: data?.personal_info?.first_name || fallback.personal_info.first_name,
         last_name: data?.personal_info?.last_name || fallback.personal_info.last_name,
-        avatar_image: data?.personal_info?.avatar_image || null // Don't enforce fallback avatar if user might want no avatar, but initially it's fine. 
-        // Actually, let's fallback avatar only if both names are default too? No, let's keep it simple.
-        // If user actively clears it, it might still be empty string. 
-        // For now, simple fallback is better for the "preview" feel.
+        avatar_image: data?.personal_info?.avatar_image || fallback.personal_info.avatar_image
     };
 
     // If the user has started editing specific sections, we might want to show their half-empty state.
