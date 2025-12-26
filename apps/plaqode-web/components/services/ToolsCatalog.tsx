@@ -1,6 +1,6 @@
 "use client";
 
-import { Link, AlignLeft, AtSign, Phone, Mail, MapPin, Wifi, Calendar, Share2, Smartphone, FileText, Image } from "lucide-react";
+import { Link, AlignLeft, AtSign, Mail, MapPin, Wifi, Calendar, Share2, Smartphone, FileText, Image, MessageSquare, Utensils } from "lucide-react";
 import GradientButton from "@/components/ui/GradientButton";
 
 // Comprehensive list of tools
@@ -8,18 +8,18 @@ const QR_STUDIO_URL = process.env.NEXT_PUBLIC_QRSTUDIO_URL || 'http://localhost:
 
 // Comprehensive list of tools
 const tools = [
+    { icon: Utensils, name: "Menu", desc: "Digital restaurant menu", href: `${QR_STUDIO_URL}/create/menu` },
     { icon: Link, name: "URL", desc: "Link to any website or page", href: `${QR_STUDIO_URL}/create/url` },
     { icon: AlignLeft, name: "Text", desc: "Display plain text messages", href: `${QR_STUDIO_URL}/create/text` },
     { icon: AtSign, name: "VCard", desc: "Share contact details instantly", href: `${QR_STUDIO_URL}/create/vcard` },
     { icon: Mail, name: "Email", desc: "Send pre-filled emails", href: `${QR_STUDIO_URL}/create/email` },
-    { icon: Phone, name: "Phone", desc: "Make a call with one scan", href: `${QR_STUDIO_URL}/create/phone` },
-    { icon: MapPin, name: "Location", desc: "Share Google Maps location", href: `${QR_STUDIO_URL}/create/location` },
+    { icon: MessageSquare, name: "Message", desc: "SMS, WhatsApp & Telegram", href: `${QR_STUDIO_URL}/create/message` },
     { icon: Wifi, name: "WiFi", desc: "Connect to WiFi automatically", href: `${QR_STUDIO_URL}/create/wifi` },
     { icon: Calendar, name: "Event", desc: "Save events to calendar", href: `${QR_STUDIO_URL}/create/event` },
-    { icon: Smartphone, name: "App Store", desc: "Download apps directly", href: `${QR_STUDIO_URL}/create/app` },
-    { icon: FileText, name: "PDF", desc: "Share PDF documents", href: `${QR_STUDIO_URL}/create/file` },
-    { icon: Image, name: "Image Gallery", desc: "Showcase photos", href: `${QR_STUDIO_URL}/create/images` },
-    { icon: Share2, name: "Social Media", desc: "Link to all your profiles", href: `${QR_STUDIO_URL}/create/social` },
+    { icon: Smartphone, name: "App Store", desc: "Download apps directly", href: `${QR_STUDIO_URL}/create/appstore` },
+    { icon: FileText, name: "File", desc: "Share PDF & documents", href: `${QR_STUDIO_URL}/create/file` },
+    { icon: Image, name: "Image Gallery", desc: "Showcase photos", href: `${QR_STUDIO_URL}/create/file` },
+    { icon: Share2, name: "Social Media", desc: "Link to all your profiles", href: `${QR_STUDIO_URL}/create/socialmedia` },
 ];
 
 export default function ToolsCatalog() {
