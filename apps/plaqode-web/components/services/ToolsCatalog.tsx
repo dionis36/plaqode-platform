@@ -24,7 +24,7 @@ const tools = [
 
 export default function ToolsCatalog() {
     return (
-        <section className="relative bg-dark text-light pt-24 pb-36 px-4 overflow-hidden">
+        <section id="qr-tools-catalog" className="relative bg-dark text-light pt-24 pb-36 px-4 overflow-hidden">
             {/* Background Decor */}
             <div className="absolute top-0 right-0 w-full h-full max-w-7xl pointer-events-none">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-900/10 rounded-full blur-[100px] opacity-40" />
