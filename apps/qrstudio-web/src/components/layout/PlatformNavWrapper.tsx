@@ -1,10 +1,13 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { PlatformNav } from './PlatformNav';
+import StaticNavbar from './StaticNavbar';
 
 export function PlatformNavWrapper() {
     const { user } = useAuth();
+    const pathname = usePathname();
 
     const handleLogout = async () => {
         // Call logout endpoint
@@ -20,6 +23,11 @@ export function PlatformNavWrapper() {
         // Redirect to platform login
         window.location.href = `${process.env.NEXT_PUBLIC_PLATFORM_URL}/auth/login`;
     };
+
+    // Use StaticNavbar for dashboard pages
+    if (pathname?.startsWith('/qrcodes')) {
+        return <StaticNavbar />;
+    }
 
     return (
         <PlatformNav
