@@ -7,6 +7,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -16,6 +17,7 @@
   from {
     transform: translateX(100%);
   }
+
   to {
     transform: translateX(0);
   }
@@ -30,26 +32,42 @@
 }
 
 @layer base {
-    body {
-        @apply bg-slate-50 text-slate-900 antialiased;
-    }
+  body {
+    @apply bg-slate-50 text-slate-900 antialiased;
+  }
 }
 
 @layer utilities {
-    .glass {
-        @apply bg-white/70 backdrop-blur-lg border border-white/20 shadow-xl;
-    }
+  .glass {
+    @apply bg-white/70 backdrop-blur-lg border border-white/20 shadow-xl;
+  }
 
-    .glass-dark {
-        @apply bg-slate-900/80 backdrop-blur-md border border-white/10 shadow-2xl;
-    }
+  .glass-dark {
+    @apply bg-slate-900/80 backdrop-blur-md border border-white/10 shadow-2xl;
+  }
 
-    .gradient-text {
-        @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-violet-600;
-    }
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-violet-600;
+  }
+
+  .gradient-border-mask {
+    background: linear-gradient(to right, var(--color-secondary), var(--color-primary));
+    padding: 2px;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    border-radius: 9999px;
+    /* Ensure rounded-full */
+  }
+}
+
+:root {
+  --color-primary: blue;
+  --color-secondary: red;
 }
 
 .pattern-grid-lg {
-    background-image: linear-gradient(currentColor 1px, transparent 1px), linear-gradient(90deg, currentColor 1px, transparent 1px);
-    background-size: 40px 40px;
+  background-image: linear-gradient(currentColor 1px, transparent 1px), linear-gradient(90deg, currentColor 1px, transparent 1px);
+  background-size: 40px 40px;
 }

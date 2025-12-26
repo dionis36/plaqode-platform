@@ -31,7 +31,7 @@ export default function StaticNavbar() {
 
                     <div className="hidden md:block">
                         {user ? (
-                            <GradientAvatar user={user} />
+                            <GradientAvatar user={user} textColor="text-dark" />
                         ) : (
                             <GradientButton href={`${process.env.NEXT_PUBLIC_PLATFORM_URL}/auth/login`} text="Login" size="sm" className="text-white bg-slate-900" />
                         )}
