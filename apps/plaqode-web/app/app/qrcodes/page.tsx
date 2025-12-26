@@ -151,7 +151,7 @@ export default function QrCodesPage() {
                     <GradientButton
                         href={`${qrStudioUrl}/create`}
                         text="Create New QR"
-                        // className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white"
+                    // className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white"
                     />
                 </div>
 
@@ -255,7 +255,7 @@ export default function QrCodesPage() {
 
                                     <div className="flex items-center justify-between text-sm mb-3">
                                         <span className="text-slate-600">Scans: <span className="font-semibold text-slate-900">{qr._count.scans}</span></span>
-                                        <span className="text-slate-500">{new Date(qr.createdAt).toLocaleDateString()}</span>
+                                        <span className="text-slate-500" suppressHydrationWarning>{new Date(qr.createdAt).toLocaleDateString()}</span>
                                     </div>
 
                                     <div className="flex items-center gap-2 pt-3 border-t border-slate-100" onClick={(e) => e.stopPropagation()}>
@@ -336,7 +336,7 @@ export default function QrCodesPage() {
                                                     {qr.isActive ? 'Active' : 'Inactive'}
                                                 </span>
                                             </td>
-                                            <td className="px-6 py-4 text-slate-600">
+                                            <td className="px-6 py-4 text-slate-600" suppressHydrationWarning>
                                                 {new Date(qr.createdAt).toLocaleDateString()}
                                             </td>
                                             <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>

@@ -1,13 +1,19 @@
 import { Store, Smartphone } from 'lucide-react';
 
-export function AppStorePreview({ data }: { data: any }) {
+import { HOVER_PREVIEW_DATA } from '../steps/hoverPreviewData';
 
-    const appName = data.app_name || 'App Name';
-    const developer = data.developer || '';
-    const description = data.description || '';
-    const appLogo = data.app_logo || '';
-    const platforms = data.platforms || [];
-    const styles = data.styles || {};
+export function AppStorePreview({ data }: { data: any }) {
+    const fallback = HOVER_PREVIEW_DATA.appstore;
+
+    // Check if platforms is empty array or undefined
+    const platformsData = data.platforms && data.platforms.length > 0 ? data.platforms : fallback.platforms;
+
+    const appName = data.app_name || fallback.app_name;
+    const developer = data.developer || fallback.developer;
+    const description = data.description || fallback.description;
+    const appLogo = data.app_logo || fallback.app_logo;
+    const platforms = platformsData;
+    const styles = data.styles || fallback.styles;
 
     // Get user's colors
     const primaryColor = styles.primary_color || '#2563EB';

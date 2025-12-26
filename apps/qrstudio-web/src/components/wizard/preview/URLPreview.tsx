@@ -1,23 +1,36 @@
 import { ExternalLink, ArrowRight } from 'lucide-react';
 
+import { HOVER_PREVIEW_DATA } from '../steps/hoverPreviewData';
+
 interface URLPreviewProps {
     data: any;
 }
 
 export function URLPreview({ data }: URLPreviewProps) {
-    const urlDetails = data?.url_details || {};
-    const redirectSettings = data?.redirect_settings || { delay: 2, show_preview: true };
-    const styles = data?.styles || { primary_color: '#2563EB', secondary_color: '#EFF6FF' };
+    const fallback = HOVER_PREVIEW_DATA.url;
 
-    const destinationUrl = urlDetails.destination_url || 'https://example.com';
-    const title = urlDetails.title || 'Redirecting...';
-    const description = urlDetails.description || '';
+    // Use fallback if top-level objects are missing or if specific crucial fields are empty
+    // For URL, usually title/desc are empty initially.
+
+    const urlDetails = {
+        destination_url: data?.url_details?.destination_url || fallback.url_details.destination_url,
+        title: data?.url_details?.title || fallback.url_details.title,
+        description: data?.url_details?.description || fallback.url_details.description,
+        logo: data?.url_details?.logo || null, // No fallback logo in sample data?
+    };
+
+    const redirectSettings = data?.redirect_settings || fallback.redirect_settings;
+    const styles = data?.styles || {};
+
+    const destinationUrl = urlDetails.destination_url;
+    const title = urlDetails.title;
+    const description = urlDetails.description;
     const logo = urlDetails.logo;
     const customMessage = redirectSettings.custom_message || '';
 
     // Get user's colors
-    const primaryColor = styles.primary_color || '#2563EB';
-    const secondaryColor = styles.secondary_color || '#EFF6FF';
+    const primaryColor = styles.primary_color || fallback.styles.primary_color;
+    const secondaryColor = styles.secondary_color || fallback.styles.secondary_color;
     const gradientType = styles.gradient_type || 'none';
     const gradientAngle = styles.gradient_angle || 135;
 

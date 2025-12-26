@@ -1,19 +1,27 @@
+import { HOVER_PREVIEW_DATA } from '../steps/hoverPreviewData';
+
 type TextPreviewProps = {
     data: any;
 };
 
 export function TextPreview({ data }: TextPreviewProps) {
-    const textContent = data?.text_content || {};
+    const fallback = HOVER_PREVIEW_DATA.text;
+
+    const textContent = {
+        title: data?.text_content?.title || fallback.text_content.title,
+        message: data?.text_content?.message || fallback.text_content.message,
+    };
+
     const styles = data?.styles || {};
 
-    const primaryColor = styles.primary_color || '#3B82F6';
-    const secondaryColor = styles.secondary_color || '#DBEAFE';
+    const primaryColor = styles.primary_color || fallback.styles.primary_color;
+    const secondaryColor = styles.secondary_color || fallback.styles.secondary_color;
     const gradientType = styles.gradient_type || 'none';
     const gradientAngle = styles.gradient_angle || 135;
 
     // Optional title
-    const title = textContent.title || '';
-    const message = textContent.message || '';
+    const title = textContent.title;
+    const message = textContent.message;
 
     // Helper to lighten a color
     const lightenColor = (hex: string, percent: number = 30) => {
@@ -85,15 +93,9 @@ Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu 
                     className="w-full bg-white rounded-2xl shadow-lg p-6 border-2"
                     style={{ borderColor: lightPrimary }}
                 >
-                    {message ? (
-                        <p className="text-base text-slate-800 leading-relaxed whitespace-pre-wrap break-words">
-                            {message}
-                        </p>
-                    ) : (
-                        <p className="text-base text-slate-400 leading-relaxed whitespace-pre-wrap italic">
-                            {placeholderText}
-                        </p>
-                    )}
+                    <p className="text-base text-slate-800 leading-relaxed whitespace-pre-wrap break-words">
+                        {message}
+                    </p>
                 </div>
 
                 {/* Bottom spacing for scroll allowance */}

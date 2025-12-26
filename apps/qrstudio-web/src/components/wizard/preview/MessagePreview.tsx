@@ -1,13 +1,33 @@
 import { MessageSquare, Phone, User, Mail, Smartphone, Send } from 'lucide-react';
 
-export function MessagePreview({ data }: { data: any }) {
+import { HOVER_PREVIEW_DATA } from '../steps/hoverPreviewData';
 
-    const platform = data.platform || 'sms';
-    const phoneNumber = data.phone_number || '';
-    const username = data.username || '';
-    const message = data.message || '';
-    const messageOnly = data.message_only || false;
-    const styles = data.styles || {};
+export function MessagePreview({ data }: { data: any }) {
+    const fallback = HOVER_PREVIEW_DATA.message;
+
+    // Platform might have a default value from form state even if empty, but usually it's 'sms'.
+    // If we want the rich preview 'whatsapp' from fallback, we should check if data.platform is default?
+    // The fallback data uses 'whatsapp'. If the user selects 'sms', they might want to see SMS.
+    // Let's stick to using data.platform if it exists (it usually does as 'sms').
+    // However, for consistency with other "rich" previews, maybe we prioritize user selection for TYPES (platform)
+    // but fill in CONTENT from fallback if matching?
+    // Actually, fallback is specifically for 'whatsapp'. If user is on 'sms' mode, showing whatsapp helper text is wrong.
+    // BUT the data structure in `hoverPreviewData` is specific to one example (whatsapp).
+    // If the user selects "SMS" template, the wizard initializes with type="message".
+    // Does the wizard default the platform to 'sms'? Yes likely.
+
+    // If I force the fallback platform 'whatsapp', it will switch the UI to WhatsApp.
+    // This might be confusing if the user explicitly clicked "SMS" (if that was an option).
+    // In `Step1Templates`, "Message" is one card.
+    // So enforcing the "Rich Preview" which happens to be WhatsApp seems acceptable for the initial "Wow" factor.
+    // As soon as they toggle the platform or type, it should switch.
+
+    const platform = data.platform || fallback.platform;
+    const phoneNumber = data.phone_number || fallback.phone_number;
+    const username = data.username || fallback.username;
+    const message = data.message || fallback.message;
+    const messageOnly = data.message_only ?? fallback.message_only;
+    const styles = data.styles || fallback.styles;
 
     // Helper to lighten a color
     const lightenColor = (hex: string, percent: number = 30) => {

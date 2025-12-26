@@ -4,6 +4,7 @@ import {
     FaGithub, FaBehance, FaDribbble, FaMedium, FaTwitch, FaFlickr,
     FaGlobe, FaTelegram, FaWhatsapp, FaReddit, FaSpotify, FaSkype
 } from 'react-icons/fa6';
+import { HOVER_PREVIEW_DATA } from '../steps/hoverPreviewData';
 
 // Social network configuration with brand colors
 const SOCIAL_NETWORK_CONFIG: Record<string, { icon: any; color: string }> = {
@@ -31,17 +32,65 @@ const SOCIAL_NETWORK_CONFIG: Record<string, { icon: any; color: string }> = {
 
 export function VCardPreview({ data }: { data: any }) {
     // Destructure with defaults to prevent crashes
+    // Destructure with defaults to prevent crashes
     const styles = data?.styles || { primary_color: '#2563EB', secondary_color: '#EFF6FF' };
-    const personal = data?.personal_info || {};
-    const contact = data?.contact_details || {};
-    const company = data?.company_details || {};
-    const address = data?.address || {};
-    const socialNetworks = data?.social_networks || [];
-    const summary = data?.summary || '';
 
-    const fullName = [personal.first_name, personal.last_name].filter(Boolean).join(' ') || 'John Doe';
-    const jobTitle = company.job_title || 'Product Designer';
-    const companyName = company.company_name || 'Creative Studio Inc.';
+    // Use hover data as fallback for empty fields to provide a rich preview experience
+    const fallback = HOVER_PREVIEW_DATA.vcard;
+
+    // We check if the data object exists, but we also want to fall back if the specific fields are empty strings
+    // This allows the preview to start "full" and update as the user types
+
+    const personal = {
+        first_name: data?.personal_info?.first_name || fallback.personal_info.first_name,
+        last_name: data?.personal_info?.last_name || fallback.personal_info.last_name,
+        avatar_image: data?.personal_info?.avatar_image || null // Don't enforce fallback avatar if user might want no avatar, but initially it's fine. 
+        // Actually, let's fallback avatar only if both names are default too? No, let's keep it simple.
+        // If user actively clears it, it might still be empty string. 
+        // For now, simple fallback is better for the "preview" feel.
+    };
+
+    // If the user has started editing specific sections, we might want to show their half-empty state.
+    // However, the request is to make it look like the create page preview.
+    // The create page preview uses the FULL fallback data.
+    // So we should fallback if the specific VALUE is falsy.
+
+    const contact = {
+        phone: data?.contact_details?.phone || fallback.contact_details.phone,
+        alternative_phone: data?.contact_details?.alternative_phone, // No fallback in sample data
+        email: data?.contact_details?.email || fallback.contact_details.email,
+        website: data?.contact_details?.website || fallback.contact_details.website,
+    };
+
+    const company = {
+        company_name: data?.company_details?.company_name || fallback.company_details.company_name,
+        job_title: data?.company_details?.job_title || fallback.company_details.job_title,
+    };
+
+    const address = {
+        street: data?.address?.street || fallback.address.street,
+        city: data?.address?.city || fallback.address.city,
+        state: data?.address?.state || fallback.address.state,
+        country: data?.address?.country || fallback.address.country,
+    };
+
+    // For arrays like social networks, if the user's array is empty, show the fallback.
+    // If they delete all items, it will go back to fallback, which might be slightly annoying if they WANT empty,
+    // but for a "preview" of a template, it usually looks better filled.
+    const socialNetworks = (data?.social_networks && data.social_networks.length > 0)
+        ? data.social_networks
+        : fallback.social_networks;
+
+    const summary = data?.summary || fallback.summary;
+
+    // Derived values
+    // We use the fallback-merged personal object here
+    const firstName = data?.personal_info?.first_name || fallback.personal_info.first_name;
+    const lastName = data?.personal_info?.last_name || fallback.personal_info.last_name;
+    const fullName = [firstName, lastName].filter(Boolean).join(' ');
+
+    const jobTitle = company.job_title;
+    const companyName = company.company_name;
 
     // Helper to lighten a color
     const lightenColor = (hex: string, percent: number = 90) => {

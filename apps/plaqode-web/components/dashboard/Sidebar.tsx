@@ -13,6 +13,7 @@ import {
     LogOut
 } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import Logo from '@/components/ui/Logo';
 
 interface SidebarProps {
@@ -107,14 +108,16 @@ export function Sidebar({ isOpen, setIsOpen, isMobile, onCloseMobile }: SidebarP
                         <Logo color="white" />
                     </div>
                     {/* Collapsed Icon when closed */}
+                    {/* Collapsed Icon when closed */}
                     {(!isOpen && !isMobile) && (
                         <Link href="/" className="absolute inset-0 flex items-center justify-center">
                             <div className="relative w-10 h-10">
-                                {/* Using image directly to match Logo.tsx style but without text */}
-                                <img
+                                {/* Using Image to match Logo.tsx style but without text */}
+                                <Image
                                     src="/img/qr-code-2.png"
                                     alt="Plaqode Logo"
-                                    className="object-contain w-full h-full"
+                                    fill
+                                    className="object-contain"
                                 />
                             </div>
                         </Link>

@@ -1,3 +1,7 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+
 interface Activity {
     id: string;
     type: 'cardify' | 'qrstudio';
@@ -21,6 +25,30 @@ function formatTimestamp(date: Date): string {
 }
 
 export function RecentActivity({ activities }: { activities: Activity[] }) {
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    if (!isMounted) {
+        return (
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-4">Recent Activity</h2>
+                <div className="space-y-4">
+                    {[1, 2, 3].map((i) => (
+                        <div key={i} className="flex items-center gap-4 pb-4 border-b border-gray-100 last:border-0 last:pb-0">
+                            <div className="w-10 h-10 rounded-lg bg-gray-100 animate-pulse" />
+                            <div className="flex-1 space-y-2">
+                                <div className="h-4 bg-gray-100 rounded w-3/4 animate-pulse" />
+                                <div className="h-3 bg-gray-100 rounded w-1/4 animate-pulse" />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    }
     if (activities.length === 0) {
         return (
             <div className="bg-white rounded-xl border border-gray-200 p-6">
@@ -40,8 +68,8 @@ export function RecentActivity({ activities }: { activities: Activity[] }) {
                 {activities.map((activity) => (
                     <div key={activity.id} className="flex items-center gap-4 pb-4 border-b border-gray-100 last:border-0 last:pb-0">
                         <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-xl ${activity.type === 'cardify'
-                                ? 'bg-purple-100 text-purple-600'
-                                : 'bg-blue-100 text-blue-600'
+                            ? 'bg-purple-100 text-purple-600'
+                            : 'bg-blue-100 text-blue-600'
                             }`}>
                             {activity.type === 'cardify' ? '🎨' : '📱'}
                         </div>

@@ -68,8 +68,8 @@ export const HOVER_PREVIEW_DATA = {
             ],
         },
         styles: {
-            primary_color: '#DC2626',
-            secondary_color: '#FEF2F2',
+            primary_color: '#F97316', // Orange-500
+            secondary_color: '#FFF7ED', // Orange-50
             gradient_type: 'none' as const,
             gradient_angle: 135,
         },
@@ -104,8 +104,8 @@ export const HOVER_PREVIEW_DATA = {
         ],
         summary: 'Passionate software developer building innovative tech solutions for East Africa. Specialized in web and mobile app development with 5+ years of experience.',
         styles: {
-            primary_color: '#16A34A',
-            secondary_color: '#F0FDF4',
+            primary_color: '#2563EB', // Blue-600
+            secondary_color: '#EFF6FF', // Blue-50
         },
     },
 
@@ -121,8 +121,8 @@ export const HOVER_PREVIEW_DATA = {
             custom_message: '',
         },
         styles: {
-            primary_color: '#EA580C',
-            secondary_color: '#FFF7ED',
+            primary_color: '#10B981', // Emerald-500
+            secondary_color: '#ECFDF5', // Emerald-50
             gradient_type: 'linear' as const,
             gradient_angle: 135,
         },
@@ -141,8 +141,8 @@ export const HOVER_PREVIEW_DATA = {
             logo: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?w=200&h=200&fit=crop',
         },
         styles: {
-            primary_color: '#0891B2',
-            secondary_color: '#ECFEFF',
+            primary_color: '#06B6D4', // Cyan-500
+            secondary_color: '#CFFAFE', // Cyan-50
         },
     },
 
@@ -161,8 +161,8 @@ export const HOVER_PREVIEW_DATA = {
             author: "Mama's Kitchen",
         },
         styles: {
-            primary_color: '#DC2626',
-            secondary_color: '#FEF2F2',
+            primary_color: '#475569', // Slate-600
+            secondary_color: '#F1F5F9', // Slate-50
         },
     },
 
@@ -172,8 +172,8 @@ export const HOVER_PREVIEW_DATA = {
             message: 'Karibu sana! Welcome to Tanzania, the land of Kilimanjaro, Serengeti, and Zanzibar.\n\nExperience our rich culture, stunning wildlife, and warm hospitality.\n\nTuonane hivi karibuni! (See you soon!)',
         },
         styles: {
-            primary_color: '#16A34A',
-            secondary_color: '#F0FDF4',
+            primary_color: '#9333EA', // Purple-600
+            secondary_color: '#FAF5FF', // Purple-50
         },
     },
 
@@ -198,8 +198,8 @@ export const HOVER_PREVIEW_DATA = {
             enabled: true,
         },
         styles: {
-            primary_color: '#7C3AED',
-            secondary_color: '#FAF5FF',
+            primary_color: '#DB2777', // Pink-600
+            secondary_color: '#FDF2F8', // Pink-50
         },
     },
 
@@ -214,8 +214,8 @@ export const HOVER_PREVIEW_DATA = {
             bcc: '',
         },
         styles: {
-            primary_color: '#F59E0B',
-            secondary_color: '#FEF3C7',
+            primary_color: '#D97706', // Amber-600
+            secondary_color: '#FFFBEB', // Amber-50
         },
     },
 
@@ -226,8 +226,8 @@ export const HOVER_PREVIEW_DATA = {
         message: 'Habari! I would like to confirm my safari booking for tomorrow at 6 AM. Asante sana!',
         message_only: false,
         styles: {
-            primary_color: '#10B981',
-            secondary_color: '#D1FAE5',
+            primary_color: '#16A34A', // Green-600
+            secondary_color: '#F0FDF4', // Green-50
         },
     },
 
@@ -241,8 +241,8 @@ export const HOVER_PREVIEW_DATA = {
             { platform: 'ios', url: 'https://apps.apple.com' },
         ],
         styles: {
-            primary_color: '#2563EB',
-            secondary_color: '#EFF6FF',
+            primary_color: '#4F46E5', // Indigo-600
+            secondary_color: '#EEF2FF', // Indigo-50
         },
     },
 
@@ -260,8 +260,8 @@ export const HOVER_PREVIEW_DATA = {
             { platform: 'instagram', url: 'https://instagram.com/amanimwangi' },
         ],
         styles: {
-            primary_color: '#A855F7',
-            secondary_color: '#FDF4FF',
+            primary_color: '#E11D48', // Rose-600
+            secondary_color: '#FFF1F2', // Rose-50
         },
     },
 };

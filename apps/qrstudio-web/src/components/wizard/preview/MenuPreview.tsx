@@ -1,6 +1,7 @@
 import { Utensils, MapPin, Clock, Phone, Globe } from 'lucide-react';
 import { useEffect } from 'react';
 import { usePreviewContext } from './PreviewContext';
+import { HOVER_PREVIEW_DATA } from '../steps/hoverPreviewData';
 
 interface MenuItem {
     id: string;
@@ -38,8 +39,102 @@ interface MenuData {
 }
 
 export function MenuPreview({ data }: { data: MenuData }) {
-    const info = data.restaurant_info || {};
-    const categories = data.content?.categories || [];
+    const fallback = HOVER_PREVIEW_DATA.menu;
+
+    // Fallback logic for Restaurant Info
+    const info = {
+        name: data.restaurant_info?.name || fallback.restaurant_info.name,
+        description: data.restaurant_info?.description || fallback.restaurant_info.description,
+        website: data.restaurant_info?.website || fallback.restaurant_info.website,
+        phone: data.restaurant_info?.phone || fallback.restaurant_info.phone,
+        logo: data.restaurant_info?.logo || null, // Optional
+        cover_image: data.restaurant_info?.cover_image || null // Optional
+    };
+
+    // Fallback logic for Categories
+    // If we have categories but the first one has no items and default name, it might be the initial state.
+    // But simplified check: if array is empty? 
+    // The store initializes with one category "Starters" and one item "Garlic Bread".
+    // So if it matches the exact store default, maybe we want to keep it?
+    // Actually, user wants the "Preview Placeholders". 
+    // The store default IS a placeholder but a boring one.
+    // The hover data has "Mama's Kitchen" with many items.
+    // Let's replace the content if it looks "default" (single category, default ID/name)? 
+    // OR just use hover data if completely empty.
+    // Since the store initializes with SOME data, simply checking length might not trigger fallback.
+    // However, the user said "disappear as user starts inputting".
+    // If we just override the store default, the user sees Mama's Kitchen.
+    // As soon as they edit the name of the restaurant, `info.name` changes.
+    // For categories, if they add a new item, the array changes.
+    // Let's try to detect "is basically empty/default".
+
+    // Store default for comparison:
+    // categories: [{ id: 'cat_1', name: 'Starters', items: [{...Garlic Bread...}] }]
+
+    // If we want the FULL rich preview initially, we should probably prefer the fallback 
+    // UNLESS the user has made deliberate changes.
+    // Detecting "deliberate changes" is hard without a dirty flag.
+    // But checking for the exact default string "Starters" / "Garlic Bread" is risky if they actually want that.
+
+    // Compromise: The user specifically asked for the SAME preview placeholders.
+    // The create page preview uses `HOVER_PREVIEW_DATA.menu`.
+    // That data has "Starters", "Main Dishes" etc.
+    // If I just swap the default store initialization to match HOVER_PREVIEW_DATA, that would be cleaner?
+    // But the request is about the *Page* showing placeholders.
+    // If I change `MenuPreview` to ignore the props if they match the store default?
+
+    // Let's stick to the pattern:
+    // If `data.content.categories` is empty OR (length=1 and items=empty/default?), unlikely.
+    // The store initializes with "Garlic Bread".
+    // If I use the fallback here whenever `data.content.categories` is falsy, it won't trigger because store has data.
+
+    // Let's look at `info` first. `info.name` defaults to "".
+    // So `info.name || fallback.name` works perfectly.
+
+    // For categories, it's tricker. 
+    // If `categories` comes from props, and it has the "Garlic Bread" item, that IS the user's current data (from the wizard store default).
+    // If I overwrite it, I lose the ability to see the "Garlic Bread" item if that's what is there.
+    // FAILURE CASE: The user actively deletes "Garlic Bread". Now categories is empty (or category has no items).
+    // Then we show fallback? That might be annoying ("I deleted it, why is it back?").
+    // BUT this is a "Mockup" that disappears as you input.
+    // Maybe best approach for complex lists: 
+    // If the list is empty, show fallback.
+    // The store initializes with items, so initially it WON'T show fallback.
+    // This deviates from "same preview placeholders".
+
+    // HYPOTHESIS: The user thinks the "Garlic Bread" default is boring/placeholder and wants "Mama's Kitchen".
+    // "placeholder details that disappear as the user starts inputting"
+
+    // If I change the Store initialization to be empty?
+    // Then `categories` would be empty, and I can fallback to `HOVER_PREVIEW_DATA`.
+    // But changing Store affects the Form too? (User sees empty form).
+    // The user might want the form to be empty so they can Type?
+    // "disappear as the user starts inputting their content"
+    // This implies the form is empty, but the preview is full.
+    // Currently, the form likely pre-fills "Garlic Bread".
+
+    // Let's assume for `MenuPreview`, `categories` fallback is only if array is empty.
+    // And for `info`, fallback if strings are empty.
+
+    // Wait, if the user starts with "Garlic Bread", they have to delete it.
+    // If I just prioritize the fallback logic for the top-level info, that's a huge win.
+    // For the list, maybe I should leave it as is if it has items? 
+    // The user explicitly said "change the template content pages with the same preview placeholder contents".
+
+    // Decided: I will use fallback for `categories` ONLY if it is empty. 
+    // AND I will check if the store default (Garlic Bread) is considered "placeholder" to be replaced?
+    // No, that's too magic.
+    // I will stick to: if `info.name` is empty => show fallback name.
+    // For categories, if `categories.length === 0` => show fallback categories.
+    // (Note: `store.ts` initializes with data, so this might not trigger for categories unless user deletes all).
+    // However, VCard initialization was empty strings, so it works great there.
+    // Menu initialization has data.
+
+    // Let's proceed with standard fallback logic.
+    const categories = (data.content?.categories && data.content.categories.length > 0)
+        ? data.content.categories
+        : fallback.content.categories;
+
     const primaryColor = data.styles?.primary_color || '#f97316';
     const secondaryColor = data.styles?.secondary_color || '#FFF7ED';
     const { setHeroBackgroundColor } = usePreviewContext();

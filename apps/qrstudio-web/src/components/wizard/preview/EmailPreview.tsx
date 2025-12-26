@@ -1,10 +1,22 @@
 import { Mail, User, FileText, Users, Eye } from 'lucide-react';
 
-export function EmailPreview({ data }: { data: any }) {
+import { HOVER_PREVIEW_DATA } from '../steps/hoverPreviewData';
 
-    const emailDetails = data.email_details || {};
-    const additionalRecipients = data.additional_recipients || {};
-    const styles = data.styles || {};
+export function EmailPreview({ data }: { data: any }) {
+    const fallback = HOVER_PREVIEW_DATA.email;
+
+    const emailDetails = {
+        recipient: data.email_details?.recipient || fallback.email_details.recipient,
+        subject: data.email_details?.subject || fallback.email_details.subject,
+        body: data.email_details?.body || fallback.email_details.body,
+    };
+
+    const additionalRecipients = {
+        cc: data.additional_recipients?.cc || fallback.additional_recipients.cc,
+        bcc: data.additional_recipients?.bcc || fallback.additional_recipients.bcc,
+    };
+
+    const styles = data.styles || fallback.styles;
 
     // Helper to lighten a color
     const lightenColor = (hex: string, percent: number = 30) => {

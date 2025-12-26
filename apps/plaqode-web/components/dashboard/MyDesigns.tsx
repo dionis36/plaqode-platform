@@ -101,7 +101,7 @@ export function MyDesigns() {
                             <p className="text-sm font-medium text-gray-900 truncate group-hover:text-purple-600 transition">
                                 {design.name}
                             </p>
-                            <p className="text-xs text-gray-500">
+                            <p className="text-xs text-gray-500" suppressHydrationWarning>
                                 {new Date(design.updatedAt).toLocaleDateString()}
                             </p>
                         </a>

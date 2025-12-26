@@ -309,14 +309,14 @@ export default function QrCodeDetailPage({ params }: { params: { id: string } })
                                 </div>
                                 <div className="p-4 bg-blue-50 rounded-lg">
                                     <p className="text-sm text-blue-600 font-medium">Created</p>
-                                    <p className="text-lg font-bold text-blue-900 mt-1">
+                                    <p className="text-lg font-bold text-blue-900 mt-1" suppressHydrationWarning>
                                         {new Date(qrCode.createdAt).toLocaleDateString()}
                                     </p>
                                 </div>
                                 {qrCode.updatedAt && qrCode.updatedAt !== qrCode.createdAt && (
                                     <div className="p-4 bg-emerald-50 rounded-lg col-span-2">
                                         <p className="text-sm text-emerald-600 font-medium">Last updated on</p>
-                                        <p className="text-lg font-bold text-emerald-900 mt-1">
+                                        <p className="text-lg font-bold text-emerald-900 mt-1" suppressHydrationWarning>
                                             {new Date(qrCode.updatedAt).toLocaleDateString()} at {new Date(qrCode.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                         </p>
                                     </div>

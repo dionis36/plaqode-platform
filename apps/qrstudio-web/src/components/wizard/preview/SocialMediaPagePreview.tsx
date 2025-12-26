@@ -6,16 +6,24 @@ import {
     FaReddit, FaSpotify, FaDiscord, FaThreads, FaGlobe
 } from 'react-icons/fa6';
 
-export function SocialMediaPagePreview({ data }: { data: any }) {
+import { HOVER_PREVIEW_DATA } from '../steps/hoverPreviewData';
 
-    const displayName = data.display_name || 'Your Name';
-    const bio = data.bio || '';
-    const profilePhoto = data.profile_photo || '';
-    const title = data.title || '';
-    const tagline = data.tagline || '';
-    const galleryImages = (data.gallery_images || []).filter((img: string) => img);
-    const socialLinks = data.social_links || [];
-    const styles = data.styles || {};
+export function SocialMediaPagePreview({ data }: { data: any }) {
+    const fallback = HOVER_PREVIEW_DATA.socialmedia;
+
+    const displayName = data.display_name || fallback.display_name;
+    const bio = data.bio || fallback.bio;
+    const profilePhoto = data.profile_photo || fallback.profile_photo;
+    const title = data.title || fallback.title;
+    const tagline = data.tagline || fallback.tagline;
+
+    const galleryImagesData = data.gallery_images && data.gallery_images.length > 0 ? data.gallery_images : fallback.gallery_images;
+    // Filter out empty strings if any
+    const galleryImages = (galleryImagesData || []).filter((img: string) => img);
+
+    const socialLinks = data.social_links && data.social_links.length > 0 ? data.social_links : (fallback.social_links || []);
+
+    const styles = data.styles || fallback.styles;
 
     // Get user's colors
     const primaryColor = styles.primary_color || '#A855F7';

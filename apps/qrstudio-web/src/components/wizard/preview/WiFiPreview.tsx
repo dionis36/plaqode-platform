@@ -1,6 +1,8 @@
 import { Wifi, Lock, Shield, Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
 
+import { HOVER_PREVIEW_DATA } from '../steps/hoverPreviewData';
+
 type WiFiPreviewProps = {
     data: any;
 };
@@ -8,12 +10,25 @@ type WiFiPreviewProps = {
 export function WiFiPreview({ data }: WiFiPreviewProps) {
     const [showPassword, setShowPassword] = useState(false);
 
-    const wifi = data?.wifi_details || {};
-    const network = data?.network_info || {};
+    const fallback = HOVER_PREVIEW_DATA.wifi;
+
+    const wifi = {
+        ssid: data?.wifi_details?.ssid || fallback.wifi_details.ssid,
+        password: data?.wifi_details?.password || fallback.wifi_details.password,
+        security: data?.wifi_details?.security || fallback.wifi_details.security,
+        hidden: data?.wifi_details?.hidden || fallback.wifi_details.hidden,
+    };
+
+    const network = {
+        title: data?.network_info?.title || fallback.network_info.title,
+        description: data?.network_info?.description || fallback.network_info.description,
+        logo: data?.network_info?.logo || fallback.network_info.logo,
+    };
+
     const styles = data?.styles || {};
 
-    const primaryColor = styles.primary_color || '#2563EB';
-    const secondaryColor = styles.secondary_color || '#EFF6FF';
+    const primaryColor = styles.primary_color || fallback.styles.primary_color;
+    const secondaryColor = styles.secondary_color || fallback.styles.secondary_color;
     const gradientType = styles.gradient_type || 'none';
     const gradientAngle = styles.gradient_angle || 135;
 

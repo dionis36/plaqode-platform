@@ -3,16 +3,36 @@ import { format, parseISO } from 'date-fns';
 import { useEffect } from 'react';
 import { usePreviewContext } from './PreviewContext';
 
+import { HOVER_PREVIEW_DATA } from '../steps/hoverPreviewData';
+
 export function EventPreview({ data }: { data: any }) {
     const { setHeroBackgroundColor } = usePreviewContext();
 
-    // Extract event data
-    const styles = data.styles || { primary_color: '#7C3AED', secondary_color: '#FAF5FF' };
-    const eventDetails = data.event_details || {};
-    const description = data.description || '';
-    const organizer = data.organizer || {};
-    const eventUrl = data.event_url || '';
-    const reminders = data.reminders || { enabled: false };
+    const fallback = HOVER_PREVIEW_DATA.event;
+
+    // Extract event data with fallbacks
+    const styles = data.styles || fallback.styles;
+
+    const eventDetails = {
+        title: data.event_details?.title || fallback.event_details.title,
+        start_date: data.event_details?.start_date || fallback.event_details.start_date,
+        end_date: data.event_details?.end_date || fallback.event_details.end_date,
+        start_time: data.event_details?.start_time || fallback.event_details.start_time,
+        end_time: data.event_details?.end_time || fallback.event_details.end_time,
+        timezone: data.event_details?.timezone || fallback.event_details.timezone,
+        location: data.event_details?.location || fallback.event_details.location,
+        all_day: data.event_details?.all_day ?? fallback.event_details.all_day,
+    };
+
+    const description = data.description || fallback.description;
+
+    const organizer = {
+        name: data.organizer?.name || fallback.organizer.name,
+        email: data.organizer?.email || fallback.organizer.email,
+    };
+
+    const eventUrl = data.event_url || fallback.event_url;
+    const reminders = data.reminders || fallback.reminders;
 
     // Set hero background color for status bar adaptation
     useEffect(() => {

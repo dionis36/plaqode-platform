@@ -1,6 +1,8 @@
 import { FileText, ExternalLink, File, FileImage, FileArchive, FileCode, Music, Video } from 'lucide-react';
 import { useState, useEffect, useCallback } from 'react';
 
+import { HOVER_PREVIEW_DATA } from '../steps/hoverPreviewData';
+
 type PDFPreviewProps = {
     data: any;
 };
@@ -37,12 +39,41 @@ export function PDFPreview({ data }: PDFPreviewProps) {
     const [thumbnailUrl, setThumbnailUrl] = useState<string>('');
     const [isGenerating, setIsGenerating] = useState(false);
 
-    const pdfFile = data?.pdf_file || {};
-    const docInfo = data?.document_info || {};
-    const styles = data?.styles || {};
+    const fallback = HOVER_PREVIEW_DATA.file;
 
-    const primaryColor = styles.primary_color || '#2563EB';
-    const secondaryColor = styles.secondary_color || '#EFF6FF';
+    // For file, we might want to show "No File" if user hasn't uploaded one, 
+    // BUT the requirement is to show the rich placeholder.
+    // So if data.pdf_file.file_data is missing, we use fallback?
+    // fallback.pdf_file doesn't have file_data (base64) usually for security/size.
+    // Let's check fallback structure. It has file_name, file_extension, etc.
+    // If we use fallback, we won't have a thumbnail logic unless we mock it, 
+    // but the component handles 'no file' gracefully. 
+    // We should populate the METADATA from fallback so it looks nice.
+
+    // We only use fallback if the MAIN data is completely missing?
+    // Actually, distinct fields.
+
+    const pdfFile = {
+        file_name: data?.pdf_file?.file_name || fallback.pdf_file.file_name,
+        file_extension: data?.pdf_file?.file_extension || fallback.pdf_file.file_extension,
+        file_category: data?.pdf_file?.file_category || fallback.pdf_file.file_category,
+        file_type: data?.pdf_file?.file_type || fallback.pdf_file.file_type,
+        file_size: data?.pdf_file?.file_size || fallback.pdf_file.file_size,
+        file_data: data?.pdf_file?.file_data, // Keep this as is, don't fallback to undefined
+        fullscreen_mode: data?.pdf_file?.fullscreen_mode,
+    };
+
+    const docInfo = {
+        title: data?.document_info?.title || fallback.document_info.title,
+        topic: data?.document_info?.topic || fallback.document_info.topic,
+        description: data?.document_info?.description || fallback.document_info.description,
+        author: data?.document_info?.author || fallback.document_info.author,
+    };
+
+    const styles = data?.styles || fallback.styles;
+
+    const primaryColor = styles.primary_color || fallback.styles.primary_color;
+    const secondaryColor = styles.secondary_color || fallback.styles.secondary_color;
     const gradientType = styles.gradient_type || 'none';
     const gradientAngle = styles.gradient_angle || 135;
 
