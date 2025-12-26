@@ -21,7 +21,7 @@ export default function Logo({ color = "white" }: LogoProps) {
             </div>
 
             {/* Text Branding */}
-            <span className={`font-serif text-2xl font-bold tracking-tight ${color === "white" ? "text-white" : "text-slate-900"}`}>
+            <span className={`font-serif text-2xl tracking-tight ${color === "white" ? "text-white" : "text-slate-900"}`}>
                 PlaQode
             </span>
         </Link>

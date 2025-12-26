@@ -1,85 +1,103 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
 import Link from 'next/link';
+import React, { useState, useRef, useEffect } from 'react';
+import { useAuth } from '@/lib/auth-context';
+import { LayoutDashboard, LogOut, Code, User, Settings } from 'lucide-react';
 
-interface User {
-    name?: string;
-    email: string;
+interface GradientAvatarProps {
+    user: {
+        name?: string;
+        email: string;
+    };
+    className?: string;
+    textColor?: "text-white" | "text-dark";
 }
 
-export default function GradientAvatar({ user }: { user: User }) {
+const HOME_URL = process.env.NEXT_PUBLIC_PLAQODE_WEB_URL || "http://localhost:3000";
+
+export default function GradientAvatar({ user, className = "", textColor = "text-white" }: GradientAvatarProps) {
+    const { logout } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
-    const initials = user.name
-        ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
-        : user.email.substring(0, 2).toUpperCase();
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
-    // Generate consistent gradient based on email length
-    const gradients = [
-        'from-blue-500 to-indigo-500',
-        'from-emerald-500 to-teal-500',
-        'from-orange-500 to-red-500',
-        'from-pink-500 to-rose-500',
-        'from-purple-500 to-violet-500',
-    ];
-    const gradient = gradients[user.email.length % gradients.length];
-
-    const handleLogout = async () => {
-        try {
-            await fetch(`${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/logout`, {
-                method: 'POST',
-                credentials: 'include',
-            });
-            window.location.href = `${process.env.NEXT_PUBLIC_PLATFORM_URL}/auth/login`;
-        } catch (error) {
-            console.error('Logout failed:', error);
+    const getInitials = (u: { name?: string; email: string }) => {
+        if (u.name) {
+            return u.name.split(" ").map((n: string) => n[0]).join("").substring(0, 2).toUpperCase();
         }
+        return u.email.substring(0, 2).toUpperCase();
     };
 
+    // Close on click outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
     return (
-        <div className="relative">
+        <div className="relative" ref={dropdownRef}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className={`w-9 h-9 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center text-white text-sm font-bold shadow-md hover:shadow-lg transition-all border-2 border-white`}
+                className={`group relative inline-flex items-center justify-center w-10 h-10 rounded-full transition-transform duration-300 hover:scale-105 cursor-pointer ${className}`}
             >
-                {initials}
+                {/* 1. The Gradient Border (Masked) */}
+                <span
+                    className="absolute inset-0 rounded-full gradient-border-mask pointer-events-none"
+                />
+
+                {/* 2. Initials (Transparent Center) */}
+                <span className={`relative z-10 font-sans font-bold text-sm tracking-wider ${textColor}`}>
+                    {getInitials(user)}
+                </span>
             </button>
 
+            {/* Dropdown Menu */}
             {isOpen && (
-                <>
-                    <div
-                        className="fixed inset-0 z-40"
-                        onClick={() => setIsOpen(false)}
-                    />
-                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-slate-100 z-50 py-1 animate-in fade-in zoom-in-95 duration-200">
-                        <div className="px-4 py-2 border-b border-slate-100">
-                            <p className="text-sm font-medium text-slate-900 truncate">{user.name || 'User'}</p>
-                            <p className="text-xs text-slate-500 truncate">{user.email}</p>
-                        </div>
-                        <div className="py-1">
-                            <Link
-                                href={`${process.env.NEXT_PUBLIC_PLAQODE_WEB_URL || 'http://localhost:3000'}/app/profile`}
-                                className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
-                            >
-                                Profile Settings
-                            </Link>
-                            <Link
-                                href={`${process.env.NEXT_PUBLIC_PLAQODE_WEB_URL || 'http://localhost:3000'}/app/qrcodes`}
-                                className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
-                            >
-                                Dashboard
-                            </Link>
-                        </div>
-                        <div className="border-t border-slate-100 py-1">
-                            <button
-                                onClick={handleLogout}
-                                className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
-                            >
-                                Sign out
-                            </button>
-                        </div>
+                <div className="absolute right-0 mt-3 w-56 bg-white/90 backdrop-blur-md shadow-xl border border-slate-200 rounded-2xl overflow-hidden origin-top-right animate-in fade-in zoom-in-95 duration-200 z-50">
+                    <div className="px-4 py-3 border-b border-slate-100 bg-slate-50/50">
+                        <p className="text-base font-medium text-slate-900 truncate font-serif">{user.name || "User"}</p>
+                        <p className="text-xs text-slate-500 truncate font-sans">{user.email}</p>
                     </div>
-                </>
+
+                    <div className="p-2 space-y-1">
+                        <Link
+                            href={HOME_URL + "/app"}
+                            className="flex items-center gap-3 px-3 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors group"
+                            onClick={() => setIsOpen(false)}
+                        >
+                            <LayoutDashboard size={18} className="text-slate-400 group-hover:text-blue-500 transition-colors" />
+                            Dashboard
+                        </Link>
+
+                        <Link
+                            href={HOME_URL + "/app/qrcodes"}
+                            className="flex items-center gap-3 px-3 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors group"
+                            onClick={() => setIsOpen(false)}
+                        >
+                            <Code size={18} className="text-slate-400 group-hover:text-blue-500 transition-colors" />
+                            My QR Codes
+                        </Link>
+                    </div>
+
+                    <div className="border-t border-slate-100 p-2">
+                        <button
+                            onClick={() => {
+                                logout();
+                                setIsOpen(false);
+                            }}
+                            className="flex w-full items-center gap-3 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        >
+                            <LogOut size={18} />
+                            Log Out
+                        </button>
+                    </div>
+                </div>
             )}
         </div>
     );

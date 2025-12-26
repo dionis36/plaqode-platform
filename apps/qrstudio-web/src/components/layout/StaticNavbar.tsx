@@ -23,10 +23,10 @@ export default function StaticNavbar() {
                 {/* Desktop Nav & Auth */}
                 <div className="flex items-center gap-8">
                     <nav className="hidden md:flex gap-8">
-                        <Link href={HOME_URL} className="text-slate-700 hover:text-blue-600 transition-colors font-medium">Home</Link>
-                        <Link href={`${HOME_URL}/about`} className="text-slate-700 hover:text-blue-600 transition-colors font-medium">About</Link>
-                        <Link href={`${HOME_URL}/services`} className="text-slate-700 hover:text-blue-600 transition-colors font-medium">Services</Link>
-                        <Link href={`${HOME_URL}/contact`} className="text-slate-700 hover:text-blue-600 transition-colors font-medium">Contact</Link>
+                        <Link href={HOME_URL} className="text-slate-700 hover:text-secondary transition-colors font-medium">Home</Link>
+                        <Link href={`${HOME_URL}/about`} className="text-slate-700 hover:text-secondary transition-colors font-medium">About</Link>
+                        <Link href={`${HOME_URL}/services`} className="text-slate-700 hover:text-secondary transition-colors font-medium">Services</Link>
+                        <Link href={`${HOME_URL}/contact`} className="text-slate-700 hover:text-secondary transition-colors font-medium">Contact</Link>
                     </nav>
 
                     <div className="hidden md:block">

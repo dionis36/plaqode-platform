@@ -15,6 +15,7 @@ interface AuthContextType {
     loading: boolean;
     isAuthenticated: boolean;
     hasQrStudioAccess: boolean;
+    logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -55,10 +56,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
     };
 
+    const logout = async () => {
+        try {
+            await fetch(`${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/logout`, {
+                method: 'POST',
+                credentials: 'include',
+            });
+            window.location.href = `${process.env.NEXT_PUBLIC_PLATFORM_URL}/auth/login`;
+        } catch (error) {
+            console.error('Logout failed:', error);
+            // Force redirect even if api fails
+            window.location.href = `${process.env.NEXT_PUBLIC_PLATFORM_URL}/auth/login`;
+        }
+    };
+
     const hasQrStudioAccess = user?.products.includes('qrstudio') || false;
 
     return (
-        <AuthContext.Provider value={{ user, loading, isAuthenticated, hasQrStudioAccess }}>
+        <AuthContext.Provider value={{ user, loading, isAuthenticated, hasQrStudioAccess, logout }}>
             {children}
         </AuthContext.Provider>
     );

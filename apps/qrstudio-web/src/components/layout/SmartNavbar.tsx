@@ -55,10 +55,10 @@ export default function SmartNavbar() {
                     <div className="flex items-center gap-8">
                         {/* Desktop Nav */}
                         <nav className="hidden md:flex gap-8">
-                            <Link href={HOME_URL} className="text-slate-200 hover:text-white transition-colors">Home</Link>
-                            <Link href={`${HOME_URL}/about`} className="text-slate-200 hover:text-white transition-colors">About</Link>
-                            <Link href={`${HOME_URL}/services`} className="text-slate-200 hover:text-white transition-colors">Services</Link>
-                            <Link href={`${HOME_URL}/contact`} className="text-slate-200 hover:text-white transition-colors">Contact</Link>
+                            <Link href={HOME_URL} className="text-slate-200 hover:text-secondary transition-colors">Home</Link>
+                            <Link href={`${HOME_URL}/about`} className="text-slate-200 hover:text-secondary transition-colors">About</Link>
+                            <Link href={`${HOME_URL}/services`} className="text-slate-200 hover:text-secondary transition-colors">Services</Link>
+                            <Link href={`${HOME_URL}/contact`} className="text-slate-200 hover:text-secondary transition-colors">Contact</Link>
                         </nav>
 
                         <div className="hidden md:block">

@@ -1,13 +1,18 @@
 'use client';
 
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Merriweather } from "next/font/google";
 import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from '@/lib/auth-context';
 import { PlatformNavWrapper } from '@/components/layout/PlatformNavWrapper';
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const merriweather = Merriweather({
+    subsets: ["latin"],
+    weight: ["300", "400", "700", "900"],
+    variable: "--font-merriweather"
+});
 
 export default function RootLayout({
     children,
@@ -16,7 +21,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={inter.className}>
+            <body className={`${inter.variable} ${merriweather.variable} font-sans`}>
                 <AuthProvider>
                     <PlatformNavWrapper />
                     <HelmetProvider>
