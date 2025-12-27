@@ -31,7 +31,7 @@ export default function GradientButton({
 }: GradientButtonProps) {
   const commonClasses = clsx(
     "group relative inline-flex items-center justify-center",
-    "rounded-full transition-transform duration-300",
+    "rounded-lg transition-transform duration-300",
     "hover:scale-[1.03]",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
     sizeStyles[size],
@@ -43,7 +43,7 @@ export default function GradientButton({
   const content = (
     <>
       {/* Gradient border */}
-      <span className="absolute inset-0 rounded-full gradient-border-mask pointer-events-none" />
+      <span className="absolute inset-0 rounded-lg gradient-border-mask pointer-events-none" />
       {/* Text */}
       <span className="relative z-10 whitespace-nowrap leading-none">
         {text}
