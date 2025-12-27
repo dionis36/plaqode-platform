@@ -8,9 +8,8 @@
   --color-light: #FAFAFA;
   --color-bg: #efefef;
 
-  /* Fonts */
-  --font-sans: var(--font-inter), sans-serif;
-  --font-serif: var(--font-merriweather), serif;
+/* Fonts - Updated to match Next.js Variables */
+  --font-sans: var(--font-open-sans), ui-sans-serif, system-ui;
   --font-merriweather: var(--font-merriweather), serif;
 
   /* Font Sizes */

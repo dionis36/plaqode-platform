@@ -1,19 +1,22 @@
 import type { Metadata } from "next";
-import { Inter, Merriweather } from "next/font/google";
+import { Open_Sans, Merriweather } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
+// Global Body Font
+const openSans = Open_Sans({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-open-sans', // CSS variable bridge
 });
 
+// Manual Heading Font
 const merriweather = Merriweather({
-  variable: "--font-merriweather",
-  weight: ["300", "400", "700", "900"],
-  subsets: ["latin"],
+  subsets: ['latin'],
+  weight: ['400', '700', '900'],
+  display: 'swap',
+  variable: '--font-merriweather', // CSS variable bridge
 });
-
 export const metadata: Metadata = {
   title: "Plaqode",
   description: "Next Gen QR Code Solutions",
@@ -27,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${merriweather.variable} antialiased font-sans`}
+        className={`${openSans.variable} ${merriweather.variable} antialiased font-sans`}
       >
         <AuthProvider>
           {children}

@@ -16,8 +16,7 @@ const config: Config = {
                 bg: "#efefef",
             },
             fontFamily: {
-                sans: ["var(--font-inter)", "sans-serif"],
-                serif: ["var(--font-merriweather)", "serif"],
+                sans: ["var(--font-open-sans)", "ui-sans-serif", "system-ui"],
                 merriweather: ["var(--font-merriweather)", "serif"],
             },
             fontSize: {
