@@ -41,14 +41,26 @@ interface MenuData {
 export function MenuPreview({ data }: { data: MenuData }) {
     const fallback = HOVER_PREVIEW_DATA.menu;
 
+    // Check if user has started entering ANY content
+    const hasUserInput =
+        (data?.restaurant_info?.name || '') !== '' ||
+        (data?.restaurant_info?.description || '') !== '' ||
+        (data?.restaurant_info?.website || '') !== '' ||
+        (data?.restaurant_info?.phone || '') !== '' ||
+        (data?.restaurant_info?.logo || '') !== '' ||
+        (data?.restaurant_info?.cover_image || '') !== '' ||
+        (data?.content?.categories && data.content.categories.length > 0);
+
+    const activeData = hasUserInput ? data : fallback;
+
     // Fallback logic for Restaurant Info
     const info = {
-        name: data.restaurant_info?.name || fallback.restaurant_info.name,
-        description: data.restaurant_info?.description || fallback.restaurant_info.description,
-        website: data.restaurant_info?.website || fallback.restaurant_info.website,
-        phone: data.restaurant_info?.phone || fallback.restaurant_info.phone,
-        logo: data.restaurant_info?.logo || null, // Optional
-        cover_image: data.restaurant_info?.cover_image || null // Optional
+        name: activeData.restaurant_info?.name || (hasUserInput ? '' : fallback.restaurant_info.name),
+        description: activeData.restaurant_info?.description || (hasUserInput ? '' : fallback.restaurant_info.description),
+        website: activeData.restaurant_info?.website || (hasUserInput ? '' : fallback.restaurant_info.website),
+        phone: activeData.restaurant_info?.phone || (hasUserInput ? '' : fallback.restaurant_info.phone),
+        logo: activeData.restaurant_info?.logo || (hasUserInput ? '' : null),
+        cover_image: activeData.restaurant_info?.cover_image || (hasUserInput ? '' : null)
     };
 
     // Fallback logic for Categories
@@ -131,9 +143,9 @@ export function MenuPreview({ data }: { data: MenuData }) {
     // Menu initialization has data.
 
     // Let's proceed with standard fallback logic.
-    const categories = (data.content?.categories && data.content.categories.length > 0)
-        ? data.content.categories
-        : fallback.content.categories;
+    const categories = (activeData.content?.categories && activeData.content.categories.length > 0)
+        ? activeData.content.categories
+        : (hasUserInput ? [] : fallback.content.categories);
 
     const primaryColor = data.styles?.primary_color || '#f97316';
     const secondaryColor = data.styles?.secondary_color || '#FFF7ED';
@@ -207,8 +219,8 @@ export function MenuPreview({ data }: { data: MenuData }) {
                             </div>
                         )}
                         <div className="flex-1">
-                            <h1 className="text-2xl font-bold leading-tight shadow-sm">{info.name || 'Restaurant Name'}</h1>
-                            <p className="text-sm opacity-90 mt-1 line-clamp-2">{info.description || 'Tasty food served with love.'}</p>
+                            <h1 className="text-2xl font-bold leading-tight shadow-sm">{info.name || (hasUserInput ? '' : 'Restaurant Name')}</h1>
+                            <p className="text-sm opacity-90 mt-1 line-clamp-2">{info.description || (hasUserInput ? '' : 'Tasty food served with love.')}</p>
                         </div>
                     </div>
                 </div>

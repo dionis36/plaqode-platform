@@ -41,33 +41,32 @@ export function PDFPreview({ data }: PDFPreviewProps) {
 
     const fallback = HOVER_PREVIEW_DATA.file;
 
-    // For file, we might want to show "No File" if user hasn't uploaded one, 
-    // BUT the requirement is to show the rich placeholder.
-    // So if data.pdf_file.file_data is missing, we use fallback?
-    // fallback.pdf_file doesn't have file_data (base64) usually for security/size.
-    // Let's check fallback structure. It has file_name, file_extension, etc.
-    // If we use fallback, we won't have a thumbnail logic unless we mock it, 
-    // but the component handles 'no file' gracefully. 
-    // We should populate the METADATA from fallback so it looks nice.
+    // Check if user has started entering ANY content
+    // We check file_data (upload) or text inputs
+    const hasUserInput =
+        (data?.pdf_file?.file_data || '') !== '' ||
+        (data?.document_info?.title || '') !== '' ||
+        (data?.document_info?.topic || '') !== '' ||
+        (data?.document_info?.description || '') !== '' ||
+        (data?.document_info?.author || '') !== '';
 
-    // We only use fallback if the MAIN data is completely missing?
-    // Actually, distinct fields.
+    const activeData = hasUserInput ? data : fallback;
 
     const pdfFile = {
-        file_name: data?.pdf_file?.file_name || fallback.pdf_file.file_name,
-        file_extension: data?.pdf_file?.file_extension || fallback.pdf_file.file_extension,
-        file_category: data?.pdf_file?.file_category || fallback.pdf_file.file_category,
-        file_type: data?.pdf_file?.file_type || fallback.pdf_file.file_type,
-        file_size: data?.pdf_file?.file_size || fallback.pdf_file.file_size,
-        file_data: data?.pdf_file?.file_data, // Keep this as is, don't fallback to undefined
-        fullscreen_mode: data?.pdf_file?.fullscreen_mode,
+        file_name: activeData?.pdf_file?.file_name || (hasUserInput ? '' : fallback.pdf_file.file_name),
+        file_extension: activeData?.pdf_file?.file_extension || (hasUserInput ? '' : fallback.pdf_file.file_extension),
+        file_category: activeData?.pdf_file?.file_category || (hasUserInput ? '' : fallback.pdf_file.file_category),
+        file_type: activeData?.pdf_file?.file_type || (hasUserInput ? '' : fallback.pdf_file.file_type),
+        file_size: activeData?.pdf_file?.file_size || (hasUserInput ? 0 : fallback.pdf_file.file_size),
+        file_data: activeData?.pdf_file?.file_data,
+        fullscreen_mode: activeData?.pdf_file?.fullscreen_mode,
     };
 
     const docInfo = {
-        title: data?.document_info?.title || fallback.document_info.title,
-        topic: data?.document_info?.topic || fallback.document_info.topic,
-        description: data?.document_info?.description || fallback.document_info.description,
-        author: data?.document_info?.author || fallback.document_info.author,
+        title: activeData?.document_info?.title || (hasUserInput ? '' : fallback.document_info.title),
+        topic: activeData?.document_info?.topic || (hasUserInput ? '' : fallback.document_info.topic),
+        description: activeData?.document_info?.description || (hasUserInput ? '' : fallback.document_info.description),
+        author: activeData?.document_info?.author || (hasUserInput ? '' : fallback.document_info.author),
     };
 
     const styles = data?.styles || fallback.styles;
@@ -273,11 +272,11 @@ export function PDFPreview({ data }: PDFPreviewProps) {
                 {/* Document Title */}
                 <div className="text-center px-4 max-w-[280px]">
                     <h2 className="text-lg font-bold text-slate-900 mb-0.5 leading-tight line-clamp-2">
-                        {docInfo.title || pdfFile.file_name || 'Your File Title'}
+                        {docInfo.title || pdfFile.file_name || (hasUserInput ? '' : 'Your File Title')}
                     </h2>
                     {docInfo.topic ? (
                         <p className="text-xs text-slate-600 mt-1">{docInfo.topic}</p>
-                    ) : !pdfFile.file_data && (
+                    ) : (!pdfFile.file_data && !hasUserInput) && (
                         <p className="text-xs text-slate-500 mt-1">Category or topic</p>
                     )}
                 </div>
@@ -287,7 +286,7 @@ export function PDFPreview({ data }: PDFPreviewProps) {
                     <p className="text-xs text-slate-600 text-center max-w-[280px] px-4 line-clamp-3 leading-relaxed">
                         {docInfo.description}
                     </p>
-                ) : !pdfFile.file_data && (
+                ) : (!pdfFile.file_data && !hasUserInput) && (
                     <p className="text-xs text-slate-400 text-center max-w-[280px] px-4 line-clamp-3 leading-relaxed italic">
                         Add a brief description to help users understand what this file contains
                     </p>
@@ -317,7 +316,7 @@ export function PDFPreview({ data }: PDFPreviewProps) {
                     <p className="text-[10px] text-slate-500 mt-2">
                         By {docInfo.author}
                     </p>
-                ) : !pdfFile.file_data && (
+                ) : (!pdfFile.file_data && !hasUserInput) && (
                     <p className="text-[10px] text-slate-400 mt-2 italic">
                         Optional author name
                     </p>

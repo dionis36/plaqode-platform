@@ -10,29 +10,41 @@ export function EventPreview({ data }: { data: any }) {
 
     const fallback = HOVER_PREVIEW_DATA.event;
 
-    // Extract event data with fallbacks
-    const styles = data.styles || fallback.styles;
+    // Check if user has started entering ANY content
+    const hasUserInput =
+        (data?.event_details?.title || '') !== '' ||
+        (data?.event_details?.start_date || '') !== '' ||
+        (data?.event_details?.end_date || '') !== '' ||
+        (data?.event_details?.location || '') !== '' ||
+        (data?.description || '') !== '' ||
+        (data?.organizer?.name || '') !== '' ||
+        (data?.organizer?.email || '') !== '' ||
+        (data?.event_url || '') !== '';
 
+    const activeData = hasUserInput ? data : fallback;
+    const styles = data.styles || fallback.styles; // Styles fallback
+
+    // Extract event data with fallbacks matching "clean mode"
     const eventDetails = {
-        title: data.event_details?.title || fallback.event_details.title,
-        start_date: data.event_details?.start_date || fallback.event_details.start_date,
-        end_date: data.event_details?.end_date || fallback.event_details.end_date,
-        start_time: data.event_details?.start_time || fallback.event_details.start_time,
-        end_time: data.event_details?.end_time || fallback.event_details.end_time,
-        timezone: data.event_details?.timezone || fallback.event_details.timezone,
-        location: data.event_details?.location || fallback.event_details.location,
-        all_day: data.event_details?.all_day ?? fallback.event_details.all_day,
+        title: activeData.event_details?.title || (hasUserInput ? '' : fallback.event_details.title),
+        start_date: activeData.event_details?.start_date || (hasUserInput ? '' : fallback.event_details.start_date),
+        end_date: activeData.event_details?.end_date || (hasUserInput ? '' : fallback.event_details.end_date),
+        start_time: activeData.event_details?.start_time || (hasUserInput ? '' : fallback.event_details.start_time),
+        end_time: activeData.event_details?.end_time || (hasUserInput ? '' : fallback.event_details.end_time),
+        timezone: activeData.event_details?.timezone || (hasUserInput ? '' : fallback.event_details.timezone),
+        location: activeData.event_details?.location || (hasUserInput ? '' : fallback.event_details.location),
+        all_day: activeData.event_details?.all_day ?? (hasUserInput ? false : fallback.event_details.all_day),
     };
 
-    const description = data.description || fallback.description;
+    const description = activeData.description || (hasUserInput ? '' : fallback.description);
 
     const organizer = {
-        name: data.organizer?.name || fallback.organizer.name,
-        email: data.organizer?.email || fallback.organizer.email,
+        name: activeData.organizer?.name || (hasUserInput ? '' : fallback.organizer.name),
+        email: activeData.organizer?.email || (hasUserInput ? '' : fallback.organizer.email),
     };
 
-    const eventUrl = data.event_url || fallback.event_url;
-    const reminders = data.reminders || fallback.reminders;
+    const eventUrl = activeData.event_url || (hasUserInput ? '' : fallback.event_url);
+    const reminders = activeData.reminders || (hasUserInput ? { enabled: false } : fallback.reminders);
 
     // Set hero background color for status bar adaptation
     useEffect(() => {
@@ -154,7 +166,7 @@ export function EventPreview({ data }: { data: any }) {
                     className="text-xl font-bold text-center mb-3 leading-tight px-4"
                     style={{ color: styles.secondary_color || '#FFFFFF' }}
                 >
-                    {eventDetails.title || 'Event Title'}
+                    {eventDetails.title || (hasUserInput ? '' : 'Event Title')}
                 </h1>
 
 

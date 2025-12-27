@@ -12,17 +12,26 @@ export function WiFiPreview({ data }: WiFiPreviewProps) {
 
     const fallback = HOVER_PREVIEW_DATA.wifi;
 
+    // Check if user has started entering ANY content
+    const hasUserInput =
+        (data?.wifi_details?.ssid || '') !== '' ||
+        (data?.wifi_details?.password || '') !== '' ||
+        (data?.network_info?.title || '') !== '' ||
+        (data?.network_info?.description || '') !== '';
+
+    const activeData = hasUserInput ? data : fallback;
+
     const wifi = {
-        ssid: data?.wifi_details?.ssid || fallback.wifi_details.ssid,
-        password: data?.wifi_details?.password || fallback.wifi_details.password,
-        security: data?.wifi_details?.security || fallback.wifi_details.security,
-        hidden: data?.wifi_details?.hidden || fallback.wifi_details.hidden,
+        ssid: activeData?.wifi_details?.ssid || (hasUserInput ? '' : fallback.wifi_details.ssid),
+        password: activeData?.wifi_details?.password || (hasUserInput ? '' : fallback.wifi_details.password),
+        security: activeData?.wifi_details?.security || (hasUserInput ? 'WPA2' : fallback.wifi_details.security),
+        hidden: activeData?.wifi_details?.hidden || (hasUserInput ? false : fallback.wifi_details.hidden),
     };
 
     const network = {
-        title: data?.network_info?.title || fallback.network_info.title,
-        description: data?.network_info?.description || fallback.network_info.description,
-        logo: data?.network_info?.logo || fallback.network_info.logo,
+        title: activeData?.network_info?.title || (hasUserInput ? '' : fallback.network_info.title),
+        description: activeData?.network_info?.description || (hasUserInput ? '' : fallback.network_info.description),
+        logo: activeData?.network_info?.logo || (hasUserInput ? null : fallback.network_info.logo),
     };
 
     const styles = data?.styles || {};
@@ -120,7 +129,7 @@ export function WiFiPreview({ data }: WiFiPreviewProps) {
                 {/* Network Title or SSID */}
                 <div className="text-center">
                     <h2 className="text-2xl font-bold text-slate-900 mb-1">
-                        {network.title || wifi.ssid || 'WiFi Network'}
+                        {network.title || wifi.ssid || (hasUserInput ? '' : 'WiFi Network')}
                     </h2>
                     {network.title && wifi.ssid && (
                         <p className="text-sm text-slate-600 font-mono">{wifi.ssid}</p>
