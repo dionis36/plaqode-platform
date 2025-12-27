@@ -5,15 +5,25 @@ import { HOVER_PREVIEW_DATA } from '../steps/hoverPreviewData';
 export function AppStorePreview({ data }: { data: any }) {
     const fallback = HOVER_PREVIEW_DATA.appstore;
 
-    // Check if platforms is empty array or undefined
-    const platformsData = data.platforms && data.platforms.length > 0 ? data.platforms : fallback.platforms;
+    // Check if user has started entering ANY content
+    const hasUserInput =
+        (data?.app_name || '') !== '' ||
+        (data?.developer || '') !== '' ||
+        (data?.description || '') !== '' ||
+        (data?.app_logo || '') !== '' ||
+        (data?.platforms && data.platforms.length > 0);
 
-    const appName = data.app_name || fallback.app_name;
-    const developer = data.developer || fallback.developer;
-    const description = data.description || fallback.description;
-    const appLogo = data.app_logo || fallback.app_logo;
+    const activeData = hasUserInput ? data : fallback;
+
+    // Check if platforms is empty array or undefined
+    const platformsData = activeData.platforms && activeData.platforms.length > 0 ? activeData.platforms : (hasUserInput ? [] : fallback.platforms);
+
+    const appName = activeData.app_name || (hasUserInput ? '' : fallback.app_name);
+    const developer = activeData.developer || (hasUserInput ? '' : fallback.developer);
+    const description = activeData.description || (hasUserInput ? '' : fallback.description);
+    const appLogo = activeData.app_logo || (hasUserInput ? '' : fallback.app_logo);
     const platforms = platformsData;
-    const styles = data.styles || fallback.styles;
+    const styles = data.styles || fallback.styles; // Styles always fallback until customized
 
     // Get user's colors
     const primaryColor = styles.primary_color || '#2563EB';

@@ -11,19 +11,31 @@ import { HOVER_PREVIEW_DATA } from '../steps/hoverPreviewData';
 export function SocialMediaPagePreview({ data }: { data: any }) {
     const fallback = HOVER_PREVIEW_DATA.socialmedia;
 
-    const displayName = data.display_name || fallback.display_name;
-    const bio = data.bio || fallback.bio;
-    const profilePhoto = data.profile_photo || fallback.profile_photo;
-    const title = data.title || fallback.title;
-    const tagline = data.tagline || fallback.tagline;
+    // Check if user has started entering ANY content
+    const hasUserInput =
+        (data?.display_name || '') !== '' ||
+        (data?.bio || '') !== '' ||
+        (data?.profile_photo || '') !== '' ||
+        (data?.title || '') !== '' ||
+        (data?.tagline || '') !== '' ||
+        (data?.social_links && data.social_links.length > 0) ||
+        (data?.gallery_images && data.gallery_images.length > 0);
 
-    const galleryImagesData = data.gallery_images && data.gallery_images.length > 0 ? data.gallery_images : fallback.gallery_images;
+    const activeData = hasUserInput ? data : fallback;
+
+    const displayName = activeData.display_name || (hasUserInput ? '' : fallback.display_name);
+    const bio = activeData.bio || (hasUserInput ? '' : fallback.bio);
+    const profilePhoto = activeData.profile_photo || (hasUserInput ? '' : fallback.profile_photo);
+    const title = activeData.title || (hasUserInput ? '' : fallback.title);
+    const tagline = activeData.tagline || (hasUserInput ? '' : fallback.tagline);
+
+    const galleryImagesData = activeData.gallery_images && activeData.gallery_images.length > 0 ? activeData.gallery_images : (hasUserInput ? [] : fallback.gallery_images);
     // Filter out empty strings if any
     const galleryImages = (galleryImagesData || []).filter((img: string) => img);
 
-    const socialLinks = data.social_links && data.social_links.length > 0 ? data.social_links : (fallback.social_links || []);
+    const socialLinks = activeData.social_links && activeData.social_links.length > 0 ? activeData.social_links : (hasUserInput ? [] : (fallback.social_links || []));
 
-    const styles = data.styles || fallback.styles;
+    const styles = data.styles || fallback.styles; // Styles always fallback
 
     // Get user's colors
     const primaryColor = styles.primary_color || '#A855F7';
