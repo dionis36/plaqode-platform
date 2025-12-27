@@ -11,9 +11,11 @@ import { qrApi } from '@/lib/api-client';
 import { SEO } from '@/components/common/SEO';
 import { BackButton } from '@/components/common/BackButton';
 import { EnhancedPreviewModal } from '@/components/common/EnhancedPreviewModal';
+import { useTemplateValidation } from '@/hooks/useTemplateValidation';
 
 export default function VCardQrPage() {
     const { payload, setEditMode, loadQrData } = useWizardStore();
+    const { isValid } = useTemplateValidation('vcard');
     const router = useRouter();
     const searchParams = useSearchParams();
     const editId = searchParams.get('edit');
@@ -81,7 +83,8 @@ export default function VCardQrPage() {
                     <div className="mt-8 pt-6 border-t border-slate-100 flex justify-end">
                         <button
                             onClick={() => router.push(`/create/vcard/design${editId ? `?edit=${editId}` : ''}`)}
-                            className="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-bold text-base shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 hover:-translate-y-0.5 transition-all flex items-center gap-2"
+                            disabled={!isValid}
+                            className={`px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-bold text-base shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 hover:-translate-y-0.5 transition-all flex items-center gap-2 ${!isValid ? 'opacity-50 cursor-not-allowed hover:translate-y-0 shadow-none' : ''}`}
                         >
                             {editId ? 'Next: Update Design' : 'Next: Customize QR Design'}
                             <ArrowRight className="w-5 h-5" />
