@@ -5,15 +5,34 @@ import { HOVER_PREVIEW_DATA } from '../steps/hoverPreviewData';
 export function EmailPreview({ data }: { data: any }) {
     const fallback = HOVER_PREVIEW_DATA.email;
 
+    // Check if user has started entering ANY content in the main email fields
+    const hasUserInput =
+        (data?.email_details?.recipient || '') !== '' ||
+        (data?.email_details?.subject || '') !== '' ||
+        (data?.email_details?.body || '') !== '';
+
+    // Determine which data source to use for display
+    // If user has input, use data. If data field is empty, show empty string.
+    // If no user input, use fallback data.
     const emailDetails = {
-        recipient: data.email_details?.recipient || fallback.email_details.recipient,
-        subject: data.email_details?.subject || fallback.email_details.subject,
-        body: data.email_details?.body || fallback.email_details.body,
+        recipient: hasUserInput
+            ? (data.email_details?.recipient || '')
+            : fallback.email_details.recipient,
+        subject: hasUserInput
+            ? (data.email_details?.subject || '')
+            : fallback.email_details.subject,
+        body: hasUserInput
+            ? (data.email_details?.body || '')
+            : fallback.email_details.body,
     };
 
     const additionalRecipients = {
-        cc: data.additional_recipients?.cc || fallback.additional_recipients.cc,
-        bcc: data.additional_recipients?.bcc || fallback.additional_recipients.bcc,
+        cc: hasUserInput
+            ? (data.additional_recipients?.cc || '')
+            : fallback.additional_recipients.cc,
+        bcc: hasUserInput
+            ? (data.additional_recipients?.bcc || '')
+            : fallback.additional_recipients.bcc,
     };
 
     const styles = data.styles || fallback.styles;

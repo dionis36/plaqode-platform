@@ -9,14 +9,21 @@ interface URLPreviewProps {
 export function URLPreview({ data }: URLPreviewProps) {
     const fallback = HOVER_PREVIEW_DATA.url;
 
-    // Use fallback if top-level objects are missing or if specific crucial fields are empty
+    // Check if user has started entering ANY content
     // For URL, usually title/desc are empty initially.
+    const hasUserInput =
+        (data?.url_details?.destination_url || '') !== '' ||
+        (data?.url_details?.title || '') !== '' ||
+        (data?.url_details?.description || '') !== '' ||
+        (data?.url_details?.logo || '') !== '';
+
+    const activeData = hasUserInput ? data : fallback;
 
     const urlDetails = {
-        destination_url: data?.url_details?.destination_url || fallback.url_details.destination_url,
-        title: data?.url_details?.title || fallback.url_details.title,
-        description: data?.url_details?.description || fallback.url_details.description,
-        logo: data?.url_details?.logo || null, // No fallback logo in sample data?
+        destination_url: activeData?.url_details?.destination_url || (hasUserInput ? '' : fallback.url_details.destination_url),
+        title: activeData?.url_details?.title || (hasUserInput ? '' : fallback.url_details.title),
+        description: activeData?.url_details?.description || (hasUserInput ? '' : fallback.url_details.description),
+        logo: activeData?.url_details?.logo || (hasUserInput ? null : null), // No fallback logo in sample data?
     };
 
     const redirectSettings = data?.redirect_settings || fallback.redirect_settings;

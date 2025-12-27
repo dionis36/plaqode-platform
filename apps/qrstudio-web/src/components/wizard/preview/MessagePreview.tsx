@@ -22,11 +22,18 @@ export function MessagePreview({ data }: { data: any }) {
     // So enforcing the "Rich Preview" which happens to be WhatsApp seems acceptable for the initial "Wow" factor.
     // As soon as they toggle the platform or type, it should switch.
 
-    const platform = data.platform || fallback.platform;
-    const phoneNumber = data.phone_number || fallback.phone_number;
-    const username = data.username || fallback.username;
-    const message = data.message || fallback.message;
-    const messageOnly = data.message_only ?? fallback.message_only;
+    // Check if user has started entering ANY content
+    const hasUserInput =
+        (data?.phone || '') !== '' ||
+        (data?.message || '') !== '';
+
+    const activeData = hasUserInput ? data : fallback;
+
+    const platform = data.platform || fallback.platform; // Platform is always taken from data if available, otherwise fallback
+    const phoneNumber = activeData.phone || (hasUserInput ? '' : fallback.phone); // Use 'phone' from activeData
+    const username = activeData.username || (hasUserInput ? '' : fallback.username); // Use 'username' from activeData
+    const message = activeData.message || (hasUserInput ? '' : fallback.message); // Use 'message' from activeData
+    const messageOnly = activeData.message_only ?? (hasUserInput ? false : fallback.message_only); // Use 'message_only' from activeData
     const styles = data.styles || fallback.styles;
 
     // Helper to lighten a color
