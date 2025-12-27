@@ -24,8 +24,8 @@ export function PlatformNavWrapper() {
         window.location.href = `${process.env.NEXT_PUBLIC_PLATFORM_URL}/auth/login`;
     };
 
-    // Use StaticNavbar for dashboard pages
-    if (pathname?.startsWith('/qrcodes')) {
+    // Use StaticNavbar for dashboard pages and creation wizards
+    if (pathname?.startsWith('/qrcodes') || pathname?.startsWith('/create')) {
         return <StaticNavbar />;
     }
 
