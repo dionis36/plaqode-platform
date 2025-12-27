@@ -8,10 +8,17 @@ export function TextPreview({ data }: TextPreviewProps) {
     const fallback = HOVER_PREVIEW_DATA.text;
 
     // Check if user has started entering ANY content
-    const hasUserInput = (data?.content || '') !== '';
+    const hasUserInput =
+        (data?.text_content?.title || '') !== '' ||
+        (data?.text_content?.message || '') !== '';
 
     const activeData = hasUserInput ? data : fallback;
-    const content = activeData.content || (hasUserInput ? '' : fallback.content);
+
+    const textContent = {
+        title: activeData.text_content?.title || (hasUserInput ? '' : fallback.text_content.title),
+        message: activeData.text_content?.message || (hasUserInput ? '' : fallback.text_content.message),
+    };
+
     const styles = data.styles || fallback.styles;
 
     const primaryColor = styles.primary_color || fallback.styles.primary_color;
@@ -89,7 +96,7 @@ Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu 
                 )}
 
                 {/* Text Content */}
-                {content ? (
+                {message ? (
                     <div className="bg-white rounded-2xl p-6 shadow-md w-full relative">
                         {/* Quote decoration */}
                         <div className="absolute -top-3 -left-2 text-slate-200">
@@ -99,7 +106,7 @@ Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu 
                         </div>
 
                         <p className="text-slate-800 text-lg leading-relaxed whitespace-pre-wrap relative z-10 font-medium">
-                            {content}
+                            {message}
                         </p>
                     </div>
                 ) : (

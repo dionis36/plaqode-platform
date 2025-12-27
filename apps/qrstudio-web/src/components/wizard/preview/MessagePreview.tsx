@@ -24,13 +24,13 @@ export function MessagePreview({ data }: { data: any }) {
 
     // Check if user has started entering ANY content
     const hasUserInput =
-        (data?.phone || '') !== '' ||
+        (data?.phone_number || '') !== '' ||
         (data?.message || '') !== '';
 
     const activeData = hasUserInput ? data : fallback;
 
     const platform = data.platform || fallback.platform; // Platform is always taken from data if available, otherwise fallback
-    const phoneNumber = activeData.phone || (hasUserInput ? '' : fallback.phone); // Use 'phone' from activeData
+    const phoneNumber = activeData.phone_number || (hasUserInput ? '' : fallback.phone_number); // Use 'phone_number' from activeData
     const username = activeData.username || (hasUserInput ? '' : fallback.username); // Use 'username' from activeData
     const message = activeData.message || (hasUserInput ? '' : fallback.message); // Use 'message' from activeData
     const messageOnly = activeData.message_only ?? (hasUserInput ? false : fallback.message_only); // Use 'message_only' from activeData
