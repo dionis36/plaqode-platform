@@ -41,50 +41,65 @@ export function VCardPreview({ data }: { data: any }) {
     // We check if the data object exists, but we also want to fall back if the specific fields are empty strings
     // This allows the preview to start "full" and update as the user types
 
+    // Check if user has started entering ANY content
+    const hasUserInput =
+        (data?.personal_info?.first_name || '') !== '' ||
+        (data?.personal_info?.last_name || '') !== '' ||
+        (data?.company_details?.company_name || '') !== '' ||
+        (data?.company_details?.job_title || '') !== '' ||
+        (data?.contact_details?.phone || '') !== '' ||
+        (data?.contact_details?.email || '') !== '' ||
+        // Extended checks
+        (data?.summary || '') !== '' ||
+        (data?.address?.street || '') !== '' ||
+        (data?.address?.city || '') !== '' ||
+        (data?.address?.state || '') !== '' ||
+        (data?.address?.country || '') !== '' ||
+        (data?.social_networks && data.social_networks.length > 0);
+
+    // If user has input, show purely their data (plus safe defaults for styles). 
+    // If no input, show the full rich fallback.
+    const activeData = hasUserInput ? data : mergeWithFallback(data, fallback);
+
     const personal = {
-        first_name: data?.personal_info?.first_name || fallback.personal_info.first_name,
-        last_name: data?.personal_info?.last_name || fallback.personal_info.last_name,
-        avatar_image: data?.personal_info?.avatar_image || fallback.personal_info.avatar_image
+        first_name: activeData?.personal_info?.first_name,
+        last_name: activeData?.personal_info?.last_name,
+        avatar_image: activeData?.personal_info?.avatar_image
     };
 
-    // If the user has started editing specific sections, we might want to show their half-empty state.
-    // However, the request is to make it look like the create page preview.
-    // The create page preview uses the FULL fallback data.
-    // So we should fallback if the specific VALUE is falsy.
-
     const contact = {
-        phone: data?.contact_details?.phone || fallback.contact_details.phone,
-        alternative_phone: data?.contact_details?.alternative_phone, // No fallback in sample data
-        email: data?.contact_details?.email || fallback.contact_details.email,
-        website: data?.contact_details?.website || fallback.contact_details.website,
+        phone: activeData?.contact_details?.phone,
+        alternative_phone: activeData?.contact_details?.alternative_phone,
+        email: activeData?.contact_details?.email,
+        website: activeData?.contact_details?.website,
     };
 
     const company = {
-        company_name: data?.company_details?.company_name || fallback.company_details.company_name,
-        job_title: data?.company_details?.job_title || fallback.company_details.job_title,
+        company_name: activeData?.company_details?.company_name,
+        job_title: activeData?.company_details?.job_title,
     };
 
     const address = {
-        street: data?.address?.street || fallback.address.street,
-        city: data?.address?.city || fallback.address.city,
-        state: data?.address?.state || fallback.address.state,
-        country: data?.address?.country || fallback.address.country,
+        street: activeData?.address?.street,
+        city: activeData?.address?.city,
+        state: activeData?.address?.state,
+        country: activeData?.address?.country,
     };
 
-    // For arrays like social networks, if the user's array is empty, show the fallback.
-    // If they delete all items, it will go back to fallback, which might be slightly annoying if they WANT empty,
-    // but for a "preview" of a template, it usually looks better filled.
-    const socialNetworks = (data?.social_networks && data.social_networks.length > 0)
-        ? data.social_networks
-        : fallback.social_networks;
+    const socialNetworks = (activeData?.social_networks && activeData.social_networks.length > 0)
+        ? activeData.social_networks
+        : (hasUserInput ? [] : fallback.social_networks);
 
-    const summary = data?.summary || fallback.summary;
+    const summary = activeData?.summary;
 
-    // Derived values
-    // We use the fallback-merged personal object here
-    const firstName = data?.personal_info?.first_name || fallback.personal_info.first_name;
-    const lastName = data?.personal_info?.last_name || fallback.personal_info.last_name;
+    const firstName = personal.first_name || '';
+    const lastName = personal.last_name || '';
     const fullName = [firstName, lastName].filter(Boolean).join(' ');
+
+    // Only fallback for styles, never 'content' when user is typing
+    function mergeWithFallback(actual: any, fallbackData: any) {
+        return { ...fallbackData, styles: actual?.styles || fallbackData.styles };
+    }
 
     const jobTitle = company.job_title;
     const companyName = company.company_name;
@@ -147,7 +162,7 @@ export function VCardPreview({ data }: { data: any }) {
                                 fontSize: '2rem'
                             }}
                         >
-                            {fullName.split(' ').map(n => n[0]).join('').toUpperCase()}
+                            {fullName ? fullName.split(' ').map((n: string) => n[0]).join('').toUpperCase() : '?'}
                         </div>
                     )}
                 </div>
