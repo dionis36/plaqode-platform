@@ -22,7 +22,7 @@ export default function BusinessSection() {
                         className=""
                     >
                         <div className="max-w-xs relative z-20">
-                            <h2 className="text-left text-balance text-base md:text-xl lg:text-3xl font-semibold tracking-[-0.015em] text-white">
+                            <h2 className="font-merriweather text-left text-balance text-base md:text-xl lg:text-3xl font-semibold tracking-[-0.015em] text-white">
                                 Dynamic QR Codes
                             </h2>
                             <p className="mt-4 text-left text-base/6 text-neutral-200">
@@ -39,7 +39,7 @@ export default function BusinessSection() {
                         className=""
                     >
                         <div className="max-w-xs relative z-20">
-                            <h2 className="text-left text-balance text-base md:text-xl lg:text-3xl font-semibold tracking-[-0.015em] text-white">
+                            <h2 className="font-merriweather text-left text-balance text-base md:text-xl lg:text-3xl font-semibold tracking-[-0.015em] text-white">
                                 Enterprise Security
                             </h2>
                             <p className="mt-4 text-left text-base/6 text-neutral-200">
@@ -55,7 +55,7 @@ export default function BusinessSection() {
                         className=""
                     >
                         <div className="max-w-md relative z-20">
-                            <h2 className="text-left text-balance text-base md:text-xl lg:text-3xl font-semibold tracking-[-0.015em] text-white">
+                            <h2 className="font-merriweather text-left text-balance text-base md:text-xl lg:text-3xl font-semibold tracking-[-0.015em] text-white">
                                 Real-time Analytics
                             </h2>
                             <p className="mt-4 text-left text-base/6 text-neutral-200">
@@ -71,7 +71,7 @@ export default function BusinessSection() {
                         className=""
                     >
                         <div className="max-w-xs relative z-20">
-                            <h2 className="text-left text-balance text-base md:text-xl lg:text-3xl font-semibold tracking-[-0.015em] text-white">
+                            <h2 className="font-merriweather text-left text-balance text-base md:text-xl lg:text-3xl font-semibold tracking-[-0.015em] text-white">
                                 Instant Sharing
                             </h2>
                             <p className="mt-4 text-left text-base/6 text-neutral-200">
