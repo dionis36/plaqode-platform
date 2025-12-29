@@ -8,6 +8,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { SEO } from '@/components/common/SEO';
 import QRCodeStyling from 'qr-code-styling';
 import { QrContentPreviewModal } from '@/components/common/QrContentPreviewModal';
+import { toast } from "@plaqode-platform/ui";
 
 interface QrCodeDetail {
     id: string;
@@ -121,7 +122,7 @@ export default function QrCodeDetailPage({ params }: { params: { id: string } })
             }
         } catch (error) {
             console.error('Failed to download QR code:', error);
-            alert('Failed to download QR code');
+            toast.error('Failed to download QR code');
         }
     }
 
@@ -130,10 +131,11 @@ export default function QrCodeDetailPage({ params }: { params: { id: string } })
 
         try {
             await qrApi.update(qrCode.id, { isActive: !qrCode.isActive });
+            toast.success(`QR Code ${!qrCode.isActive ? 'activated' : 'deactivated'}`);
             loadQrCode(); // Reload
         } catch (error) {
             console.error('Failed to update status:', error);
-            alert('Failed to update status');
+            toast.error('Failed to update status');
         }
     }
 
@@ -147,10 +149,11 @@ export default function QrCodeDetailPage({ params }: { params: { id: string } })
         try {
             setIsDeleting(true);
             await qrApi.delete(qrCode.id);
+            toast.success("QR Code deleted successfully");
             router.push('/qrcodes');
         } catch (error) {
             console.error('Failed to delete QR code:', error);
-            alert('Failed to delete QR code');
+            toast.error('Failed to delete QR code');
         } finally {
             setIsDeleting(false);
         }

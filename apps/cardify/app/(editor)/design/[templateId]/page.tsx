@@ -27,7 +27,7 @@ import ZoomControls from "@/components/editor/ZoomControls";
 import ConfirmationModal from "@/components/ui/ConfirmationModal";
 import ExportModal from "@/components/editor/ExportModal";
 import { ExportAuthModal } from "@/components/auth/ExportAuthModal";
-import SuccessModal from "@/components/ui/SuccessModal";
+import { toast } from "@plaqode-platform/ui";
 
 // Auth
 import { useAuth } from '@/lib/auth-context';
@@ -336,7 +336,6 @@ export default function Editor() {
     // Save State
     const [saving, setSaving] = useState(false);
     const [saveMessage, setSaveMessage] = useState<string | null>(null);
-    const [saveSuccessOpen, setSaveSuccessOpen] = useState(false);
 
     // NEW: QR Code Mode State ('add' | 'update')
     const [qrCodeMode, setQrCodeMode] = useState<'add' | 'update'>('add');
@@ -904,19 +903,19 @@ export default function Editor() {
             if (response.ok) {
                 const result = await response.json();
                 console.log('Save successful:', result);
+                toast.success("Design saved successfully!");
                 setSaveMessage('Design saved successfully!');
-                setSaveSuccessOpen(true);
-                setTimeout(() => {
-                    setSaveMessage(null);
-                    setSaveSuccessOpen(false);
-                }, 2000);
             } else {
                 const error = await response.json();
                 console.error('Save failed:', error);
-                setSaveMessage(`Save failed: ${error.error || 'Unknown error'}`);
+                const errorMessage = error.error || 'Unknown error';
+                toast.error(`Save failed: ${errorMessage}`);
+                setSaveMessage(`Save failed: ${errorMessage}`);
             }
         } catch (error) {
             console.error('Save failed:', error);
+            console.error('Save failed:', error);
+            toast.error("Save failed. Please try again.");
             setSaveMessage('Save failed. Please try again.');
         } finally {
             setSaving(false);
@@ -952,8 +951,10 @@ export default function Editor() {
             };
 
             await exportWithOptions(stageRef.current, enhancedOptions);
+            toast.success("Export started!");
         } catch (error) {
             console.error("Export failed:", error);
+            toast.error("Export failed. Please try again.");
         }
     }, [currentPage]);
 
@@ -1014,10 +1015,11 @@ export default function Editor() {
 
             const result: TemplateExportResponse = await response.json();
             console.log('Template saved:', result);
+            toast.success("Template saved successfully!");
 
         } catch (error) {
             console.error("Template export failed:", error);
-            alert('Failed to save template');
+            toast.error('Failed to save template');
             throw error;
         }
     }, [currentPage]);
@@ -1471,13 +1473,6 @@ export default function Editor() {
                 isOpen={showExportAuthModal}
                 onClose={() => setShowExportAuthModal(false)}
                 onSaveBeforeAuth={handleSave}
-            />
-
-            <SuccessModal
-                isOpen={saveSuccessOpen}
-                title="Save Complete"
-                message="Your design has been saved successfully."
-                onClose={() => setSaveSuccessOpen(false)}
             />
 
             {/* Mobile Menu Overlay */}

@@ -5,6 +5,7 @@ import { Layout } from 'lucide-react';
 import { GradientButton } from "@plaqode-platform/ui";
 import SavedCard from '@/components/app/SavedCard';
 import ConfirmationModal from '@/components/ui/ConfirmationModal';
+import { toast } from "@plaqode-platform/ui";
 
 interface SavedDesign {
     id: string;
@@ -62,11 +63,14 @@ export default function SavedCardsPage() {
             if (response.ok) {
                 // Remove from state immediately
                 setDesigns(prev => prev.filter(d => d.id !== cardToDelete.id));
+                toast.success("Design deleted successfully");
             } else {
                 console.error('Failed to delete design');
+                toast.error("Failed to delete design");
             }
         } catch (error) {
             console.error('Error deleting design:', error);
+            toast.error("Error deleting design");
         } finally {
             setDeleteModalOpen(false);
             setCardToDelete(null);

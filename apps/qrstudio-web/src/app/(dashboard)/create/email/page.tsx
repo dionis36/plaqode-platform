@@ -12,6 +12,7 @@ import { SEO } from '@/components/common/SEO';
 import { BackButton } from '@/components/common/BackButton';
 import { EnhancedPreviewModal } from '@/components/common/EnhancedPreviewModal';
 import { useTemplateValidation } from '@/hooks/useTemplateValidation';
+import { toast } from "@plaqode-platform/ui";
 
 export default function EmailPage() {
     const { payload, setEditMode, loadQrData } = useWizardStore();
@@ -55,6 +56,10 @@ export default function EmailPage() {
     }
 
     const handleNext = () => {
+        if (!isValid) {
+            toast.error("Please fill in all required fields");
+            return;
+        }
         router.push(`/create/email/design${editId ? `?edit=${editId}` : ''}`);
     };
 
@@ -87,8 +92,7 @@ export default function EmailPage() {
                     <div className="mt-8 pt-6 border-t border-slate-100 flex justify-end">
                         <button
                             onClick={handleNext}
-                            disabled={!isValid}
-                            className={`px-8 py-3 bg-blue-600 text-white rounded-xl font-bold text-base shadow-lg hover:bg-blue-700 hover:-translate-y-0.5 transition-all flex items-center gap-2 ${!isValid ? 'opacity-50 cursor-not-allowed hover:bg-blue-600 hover:translate-y-0 shadow-none' : ''}`}
+                            className={`px-8 py-3 bg-blue-600 text-white rounded-xl font-bold text-base shadow-lg hover:bg-blue-700 hover:-translate-y-0.5 transition-all flex items-center gap-2`}
                         >
                             {editId ? 'Next: Update Design' : 'Next: Customize QR Design'}
                             <ArrowRight className="w-5 h-5" />

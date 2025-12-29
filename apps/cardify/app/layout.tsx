@@ -5,6 +5,7 @@ import { Inter, Merriweather } from 'next/font/google';
 import { AuthProvider } from '@/lib/auth-context';
 import { PlatformNav } from '@/components/layout/PlatformNav';
 import { PlatformNavWrapper } from '@/components/layout/PlatformNavWrapper';
+import { Toaster } from "@plaqode-platform/ui";
 
 // Keep Inter for UI consistency
 const inter = Inter({
@@ -38,6 +39,7 @@ export default function RootLayout({
           <PlatformNavWrapper />
           <FontLoader />
           {children}
+          <Toaster />
         </AuthProvider>
       </body>
     </html>

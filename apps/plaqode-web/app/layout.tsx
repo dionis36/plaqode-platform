@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Open_Sans, Merriweather } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
+import { Toaster } from "@plaqode-platform/ui";
 
 import FontLoader from "@/components/FontLoader";
 
@@ -37,6 +38,7 @@ export default function RootLayout({
         <AuthProvider>
           <FontLoader />
           {children}
+          <Toaster />
         </AuthProvider>
       </body>
     </html>

@@ -3,6 +3,7 @@
 import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { toast } from "@plaqode-platform/ui";
 
 interface User {
     id: string;
@@ -23,8 +24,6 @@ export default function AdminPage() {
     const [showProductModal, setShowProductModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [actionLoading, setActionLoading] = useState(false);
-    const [message, setMessage] = useState('');
-    const [error, setError] = useState('');
     const [filter, setFilter] = useState<'all' | 'admins' | 'users'>('all');
     const [openActionMenu, setOpenActionMenu] = useState<string | null>(null);
 
@@ -76,7 +75,7 @@ export default function AdminPage() {
 
     const assignRole = async (userId: string, role: string) => {
         setActionLoading(true);
-        setError('');
+        setActionLoading(true);
         try {
             const response = await fetch(
                 `${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/users/${userId}/roles`,
@@ -89,19 +88,16 @@ export default function AdminPage() {
             );
 
             if (response.ok) {
-                setMessage(`Role "${role}" assigned successfully!`);
+                toast.success(`Role "${role}" assigned successfully!`);
                 fetchUsers();
                 setShowRoleModal(false);
-                setTimeout(() => setMessage(''), 3000);
             } else {
                 const errorData = await response.json();
-                setError(errorData.error || 'Failed to assign role');
-                setTimeout(() => setError(''), 5000);
+                toast.error(errorData.error || 'Failed to assign role');
             }
         } catch (error) {
             console.error('Failed to assign role:', error);
-            setError('Failed to assign role');
-            setTimeout(() => setError(''), 5000);
+            toast.error('Failed to assign role');
         } finally {
             setActionLoading(false);
         }
@@ -120,9 +116,8 @@ export default function AdminPage() {
             );
 
             if (response.ok) {
-                setMessage(`Role "${role}" revoked successfully!`);
+                toast.success(`Role "${role}" revoked successfully!`);
                 fetchUsers();
-                setTimeout(() => setMessage(''), 3000);
             }
         } catch (error) {
             console.error('Failed to revoke role:', error);
@@ -143,10 +138,9 @@ export default function AdminPage() {
             );
 
             if (response.ok) {
-                setMessage(`Product "${product}" granted successfully!`);
+                toast.success(`Product "${product}" granted successfully!`);
                 fetchUsers();
                 setShowProductModal(false);
-                setTimeout(() => setMessage(''), 3000);
             }
         } catch (error) {
             console.error('Failed to grant product:', error);
@@ -168,9 +162,8 @@ export default function AdminPage() {
             );
 
             if (response.ok) {
-                setMessage(`Product "${product}" revoked successfully!`);
+                toast.success(`Product "${product}" revoked successfully!`);
                 fetchUsers();
-                setTimeout(() => setMessage(''), 3000);
             }
         } catch (error) {
             console.error('Failed to revoke product:', error);
@@ -189,20 +182,17 @@ export default function AdminPage() {
             );
 
             if (response.ok) {
-                setMessage('User deleted successfully!');
+                toast.success('User deleted successfully!');
                 fetchUsers();
                 setShowDeleteModal(false);
                 setSelectedUser(null);
-                setTimeout(() => setMessage(''), 3000);
             } else {
                 const errorData = await response.json();
-                setError(errorData.error || 'Failed to delete user');
-                setTimeout(() => setError(''), 5000);
+                toast.error(errorData.error || 'Failed to delete user');
             }
         } catch (error) {
             console.error('Failed to delete user:', error);
-            setError('Failed to delete user');
-            setTimeout(() => setError(''), 5000);
+            toast.error('Failed to delete user');
         } finally {
             setActionLoading(false);
         }
@@ -235,17 +225,7 @@ export default function AdminPage() {
                 </p>
             </div>
 
-            {message && (
-                <div className="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
-                    {message}
-                </div>
-            )}
 
-            {error && (
-                <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-                    {error}
-                </div>
-            )}
 
             {usersLoading ? (
                 <div className="text-center py-12">

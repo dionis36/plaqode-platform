@@ -5,6 +5,7 @@ import { Inter, Merriweather } from "next/font/google";
 import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from '@/lib/auth-context';
 import { PlatformNavWrapper } from '@/components/layout/PlatformNavWrapper';
+import { Toaster } from "@plaqode-platform/ui";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -26,6 +27,7 @@ export default function RootLayout({
                     <PlatformNavWrapper />
                     <HelmetProvider>
                         {children}
+                        <Toaster />
                     </HelmetProvider>
                 </AuthProvider>
             </body>
