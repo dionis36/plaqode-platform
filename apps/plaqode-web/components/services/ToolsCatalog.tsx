@@ -1,7 +1,7 @@
 "use client";
 
 import { Link, AlignLeft, AtSign, Mail, MapPin, Wifi, Calendar, Share2, Smartphone, FileText, Image, MessageSquare, Utensils } from "lucide-react";
-import GradientButton from "@/components/ui/GradientButton";
+import { GradientButton } from "@plaqode-platform/ui";
 
 // Comprehensive list of tools
 const QR_STUDIO_URL = process.env.NEXT_PUBLIC_QRSTUDIO_URL || 'http://localhost:3001';

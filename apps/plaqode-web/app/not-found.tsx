@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import GradientButton from "@/components/ui/GradientButton";
+import { GradientButton } from "@plaqode-platform/ui";
 
 export default function NotFound() {
     return (

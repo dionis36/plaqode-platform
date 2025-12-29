@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import Link from 'next/link';
-import Logo from '@/components/ui/Logo';
+import { Logo } from "@plaqode-platform/ui";
 
 export default function SignupPage() {
     const [email, setEmail] = useState('');

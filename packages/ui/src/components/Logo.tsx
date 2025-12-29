@@ -5,7 +5,7 @@ interface LogoProps {
     color?: "white" | "dark";
 }
 
-export default function Logo({ color = "white" }: LogoProps) {
+export function Logo({ color = "white" }: LogoProps) {
     return (
         <Link href="/" className="flex items-center gap-3">
             {/* Icon */}

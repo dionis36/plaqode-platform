@@ -4,8 +4,8 @@ import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { Menu } from "lucide-react";
 import MobileMenu from "./MobileMenu";
-import Logo from "@/components/ui/Logo";
-import GradientButton from "@/components/ui/GradientButton";
+import { Logo } from "@plaqode-platform/ui";
+import { GradientButton } from "@plaqode-platform/ui";
 import GradientAvatar from "@/components/ui/GradientAvatar";
 
 import { useAuth } from "@/lib/auth-context";

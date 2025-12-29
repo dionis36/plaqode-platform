@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@plaqode-platform/ui": "*",
     "@gsap/react": "^2.1.2",
     "@iconify-json/fa6-brands": "^1.2.6",
     "@iconify-json/fa6-solid": "^1.2.4",

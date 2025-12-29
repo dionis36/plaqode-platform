@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Layout } from 'lucide-react';
-import GradientButton from '@/components/ui/GradientButton';
+import { GradientButton } from "@plaqode-platform/ui";
 import SavedCard from '@/components/app/SavedCard';
 import ConfirmationModal from '@/components/ui/ConfirmationModal';
 

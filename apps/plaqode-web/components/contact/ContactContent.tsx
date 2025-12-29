@@ -1,6 +1,6 @@
 "use client";
 
-import GradientButton from "@/components/ui/GradientButton";
+import { GradientButton } from "@plaqode-platform/ui";
 import { Facebook, Twitter, Linkedin, Instagram, Phone, Mail, MessageCircle } from "lucide-react";
 import { useState } from "react";
 

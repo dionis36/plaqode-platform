@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Facebook, Twitter, Instagram, Linkedin, MapPin, Phone, Mail } from "lucide-react";
-import Logo from "../ui/Logo";
+import { Logo } from "@plaqode-platform/ui";
 
 export default function Footer() {
     return (

@@ -2,9 +2,9 @@
 
 import { useSplitText } from "@/lib/animations/useSplitText";
 import Link from "next/link";
-import GradientButton from "@/components/ui/GradientButton";
+import { GradientButton } from "@plaqode-platform/ui";
 import GradientAvatar from "@/components/ui/GradientAvatar";
-import Logo from "@/components/ui/Logo";
+import { Logo } from "@plaqode-platform/ui";
 import { ArrowRight } from "lucide-react";
 
 import { useAuth } from "@/lib/auth-context";

@@ -1,6 +1,6 @@
 "use client";
 
-import GradientButton from "@/components/ui/GradientButton";
+import { GradientButton } from "@plaqode-platform/ui";
 import { Link, IdCard, Share2, Smartphone, Utensils, Wifi, FileText, ArrowRight } from "lucide-react";
 
 // Environment URLs

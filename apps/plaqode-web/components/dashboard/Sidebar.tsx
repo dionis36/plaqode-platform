@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
-import Logo from '@/components/ui/Logo';
+import { Logo } from "@plaqode-platform/ui";
 
 interface SidebarProps {
     isOpen: boolean;

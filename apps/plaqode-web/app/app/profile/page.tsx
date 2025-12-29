@@ -2,7 +2,7 @@
 
 import { useAuth } from '@/lib/auth-context';
 import { useState } from 'react';
-import GradientButton from '@/components/ui/GradientButton';
+import { GradientButton } from "@plaqode-platform/ui";
 
 export default function ProfilePage() {
     const { user } = useAuth();

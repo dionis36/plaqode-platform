@@ -1,4 +1,4 @@
-import GradientButton from "@/components/ui/GradientButton";
+import { GradientButton } from "@plaqode-platform/ui";
 
 export default function AboutSection() {
     return (

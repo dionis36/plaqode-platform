@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import GradientButton from "@/components/ui/GradientButton";
+import { GradientButton } from "@plaqode-platform/ui";
 import GradientAvatar from "@/components/ui/GradientAvatar";
-import Logo from "@/components/ui/Logo";
+import { Logo } from "@plaqode-platform/ui";
 import { useAuth } from "@/lib/auth-context";
 import { Menu } from "lucide-react";
 import { useState } from "react";
