@@ -3,6 +3,9 @@
 "use client";
 
 import { Download, Undo, Redo, Save, ArrowLeft, Loader, Shuffle, RotateCcw } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
+import GradientAvatar from "@/components/ui/GradientAvatar";
+import { GradientButton } from "@plaqode-platform/ui";
 
 interface EditorTopbarProps {
     templateName: string;
@@ -37,6 +40,8 @@ export default function EditorTopbar({
     onShuffleLogo,
     hasLogo = false,
 }: EditorTopbarProps) {
+    const { user } = useAuth();
+
     return (
         <div className="absolute top-0 left-0 right-0 h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4 z-50 shadow-sm hidden lg:flex">
 
@@ -124,6 +129,20 @@ export default function EditorTopbar({
                     <Download size={16} className="mr-2" />
                     Export
                 </button>
+
+                {/* Vertical Divider */}
+                <div className="h-6 w-px bg-gray-200 mx-1"></div>
+
+                {/* User Auth */}
+                {user ? (
+                    <GradientAvatar user={user} textColor="text-dark" />
+                ) : (
+                    <GradientButton
+                        href={`${process.env.NEXT_PUBLIC_PLATFORM_URL}/auth/login`}
+                        text="Login"
+                        size="sm"
+                    />
+                )}
             </div>
         </div>
     );

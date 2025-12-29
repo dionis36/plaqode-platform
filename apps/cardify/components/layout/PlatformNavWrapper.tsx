@@ -8,8 +8,8 @@ export function PlatformNavWrapper() {
     const { user } = useAuth();
     const pathname = usePathname();
 
-    // Hide PlatformNav (Dashboard Sidebar) on public templates page
-    if (pathname?.startsWith('/templates')) {
+    // Hide PlatformNav (Dashboard Sidebar) on public templates page and design editor
+    if (pathname?.startsWith('/templates') || pathname?.startsWith('/design')) {
         return null;
     }
 
