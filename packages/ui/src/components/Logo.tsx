@@ -3,11 +3,12 @@ import Link from "next/link";
 
 interface LogoProps {
     color?: "white" | "dark";
+    href?: string;
 }
 
-export function Logo({ color = "white" }: LogoProps) {
+export function Logo({ color = "white", href = "/" }: LogoProps) {
     return (
-        <Link href="/" className="flex items-center gap-3">
+        <Link href={href} className="flex items-center gap-3">
             {/* Icon */}
             <div className="relative w-10 h-10">
                 {/* Using qr-code-2.png as the icon based on file analysis. 

@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import GradientButton from "@/components/ui/GradientButton";
+import { GradientButton } from "@plaqode-platform/ui";
 import GradientAvatar from "@/components/ui/GradientAvatar";
-import Logo from "@/components/ui/Logo";
+import { Logo } from "@plaqode-platform/ui";
 import { useAuth } from "@/lib/auth-context";
 import { Menu } from "lucide-react";
 import { useState } from "react";
@@ -18,7 +18,7 @@ export default function StaticNavbar() {
     return (
         <>
             <div className="absolute top-0 left-0 w-full z-20 px-4 md:px-8 py-4 flex justify-between items-center max-w-[1400px] mx-auto right-0 bg-transparent">
-                <Logo color="dark" />
+                <Logo color="dark" href={HOME_URL} />
 
                 {/* Desktop Nav & Auth */}
                 <div className="flex items-center gap-8">
@@ -33,7 +33,7 @@ export default function StaticNavbar() {
                         {user ? (
                             <GradientAvatar user={user} textColor="text-dark" />
                         ) : (
-                            <GradientButton href={`${process.env.NEXT_PUBLIC_PLATFORM_URL}/auth/login`} text="Login" size="sm" className="text-white bg-slate-900" />
+                            <GradientButton href={`${process.env.NEXT_PUBLIC_PLATFORM_URL}/auth/login`} text="Login" size="sm" />
                         )}
                     </div>
 

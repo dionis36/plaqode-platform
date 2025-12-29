@@ -6,8 +6,8 @@ import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { Menu } from "lucide-react";
 import MobileMenu from "./MobileMenu";
-import Logo from "@/components/ui/Logo";
-import GradientButton from "@/components/ui/GradientButton";
+import { Logo } from "@plaqode-platform/ui";
+import { GradientButton } from "@plaqode-platform/ui";
 import GradientAvatar from "@/components/ui/GradientAvatar";
 
 import { useAuth } from "@/lib/auth-context";
@@ -50,7 +50,7 @@ export default function SmartNavbar() {
             >
                 <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-4 flex justify-between items-center">
                     {/* Logo */}
-                    <Logo />
+                    <Logo href={PLATFORM_URL} />
 
                     {/* Desktop Nav */}
                     {/* Right Side - Nav & Login & Mobile Toggle */}
@@ -72,7 +72,7 @@ export default function SmartNavbar() {
                             {user ? (
                                 <GradientAvatar user={user} />
                             ) : (
-                                <GradientButton href={`${PLATFORM_URL}/auth/login`} text="Login" size="sm" className="text-light" />
+                                <GradientButton href={`${PLATFORM_URL}/auth/login`} text="Login" size="sm" />
                             )}
                         </div>
 
