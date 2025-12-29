@@ -10,6 +10,7 @@ import CanvasStage from "@/components/editor/CanvasStage";
 import EditorSidebar, { SidebarTab } from "@/components/editor/EditorSidebar";
 import EditorTopbar from "@/components/editor/EditorTopbar";
 import MobileEditorTopbar from "@/components/editor/MobileEditorTopbar";
+import MobileMenu from "@/components/layout/MobileMenu";
 import { PlatformNav } from '@/components/layout/PlatformNav';
 import MobileBottomToolbar from "@/components/editor/MobileBottomToolbar";
 import PropertyPanel from "@/components/editor/PropertyPanel";
@@ -297,6 +298,9 @@ export default function Editor() {
     // Export & Print State
     const [exportModalOpen, setExportModalOpen] = useState(false);
     const [showExportAuthModal, setShowExportAuthModal] = useState(false);
+
+    // NEW: Mobile Menu State
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     // Load saved design effect
     useEffect(() => {
@@ -1098,6 +1102,9 @@ export default function Editor() {
                 onReset={handleReset}
                 canUndo={state.history.length > 0}
                 canRedo={state.future.length > 0}
+                onShowMenu={() => setMobileMenuOpen(true)}
+                onSave={handleSave}
+                saving={saving}
             />
 
             {/* Desktop Top Bar (hidden on mobile) */}
@@ -1472,6 +1479,9 @@ export default function Editor() {
                 message="Your design has been saved successfully."
                 onClose={() => setSaveSuccessOpen(false)}
             />
+
+            {/* Mobile Menu Overlay */}
+            <MobileMenu isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
         </div>
     );
 }

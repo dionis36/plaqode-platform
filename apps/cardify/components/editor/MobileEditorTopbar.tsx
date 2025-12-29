@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { ArrowLeft, Undo, Redo, MoreVertical, RotateCcw } from "lucide-react";
+import Image from "next/image";
+import { Undo, Redo, MoreVertical, RotateCcw, Menu, Save, Download } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 interface MobileEditorTopbarProps {
@@ -13,6 +14,8 @@ interface MobileEditorTopbarProps {
     canUndo: boolean;
     canRedo: boolean;
     onShowMenu?: () => void;
+    onSave?: () => void;
+    saving?: boolean;
 }
 
 export default function MobileEditorTopbar({
@@ -24,6 +27,8 @@ export default function MobileEditorTopbar({
     canUndo,
     canRedo,
     onShowMenu,
+    onSave,
+    saving = false,
 }: MobileEditorTopbarProps) {
     const router = useRouter();
 
@@ -33,15 +38,26 @@ export default function MobileEditorTopbar({
 
     return (
         <div className="lg:hidden fixed top-0 inset-x-0 h-14 bg-white border-b border-gray-200 z-50 flex items-center justify-between px-3 safe-area-inset-top">
-            {/* Left: Back, Undo, Redo, Reset */}
+            {/* Left: Back, Undo, Redo */}
             <div className="flex items-center gap-1">
                 <button
                     onClick={handleBack}
-                    className="p-2 text-gray-700 hover:bg-gray-100 active:bg-gray-200 rounded-lg transition-colors touch-target"
+                    className="p-1 -ml-1 rounded-lg transition-transform active:scale-95 touch-target"
                     aria-label="Back to templates"
                 >
-                    <ArrowLeft size={20} />
+                    <div className="relative w-8 h-8">
+                        <Image
+                            src="/img/qr-code-2.png"
+                            alt="Plaqode"
+                            fill
+                            className="object-contain"
+                        />
+                    </div>
                 </button>
+
+                {/* Vertical Divider */}
+                <div className="h-6 w-px bg-gray-200 mx-0.5"></div>
+
                 <button
                     onClick={onUndo}
                     disabled={!canUndo}
@@ -73,13 +89,34 @@ export default function MobileEditorTopbar({
                 </button>
             </div>
 
-            {/* Right: Export */}
-            <div className="flex items-center gap-1">
+            {/* Right: Save, Export */}
+            <div className="flex items-center gap-2">
+                {/* Save Button */}
+                <button
+                    onClick={onSave}
+                    disabled={saving}
+                    className="p-2 text-gray-700 hover:bg-gray-100 active:bg-gray-200 rounded-lg transition-colors touch-target disabled:opacity-50"
+                    aria-label="Save"
+                >
+                    <Save size={20} className={saving ? "animate-pulse" : ""} />
+                </button>
+
+                {/* Export Button (Icon Only) */}
                 <button
                     onClick={onExport}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 active:bg-blue-800 transition-colors whitespace-nowrap"
+                    className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-colors touch-target"
+                    aria-label="Export"
                 >
-                    Export
+                    <Download size={20} />
+                </button>
+
+                {/* Menu Toggle */}
+                <button
+                    onClick={onShowMenu}
+                    className="p-2 text-gray-700 hover:bg-gray-100 active:bg-gray-200 rounded-lg transition-colors touch-target"
+                    aria-label="Menu"
+                >
+                    <Menu size={20} />
                 </button>
             </div>
         </div>

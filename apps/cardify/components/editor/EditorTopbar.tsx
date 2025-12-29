@@ -3,6 +3,7 @@
 "use client";
 
 import { Download, Undo, Redo, Save, ArrowLeft, Loader, Shuffle, RotateCcw } from "lucide-react";
+import Image from "next/image";
 import { useAuth } from "@/lib/auth-context";
 import GradientAvatar from "@/components/ui/GradientAvatar";
 import { GradientButton } from "@plaqode-platform/ui";
@@ -45,14 +46,21 @@ export default function EditorTopbar({
     return (
         <div className="absolute top-0 left-0 right-0 h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4 z-[100] shadow-sm hidden lg:flex">
 
-            {/* 1. Left: Back & Title */}
+            {/* 1. Left: Back (Logo) & Title */}
             <div className="flex items-center space-x-4">
                 <button
                     onClick={() => window.history.back()}
-                    className="p-2 hover:bg-gray-100 rounded-full text-gray-600 transition-colors"
+                    className="p-1 -ml-1 rounded-lg transition-transform active:scale-95"
                     title="Back"
                 >
-                    <ArrowLeft size={20} />
+                    <div className="relative w-8 h-8">
+                        <Image
+                            src="/img/qr-code-2.png"
+                            alt="Plaqode"
+                            fill
+                            className="object-contain"
+                        />
+                    </div>
                 </button>
                 <div className="flex flex-col">
                     <h1 className="font-semibold text-gray-800 text-sm">{templateName || "Untitled Design"}</h1>

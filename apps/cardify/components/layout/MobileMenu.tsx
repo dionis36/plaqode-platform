@@ -55,14 +55,14 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             {/* Overlay */}
             <div
                 ref={overlayRef}
-                className="fixed inset-0 bg-black/50 z-[20] opacity-0 invisible"
+                className="fixed inset-0 bg-black/50 z-[2000] opacity-0 invisible"
                 onClick={onClose}
             />
 
             {/* Drawer */}
             <div
                 ref={drawerRef}
-                className="fixed top-0 right-0 h-full w-[80%] min-w-[300px] max-w-sm bg-dark/95 backdrop-blur-md z-[1000] p-6 translate-x-full text-light flex flex-col justify-between"
+                className="fixed top-0 right-0 h-full w-[80%] min-w-[300px] max-w-sm bg-dark/95 backdrop-blur-md z-[2001] p-6 translate-x-full text-light flex flex-col justify-between"
             >
                 <div>
                     <div className="flex justify-between items-center mb-8">
