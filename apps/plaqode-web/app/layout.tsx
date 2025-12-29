@@ -3,6 +3,8 @@ import { Open_Sans, Merriweather } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
 
+import FontLoader from "@/components/FontLoader";
+
 // Global Body Font
 const openSans = Open_Sans({
   subsets: ['latin'],
@@ -33,6 +35,7 @@ export default function RootLayout({
         className="antialiased font-sans"
       >
         <AuthProvider>
+          <FontLoader />
           {children}
         </AuthProvider>
       </body>

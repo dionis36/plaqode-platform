@@ -43,7 +43,7 @@ export default function SmartNavbar() {
     return (
         <>
             <header
-                className={`fixed top-0 left-0 w-full z-[999] bg-dark/80 backdrop-blur-md shadow-md border-b border-white/5 rounded-b-lg transition-transform duration-300 ease-in-out ${isVisible ? "translate-y-0" : "-translate-y-full"
+                className={`fixed top-0 left-0 w-full z-[999] bg-[#121212]/80 backdrop-blur-md shadow-md border-b border-white/5 rounded-b-lg transition-transform duration-300 ease-in-out ${isVisible ? "translate-y-0" : "-translate-y-full"
                     }`}
             >
                 <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-4 flex justify-between items-center">

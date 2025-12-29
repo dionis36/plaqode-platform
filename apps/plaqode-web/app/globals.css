@@ -1,26 +1,37 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@theme {
-  --color-primary: blue;
-  --color-secondary: red;
-  --color-dark: #121212;
-  --color-text: #4A5568;
-  --color-light: #FAFAFA;
-  --color-bg: #efefef;
+@layer base {
+  :root {
+    --color-primary: blue;
+    --color-secondary: red;
+    --color-dark: #121212;
+    --color-text: #4A5568;
+    --color-light: #FAFAFA;
+    --color-bg: #efefef;
 
-  /* Fonts - Updated to match Next.js Variables */
-  --font-sans: var(--font-open-sans), ui-sans-serif, system-ui;
-  /* Fonts - Managed in tailwind.config.ts */
+    /* Fonts - Updated to match Next.js Variables */
+    --font-sans: var(--font-open-sans), ui-sans-serif, system-ui;
+    --font-merriweather: var(--font-merriweather), serif;
 
-  /* Font Sizes */
-  --text-display-xl: 4.5rem;
-  --text-display-lg: 3rem;
-  --text-display-md: 2.5rem;
+    /* Font Sizes */
+    --text-display-xl: 4.5rem;
+    --text-display-lg: 3rem;
+    --text-display-md: 2.5rem;
+  }
 
-  --background-image-hero-pattern: url('/img/hero-bg.jpg');
+  html {
+    background-color: var(--color-light);
+    color: var(--color-dark);
+  }
+
+  body {
+    background-color: var(--color-bg);
+    font-family: var(--font-sans);
+  }
 }
 
-/* Custom Utilities for detailed replication if needed */
 @layer utilities {
   .text-gradient {
     background-image: linear-gradient(to right, var(--color-secondary), var(--color-primary));
@@ -37,16 +48,10 @@
     -webkit-mask-composite: xor;
     mask-composite: exclude;
   }
-}
 
-:root {
-  background-color: var(--color-light);
-  /* Default light bg, verified from checking source again (home-about uses light, hero uses dark) */
-  color: var(--color-dark);
-}
-
-body {
-  background-color: var(--color-bg);
-  /* Setting body bg to match Plaqode default */
-  font-family: var(--font-sans);
+  /* Manual font fallback just in case, though standard config should handle it now */
+  /* Manual font fallback just in case, though standard config should handle it now */
+  .font-merriweather {
+    font-family: 'Merriweather', serif !important;
+  }
 }

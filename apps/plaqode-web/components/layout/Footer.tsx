@@ -17,7 +17,7 @@ export default function Footer() {
 
                 {/* Column 2: Quick Links */}
                 <div className="lg:pl-8">
-                    <h4 className="text-lg font-bold text-text mb-6">Quick Links</h4>
+                    <h4 className="text-md font-bold text-text mb-6">Quick Links</h4>
                     <div className="flex flex-col gap-3">
                         {["Home", "About", "Services", "Contact"].map((link) => (
                             <Link
@@ -33,7 +33,7 @@ export default function Footer() {
 
                 {/* Column 3: Contact Info */}
                 <div>
-                    <h4 className="text-lg font-bold text-text mb-6">Contact Us</h4>
+                    <h4 className="text-md font-bold text-text mb-6">Contact Us</h4>
                     <div className="flex flex-col gap-4">
                         <div className="flex items-center gap-3 group cursor-pointer">
                             <Phone className="text-text w-5 h-5 group-hover:scale-110 transition-transform" />
@@ -53,13 +53,13 @@ export default function Footer() {
                 {/* Column 4: Socials & Copyright */}
                 <div className="flex flex-col items-start lg:items-end">
                     <div className="flex gap-4 mb-6">
-                        <a href="#" className="text-text/80 hover:text-secondary hover:scale-110 transition-all"><Facebook size={25} /></a>
-                        <a href="#" className="text-text/80 hover:text-secondary hover:scale-110 transition-all"><Twitter size={25} /></a>
-                        <a href="#" className="text-text/80 hover:text-secondary hover:scale-110 transition-all"><Linkedin size={25} /></a>
-                        <a href="#" className="text-text/80 hover:text-secondary hover:scale-110 transition-all"><Instagram size={25} /></a>
+                        <a href="#" className="text-text hover:text-secondary hover:scale-110 transition-all"><Facebook size={25} /></a>
+                        <a href="#" className="text-text hover:text-secondary hover:scale-110 transition-all"><Twitter size={25} /></a>
+                        <a href="#" className="text-text hover:text-secondary hover:scale-110 transition-all"><Linkedin size={25} /></a>
+                        <a href="#" className="text-text hover:text-secondary hover:scale-110 transition-all"><Instagram size={25} /></a>
                     </div>
 
-                    <p className="text-text/80 text-sm mt-8 lg:mt-0 font-medium">
+                    <p className="text-text text-sm mt-8 lg:mt-0 font-medium">
                         &copy; 2025 PlaQode. All Rights Reserved.
                     </p>
                 </div>
