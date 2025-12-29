@@ -10,7 +10,7 @@
 
   /* Fonts - Updated to match Next.js Variables */
   --font-sans: var(--font-open-sans), ui-sans-serif, system-ui;
-  --font-merriweather: var(--font-merriweather), serif;
+  /* Fonts - Managed in tailwind.config.ts */
 
   /* Font Sizes */
   --text-display-xl: 4.5rem;

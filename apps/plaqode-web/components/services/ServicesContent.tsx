@@ -84,7 +84,7 @@ export default function ServicesContent() {
                                     {item.desc}
                                 </p>
                                 <div className="mt-auto">
-                                    <GradientButton href={item.href} text={item.cta} size="sm" />
+                                    <GradientButton href={item.href} text={item.cta} size="md" />
                                 </div>
                             </div>
                         ))}

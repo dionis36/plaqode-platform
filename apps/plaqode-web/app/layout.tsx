@@ -28,9 +28,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${openSans.variable} ${merriweather.variable}`}>
       <body
-        className={`${openSans.variable} ${merriweather.variable} antialiased font-sans`}
+        className="antialiased font-sans"
       >
         <AuthProvider>
           {children}

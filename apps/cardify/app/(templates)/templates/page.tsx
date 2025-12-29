@@ -180,12 +180,12 @@ const TemplatesPage = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-dark/90 pointer-events-none" />
 
         <div className="relative z-10 max-w-4xl mx-auto pt-10">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-merriweather font-bold text-white mb-6">
-            Template Library
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-merriweather font-bold bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent mb-6">
+            Business Card Designs
           </h1>
           <p className="text-lg sm:text-xl text-white/70 max-w-2xl mx-auto font-sans">
-            Jumpstart your design with our professionally crafted templates.
-            Customize every detail to match your brand.
+            Select a premium layout to begin your professional identity.
+            Each design is fully customizable to align with your corporate branding.
           </p>
         </div>
       </div>
