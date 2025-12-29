@@ -4,6 +4,7 @@
 
 import { Download, Undo, Redo, Save, ArrowLeft, Loader, Shuffle, RotateCcw } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
 import GradientAvatar from "@/components/ui/GradientAvatar";
 import { GradientButton } from "@plaqode-platform/ui";
@@ -48,10 +49,10 @@ export default function EditorTopbar({
 
             {/* 1. Left: Back (Logo) & Title */}
             <div className="flex items-center space-x-4">
-                <button
-                    onClick={() => window.history.back()}
-                    className="p-1 -ml-1 rounded-lg transition-transform active:scale-95"
-                    title="Back"
+                <Link
+                    href={process.env.NEXT_PUBLIC_PLATFORM_URL || 'http://localhost:3000'}
+                    className="flex-shrink-0"
+                    title="Back to Home"
                 >
                     <div className="relative w-8 h-8">
                         <Image
@@ -61,7 +62,7 @@ export default function EditorTopbar({
                             className="object-contain"
                         />
                     </div>
-                </button>
+                </Link>
                 <div className="flex flex-col">
                     <h1 className="font-semibold text-gray-800 text-sm">{templateName || "Untitled Design"}</h1>
                     <span className="text-xs text-gray-400">Card Editor</span>
