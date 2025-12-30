@@ -20,6 +20,8 @@ interface TemplateEditorModalProps {
     onSave: () => void;
 }
 
+import { Modal } from "@plaqode-platform/ui";
+
 export default function TemplateEditorModal({ template, isOpen, onClose, onSave }: TemplateEditorModalProps) {
     const [activeTab, setActiveTab] = useState<'basic' | 'advanced'>('basic');
     const [saving, setSaving] = useState(false);
@@ -33,8 +35,6 @@ export default function TemplateEditorModal({ template, isOpen, onClose, onSave 
     // Advanced JSON state
     const [jsonData, setJsonData] = useState(JSON.stringify(template.data, null, 2));
     const [jsonError, setJsonError] = useState('');
-
-    if (!isOpen) return null;
 
     const handleSave = async () => {
         setSaving(true);
@@ -94,31 +94,20 @@ export default function TemplateEditorModal({ template, isOpen, onClose, onSave 
     };
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] flex flex-col">
-                {/* Header */}
-                <div className="flex items-center justify-between p-6 border-b">
-                    <div>
-                        <h2 className="text-2xl font-bold text-gray-900">Edit Template</h2>
-                        <p className="text-sm text-gray-500 mt-1">
-                            {template.id} • Version {template.version}
-                        </p>
-                    </div>
-                    <button
-                        onClick={onClose}
-                        className="text-gray-400 hover:text-gray-600 transition"
-                    >
-                        <X size={24} />
-                    </button>
-                </div>
-
+        <Modal
+            isOpen={isOpen}
+            onClose={onClose}
+            title={`Edit Template: ${template.id}`}
+            size="xl"
+        >
+            <div className="flex flex-col h-full">
                 {/* Tabs */}
-                <div className="flex border-b">
+                <div className="flex border-b mb-6">
                     <button
                         onClick={() => setActiveTab('basic')}
                         className={`px-6 py-3 font-medium transition ${activeTab === 'basic'
-                                ? 'text-blue-600 border-b-2 border-blue-600'
-                                : 'text-gray-500 hover:text-gray-700'
+                            ? 'text-blue-600 border-b-2 border-blue-600'
+                            : 'text-gray-500 hover:text-gray-700'
                             }`}
                     >
                         Basic Info
@@ -126,8 +115,8 @@ export default function TemplateEditorModal({ template, isOpen, onClose, onSave 
                     <button
                         onClick={() => setActiveTab('advanced')}
                         className={`px-6 py-3 font-medium transition ${activeTab === 'advanced'
-                                ? 'text-blue-600 border-b-2 border-blue-600'
-                                : 'text-gray-500 hover:text-gray-700'
+                            ? 'text-blue-600 border-b-2 border-blue-600'
+                            : 'text-gray-500 hover:text-gray-700'
                             }`}
                     >
                         Advanced (JSON)
@@ -135,7 +124,7 @@ export default function TemplateEditorModal({ template, isOpen, onClose, onSave 
                 </div>
 
                 {/* Content */}
-                <div className="flex-1 overflow-y-auto p-6">
+                <div className="flex-1 overflow-y-auto mb-6">
                     {activeTab === 'basic' ? (
                         <div className="space-y-4">
                             {/* Name */}
@@ -255,7 +244,7 @@ export default function TemplateEditorModal({ template, isOpen, onClose, onSave 
                 </div>
 
                 {/* Footer */}
-                <div className="flex items-center justify-between p-6 border-t bg-gray-50">
+                <div className="flex items-center justify-between pt-4 border-t bg-white">
                     <div className="text-sm text-gray-500">
                         {activeTab === 'advanced' && (
                             <span>Changes will increment version to {template.version + 1}</span>
@@ -280,6 +269,6 @@ export default function TemplateEditorModal({ template, isOpen, onClose, onSave 
                     </div>
                 </div>
             </div>
-        </div>
+        </Modal>
     );
 }

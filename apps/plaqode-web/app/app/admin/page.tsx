@@ -3,7 +3,7 @@
 import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { toast } from "@plaqode-platform/ui";
+import { toast, Modal, ConfirmationModal } from "@plaqode-platform/ui";
 
 interface User {
     id: string;
@@ -423,139 +423,91 @@ export default function AdminPage() {
             )}
 
             {/* Role Assignment Modal - Superadmin Only */}
-            {showRoleModal && selectedUser && isSuperAdmin && (
-                <div
-                    className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50"
-                    onClick={() => setShowRoleModal(false)}
+            {selectedUser && (
+                <Modal
+                    isOpen={showRoleModal && isSuperAdmin}
+                    onClose={() => setShowRoleModal(false)}
+                    title={`Assign Role to ${selectedUser.name || selectedUser.email}`}
+                    size="sm"
                 >
-                    <div
-                        className="bg-white rounded-xl p-6 max-w-md w-full mx-4"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <h3 className="text-xl font-bold text-gray-900 mb-4">
-                            Assign Role to {selectedUser.name || selectedUser.email}
-                        </h3>
-                        <div className="space-y-3">
-                            <button
-                                onClick={() => assignRole(selectedUser.id, 'superadmin')}
-                                disabled={actionLoading || selectedUser.roles.includes('superadmin')}
-                                className="w-full px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                {selectedUser.roles.includes('superadmin') ? 'Already Superadmin' : 'Make Superadmin'}
-                            </button>
-                            <button
-                                onClick={() => assignRole(selectedUser.id, 'admin')}
-                                disabled={actionLoading || selectedUser.roles.includes('admin')}
-                                className="w-full px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                {selectedUser.roles.includes('admin') ? 'Already Admin' : 'Make Admin'}
-                            </button>
-                            <button
-                                onClick={() => assignRole(selectedUser.id, 'user')}
-                                disabled={actionLoading || selectedUser.roles.includes('user')}
-                                className="w-full px-4 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                {selectedUser.roles.includes('user') ? 'Already User' : 'Make User'}
-                            </button>
-                            <button
-                                onClick={() => setShowRoleModal(false)}
-                                className="w-full px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition"
-                            >
-                                Cancel
-                            </button>
-                        </div>
+                    <div className="space-y-3">
+                        <button
+                            onClick={() => assignRole(selectedUser.id, 'superadmin')}
+                            disabled={actionLoading || selectedUser.roles.includes('superadmin')}
+                            className="w-full px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {selectedUser.roles.includes('superadmin') ? 'Already Superadmin' : 'Make Superadmin'}
+                        </button>
+                        <button
+                            onClick={() => assignRole(selectedUser.id, 'admin')}
+                            disabled={actionLoading || selectedUser.roles.includes('admin')}
+                            className="w-full px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {selectedUser.roles.includes('admin') ? 'Already Admin' : 'Make Admin'}
+                        </button>
+                        <button
+                            onClick={() => assignRole(selectedUser.id, 'user')}
+                            disabled={actionLoading || selectedUser.roles.includes('user')}
+                            className="w-full px-4 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {selectedUser.roles.includes('user') ? 'Already User' : 'Make User'}
+                        </button>
+                        <button
+                            onClick={() => setShowRoleModal(false)}
+                            className="w-full px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition"
+                        >
+                            Cancel
+                        </button>
                     </div>
-                </div>
+                </Modal>
             )}
 
             {/* Product Grant Modal */}
-            {showProductModal && selectedUser && (
-                <div
-                    className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50"
-                    onClick={() => setShowProductModal(false)}
+            {selectedUser && (
+                <Modal
+                    isOpen={showProductModal}
+                    onClose={() => setShowProductModal(false)}
+                    title={`Grant Product Access to ${selectedUser.name || selectedUser.email}`}
+                    size="sm"
                 >
-                    <div
-                        className="bg-white rounded-xl p-6 max-w-md w-full mx-4"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <h3 className="text-xl font-bold text-gray-900 mb-4">
-                            Grant Product Access to {selectedUser.name || selectedUser.email}
-                        </h3>
-                        <div className="space-y-3">
-                            <button
-                                onClick={() => grantProduct(selectedUser.id, 'cardify')}
-                                disabled={actionLoading || selectedUser.products.includes('cardify')}
-                                className="w-full px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                {selectedUser.products.includes('cardify') ? 'Already has Cardify' : 'Grant Cardify'}
-                            </button>
-                            <button
-                                onClick={() => grantProduct(selectedUser.id, 'qrstudio')}
-                                disabled={actionLoading || selectedUser.products.includes('qrstudio')}
-                                className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                {selectedUser.products.includes('qrstudio') ? 'Already has QR Studio' : 'Grant QR Studio'}
-                            </button>
-                            <button
-                                onClick={() => setShowProductModal(false)}
-                                className="w-full px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition"
-                            >
-                                Cancel
-                            </button>
-                        </div>
+                    <div className="space-y-3">
+                        <button
+                            onClick={() => grantProduct(selectedUser.id, 'cardify')}
+                            disabled={actionLoading || selectedUser.products.includes('cardify')}
+                            className="w-full px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {selectedUser.products.includes('cardify') ? 'Already has Cardify' : 'Grant Cardify'}
+                        </button>
+                        <button
+                            onClick={() => grantProduct(selectedUser.id, 'qrstudio')}
+                            disabled={actionLoading || selectedUser.products.includes('qrstudio')}
+                            className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {selectedUser.products.includes('qrstudio') ? 'Already has QR Studio' : 'Grant QR Studio'}
+                        </button>
+                        <button
+                            onClick={() => setShowProductModal(false)}
+                            className="w-full px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition"
+                        >
+                            Cancel
+                        </button>
                     </div>
-                </div>
+                </Modal>
             )}
 
             {/* Delete User Modal - Superadmin Only */}
-            {showDeleteModal && selectedUser && isSuperAdmin && (
-                <div
-                    className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50"
-                    onClick={() => setShowDeleteModal(false)}
-                >
-                    <div
-                        className="bg-white rounded-xl p-6 max-w-md w-full mx-4"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <div className="flex items-center gap-3 mb-4">
-                            <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
-                                <svg className="w-6 h-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 className="text-xl font-bold text-gray-900">Delete User</h3>
-                                <p className="text-sm text-gray-600">This action cannot be undone</p>
-                            </div>
-                        </div>
+            <ConfirmationModal
+                isOpen={showDeleteModal && !!selectedUser && isSuperAdmin}
+                onClose={() => setShowDeleteModal(false)}
+                onConfirm={() => selectedUser && deleteUser(selectedUser.id)}
+                title="Delete User"
+                message={`Are you sure you want to delete ${selectedUser?.name || selectedUser?.email}? All their data, designs, and access will be permanently removed.`}
+                confirmText="Delete User"
+                variant="danger"
+                isLoading={actionLoading}
+            />
 
-                        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-                            <p className="text-sm text-gray-700">
-                                Are you sure you want to delete <span className="font-semibold">{selectedUser.name || selectedUser.email}</span>?
-                            </p>
-                            <p className="text-sm text-gray-600 mt-2">
-                                All their data, designs, and access will be permanently removed.
-                            </p>
-                        </div>
 
-                        <div className="flex gap-3">
-                            <button
-                                onClick={() => deleteUser(selectedUser.id)}
-                                disabled={actionLoading}
-                                className="flex-1 px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition disabled:opacity-50 disabled:cursor-not-allowed font-medium"
-                            >
-                                {actionLoading ? 'Deleting...' : 'Delete User'}
-                            </button>
-                            <button
-                                onClick={() => setShowDeleteModal(false)}
-                                className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium"
-                            >
-                                Cancel
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-        </div>
+        </div >
     );
 }

@@ -2,10 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { Layout } from 'lucide-react';
-import { GradientButton } from "@plaqode-platform/ui";
 import SavedCard from '@/components/app/SavedCard';
-import ConfirmationModal from '@/components/ui/ConfirmationModal';
-import { toast } from "@plaqode-platform/ui";
+import { toast, ConfirmationModal, GradientButton } from "@plaqode-platform/ui";
 
 interface SavedDesign {
     id: string;
@@ -134,13 +132,14 @@ export default function SavedCardsPage() {
                 )}
             </div>
 
+            {/* Delete Confirmation Modal */}
             <ConfirmationModal
                 isOpen={deleteModalOpen}
                 onClose={() => setDeleteModalOpen(false)}
                 onConfirm={confirmDelete}
                 title="Delete Design"
                 message={`Are you sure you want to delete "${cardToDelete?.name}"? This action cannot be undone.`}
-                confirmText="Delete"
+                confirmText="Delete Design"
                 variant="danger"
             />
         </div>

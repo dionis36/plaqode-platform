@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { X, FileImage, FileText, Download, Loader, Save, LayoutTemplate, Tag, List, Type, Palette, CheckCircle, Info } from "lucide-react";
-import SuccessModal from "@/components/ui/SuccessModal";
+import { toast, Modal } from "@plaqode-platform/ui";
 import { ExportOptions, ExportFormat, TemplateExportMetadata } from "@/types/template";
 import { TEMPLATE_CATEGORIES, TemplateCategoryKey } from "@/lib/templateCategories";
 
@@ -106,7 +106,7 @@ export default function ExportModal({
                 });
 
                 // Show success UI inside modal instead of alert
-                setSuccessMessage(nextId || templateName.trim()); // Show ID or Name on success
+                toast.success(`Template ${nextId || templateName.trim()} has been saved.`);
                 setExporting(false);
 
                 // Auto-close after a delay
@@ -114,7 +114,6 @@ export default function ExportModal({
                     onClose();
                     // Reset form after closing
                     setTimeout(() => {
-                        setSuccessMessage(null);
                         setTemplateName('');
                         setTemplateTags('');
                         setTemplateFeatures('');
@@ -141,7 +140,7 @@ export default function ExportModal({
                 // Show success notification for PNG/PDF exports
                 const fileExtension = format.toLowerCase();
                 const fullFileName = fileName.endsWith(`.${fileExtension}`) ? fileName : `${fileName}.${fileExtension}`;
-                setSuccessMessage(fullFileName);
+                toast.success(`File ${fullFileName} has been downloaded.`);
                 setExporting(false);
 
                 // Auto-close after a delay
@@ -149,7 +148,6 @@ export default function ExportModal({
                     onClose();
                     // Reset form after closing
                     setTimeout(() => {
-                        setSuccessMessage(null);
                         setFileName('card');
                     }, 300);
                 }, 1500);
@@ -160,46 +158,18 @@ export default function ExportModal({
         }
     };
 
-    // Render Success State
-    if (successMessage) {
-        // Determine if this is a template export or file export
-        const isTemplateExport = activeTab === 'template';
-        const messageText = isTemplateExport
-            ? `Template ${successMessage} has been saved.`
-            : `File ${successMessage} has been downloaded.`;
-        const titleText = isTemplateExport
-            ? 'Export Successful!'
-            : 'Download Complete!';
 
-        return (
-            <SuccessModal
-                isOpen={!!successMessage}
-                title={titleText}
-                message={messageText}
-            />
-        );
-    }
 
     return (
-        <div
-            className="fixed inset-0 z-[100] flex items-center justify-center animate-fadeIn p-4"
-            onClick={onClose}
-            style={{
-                backgroundColor: 'rgba(0, 0, 0, 0.6)',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)'
-            }}
+        <Modal
+            isOpen={isOpen}
+            onClose={onClose}
+            size="lg"
+            noPadding
         >
-            <div
-                className="relative w-full max-w-2xl bg-white rounded-2xl lg:shadow-2xl overflow-hidden animate-scaleIn flex flex-col max-h-[90vh] lg:rounded-2xl rounded-t-3xl"
-                onClick={(e) => e.stopPropagation()}
-            >
+            <div className="flex flex-col h-full max-h-[90vh]">
                 {/* Header & Tabs */}
                 <div className="bg-gray-50 border-b border-gray-200">
-                    {/* Mobile Handle */}
-                    <div className="lg:hidden flex justify-center pt-3 pb-2">
-                        <div className="w-12 h-1 bg-gray-300 rounded-full"></div>
-                    </div>
                     <div className="px-4 lg:px-6 py-3 lg:py-4 flex items-center justify-between">
                         <h2 className="text-lg lg:text-xl font-bold text-gray-900">Export Design</h2>
                         <button
@@ -252,7 +222,7 @@ export default function ExportModal({
                 </div>
 
                 {/* Content - Scrollable */}
-                <div className="p-4 lg:p-8 overflow-y-auto custom-scrollbar pb-6 lg:pb-8">
+                <div className="p-4 lg:p-8 overflow-y-auto custom-scrollbar pb-6 lg:pb-8 flex-1">
                     {activeTab === 'file' ? (
                         <div className="space-y-6 lg:space-y-8">
                             {/* Format Selection */}
@@ -492,9 +462,7 @@ export default function ExportModal({
                         )}
                     </button>
                 </div>
-            </div>
-
-            <style jsx>{`
+                <style jsx>{`
                 @keyframes fadeIn {
                     from { opacity: 0; }
                     to { opacity: 1; }
@@ -527,6 +495,8 @@ export default function ExportModal({
                     background-color: rgba(0, 0, 0, 0.2);
                 }
             `}</style>
-        </div>
+            </div>
+        </Modal>
     );
 }
+

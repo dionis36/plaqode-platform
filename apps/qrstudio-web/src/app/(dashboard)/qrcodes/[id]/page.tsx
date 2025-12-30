@@ -25,7 +25,7 @@ interface QrCodeDetail {
     };
 }
 
-import { ConfirmationModal } from '@/components/common/ConfirmationModal';
+import { ConfirmationModal } from "@plaqode-platform/ui";
 
 export default function QrCodeDetailPage({ params }: { params: { id: string } }) {
     const router = useRouter();
@@ -376,7 +376,7 @@ export default function QrCodeDetailPage({ params }: { params: { id: string } })
                     title="Delete QR Code"
                     message="Are you sure you want to delete this QR code? This action cannot be undone and the QR code will stop working immediately."
                     confirmText="Delete"
-                    isDestructive={true}
+                    variant="danger"
                     isLoading={isDeleting}
                 />
 

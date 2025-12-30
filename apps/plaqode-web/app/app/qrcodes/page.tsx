@@ -4,9 +4,8 @@ import { useEffect, useState } from 'react';
 import { qrApi } from '@/lib/api-client';
 import { QrCode, Search, Filter, BarChart2, Edit, Trash2, Smartphone } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { ConfirmationModal } from '@/components/common/ConfirmationModal';
 import { QrContentPreviewModal } from '@/components/common/QrContentPreviewModal';
-import { GradientButton, toast } from "@plaqode-platform/ui";
+import { GradientButton, toast, ConfirmationModal } from "@plaqode-platform/ui";
 
 interface QrCodeItem {
     id: string;
@@ -412,7 +411,7 @@ export default function QrCodesPage() {
                 title="Delete QR Code"
                 message="Are you sure you want to delete this QR code? This action cannot be undone."
                 confirmText="Delete"
-                isDestructive={true}
+                variant="danger"
                 isLoading={isDeleting}
             />
 
