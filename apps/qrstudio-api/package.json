@@ -21,6 +21,7 @@
         "dotenv": "^16.4.5",
         "fastify": "^4.29.1",
         "fastify-type-provider-zod": "^2.1.0",
+        "geoip-lite": "^1.4.10",
         "jsonwebtoken": "^9.0.3",
         "nanoid": "^3.3.11",
         "prisma": "^5.22.0",
@@ -29,6 +30,7 @@
         "zod": "^3.22.4"
     },
     "devDependencies": {
+        "@types/geoip-lite": "^1.4.4",
         "@types/node": "^20.19.26",
         "@types/qrcode": "^1.5.5",
         "ts-node": "^10.9.2",

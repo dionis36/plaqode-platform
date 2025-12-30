@@ -1,6 +1,8 @@
 import { prisma } from '../lib/prisma';
 import crypto from 'crypto';
 
+import geoip from 'geoip-lite';
+
 export interface ScanMetadata {
     country?: string;
     city?: string;
@@ -62,6 +64,10 @@ export class AnalyticsService {
             // Parse user agent for device detection
             const deviceInfo = this.parseUserAgent(data.userAgent);
 
+            // Resolve location from IP
+            // geoip-lite lookup returns null for private/local IPs
+            const geo = geoip.lookup(data.ip);
+
             // Create scan record
             await prisma.scan.create({
                 data: {
@@ -72,6 +78,9 @@ export class AnalyticsService {
                     os: deviceInfo.os,
                     browser: deviceInfo.browser,
                     referrer: data.referrer,
+                    // Add location data if valid
+                    country: geo?.country,
+                    city: geo?.city,
                 },
             });
         } catch (error) {
