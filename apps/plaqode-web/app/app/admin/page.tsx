@@ -428,18 +428,28 @@ export default function AdminPage() {
                 <Modal
                     isOpen={showRoleModal && isSuperAdmin}
                     onClose={() => setShowRoleModal(false)}
-                    title={`Assign Role to ${selectedUser.name || selectedUser.email}`}
                     size="md"
                 >
-                    <div className="space-y-4">
-                        <p className="text-sm text-gray-500">Select a role to assign to this user. Higher roles inherit permissions from lower roles.</p>
+                    <div className="flex flex-col">
+                        {/* Centered Header */}
+                        <div className="flex flex-col items-center text-center mb-6">
+                            <div className="bg-purple-50 p-3 rounded-full mb-4">
+                                <Shield className="w-8 h-8 text-purple-600" strokeWidth={2} />
+                            </div>
+                            <h3 className="text-xl font-bold text-gray-900 mb-2">
+                                Assign Role
+                            </h3>
+                            <p className="text-gray-500 max-w-sm">
+                                Managing roles for <span className="font-medium text-gray-900">{selectedUser.name || selectedUser.email}</span>
+                            </p>
+                        </div>
 
-                        <div className="grid gap-3">
+                        <div className="space-y-3 mb-6">
                             <button
                                 onClick={() => assignRole(selectedUser.id, 'superadmin')}
                                 disabled={actionLoading}
                                 className={`
-                                    relative flex items-start gap-4 p-4 rounded-xl border-2 text-left transition-all
+                                    relative flex items-start gap-4 p-4 rounded-xl border-2 text-left transition-all w-full
                                     ${selectedUser.roles.includes('superadmin')
                                         ? 'border-red-600 bg-red-50'
                                         : 'border-gray-200 hover:border-red-200 hover:bg-red-50/30'
@@ -462,7 +472,7 @@ export default function AdminPage() {
                                 onClick={() => assignRole(selectedUser.id, 'admin')}
                                 disabled={actionLoading}
                                 className={`
-                                    relative flex items-start gap-4 p-4 rounded-xl border-2 text-left transition-all
+                                    relative flex items-start gap-4 p-4 rounded-xl border-2 text-left transition-all w-full
                                     ${selectedUser.roles.includes('admin')
                                         ? 'border-purple-600 bg-purple-50'
                                         : 'border-gray-200 hover:border-purple-200 hover:bg-purple-50/30'
@@ -485,7 +495,7 @@ export default function AdminPage() {
                                 onClick={() => assignRole(selectedUser.id, 'user')}
                                 disabled={actionLoading}
                                 className={`
-                                    relative flex items-start gap-4 p-4 rounded-xl border-2 text-left transition-all
+                                    relative flex items-start gap-4 p-4 rounded-xl border-2 text-left transition-all w-full
                                     ${selectedUser.roles.includes('user')
                                         ? 'border-gray-600 bg-gray-50'
                                         : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
@@ -505,12 +515,12 @@ export default function AdminPage() {
                             </button>
                         </div>
 
-                        <div className="pt-2 flex justify-end">
+                        <div className="flex justify-center">
                             <button
                                 onClick={() => setShowRoleModal(false)}
-                                className="px-5 py-2.5 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition"
+                                className="px-8 py-2.5 border border-gray-200 text-gray-600 font-medium rounded-lg hover:bg-gray-50 hover:text-gray-900 transition w-full sm:w-auto"
                             >
-                                Close
+                                Done
                             </button>
                         </div>
                     </div>
@@ -522,18 +532,29 @@ export default function AdminPage() {
                 <Modal
                     isOpen={showProductModal}
                     onClose={() => setShowProductModal(false)}
-                    title={`Grant Product Access`}
-                    description={`Manage product access for ${selectedUser.name || selectedUser.email}`}
                     size="md"
                 >
-                    <div className="space-y-4">
-                        <div className="grid gap-3">
+                    <div className="flex flex-col">
+                        {/* Centered Header */}
+                        <div className="flex flex-col items-center text-center mb-6">
+                            <div className="bg-blue-50 p-3 rounded-full mb-4">
+                                <CreditCard className="w-8 h-8 text-blue-600" strokeWidth={2} />
+                            </div>
+                            <h3 className="text-xl font-bold text-gray-900 mb-2">
+                                Grant Product Access
+                            </h3>
+                            <p className="text-gray-500 max-w-sm">
+                                Control which applications <span className="font-medium text-gray-900">{selectedUser.name || selectedUser.email}</span> can access.
+                            </p>
+                        </div>
+
+                        <div className="space-y-3 mb-6">
                             {/* Cardify */}
                             <button
                                 onClick={() => grantProduct(selectedUser.id, 'cardify')}
                                 disabled={actionLoading}
                                 className={`
-                                    relative flex items-start gap-4 p-4 rounded-xl border-2 text-left transition-all
+                                    relative flex items-start gap-4 p-4 rounded-xl border-2 text-left transition-all w-full
                                     ${selectedUser.products.includes('cardify')
                                         ? 'border-purple-600 bg-purple-50'
                                         : 'border-gray-200 hover:border-purple-200 hover:bg-purple-50/30'
@@ -557,7 +578,7 @@ export default function AdminPage() {
                                 onClick={() => grantProduct(selectedUser.id, 'qrstudio')}
                                 disabled={actionLoading}
                                 className={`
-                                    relative flex items-start gap-4 p-4 rounded-xl border-2 text-left transition-all
+                                    relative flex items-start gap-4 p-4 rounded-xl border-2 text-left transition-all w-full
                                     ${selectedUser.products.includes('qrstudio')
                                         ? 'border-blue-600 bg-blue-50'
                                         : 'border-gray-200 hover:border-blue-200 hover:bg-blue-50/30'
@@ -577,12 +598,12 @@ export default function AdminPage() {
                             </button>
                         </div>
 
-                        <div className="pt-2 flex justify-end">
+                        <div className="flex justify-center">
                             <button
                                 onClick={() => setShowProductModal(false)}
-                                className="px-5 py-2.5 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition"
+                                className="px-8 py-2.5 border border-gray-200 text-gray-600 font-medium rounded-lg hover:bg-gray-50 hover:text-gray-900 transition w-full sm:w-auto"
                             >
-                                Close
+                                Done
                             </button>
                         </div>
                     </div>
