@@ -6,7 +6,7 @@ import { QrCode, Search, Filter, BarChart2, Edit, Trash2, Smartphone } from 'luc
 import { useRouter } from 'next/navigation';
 import { ConfirmationModal } from '@/components/common/ConfirmationModal';
 import { QrContentPreviewModal } from '@/components/common/QrContentPreviewModal';
-import { GradientButton } from "@plaqode-platform/ui";
+import { GradientButton, toast } from "@plaqode-platform/ui";
 
 interface QrCodeItem {
     id: string;
@@ -84,9 +84,10 @@ export default function QrCodesPage() {
             await loadQrCodes();
             setDeleteModalOpen(false);
             setQrToDelete(null);
+            toast.success("QR Code deleted successfully");
         } catch (error) {
             console.error('Failed to delete QR code:', error);
-            alert('Failed to delete QR code');
+            toast.error('Failed to delete QR code');
         } finally {
             setIsDeleting(false);
         }

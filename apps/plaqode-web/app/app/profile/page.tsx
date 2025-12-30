@@ -2,21 +2,17 @@
 
 import { useAuth } from '@/lib/auth-context';
 import { useState } from 'react';
-import { GradientButton } from "@plaqode-platform/ui";
+import { GradientButton, toast } from "@plaqode-platform/ui";
 
 export default function ProfilePage() {
     const { user } = useAuth();
     const [editing, setEditing] = useState(false);
     const [name, setName] = useState(user?.name || '');
     const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState('');
-    const [error, setError] = useState('');
 
     const handleUpdateProfile = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
-        setError('');
-        setMessage('');
 
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/profile`, {
@@ -30,13 +26,13 @@ export default function ProfilePage() {
                 throw new Error('Failed to update profile');
             }
 
-            setMessage('Profile updated successfully!');
+            toast.success('Profile updated successfully!');
             setEditing(false);
 
             // Refresh the page to update user data
             setTimeout(() => window.location.reload(), 1000);
         } catch (err: any) {
-            setError(err.message || 'Failed to update profile');
+            toast.error(err.message || 'Failed to update profile');
         } finally {
             setLoading(false);
         }
@@ -51,17 +47,7 @@ export default function ProfilePage() {
                 <p className="text-text/70 font-sans text-lg">Manage your account information</p>
             </div>
 
-            {message && (
-                <div className="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-left">
-                    {message}
-                </div>
-            )}
 
-            {error && (
-                <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-left">
-                    {error}
-                </div>
-            )}
 
             <div className="grid md:grid-cols-2 gap-6">
                 {/* Profile Information */}
