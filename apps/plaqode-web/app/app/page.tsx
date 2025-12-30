@@ -4,7 +4,8 @@ import { useAuth } from '@/lib/auth-context';
 import { StatsOverview } from '@/components/dashboard/widgets/StatsOverview';
 import { RecentQrWidget } from '@/components/dashboard/widgets/RecentQrWidget';
 import { RecentDesignsWidget } from '@/components/dashboard/widgets/RecentDesignsWidget';
-import { QuickActionsWidget } from '@/components/dashboard/widgets/QuickActionsWidget';
+import { AdminWidget } from '@/components/dashboard/widgets/AdminWidget';
+import { ServicesWidget } from '@/components/dashboard/widgets/ServicesWidget';
 import { ProfileWidget } from '@/components/dashboard/widgets/ProfileWidget';
 import { useState, useEffect } from 'react';
 import { qrApi } from '@/lib/api-client';
@@ -172,10 +173,14 @@ export default function DashboardPage() {
                     onDelete={(id, name) => setDesignToDelete({ id, name })}
                 />
 
-                {/* Bottom Row: Profile + Quick Actions */}
+                {/* Bottom Row: Profile + Admin/Services */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <ProfileWidget />
-                    <QuickActionsWidget />
+                    {user?.roles?.some(role => ['admin', 'superadmin'].includes(role)) ? (
+                        <AdminWidget />
+                    ) : (
+                        <ServicesWidget />
+                    )}
                 </div>
             </div>
 
