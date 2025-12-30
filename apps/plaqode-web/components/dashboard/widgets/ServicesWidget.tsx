@@ -64,9 +64,11 @@ export function ServicesWidget() {
                 ))}
 
                 <div className="pt-2">
-                    <button className="w-full py-2.5 text-sm font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors border border-indigo-100 dashed">
-                        + Browse More Products
-                    </button>
+                    <Link href="/services">
+                        <button className="w-full py-2.5 text-sm font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors border border-indigo-100 dashed">
+                            + Browse More Products
+                        </button>
+                    </Link>
                 </div>
             </div>
         </div>

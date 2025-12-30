@@ -19,7 +19,7 @@ export function ProfileWidget() {
             </div>
 
             <div className="flex items-start gap-4 mb-6">
-                <GradientAvatar user={user} className="w-16 h-16 text-2xl" />
+                <GradientAvatar user={user} className="w-16 h-16 text-2xl" disableDropdown={true} textColor="text-dark" />
                 <div>
                     <h3 className="font-bold text-lg text-gray-900">{user.name}</h3>
                     <p className="text-gray-500 text-sm">{user.email}</p>
@@ -34,19 +34,10 @@ export function ProfileWidget() {
                 </div>
             </div>
 
-            <div className="pt-4 border-t border-gray-100">
-                <div className="grid grid-cols-2 gap-4">
-                    <div>
-                        <p className="text-xs text-gray-500 uppercase font-semibold mb-1">User ID</p>
-                        <p className="text-sm font-mono text-gray-700 truncate" title={user.id}>{user.id}</p>
-                    </div>
-                    <div>
-                        <p className="text-xs text-gray-500 uppercase font-semibold mb-1">Plan</p>
-                        <div className="flex items-center gap-1 text-sm text-gray-700">
-                            <Award className="w-4 h-4 text-yellow-500" />
-                            <span>Pro</span>
-                        </div>
-                    </div>
+            <div className="pt-4 border-t border-gray-100 mb-2">
+                <div>
+                    <p className="text-xs text-gray-500 uppercase font-semibold mb-1">User ID</p>
+                    <p className="text-sm font-mono text-gray-700 truncate" title={user.id}>{user.id}</p>
                 </div>
             </div>
 

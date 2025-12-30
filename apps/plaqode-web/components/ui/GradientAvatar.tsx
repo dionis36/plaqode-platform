@@ -12,9 +12,10 @@ interface GradientAvatarProps {
     };
     className?: string;
     textColor?: "text-white" | "text-dark";
+    disableDropdown?: boolean;
 }
 
-export default function GradientAvatar({ user, className = "", textColor = "text-white" }: GradientAvatarProps) {
+export default function GradientAvatar({ user, className = "", textColor = "text-white", disableDropdown = false }: GradientAvatarProps) {
     const { logout } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -38,11 +39,17 @@ export default function GradientAvatar({ user, className = "", textColor = "text
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
+    const toggleDropdown = () => {
+        if (!disableDropdown) {
+            setIsOpen(!isOpen);
+        }
+    };
+
     return (
         <div className="relative" ref={dropdownRef}>
             <button
-                onClick={() => setIsOpen(!isOpen)}
-                className={`group relative inline-flex items-center justify-center w-10 h-10 rounded-full transition-transform duration-300 hover:scale-105 cursor-pointer ${className}`}
+                onClick={toggleDropdown}
+                className={`group relative inline-flex items-center justify-center w-10 h-10 rounded-full transition-transform duration-300 hover:scale-105 ${disableDropdown ? 'cursor-default' : 'cursor-pointer'} ${className}`}
             >
                 {/* 1. The Gradient Border (Masked) */}
                 <span

@@ -33,7 +33,7 @@ export function RecentDesignsWidget({ designs, loading, onDelete }: RecentDesign
 
             <div className="p-6 flex-1 bg-slate-50/50">
                 {loading ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         {[1, 2, 3, 4].map((i) => (
                             <div key={i} className="aspect-[1.75/1] bg-slate-200 rounded-xl animate-pulse" />
                         ))}
@@ -43,7 +43,7 @@ export function RecentDesignsWidget({ designs, loading, onDelete }: RecentDesign
                         <p>No saved designs yet.</p>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         {designs.slice(0, 4).map((design: any) => (
                             <SavedCard
                                 key={design.id}
