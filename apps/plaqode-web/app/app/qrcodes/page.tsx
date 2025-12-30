@@ -167,7 +167,7 @@ export default function QrCodesPage() {
                                 setSearch(e.target.value);
                                 setPage(1);
                             }}
-                            className="pl-12 bg-gray-50/50 focus-visible:ring-blue-600"
+                            className="pl-12 bg-white"
                         />
                     </div>
 
@@ -180,7 +180,7 @@ export default function QrCodesPage() {
                                 setTypeFilter(e.target.value);
                                 setPage(1);
                             }}
-                            className="w-full pl-12 pr-10 h-11 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent appearance-none cursor-pointer transition-all text-sm sm:text-base hover:border-slate-300"
+                            className="w-full pl-12 pr-10 h-11 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-0 focus:border-blue-500 focus:shadow-[0_0_15px_rgba(59,130,246,0.4)] appearance-none cursor-pointer transition-all text-sm sm:text-base hover:border-slate-300"
                         >
                             <option value="">All Types</option>
                             <option value="menu">Menu</option>

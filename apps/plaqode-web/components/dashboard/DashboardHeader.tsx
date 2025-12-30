@@ -5,7 +5,7 @@ import { useAuth } from '@/lib/auth-context';
 import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
 import GradientAvatar from '@/components/ui/GradientAvatar';
-import { Logo } from '@plaqode-platform/ui';
+import { Logo, Input } from '@plaqode-platform/ui';
 
 interface DashboardHeaderProps {
     onMenuClick: () => void;
@@ -37,12 +37,12 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
                 </div>
 
                 {/* Search Bar */}
-                <div className="hidden md:flex items-center gap-2 px-4 py-2 bg-white/50 backdrop-blur-sm border border-dark/5 rounded-xl w-72 focus-within:bg-white focus-within:shadow-md transition-all duration-300">
-                    <Search size={18} className="text-dark/40" />
-                    <input
+                <div className="hidden md:flex relative w-72">
+                    <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-dark/40 pointer-events-none z-10" />
+                    <Input
                         type="text"
                         placeholder="Search designs, codes..."
-                        className="bg-transparent border-none outline-none text-sm text-dark/80 w-full placeholder:text-dark/40 font-sans"
+                        className="pl-10 h-10 bg-white border-dark/5 rounded-xl"
                     />
                 </div>
             </div>
