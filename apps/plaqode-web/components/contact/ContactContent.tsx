@@ -1,10 +1,62 @@
 "use client";
 
-import { GradientButton } from "@plaqode-platform/ui";
-import { Facebook, Twitter, Linkedin, Instagram, Phone, Mail, MessageCircle } from "lucide-react";
-import { useState } from "react";
+import { GradientButton, toast } from "@plaqode-platform/ui";
+import { Facebook, Twitter, Linkedin, Instagram, Phone, Mail, MessageCircle, Loader2 } from "lucide-react";
+import { useFormState } from "react-dom";
+import { useEffect, useRef } from "react";
+import { sendContactEmail, ContactState } from "@/actions/contact";
+
+const initialState: ContactState = {
+    success: false,
+    message: "",
+};
+
+function SubmitButton() {
+    // We can use useFormStatus here if we want button loading state, 
+    // but since we are in the same component we can also check pending if we extract this or use a pending state from action?
+    // Actually simpler to use useFormStatus hooks if available, but for now let's just use the button style.
+    // Wait, useFormState doesn't give pending. useFormStatus does.
+    // To use useFormStatus, the button must be inside the form.
+    // Let's create a separate component or just rely on the action being fast/optimistic? 
+    // Ideally use useFormStatus.
+    // Let's keep it simple for now, prompt implies toast usage.
+    // I'll add useFormStatus support for better UX.
+
+    const { pending } = useFormStatus();
+
+    return (
+        <div className="pt-4">
+            <GradientButton
+                type="submit"
+                text={pending ? "Sending..." : "Send Message"}
+                size="lg"
+                bold
+                disabled={pending}
+                icon={pending ? <Loader2 className="animate-spin" size={20} /> : undefined}
+                className="w-full md:w-auto"
+            />
+        </div>
+    );
+}
+
+// Helper for useFormStatus since it must be imported
+import { useFormStatus } from "react-dom";
 
 export default function ContactContent() {
+    const [state, formAction] = useFormState(sendContactEmail, initialState);
+    const formRef = useRef<HTMLFormElement>(null);
+
+    useEffect(() => {
+        if (state.message) {
+            if (state.success) {
+                toast.success(state.message);
+                formRef.current?.reset();
+            } else {
+                toast.error(state.message);
+            }
+        }
+    }, [state]);
+
     return (
         <section className="relative bg-dark text-light pt-0 pb-36 px-4 overflow-hidden">
             {/* Background Decor */}
@@ -61,7 +113,7 @@ export default function ContactContent() {
                         Send Us A Message
                     </h2>
 
-                    <form className="space-y-10">
+                    <form action={formAction} ref={formRef} className="space-y-10">
                         <div className="relative z-0 w-full group">
                             <input
                                 type="text"
@@ -77,6 +129,7 @@ export default function ContactContent() {
                             >
                                 Name
                             </label>
+                            {state.errors?.name && <p className="text-red-500 text-sm mt-1">{state.errors.name[0]}</p>}
                         </div>
 
                         <div className="relative z-0 w-full group">
@@ -94,6 +147,7 @@ export default function ContactContent() {
                             >
                                 Email
                             </label>
+                            {state.errors?.email && <p className="text-red-500 text-sm mt-1">{state.errors.email[0]}</p>}
                         </div>
 
                         <div className="relative z-0 w-full group">
@@ -111,14 +165,10 @@ export default function ContactContent() {
                             >
                                 How Can We Help?
                             </label>
+                            {state.errors?.message && <p className="text-red-500 text-sm mt-1">{state.errors.message[0]}</p>}
                         </div>
 
-                        <div className="pt-4">
-                            <button type="submit" className="group relative inline-flex items-center justify-center rounded-full transition-transform duration-300 hover:scale-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 h-12 px-10 text-base font-medium text-light">
-                                <span className="absolute inset-0 rounded-full gradient-border-mask pointer-events-none" />
-                                <span className="relative z-10 whitespace-nowrap leading-none">Submit</span>
-                            </button>
-                        </div>
+                        <SubmitButton />
                     </form>
                 </div>
 
