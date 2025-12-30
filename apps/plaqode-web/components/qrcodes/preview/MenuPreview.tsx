@@ -1,3 +1,5 @@
+'use client';
+
 import { Utensils, MapPin, Clock, Phone, Globe } from 'lucide-react';
 import { useEffect } from 'react';
 import { usePreviewContext } from './PreviewContext';

@@ -1,3 +1,5 @@
+'use client';
+
 import { Phone, Mail, Globe, MapPin, Building2, AlignLeft } from 'lucide-react';
 import {
     FaLinkedin, FaFacebook, FaXTwitter, FaInstagram, FaYoutube, FaTiktok, FaPinterest, FaMastodon,

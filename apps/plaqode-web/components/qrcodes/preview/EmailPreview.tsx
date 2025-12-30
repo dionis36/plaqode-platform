@@ -1,3 +1,5 @@
+'use client';
+
 import { Mail, User, FileText, Users, Eye } from 'lucide-react';
 
 export function EmailPreview({ data }: { data: any }) {

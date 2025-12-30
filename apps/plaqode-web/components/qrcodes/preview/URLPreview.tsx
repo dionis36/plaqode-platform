@@ -1,3 +1,5 @@
+'use client';
+
 import { ExternalLink, ArrowRight } from 'lucide-react';
 
 interface URLPreviewProps {

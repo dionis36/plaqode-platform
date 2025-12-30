@@ -1,3 +1,5 @@
+'use client';
+
 import { Calendar, MapPin, Clock, User, Mail, Globe, Bell, FileText } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import { useEffect } from 'react';

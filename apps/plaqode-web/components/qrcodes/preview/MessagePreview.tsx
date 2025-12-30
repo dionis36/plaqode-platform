@@ -1,3 +1,5 @@
+'use client';
+
 import { MessageSquare, Phone, User, Mail, Smartphone, Send } from 'lucide-react';
 
 export function MessagePreview({ data }: { data: any }) {

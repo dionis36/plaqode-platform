@@ -8,6 +8,14 @@ const nextConfig = {
         config.externals = [...config.externals, { canvas: "canvas" }];
         return config;
     },
+    async rewrites() {
+        return [
+            {
+                source: '/q/:path*',
+                destination: `${process.env.NEXT_PUBLIC_QRSTUDIO_API_URL || 'http://localhost:3005'}/:path*`,
+            },
+        ];
+    },
 };
 
 export default nextConfig;

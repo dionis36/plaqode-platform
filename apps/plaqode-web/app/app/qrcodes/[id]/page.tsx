@@ -61,7 +61,9 @@ export default function QrCodeDetailPage({ params }: { params: { id: string } })
     }
 
     function generateQrCode(data: QrCodeDetail) {
-        const qrUrl = `https://qrstudio.app/q/${data.shortcode}`;
+        // Use configured app URL or fallback to window origin
+        const baseUrl = process.env.NEXT_PUBLIC_APP_URL || (typeof window !== 'undefined' ? window.location.origin : 'https://plaqode.com');
+        const qrUrl = `${baseUrl}/q/${data.shortcode}`;
 
         const qr = new QRCodeStyling({
             width: 300,
@@ -230,7 +232,9 @@ export default function QrCodeDetailPage({ params }: { params: { id: string } })
 
                     {/* URL Row with Action Buttons */}
                     <div className="flex items-center justify-between">
-                        <p className="text-sm sm:text-base text-slate-600">qrstudio.app/q/{qrCode.shortcode}</p>
+                        <p className="text-sm sm:text-base text-slate-600">
+                            {(process.env.NEXT_PUBLIC_APP_URL || 'https://plaqode.com').replace(/^https?:\/\//, '')}/q/{qrCode.shortcode}
+                        </p>
 
                         {/* Icon-Only Action Buttons */}
                         <div className="flex gap-2">
@@ -352,12 +356,12 @@ export default function QrCodeDetailPage({ params }: { params: { id: string } })
                                     <dt className="text-sm font-medium text-slate-600">Public URL</dt>
                                     <dd className="mt-1">
                                         <a
-                                            href={`https://qrstudio.app/q/${qrCode.shortcode}`}
+                                            href={`${process.env.NEXT_PUBLIC_APP_URL || 'https://plaqode.com'}/q/${qrCode.shortcode}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="text-sm text-blue-600 hover:underline"
                                         >
-                                            https://qrstudio.app/q/{qrCode.shortcode}
+                                            {process.env.NEXT_PUBLIC_APP_URL || 'https://plaqode.com'}/q/{qrCode.shortcode}
                                         </a>
                                     </dd>
                                 </div>

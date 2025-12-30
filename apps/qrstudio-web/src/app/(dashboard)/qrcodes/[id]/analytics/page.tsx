@@ -201,7 +201,7 @@ export default function AnalyticsPage({ params }: { params: { id: string } }) {
                                         cx="50%"
                                         cy="50%"
                                         outerRadius={80}
-                                        label={(entry) => `${entry.device}: ${entry.count}`}
+                                        label={(props) => `${props.payload.device}: ${props.payload.count}`}
                                     >
                                         {analytics.deviceBreakdown.map((entry, index) => (
                                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />

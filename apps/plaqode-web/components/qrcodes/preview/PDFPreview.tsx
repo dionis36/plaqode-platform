@@ -1,3 +1,5 @@
+'use client';
+
 import { FileText, ExternalLink, File, FileImage, FileArchive, FileCode, Music, Video } from 'lucide-react';
 import { useState, useEffect, useCallback } from 'react';
 

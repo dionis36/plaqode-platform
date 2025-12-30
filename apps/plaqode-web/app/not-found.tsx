@@ -1,7 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { GradientButton } from "@plaqode-platform/ui";
 import { ArrowLeft, Home } from "lucide-react";
 
 export default function NotFound() {

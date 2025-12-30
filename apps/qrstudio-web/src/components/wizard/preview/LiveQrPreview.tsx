@@ -20,13 +20,15 @@ export function LiveQrPreview() {
 
             // IMPORTANT: QR code should ALWAYS encode the shortcode URL
             // In edit mode, use existing shortcode; in create mode, use placeholder
+            const baseUrl = process.env.NEXT_PUBLIC_PLATFORM_URL || 'https://plaqode.com';
+
             let content = '';
             if (editMode && shortcode) {
                 // Edit mode: Use actual shortcode
-                content = `https://qrstudio.app/q/${shortcode}`;
+                content = `${baseUrl}/q/${shortcode}`;
             } else {
                 // Create mode: Use placeholder (will be replaced with real shortcode after creation)
-                content = 'https://qrstudio.app';
+                content = baseUrl;
             }
 
             // Create or update QR code

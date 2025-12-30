@@ -1,4 +1,6 @@
-import { Store, Smartphone } from 'lucide-react';
+'use client';
+
+import { Download, Star, Globe, Smartphone, Tablet, Clock, ShieldCheck, Store } from 'lucide-react';
 
 export function AppStorePreview({ data }: { data: any }) {
 

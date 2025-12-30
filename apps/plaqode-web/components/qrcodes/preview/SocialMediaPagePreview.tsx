@@ -1,3 +1,5 @@
+'use client';
+
 import { User, Share2, ChevronRight } from 'lucide-react';
 import {
     FaInstagram, FaFacebook, FaYoutube, FaTiktok, FaLinkedin,

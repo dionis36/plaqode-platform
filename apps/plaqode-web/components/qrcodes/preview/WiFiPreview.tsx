@@ -1,3 +1,5 @@
+'use client';
+
 import { Wifi, Lock, Shield, Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
 

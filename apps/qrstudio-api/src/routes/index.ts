@@ -12,6 +12,7 @@ export async function routes(fastify: FastifyInstance) {
 
     // Register redirect routes (no /api prefix - handled at root level)
     // This will be registered separately in app.ts
+    fastify.register(redirectRoutes);
 
     // Health check
     fastify.get('/health', async () => {
