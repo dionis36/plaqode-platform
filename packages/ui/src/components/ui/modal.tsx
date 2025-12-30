@@ -73,7 +73,7 @@ export function Modal({
 
     return createPortal(
         <div
-            className="fixed inset-0 z-[9999] flex items-center justify-center animate-in fade-in duration-200 p-4"
+            className="fixed inset-0 z-[9999] flex items-center justify-center animate-in fade-in duration-300 ease-out p-4"
             onClick={handleBackdropClick}
             style={{
                 backgroundColor: 'rgba(0, 0, 0, 0.4)',
@@ -84,7 +84,7 @@ export function Modal({
             <div
                 ref={modalRef}
                 className={clsx(
-                    "bg-white rounded-2xl shadow-2xl w-full mx-auto animate-in zoom-in-95 duration-200 relative max-h-[90vh] flex flex-col",
+                    "bg-white rounded-2xl shadow-2xl w-full mx-auto animate-in zoom-in-95 duration-300 ease-out relative max-h-[90vh] flex flex-col",
                     sizeClasses[size]
                 )}
                 onClick={(e) => e.stopPropagation()}

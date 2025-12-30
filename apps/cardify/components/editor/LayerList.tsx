@@ -7,7 +7,7 @@ import React, { useState, useMemo } from "react";
 import { ChevronDown, ChevronRight, Eye, EyeOff, Lock, Unlock, Trash2, Folder, FolderOpen, Check, Layers, Type, Image as ImageIcon, Move } from "lucide-react";
 import LayerSearchBar from "./LayerSearchBar";
 import BulkActionsToolbar from "./BulkActionsToolbar";
-import ConfirmationModal from "../ui/ConfirmationModal";
+import { ConfirmationModal } from "@plaqode-platform/ui";
 
 
 interface LayerListProps {

@@ -24,10 +24,10 @@ import QRCodeDesigner from "@/components/editor/QRCodeDesigner";
 import ShortcutsReference from "@/components/editor/ShortcutsReference";
 import ZoomControls from "@/components/editor/ZoomControls";
 
-import ConfirmationModal from "@/components/ui/ConfirmationModal";
+import { ConfirmationModal, toast } from "@plaqode-platform/ui";
 import ExportModal from "@/components/editor/ExportModal";
 import { ExportAuthModal } from "@/components/auth/ExportAuthModal";
-import { toast } from "@plaqode-platform/ui";
+
 
 // Auth
 import { useAuth } from '@/lib/auth-context';

@@ -95,7 +95,7 @@ export function ConfirmationModal({
 
     return createPortal(
         <div
-            className="fixed inset-0 z-[9999] flex items-center justify-center animate-in fade-in duration-200"
+            className="fixed inset-0 z-[9999] flex items-center justify-center animate-in fade-in duration-300 ease-out"
             onClick={handleBackdropClick}
             style={{
                 backgroundColor: 'rgba(0, 0, 0, 0.4)',
@@ -105,7 +105,7 @@ export function ConfirmationModal({
         >
             <div
                 ref={modalRef}
-                className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 animate-in zoom-in-95 duration-200"
+                className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 animate-in zoom-in-95 duration-300 ease-out"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Icon and Title */}
