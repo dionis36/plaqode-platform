@@ -184,9 +184,9 @@ export function AppStorePreview({ data }: { data: any }) {
                 {/* Download Buttons */}
                 {platforms.length > 0 && (
                     <div className="space-y-3 pt-1">
-                        {platforms.map((platform, index) => (
+                        {platforms.map((platform: any, index: number) => (
                             <div key={index} className="cursor-pointer transform hover:scale-[1.02] transition-transform">
-                                {platformBadges[platform.platform]?.badge}
+                                {platformBadges[platform.platform as keyof typeof platformBadges]?.badge}
                             </div>
                         ))}
                     </div>

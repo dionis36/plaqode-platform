@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import QRCodeStyling from 'qr-code-styling';
 import { QrContentPreviewModal } from '@/components/common/QrContentPreviewModal';
-import { ConfirmationModal } from '@/components/common/ConfirmationModal';
+import { ConfirmationModal, toast } from "@plaqode-platform/ui";
 
 interface QrCodeDetail {
     id: string;
@@ -125,7 +125,7 @@ export default function QrCodeDetailPage({ params }: { params: { id: string } })
             }
         } catch (error) {
             console.error('Failed to download QR code:', error);
-            alert('Failed to download QR code');
+            toast.error('Failed to download QR code');
         }
     }
 
@@ -137,7 +137,7 @@ export default function QrCodeDetailPage({ params }: { params: { id: string } })
             loadQrCode(); // Reload
         } catch (error) {
             console.error('Failed to update status:', error);
-            alert('Failed to update status');
+            toast.error('Failed to update status');
         }
     }
 
@@ -151,10 +151,11 @@ export default function QrCodeDetailPage({ params }: { params: { id: string } })
         try {
             setIsDeleting(true);
             await qrApi.delete(qrCode.id);
+            toast.success("QR Code deleted successfully");
             router.push('/app/qrcodes');
         } catch (error) {
             console.error('Failed to delete QR code:', error);
-            alert('Failed to delete QR code');
+            toast.error('Failed to delete QR code');
         } finally {
             setIsDeleting(false);
         }
@@ -372,7 +373,7 @@ export default function QrCodeDetailPage({ params }: { params: { id: string } })
                     title="Delete QR Code"
                     message="Are you sure you want to delete this QR code? This action cannot be undone and the QR code will stop working immediately."
                     confirmText="Delete"
-                    isDestructive={true}
+                    variant="danger"
                     isLoading={isDeleting}
                 />
 

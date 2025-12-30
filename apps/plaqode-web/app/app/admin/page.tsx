@@ -267,8 +267,101 @@ export default function AdminPage() {
                         </div>
                     )}
 
-                    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-                        <div className="overflow-x-auto">
+                    <div className="bg-white rounded-xl border border-gray-200">
+                        {/* Mobile Card View */}
+                        <div className="lg:hidden divide-y divide-gray-200">
+                            {filteredUsers.map((u) => (
+                                <div key={u.id} className="p-4 space-y-4">
+                                    <div className="flex justify-between items-start">
+                                        <div>
+                                            <div className="text-sm font-semibold text-gray-900">{u.name || 'Unnamed User'}</div>
+                                            <div className="text-xs text-gray-500">{u.email}</div>
+                                            <div className="text-xs text-slate-400 mt-1">{new Date(u.createdAt).toLocaleDateString()}</div>
+                                        </div>
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setOpenActionMenu(openActionMenu === u.id ? null : u.id);
+                                            }}
+                                            className="p-1 text-gray-400 hover:text-gray-600"
+                                        >
+                                            <div className="relative">
+                                                <div className="p-2 bg-gray-100 rounded-lg">
+                                                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                                                    </svg>
+                                                </div>
+                                                {openActionMenu === u.id && (
+                                                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 z-50">
+                                                        {isSuperAdmin && (
+                                                            <button
+                                                                onClick={() => {
+                                                                    setSelectedUser(u);
+                                                                    setShowRoleModal(true);
+                                                                    setOpenActionMenu(null);
+                                                                }}
+                                                                className="w-full text-left px-4 py-3 text-sm text-gray-900 hover:bg-gray-50 flex items-center gap-2 border-b border-gray-100"
+                                                            >
+                                                                Assign Role
+                                                            </button>
+                                                        )}
+                                                        <button
+                                                            onClick={() => {
+                                                                setSelectedUser(u);
+                                                                setShowProductModal(true);
+                                                                setOpenActionMenu(null);
+                                                            }}
+                                                            className="w-full text-left px-4 py-3 text-sm text-gray-900 hover:bg-gray-50 flex items-center gap-2 border-b border-gray-100"
+                                                        >
+                                                            Grant Product
+                                                        </button>
+                                                        {isSuperAdmin && (
+                                                            <button
+                                                                onClick={() => {
+                                                                    setSelectedUser(u);
+                                                                    setShowDeleteModal(true);
+                                                                    setOpenActionMenu(null);
+                                                                }}
+                                                                className="w-full text-left px-4 py-3 text-sm hover:bg-red-50 text-red-600 flex items-center gap-2"
+                                                            >
+                                                                Delete User
+                                                            </button>
+                                                        )}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </button>
+                                    </div>
+
+                                    <div className="flex flex-wrap gap-2">
+                                        {/* Roles */}
+                                        {u.roles.map((role) => (
+                                            <div key={role} className="flex items-center gap-1">
+                                                <span className={`px-2 py-1 text-xs rounded-full border ${role === 'superadmin' ? 'bg-red-50 text-red-700 border-red-200' : role === 'admin' ? 'bg-purple-50 text-purple-700 border-purple-200' : 'bg-slate-50 text-slate-700 border-slate-200'}`}>
+                                                    {role}
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <div className="flex flex-wrap gap-2">
+                                        {/* Products */}
+                                        {u.products && u.products.length > 0 ? (
+                                            u.products.filter(p => p).map((product, idx) => (
+                                                <span key={idx} className="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-full border border-blue-200">
+                                                    {product}
+                                                </span>
+                                            ))
+                                        ) : (
+                                            <span className="text-xs text-gray-400">No products</span>
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Desktop Table */}
+                        <div className="hidden lg:block overflow-x-auto">
                             <table className="w-full">
                                 <thead className="bg-gray-50 border-b border-gray-200">
                                     <tr>

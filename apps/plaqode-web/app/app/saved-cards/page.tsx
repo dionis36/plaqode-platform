@@ -110,14 +110,12 @@ export default function SavedCardsPage() {
                         <Layout className="w-16 h-16 mx-auto text-slate-300 mb-4" />
                         <h3 className="text-lg font-semibold text-slate-900 mb-2">No saved designs yet</h3>
                         <p className="text-slate-600 mb-6">Start creating beautiful business cards</p>
-                        <a
-                            href={`${process.env.NEXT_PUBLIC_CARDIFY_URL || 'http://localhost:3002'}/templates`}
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
-                        >
-                            <Layout className="w-5 h-5" />
-                            Create Your First Design
-                        </a>
+                        <div className="flex justify-center">
+                            <GradientButton
+                                href={`${process.env.NEXT_PUBLIC_CARDIFY_URL || 'http://localhost:3002'}/templates`}
+                                text="Create Your First Design"
+                            />
+                        </div>
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-12">

@@ -38,8 +38,8 @@ export function EmailPreview({ data }: { data: any }) {
     };
 
     // Parse CC/BCC emails
-    const ccEmails = additionalRecipients.cc?.split(',').map(e => e.trim()).filter(e => e) || [];
-    const bccEmails = additionalRecipients.bcc?.split(',').map(e => e.trim()).filter(e => e) || [];
+    const ccEmails = additionalRecipients.cc?.split(',').map((e: string) => e.trim()).filter((e: string) => e) || [];
+    const bccEmails = additionalRecipients.bcc?.split(',').map((e: string) => e.trim()).filter((e: string) => e) || [];
 
     return (
         <div
@@ -140,7 +140,7 @@ export function EmailPreview({ data }: { data: any }) {
                             <Users style={{ width: '1rem', height: '1rem' }} /> CC
                         </h3>
                         <div className="space-y-1">
-                            {ccEmails.map((email, idx) => (
+                            {ccEmails.map((email: string, idx: number) => (
                                 <p key={idx} className="text-gray-700" style={{ fontSize: '0.875rem', wordBreak: 'break-all' }}>
                                     {email}
                                 </p>
@@ -159,7 +159,7 @@ export function EmailPreview({ data }: { data: any }) {
                             <Eye style={{ width: '1rem', height: '1rem' }} /> BCC
                         </h3>
                         <div className="space-y-1">
-                            {bccEmails.map((email, idx) => (
+                            {bccEmails.map((email: string, idx: number) => (
                                 <p key={idx} className="text-gray-700" style={{ fontSize: '0.875rem', wordBreak: 'break-all' }}>
                                     {email}
                                 </p>

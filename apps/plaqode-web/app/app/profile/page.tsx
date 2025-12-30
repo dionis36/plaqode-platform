@@ -2,7 +2,7 @@
 
 import { useAuth } from '@/lib/auth-context';
 import { useState } from 'react';
-import { GradientButton, toast } from "@plaqode-platform/ui";
+import { GradientButton, toast, Input } from "@plaqode-platform/ui";
 
 export default function ProfilePage() {
     const { user } = useAuth();
@@ -57,46 +57,41 @@ export default function ProfilePage() {
                     {editing ? (
                         <form onSubmit={handleUpdateProfile} className="space-y-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
-                                    Name
-                                </label>
-                                <input
+                                <Input
+                                    label="Name"
                                     type="text"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-500"
                                     placeholder="Your name"
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
-                                    Email
-                                </label>
-                                <input
+                                <Input
+                                    label="Email"
                                     type="email"
                                     value={user.email}
                                     disabled
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-500"
+                                    className="bg-gray-100 text-gray-500"
                                 />
                                 <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
                             </div>
 
                             <div className="flex gap-3">
-                                <button
+                                <GradientButton
                                     type="submit"
+                                    text={loading ? 'Saving...' : 'Save Changes'}
                                     disabled={loading}
-                                    className="px-6 py-2.5 bg-black text-white rounded-full font-bold hover:opacity-90 transition disabled:opacity-50 shadow-lg text-sm"
-                                >
-                                    {loading ? 'Saving...' : 'Save Changes'}
-                                </button>
+                                    size="md"
+                                    bold
+                                />
                                 <button
                                     type="button"
                                     onClick={() => {
                                         setEditing(false);
                                         setName(user.name || '');
                                     }}
-                                    className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition"
+                                    className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition h-10"
                                 >
                                     Cancel
                                 </button>

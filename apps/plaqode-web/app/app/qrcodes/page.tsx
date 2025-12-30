@@ -5,7 +5,7 @@ import { qrApi } from '@/lib/api-client';
 import { QrCode, Search, Filter, BarChart2, Edit, Trash2, Smartphone } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { QrContentPreviewModal } from '@/components/common/QrContentPreviewModal';
-import { GradientButton, toast, ConfirmationModal } from "@plaqode-platform/ui";
+import { GradientButton, toast, ConfirmationModal, Input } from "@plaqode-platform/ui";
 
 interface QrCodeItem {
     id: string;
@@ -160,15 +160,14 @@ export default function QrCodesPage() {
                     {/* Search */}
                     <div className="relative">
                         <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
-                        <input
-                            type="text"
+                        <Input
                             placeholder="Search QR codes..."
                             value={search}
                             onChange={(e) => {
                                 setSearch(e.target.value);
                                 setPage(1);
                             }}
-                            className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-1 focus:ring-secondary focus:border-secondary transition-all text-sm sm:text-base text-dark placeholder:text-gray-500 font-sans font-medium"
+                            className="pl-12 bg-gray-50/50 focus-visible:ring-blue-600"
                         />
                     </div>
 
@@ -181,7 +180,7 @@ export default function QrCodesPage() {
                                 setTypeFilter(e.target.value);
                                 setPage(1);
                             }}
-                            className="w-full pl-12 pr-10 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none cursor-pointer transition-all text-sm sm:text-base shadow-sm hover:border-slate-300"
+                            className="w-full pl-12 pr-10 h-11 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent appearance-none cursor-pointer transition-all text-sm sm:text-base hover:border-slate-300"
                         >
                             <option value="">All Types</option>
                             <option value="menu">Menu</option>
@@ -214,13 +213,12 @@ export default function QrCodesPage() {
                         <QrCode className="w-16 h-16 text-slate-300 mx-auto mb-4" />
                         <h3 className="text-lg font-semibold text-slate-900 mb-2">No QR codes found</h3>
                         <p className="text-slate-600 mb-6">Create your first QR code to get started</p>
-                        <a
-                            href={`${qrStudioUrl}/create`}
-                            className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
-                        >
-                            <QrCode className="w-5 h-5" />
-                            Create QR Code
-                        </a>
+                        <div className="flex justify-center">
+                            <GradientButton
+                                href={`${qrStudioUrl}/create`}
+                                text="Create QR Code"
+                            />
+                        </div>
                     </div>
                 ) : (
                     <>

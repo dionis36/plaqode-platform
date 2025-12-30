@@ -47,7 +47,7 @@ export function MessagePreview({ data }: { data: any }) {
         telegram: { Icon: Send, name: 'Telegram', action: 'Open Telegram' }
     };
 
-    const currentPlatform = platformData[platform];
+    const currentPlatform = platformData[platform as keyof typeof platformData] || platformData.sms;
     const PlatformIcon = currentPlatform.Icon;
 
     return (

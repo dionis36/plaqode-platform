@@ -167,7 +167,7 @@ export function SocialMediaPagePreview({ data }: { data: any }) {
                 {/* Social Links - Enhanced Cards */}
                 <div className="space-y-3 px-6 pb-8">
                     {socialLinks.length > 0 ? (
-                        socialLinks.map((link, index) => {
+                        socialLinks.map((link: any, index: number) => {
                             const platform = SOCIAL_PLATFORMS[link.platform as keyof typeof SOCIAL_PLATFORMS];
                             if (!platform) return null;
 
