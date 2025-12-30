@@ -23,7 +23,7 @@ export default function WhyChooseSection() {
                         className="p-8 sm:p-10"
                     >
                         <div className="max-w-xs relative z-20">
-                            <h2 className="text-left text-balance text-2xl lg:text-3xl font-semibold tracking-[-0.015em] text-white">
+                            <h2 className="font-merriweather text-left text-balance text-2xl lg:text-3xl font-semibold tracking-[-0.015em] text-white">
                                 Secure & Authentic
                             </h2>
                             <p className="mt-4 text-left text-base/6 text-neutral-200">
@@ -40,7 +40,7 @@ export default function WhyChooseSection() {
                         className="p-8 sm:p-10"
                     >
                         <div className="max-w-full relative z-20">
-                            <h2 className="text-left text-balance text-2xl lg:text-3xl font-semibold tracking-[-0.015em] text-white">
+                            <h2 className="font-merriweather text-left text-balance text-2xl lg:text-3xl font-semibold tracking-[-0.015em] text-white">
                                 Customizable
                             </h2>
                             <p className="mt-4 text-left text-base/6 text-neutral-200">
@@ -56,7 +56,7 @@ export default function WhyChooseSection() {
                         className="p-8 sm:p-10"
                     >
                         <div className="max-w-full relative z-20">
-                            <h2 className="text-left text-balance text-2xl lg:text-3xl font-semibold tracking-[-0.015em] text-white">
+                            <h2 className="font-merriweather text-left text-balance text-2xl lg:text-3xl font-semibold tracking-[-0.015em] text-white">
                                 Analytics
                             </h2>
                             <p className="mt-4 text-left text-base/6 text-neutral-200">
@@ -72,7 +72,7 @@ export default function WhyChooseSection() {
                         className="p-8 sm:p-10"
                     >
                         <div className="max-w-full relative z-20">
-                            <h2 className="text-left text-balance text-2xl lg:text-3xl font-semibold tracking-[-0.015em] text-white">
+                            <h2 className="font-merriweather text-left text-balance text-2xl lg:text-3xl font-semibold tracking-[-0.015em] text-white">
                                 Data Privacy
                             </h2>
                             <p className="mt-4 text-left text-base/6 text-neutral-200">
@@ -88,7 +88,7 @@ export default function WhyChooseSection() {
                         className="p-8 sm:p-10"
                     >
                         <div className="max-w-full relative z-20">
-                            <h2 className="text-left text-balance text-2xl lg:text-3xl font-semibold tracking-[-0.015em] text-white">
+                            <h2 className="font-merriweather text-left text-balance text-2xl lg:text-3xl font-semibold tracking-[-0.015em] text-white">
                                 Mobile-First
                             </h2>
                             <p className="mt-4 text-left text-base/6 text-neutral-200">
@@ -104,7 +104,7 @@ export default function WhyChooseSection() {
                         className="p-8 sm:p-10"
                     >
                         <div className="max-w-xs relative z-20">
-                            <h2 className="text-left text-balance text-2xl lg:text-3xl font-semibold tracking-[-0.015em] text-white">
+                            <h2 className="font-merriweather text-left text-balance text-2xl lg:text-3xl font-semibold tracking-[-0.015em] text-white">
                                 Local Support
                             </h2>
                             <p className="mt-4 text-left text-base/6 text-neutral-200">
