@@ -7,7 +7,7 @@ This guide details the specific environment variables and configurations require
 
 | Variable Name | Local Value (`.env.local`) | Production Value (Vercel Settings) | Description |
 | :--- | :--- | :--- | :--- |
-| `NEXT_PUBLIC_APP_URL` | `http://localhost:3000` | `https://plaqode.com` | Used to generate QR code links (e.g., `plaqode.com/q/abc`). |
+| `NEXT_PUBLIC_APP_URL` | `http://localhost:3000` | `https://plaqode.com` | **CRITICAL:** Used to generate the visible QR code links (e.g., `plaqode.com/r/abc`). Must match `FRONTEND_URL` in backend. |
 | `NEXT_PUBLIC_QRSTUDIO_API_URL` | `http://localhost:3005` | `https://api.plaqode.com` | Used by the Frontend to talk to the API and for URL rewrites. |
 
 ### Configuration Files
@@ -25,7 +25,7 @@ This guide details the specific environment variables and configurations require
 | :--- | :--- | :--- | :--- |
 | `HOST` | `0.0.0.0` | `0.0.0.0` | Binding address (required for most cloud containers). |
 | `PORT` | `3005` | `3005` (or provided by host) | The port the API listens on. |
-| `FRONTEND_URL` | `http://localhost:3000` | `https://plaqode.com` | **UPDATED:** Points to the MAIN APP (plaqode-web), which now handles `/r/...` redirects. |
+| `FRONTEND_URL` | `http://localhost:3000` | `https://plaqode.com` | **CRITICAL:** Points to the MAIN APP (plaqode-web). The API redirects scanned users here (e.g., `https://plaqode.com/r/abc`). |
 | `DATABASE_URL` | `postgresql://...` | `postgresql://...` | Connection string to your Production Database (Supabase/Neon/Railway). |
 
 ### Important Backend Notes
@@ -48,6 +48,6 @@ This guide details the specific environment variables and configurations require
 
 | Variable Name | Local Value (`.env.local`) | Production Value (Vercel Settings) | Description |
 | :--- | :--- | :--- | :--- |
-| `NEXT_PUBLIC_PLATFORM_URL` | `http://localhost:3000` | `https://plaqode.com` | **CRITICAL**: The generated QR codes will point to this URL. |
+| `NEXT_PUBLIC_PLATFORM_URL` | `http://localhost:3000` | `https://plaqode.com` | **CRITICAL**: The generated QR codes will point to this URL (e.g. `plaqode.com/r/...`). Must match `FRONTEND_URL` in backend. |
 | `NEXT_PUBLIC_API_URL` | `http://localhost:3005` | `https://api.plaqode.com` | Backend API URL. |
 | `NEXT_PUBLIC_APP_URL` | `http://localhost:3001` | `https://create.plaqode.com` (or similar) | The URL of this creator app itself. |
