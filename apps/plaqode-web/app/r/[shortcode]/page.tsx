@@ -121,8 +121,14 @@ export default async function ViewerPage({ params }: ViewerPageProps) {
     };
 
     return (
-        <div className="min-h-screen bg-slate-100 flex justify-center">
-            <div className="w-full max-w-md bg-white min-h-screen shadow-2xl overflow-hidden relative">
+        <div className="min-h-screen flex justify-center bg-gray-50 relative selection:bg-blue-100">
+            {/* Desktop Background Pattern */}
+            <div className="absolute inset-0 z-0 opacity-40 pointer-events-none" style={{
+                backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)',
+                backgroundSize: '24px 24px'
+            }}></div>
+
+            <div className="w-full max-w-md bg-white min-h-screen shadow-2xl overflow-hidden relative z-10 sm:my-8 sm:min-h-[calc(100vh-4rem)] sm:rounded-[2.5rem] sm:border-[8px] sm:border-slate-800/5 ring-1 ring-slate-900/5">
                 {renderContent()}
             </div>
         </div>
