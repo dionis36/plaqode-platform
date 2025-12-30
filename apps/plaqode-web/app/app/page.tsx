@@ -5,6 +5,7 @@ import { StatsOverview } from '@/components/dashboard/widgets/StatsOverview';
 import { RecentQrWidget } from '@/components/dashboard/widgets/RecentQrWidget';
 import { RecentDesignsWidget } from '@/components/dashboard/widgets/RecentDesignsWidget';
 import { QuickActionsWidget } from '@/components/dashboard/widgets/QuickActionsWidget';
+import { ProfileWidget } from '@/components/dashboard/widgets/ProfileWidget';
 import { useState, useEffect } from 'react';
 import { qrApi } from '@/lib/api-client';
 import { ConfirmationModal, toast } from '@plaqode-platform/ui';
@@ -37,7 +38,7 @@ export default function DashboardPage() {
             // 1. Fetch QR Stats & Recent QRs
             const [qrStatsRes, qrListRes] = await Promise.all([
                 qrApi.getDashboardStats().catch(() => ({ success: false, data: null })),
-                qrApi.list({ limit: 5 }).catch(() => ({ success: false, data: [] }))
+                qrApi.list({ limit: 4 }).catch(() => ({ success: false, data: [] }))
             ]);
 
             // 2. Fetch Designs (Saved Cards)
@@ -156,11 +157,6 @@ export default function DashboardPage() {
             {/* 3. Main Actions & Widgets Stack */}
             <div className="space-y-8 mt-8">
 
-                {/* Quick Actions - Full width strip */}
-                <div className="w-full">
-                    <QuickActionsWidget />
-                </div>
-
                 {/* Recent QRs - Full Width */}
                 <RecentQrWidget
                     qrCodes={data.recentQrs}
@@ -175,6 +171,12 @@ export default function DashboardPage() {
                     loading={loading}
                     onDelete={(id, name) => setDesignToDelete({ id, name })}
                 />
+
+                {/* Bottom Row: Profile + Quick Actions */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <ProfileWidget />
+                    <QuickActionsWidget />
+                </div>
             </div>
 
             {/* Modals */}

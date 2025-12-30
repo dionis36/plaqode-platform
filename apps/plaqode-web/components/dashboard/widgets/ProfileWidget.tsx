@@ -10,63 +10,51 @@ export function ProfileWidget() {
     if (!user) return null;
 
     return (
-        <div className="grid md:grid-cols-2 gap-6 w-full">
-            {/* Personal Information */}
-            <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">Personal Information</h2>
-                <div className="space-y-4">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-500 mb-1">Name</label>
-                        <p className="text-gray-900 font-medium">{user.name}</p>
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-500 mb-1">Email</label>
-                        <p className="text-gray-900">{user.email}</p>
-                    </div>
-                    <div>
-                        <Link href="/app/profile">
-                            <span className="inline-flex items-center justify-center rounded-lg text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-slate-200 bg-white hover:bg-slate-100 hover:text-slate-900 h-9 px-4 py-2 mt-2">
-                                Edit Profile
+        <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow h-full">
+            <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold text-gray-900">My Profile</h2>
+                <Link href="/app/profile">
+                    <Settings className="w-5 h-5 text-gray-400 hover:text-gray-600 transition-colors" />
+                </Link>
+            </div>
+
+            <div className="flex items-start gap-4 mb-6">
+                <GradientAvatar user={user} className="w-16 h-16 text-2xl" />
+                <div>
+                    <h3 className="font-bold text-lg text-gray-900">{user.name}</h3>
+                    <p className="text-gray-500 text-sm">{user.email}</p>
+
+                    <div className="flex gap-2 mt-2">
+                        {user.roles?.slice(0, 2).map((role: string) => (
+                            <span key={role} className="px-2 py-0.5 bg-purple-100 text-purple-700 text-xs rounded-full font-medium capitalize">
+                                {role}
                             </span>
-                        </Link>
+                        ))}
                     </div>
                 </div>
             </div>
 
-            {/* Account Details */}
-            <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">Account Details</h2>
-                <div className="space-y-4">
+            <div className="pt-4 border-t border-gray-100">
+                <div className="grid grid-cols-2 gap-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-500 mb-1">User ID</label>
-                        <p className="text-gray-900 font-mono text-sm break-all">{user.id}</p>
+                        <p className="text-xs text-gray-500 uppercase font-semibold mb-1">User ID</p>
+                        <p className="text-sm font-mono text-gray-700 truncate" title={user.id}>{user.id}</p>
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-500 mb-1">Roles</label>
-                        <div className="flex gap-2 flex-wrap">
-                            {user.roles?.map((role: string) => (
-                                <span key={role} className="px-3 py-1 bg-purple-100 text-purple-700 text-sm rounded-full font-medium">
-                                    {role}
-                                </span>
-                            ))}
+                        <p className="text-xs text-gray-500 uppercase font-semibold mb-1">Plan</p>
+                        <div className="flex items-center gap-1 text-sm text-gray-700">
+                            <Award className="w-4 h-4 text-yellow-500" />
+                            <span>Pro</span>
                         </div>
                     </div>
-                    {user.products && (
-                        <div>
-                            <label className="block text-sm font-medium text-gray-500 mb-1">Product Access</label>
-                            <div className="flex gap-2 flex-wrap">
-                                {user.products.length > 0 ? (
-                                    user.products.map((product: string) => (
-                                        <span key={product} className="px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-full font-medium">
-                                            {product}
-                                        </span>
-                                    ))
-                                ) : <span className="text-sm text-slate-400">No products</span>}
-                            </div>
-                        </div>
-                    )}
                 </div>
             </div>
+
+            <Link href="/app/profile" className="block mt-6">
+                <button className="w-full py-2 px-4 bg-slate-50 hover:bg-slate-100 text-slate-700 font-medium rounded-lg border border-slate-200 transition-colors text-sm">
+                    Manage Account
+                </button>
+            </Link>
         </div>
     );
 }

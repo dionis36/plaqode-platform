@@ -44,7 +44,7 @@ export function RecentDesignsWidget({ designs, loading, onDelete }: RecentDesign
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        {designs.slice(0, 8).map((design: any) => (
+                        {designs.slice(0, 4).map((design: any) => (
                             <SavedCard
                                 key={design.id}
                                 design={design}
