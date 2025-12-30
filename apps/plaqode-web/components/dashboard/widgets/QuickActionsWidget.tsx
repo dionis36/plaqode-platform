@@ -14,16 +14,16 @@ export function QuickActionsWidget() {
                 Quick Actions
             </h3>
 
-            <div className="space-y-3">
+            <div className="flex flex-col sm:flex-row gap-4">
                 <GradientButton
                     href={`${qrStudioUrl}/create`}
                     text="Create New QR Code"
-                    className="w-full justify-center"
+                    className="flex-1 justify-center"
                 />
 
                 <a
-                    href={`${cardifyUrl}/templates`}
-                    className="flex items-center justify-center w-full px-6 py-3 rounded-full font-medium transition-all duration-300 bg-white/10 hover:bg-white/20 text-white border border-white/10"
+                    href={`${process.env.NEXT_PUBLIC_CARDIFY_URL || 'http://localhost:3002'}/templates`}
+                    className="flex-1 flex items-center justify-center px-6 py-3 rounded-full font-medium transition-all duration-300 bg-white/10 hover:bg-white/20 text-white border border-white/10"
                 >
                     Create Business Card
                 </a>

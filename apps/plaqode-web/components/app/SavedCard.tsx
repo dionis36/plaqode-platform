@@ -34,7 +34,7 @@ export default function SavedCard({ design, onDelete }: SavedCardProps) {
             <div className="relative bg-transparent rounded-xl overflow-hidden shadow-sm transition-all duration-300">
                 {/* Thumbnail Container - Aspect Ratio 1.75:1 (Standard Business Card) */}
                 <div className="relative aspect-[1.75/1] w-full bg-gray-100 overflow-hidden rounded-xl">
-                    {template ? (
+                    {template && Array.isArray(template.layers) ? (
                         <TemplatePreview template={template} />
                     ) : design.thumbnail ? (
                         <img

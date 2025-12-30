@@ -1,20 +1,24 @@
-'use client';
-
-import { Layout, ArrowRight, CreditCard } from 'lucide-react';
 import Link from 'next/link';
+import { ArrowRight, Layout } from 'lucide-react';
+import SavedCard from '@/components/app/SavedCard';
 
 interface DesignItem {
     id: string;
     name: string;
     updatedAt: string;
+    thumbnail?: string;
+    designData?: any;
+    templateId?: string;
+    userId?: string;
 }
 
 interface RecentDesignsWidgetProps {
     designs: DesignItem[];
     loading: boolean;
+    onDelete?: (id: string, name: string) => void;
 }
 
-export function RecentDesignsWidget({ designs, loading }: RecentDesignsWidgetProps) {
+export function RecentDesignsWidget({ designs, loading, onDelete }: RecentDesignsWidgetProps) {
     return (
         <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden flex flex-col h-full shadow-sm hover:shadow-md transition-shadow">
             <div className="p-6 border-b border-slate-100 flex items-center justify-between">
@@ -27,35 +31,25 @@ export function RecentDesignsWidget({ designs, loading }: RecentDesignsWidgetPro
                 </Link>
             </div>
 
-            <div className="p-6 flex-1">
+            <div className="p-6 flex-1 bg-slate-50/50">
                 {loading ? (
-                    <div className="space-y-3">
-                        {[1, 2].map((i) => (
-                            <div key={i} className="h-16 bg-slate-50 rounded-xl animate-pulse" />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {[1, 2, 3, 4].map((i) => (
+                            <div key={i} className="aspect-[1.75/1] bg-slate-200 rounded-xl animate-pulse" />
                         ))}
                     </div>
                 ) : designs.length === 0 ? (
-                    <div className="text-center text-slate-500 py-4">
+                    <div className="text-center text-slate-500 py-6">
                         <p>No saved designs yet.</p>
                     </div>
                 ) : (
-                    <div className="space-y-4">
-                        {designs.slice(0, 3).map((design) => (
-                            <Link
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {designs.slice(0, 8).map((design: any) => (
+                            <SavedCard
                                 key={design.id}
-                                href={`/app/saved-cards`} // Ideally deep link if possible, but saves-cards is a list
-                                className="flex items-center gap-4 p-3 rounded-xl border border-slate-100 hover:border-blue-100 hover:bg-blue-50/30 transition-all group"
-                            >
-                                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-100 to-blue-50 flex items-center justify-center text-purple-500 group-hover:scale-105 transition-transform">
-                                    <CreditCard size={20} />
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                    <h4 className="font-semibold text-slate-900 truncate group-hover:text-blue-600 transition-colors">{design.name}</h4>
-                                    <p className="text-xs text-slate-500">
-                                        Edited {new Date(design.updatedAt).toLocaleDateString()}
-                                    </p>
-                                </div>
-                            </Link>
+                                design={design}
+                                onDelete={(id, name) => onDelete?.(id, name)}
+                            />
                         ))}
                     </div>
                 )}

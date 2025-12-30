@@ -1,11 +1,12 @@
 'use client';
 
-import { QrCode, ArrowRight } from 'lucide-react';
+import { QrCode, ArrowRight, Smartphone, Trash2, BarChart2, Edit } from 'lucide-react';
 import Link from 'next/link';
 
 interface QrDisplayItem {
     id: string;
     name: string;
+    shortcode?: string;
     type: string;
     scans: number;
     status: boolean;
@@ -15,9 +16,12 @@ interface QrDisplayItem {
 interface RecentQrWidgetProps {
     qrCodes: QrDisplayItem[];
     loading: boolean;
+    onDelete?: (id: string) => void;
+    onPreview?: (id: string) => void;
 }
 
-export function RecentQrWidget({ qrCodes, loading }: RecentQrWidgetProps) {
+export function RecentQrWidget({ qrCodes, loading, onDelete, onPreview }: RecentQrWidgetProps) {
+    const qrStudioUrl = process.env.NEXT_PUBLIC_QRSTUDIO_URL || 'http://localhost:3001';
 
     const getTypeColor = (type: string) => {
         const colors: Record<string, string> = {
@@ -25,7 +29,9 @@ export function RecentQrWidget({ qrCodes, loading }: RecentQrWidgetProps) {
             vcard: 'bg-blue-100 text-blue-700',
             url: 'bg-green-100 text-green-700',
             wifi: 'bg-cyan-100 text-cyan-700',
-            // Add other types as needed, fallback default:
+            text: 'bg-orange-100 text-orange-700',
+            file: 'bg-pink-100 text-pink-700',
+            // Default fallback
         };
         return colors[type.toLowerCase()] || 'bg-slate-100 text-slate-700';
     };
@@ -42,39 +48,90 @@ export function RecentQrWidget({ qrCodes, loading }: RecentQrWidgetProps) {
                 </Link>
             </div>
 
-            <div className="flex-1 overflow-auto">
+            <div className="flex-1 overflow-x-auto">
                 {loading ? (
                     <div className="p-6 space-y-4">
                         {[1, 2, 3].map((i) => (
-                            <div key={i} className="h-12 bg-slate-50 rounded-lg animate-pulse" />
+                            <div key={i} className="h-16 bg-slate-50 rounded-lg animate-pulse" />
                         ))}
                     </div>
                 ) : qrCodes.length === 0 ? (
-                    <div className="p-8 text-center text-slate-500">
+                    <div className="p-12 text-center text-slate-500">
                         <p>No QR codes created yet.</p>
                     </div>
                 ) : (
-                    <table className="w-full text-left text-sm">
-                        <thead className="bg-slate-50 text-slate-500 font-medium">
+                    <table className="w-full text-left text-sm min-w-[600px]">
+                        <thead className="bg-slate-50 text-slate-500 font-medium border-b border-slate-100">
                             <tr>
-                                <th className="px-6 py-3">Name</th>
-                                <th className="px-6 py-3">Type</th>
-                                <th className="px-6 py-3 text-right">Scans</th>
+                                <th className="px-6 py-4">Name</th>
+                                <th className="px-6 py-4">Type</th>
+                                <th className="px-6 py-4">Scans</th>
+                                <th className="px-6 py-4">Status</th>
+                                <th className="px-6 py-4">Created</th>
+                                <th className="px-6 py-4 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100">
                             {qrCodes.map((qr) => (
-                                <tr key={qr.id} className="hover:bg-slate-50/50 transition-colors">
-                                    <td className="px-6 py-4 font-medium text-slate-900">
-                                        <div className="truncate max-w-[150px]">{qr.name}</div>
+                                <tr key={qr.id} className="hover:bg-slate-50/50 transition-colors group">
+                                    <td className="px-6 py-4">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center shrink-0">
+                                                <QrCode className="w-5 h-5 text-slate-500" />
+                                            </div>
+                                            <div>
+                                                <div className="font-medium text-slate-900 truncate max-w-[150px]">{qr.name}</div>
+                                                <div className="text-xs text-slate-500">{qr.shortcode || 'No Code'}</div>
+                                            </div>
+                                        </div>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <span className={`px-2 py-1 rounded-md text-xs font-semibold ${getTypeColor(qr.type)}`}>
+                                        <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${getTypeColor(qr.type)}`}>
                                             {qr.type.toUpperCase()}
                                         </span>
                                     </td>
-                                    <td className="px-6 py-4 text-right font-mono text-slate-600">
+                                    <td className="px-6 py-4 font-mono text-slate-600">
                                         {qr.scans}
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${qr.status ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'}`}>
+                                            {qr.status ? 'Active' : 'Inactive'}
+                                        </span>
+                                    </td>
+                                    <td className="px-6 py-4 text-slate-500">
+                                        {new Date(qr.createdAt).toLocaleDateString()}
+                                    </td>
+                                    <td className="px-6 py-4 text-right">
+                                        <div className="flex items-center justify-end gap-2 opacity-50 group-hover:opacity-100 transition-opacity">
+                                            <button
+                                                onClick={() => onPreview?.(qr.id)}
+                                                className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+                                                title="Preview"
+                                            >
+                                                <Smartphone className="w-4 h-4" />
+                                            </button>
+                                            <a
+                                                href={`${qrStudioUrl}/qrcodes/${qr.id}/analytics`}
+                                                className="p-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+                                                title="Analytics"
+                                            >
+                                                <BarChart2 className="w-4 h-4" />
+                                            </a>
+                                            <a
+                                                href={`${qrStudioUrl}/create/${qr.type}?edit=${qr.id}`}
+                                                className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                                title="Edit"
+                                            >
+                                                <Edit className="w-4 h-4" />
+                                            </a>
+                                            <button
+                                                onClick={() => onDelete?.(qr.id)}
+                                                className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                                title="Delete"
+                                            >
+                                                <Trash2 className="w-4 h-4" />
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}
