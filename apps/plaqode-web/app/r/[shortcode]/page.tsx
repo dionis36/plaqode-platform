@@ -25,7 +25,7 @@ interface ViewerPageProps {
 async function getQRCodeByShortcode(shortcode: string) {
     try {
         const apiUrl = process.env.NEXT_PUBLIC_QRSTUDIO_API_URL || 'http://localhost:3005';
-        const response = await fetch(`${apiUrl}/api/q/${shortcode}`, {
+        const response = await fetch(`${apiUrl}/q/${shortcode}`, {
             cache: 'no-store',
         });
 
