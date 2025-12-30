@@ -1,59 +1,67 @@
 "use client";
 
-import Link from "next/link";
 import { motion } from "framer-motion";
 import { GradientButton } from "@plaqode-platform/ui";
+import { ArrowLeft, Home } from "lucide-react";
 
 export default function NotFound() {
     return (
-        <div className="min-h-screen w-full bg-dark flex items-center justify-center p-4 relative overflow-hidden">
-            {/* Background Effects */}
-            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-                <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-primary/20 rounded-full blur-[128px]" />
-                <div className="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-secondary/20 rounded-full blur-[128px]" />
+        <div className="h-screen w-full bg-[#0a0a0a] flex flex-col items-center justify-center relative overflow-hidden font-sans text-white p-6">
+
+            {/* Background Decor */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-7xl pointer-events-none">
+                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl opacity-50 mix-blend-screen" />
+                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl opacity-50 mix-blend-screen" />
             </div>
 
-            <div className="relative z-10 max-w-2xl w-full text-center">
+            <div className="relative z-10 flex flex-col items-center text-center max-w-md mx-auto">
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
                 >
-                    {/* 404 Text */}
-                    <h1 className="text-[150px] md:text-[200px] font-black leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-primary via-accent to-secondary select-none">
+                    <h1 className="text-[8rem] font-bold leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/10 select-none font-merriweather">
                         404
                     </h1>
                 </motion.div>
 
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.1 }}
-                    className="space-y-6"
+                    className="mt-6 space-y-6"
                 >
-                    <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
-                        Page Not Found
-                    </h2>
+                    <div className="space-y-2">
+                        <h2 className="text-2xl font-medium tracking-tight">
+                            Page not found
+                        </h2>
+                        <p className="text-gray-400 text-base">
+                            The page you are looking for doesn't exist or has been moved.
+                        </p>
+                    </div>
 
-                    <p className="text-lg text-slate-400 max-w-lg mx-auto">
-                        Oops! We can't seem to find the page you're looking for. It might have been moved, deleted, or never existed in the first place.
-                    </p>
-
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
+                    <div className="flex items-center justify-center gap-4 pt-4">
                         <GradientButton
                             href="/"
-                            text="Return Home"
-                            size="lg"
-                            bold
+                            text="Go Home"
+                            size="md"
+                            icon={<Home size={16} />}
                         />
-                        <Link
-                            href="/contact"
-                            className="text-slate-400 hover:text-white transition-colors duration-200 font-medium px-6 py-3"
+
+                        <button
+                            onClick={() => window.history.back()}
+                            className="px-6 py-2.5 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 text-white text-sm font-medium transition-colors flex items-center gap-2"
                         >
-                            Report Issue
-                        </Link>
+                            <ArrowLeft size={16} />
+                            Go Back
+                        </button>
                     </div>
                 </motion.div>
+            </div>
+
+            {/* Minimal Footer */}
+            <div className="absolute bottom-8 text-xs text-gray-700 font-mono">
+                404_ERROR
             </div>
         </div>
     );

@@ -10,6 +10,7 @@ interface GradientButtonProps {
     onClick?: () => void;
     type?: "button" | "submit" | "reset";
     disabled?: boolean;
+    icon?: React.ReactNode;
 }
 
 const sizeStyles = {
@@ -28,9 +29,10 @@ export function GradientButton({
     onClick,
     type = "button",
     disabled = false,
+    icon,
 }: GradientButtonProps) {
     const commonClasses = clsx(
-        "group relative inline-flex items-center justify-center",
+        "group relative inline-flex items-center justify-center gap-2",
         "rounded-lg transition-transform duration-300",
         "hover:scale-[1.03]",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
@@ -44,6 +46,8 @@ export function GradientButton({
         <>
             {/* Gradient border */}
             <span className="absolute inset-0 rounded-lg gradient-border-mask pointer-events-none" />
+            {/* Icon */}
+            {icon && <span className="relative z-10 flex items-center">{icon}</span>}
             {/* Text */}
             <span className="relative z-10 whitespace-nowrap leading-none">
                 {text}

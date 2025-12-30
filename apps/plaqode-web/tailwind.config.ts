@@ -20,15 +20,7 @@ const config: Config = {
                 sans: ["'Open Sans'", "var(--font-sans)", "ui-sans-serif", "system-ui"],
                 merriweather: ["'Merriweather'", "var(--font-merriweather)", "serif"],
             },
-            fontSize: {
-                "display-xl": "var(--text-display-xl)",
-                "display-lg": "var(--text-display-lg)",
-                "display-md": "var(--text-display-md)",
-                // Keep the manual ones if they are used elsewhere
-                "xlg": "4.5rem",
-                "lg": "3rem",
-                "sm-heading": "2.5rem",
-            },
+
             backgroundImage: {
                 "hero-pattern": "url('/img/hero-bg.jpg')",
             },
