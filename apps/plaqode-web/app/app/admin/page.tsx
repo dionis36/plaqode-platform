@@ -4,6 +4,7 @@ import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast, Modal, ConfirmationModal } from "@plaqode-platform/ui";
+import { Shield, ShieldAlert, User as UserIcon, CheckCircle, CreditCard, QrCode, X } from "lucide-react";
 
 interface User {
     id: string;
@@ -428,36 +429,90 @@ export default function AdminPage() {
                     isOpen={showRoleModal && isSuperAdmin}
                     onClose={() => setShowRoleModal(false)}
                     title={`Assign Role to ${selectedUser.name || selectedUser.email}`}
-                    size="sm"
+                    size="md"
                 >
-                    <div className="space-y-3">
-                        <button
-                            onClick={() => assignRole(selectedUser.id, 'superadmin')}
-                            disabled={actionLoading || selectedUser.roles.includes('superadmin')}
-                            className="w-full px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            {selectedUser.roles.includes('superadmin') ? 'Already Superadmin' : 'Make Superadmin'}
-                        </button>
-                        <button
-                            onClick={() => assignRole(selectedUser.id, 'admin')}
-                            disabled={actionLoading || selectedUser.roles.includes('admin')}
-                            className="w-full px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            {selectedUser.roles.includes('admin') ? 'Already Admin' : 'Make Admin'}
-                        </button>
-                        <button
-                            onClick={() => assignRole(selectedUser.id, 'user')}
-                            disabled={actionLoading || selectedUser.roles.includes('user')}
-                            className="w-full px-4 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            {selectedUser.roles.includes('user') ? 'Already User' : 'Make User'}
-                        </button>
-                        <button
-                            onClick={() => setShowRoleModal(false)}
-                            className="w-full px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition"
-                        >
-                            Cancel
-                        </button>
+                    <div className="space-y-4">
+                        <p className="text-sm text-gray-500">Select a role to assign to this user. Higher roles inherit permissions from lower roles.</p>
+
+                        <div className="grid gap-3">
+                            <button
+                                onClick={() => assignRole(selectedUser.id, 'superadmin')}
+                                disabled={actionLoading}
+                                className={`
+                                    relative flex items-start gap-4 p-4 rounded-xl border-2 text-left transition-all
+                                    ${selectedUser.roles.includes('superadmin')
+                                        ? 'border-red-600 bg-red-50'
+                                        : 'border-gray-200 hover:border-red-200 hover:bg-red-50/30'
+                                    }
+                                `}
+                            >
+                                <div className={`p-2 rounded-lg ${selectedUser.roles.includes('superadmin') ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-500'}`}>
+                                    <ShieldAlert size={24} />
+                                </div>
+                                <div className="flex-1">
+                                    <div className="flex items-center justify-between">
+                                        <h3 className={`font-bold ${selectedUser.roles.includes('superadmin') ? 'text-red-900' : 'text-gray-900'}`}>Superadmin</h3>
+                                        {selectedUser.roles.includes('superadmin') && <CheckCircle size={18} className="text-red-600" />}
+                                    </div>
+                                    <p className="text-sm text-gray-600 mt-1">Full access to all system settings, user management, and sensitive operations.</p>
+                                </div>
+                            </button>
+
+                            <button
+                                onClick={() => assignRole(selectedUser.id, 'admin')}
+                                disabled={actionLoading}
+                                className={`
+                                    relative flex items-start gap-4 p-4 rounded-xl border-2 text-left transition-all
+                                    ${selectedUser.roles.includes('admin')
+                                        ? 'border-purple-600 bg-purple-50'
+                                        : 'border-gray-200 hover:border-purple-200 hover:bg-purple-50/30'
+                                    }
+                                `}
+                            >
+                                <div className={`p-2 rounded-lg ${selectedUser.roles.includes('admin') ? 'bg-purple-100 text-purple-600' : 'bg-gray-100 text-gray-500'}`}>
+                                    <Shield size={24} />
+                                </div>
+                                <div className="flex-1">
+                                    <div className="flex items-center justify-between">
+                                        <h3 className={`font-bold ${selectedUser.roles.includes('admin') ? 'text-purple-900' : 'text-gray-900'}`}>Admin</h3>
+                                        {selectedUser.roles.includes('admin') && <CheckCircle size={18} className="text-purple-600" />}
+                                    </div>
+                                    <p className="text-sm text-gray-600 mt-1">Can manage products and view user data but cannot delete users or change roles.</p>
+                                </div>
+                            </button>
+
+                            <button
+                                onClick={() => assignRole(selectedUser.id, 'user')}
+                                disabled={actionLoading}
+                                className={`
+                                    relative flex items-start gap-4 p-4 rounded-xl border-2 text-left transition-all
+                                    ${selectedUser.roles.includes('user')
+                                        ? 'border-gray-600 bg-gray-50'
+                                        : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                                    }
+                                `}
+                            >
+                                <div className={`p-2 rounded-lg ${selectedUser.roles.includes('user') ? 'bg-gray-200 text-gray-700' : 'bg-gray-100 text-gray-500'}`}>
+                                    <UserIcon size={24} />
+                                </div>
+                                <div className="flex-1">
+                                    <div className="flex items-center justify-between">
+                                        <h3 className={`font-bold ${selectedUser.roles.includes('user') ? 'text-gray-900' : 'text-gray-900'}`}>Standard User</h3>
+                                        {selectedUser.roles.includes('user') && <CheckCircle size={18} className="text-gray-600" />}
+                                    </div>
+                                    <p className="text-sm text-gray-600 mt-1">Default access level. Can use granted products and manage their own profile.</p>
+                                </div>
+                            </button>
+                        </div>
+
+                        <div className="pt-2 flex justify-end">
+                            <button
+                                onClick={() => setShowRoleModal(false)}
+                                className="px-5 py-2.5 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition"
+                            >
+                                Close
+                            </button>
+                        </div>
                     </div>
                 </Modal>
             )}
@@ -467,30 +522,69 @@ export default function AdminPage() {
                 <Modal
                     isOpen={showProductModal}
                     onClose={() => setShowProductModal(false)}
-                    title={`Grant Product Access to ${selectedUser.name || selectedUser.email}`}
-                    size="sm"
+                    title={`Grant Product Access`}
+                    description={`Manage product access for ${selectedUser.name || selectedUser.email}`}
+                    size="md"
                 >
-                    <div className="space-y-3">
-                        <button
-                            onClick={() => grantProduct(selectedUser.id, 'cardify')}
-                            disabled={actionLoading || selectedUser.products.includes('cardify')}
-                            className="w-full px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            {selectedUser.products.includes('cardify') ? 'Already has Cardify' : 'Grant Cardify'}
-                        </button>
-                        <button
-                            onClick={() => grantProduct(selectedUser.id, 'qrstudio')}
-                            disabled={actionLoading || selectedUser.products.includes('qrstudio')}
-                            className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            {selectedUser.products.includes('qrstudio') ? 'Already has QR Studio' : 'Grant QR Studio'}
-                        </button>
-                        <button
-                            onClick={() => setShowProductModal(false)}
-                            className="w-full px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition"
-                        >
-                            Cancel
-                        </button>
+                    <div className="space-y-4">
+                        <div className="grid gap-3">
+                            {/* Cardify */}
+                            <button
+                                onClick={() => grantProduct(selectedUser.id, 'cardify')}
+                                disabled={actionLoading}
+                                className={`
+                                    relative flex items-start gap-4 p-4 rounded-xl border-2 text-left transition-all
+                                    ${selectedUser.products.includes('cardify')
+                                        ? 'border-purple-600 bg-purple-50'
+                                        : 'border-gray-200 hover:border-purple-200 hover:bg-purple-50/30'
+                                    }
+                                `}
+                            >
+                                <div className={`p-2 rounded-lg ${selectedUser.products.includes('cardify') ? 'bg-purple-100 text-purple-600' : 'bg-gray-100 text-gray-500'}`}>
+                                    <CreditCard size={24} />
+                                </div>
+                                <div className="flex-1">
+                                    <div className="flex items-center justify-between">
+                                        <h3 className={`font-bold ${selectedUser.products.includes('cardify') ? 'text-purple-900' : 'text-gray-900'}`}>Cardify</h3>
+                                        {selectedUser.products.includes('cardify') && <CheckCircle size={18} className="text-purple-600" />}
+                                    </div>
+                                    <p className="text-sm text-gray-600 mt-1">Digital business card platform. Allows users to create, design, and share digital cards.</p>
+                                </div>
+                            </button>
+
+                            {/* QR Studio */}
+                            <button
+                                onClick={() => grantProduct(selectedUser.id, 'qrstudio')}
+                                disabled={actionLoading}
+                                className={`
+                                    relative flex items-start gap-4 p-4 rounded-xl border-2 text-left transition-all
+                                    ${selectedUser.products.includes('qrstudio')
+                                        ? 'border-blue-600 bg-blue-50'
+                                        : 'border-gray-200 hover:border-blue-200 hover:bg-blue-50/30'
+                                    }
+                                `}
+                            >
+                                <div className={`p-2 rounded-lg ${selectedUser.products.includes('qrstudio') ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-500'}`}>
+                                    <QrCode size={24} />
+                                </div>
+                                <div className="flex-1">
+                                    <div className="flex items-center justify-between">
+                                        <h3 className={`font-bold ${selectedUser.products.includes('qrstudio') ? 'text-blue-900' : 'text-gray-900'}`}>QR Studio</h3>
+                                        {selectedUser.products.includes('qrstudio') && <CheckCircle size={18} className="text-blue-600" />}
+                                    </div>
+                                    <p className="text-sm text-gray-600 mt-1">Advanced QR code generator with analytics, dynamic content, and template library.</p>
+                                </div>
+                            </button>
+                        </div>
+
+                        <div className="pt-2 flex justify-end">
+                            <button
+                                onClick={() => setShowProductModal(false)}
+                                className="px-5 py-2.5 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition"
+                            >
+                                Close
+                            </button>
+                        </div>
                     </div>
                 </Modal>
             )}

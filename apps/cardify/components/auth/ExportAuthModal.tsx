@@ -9,7 +9,7 @@ interface ExportAuthModalProps {
 }
 
 import { Modal } from "@plaqode-platform/ui";
-import { LogIn } from "lucide-react";
+import { LogIn, Lock, ArrowRight, UserPlus } from "lucide-react";
 
 export function ExportAuthModal({ isOpen, onClose, onSaveBeforeAuth }: ExportAuthModalProps) {
     const handleLogin = async () => {
@@ -39,38 +39,47 @@ export function ExportAuthModal({ isOpen, onClose, onSaveBeforeAuth }: ExportAut
         <Modal
             isOpen={isOpen}
             onClose={onClose}
-            title="Login Required"
-            size="sm"
+            size="md"
         >
-            <div className="text-center">
-                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <LogIn className="w-8 h-8 text-purple-600" />
+            <div className="flex flex-col items-center text-center pt-2">
+                <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-5">
+                    <Lock className="w-8 h-8 text-blue-600" strokeWidth={2} />
                 </div>
 
-                <p className="text-gray-600 mb-6 font-sans">
-                    Please login or create a free account to export your design
+                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                    Sign in to Continue
+                </h3>
+                <p className="text-gray-500 text-sm leading-relaxed mb-8 max-w-[80%]">
+                    Create a free account or login to save your design.
                 </p>
 
-                <div className="space-y-3">
-                    <button
-                        onClick={handleLogin}
-                        className="w-full px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition font-medium"
-                    >
-                        Login to Export
-                    </button>
-                    <button
-                        onClick={handleSignup}
-                        className="w-full px-6 py-3 border border-purple-600 text-purple-600 rounded-lg hover:bg-purple-50 transition font-medium"
-                    >
-                        Create Free Account
-                    </button>
+                <div className="w-full max-w-sm space-y-4">
+                    <div className="flex gap-3 w-full">
+                        <button
+                            onClick={handleSignup}
+                            className="flex-1 px-4 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 transition-all font-medium flex items-center justify-center gap-2"
+                        >
+                            <UserPlus size={18} />
+                            <span>Sign Up</span>
+                        </button>
+
+                        <button
+                            onClick={handleLogin}
+                            className="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all font-medium flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20"
+                        >
+                            <LogIn size={18} />
+                            <span>Login</span>
+                        </button>
+                    </div>
+
                     <button
                         onClick={onClose}
-                        className="w-full px-6 py-3 text-gray-600 hover:text-gray-900 transition"
+                        className="text-gray-400 hover:text-gray-600 transition font-medium text-xs"
                     >
-                        Cancel
+                        Maybe Later
                     </button>
                 </div>
+
             </div>
         </Modal>
     );

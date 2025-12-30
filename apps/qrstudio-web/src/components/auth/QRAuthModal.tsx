@@ -1,13 +1,14 @@
 'use client';
 
+import { Modal } from "@plaqode-platform/ui";
+import { LogIn, QrCode, UserPlus, Lock } from "lucide-react";
+
 interface QRAuthModalProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
 export function QRAuthModal({ isOpen, onClose }: QRAuthModalProps) {
-    if (!isOpen) return null;
-
     const handleLogin = () => {
         const currentUrl = typeof window !== 'undefined' ? encodeURIComponent(window.location.href) : '';
         window.location.href = `${process.env.NEXT_PUBLIC_PLATFORM_URL || 'http://localhost:3000'}/auth/login?redirect=${currentUrl}`;
@@ -18,50 +19,50 @@ export function QRAuthModal({ isOpen, onClose }: QRAuthModalProps) {
     };
 
     return (
-        <div
-            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-            onClick={onClose}
+        <Modal
+            isOpen={isOpen}
+            onClose={onClose}
+            size="md"
         >
-            <div
-                className="bg-white rounded-xl p-8 max-w-md w-full mx-4"
-                onClick={(e) => e.stopPropagation()}
-            >
-                <div className="text-center">
-                    <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg className="w-8 h-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                        </svg>
-                    </div>
+            <div className="flex flex-col items-center text-center pt-2">
+                <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-5">
+                    <Lock className="w-8 h-8 text-blue-600" strokeWidth={2} />
+                </div>
 
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                        Login Required
-                    </h2>
-                    <p className="text-gray-600 mb-6">
-                        Please login or create a free account to create and save your QR code
-                    </p>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                    Sign in Required
+                </h3>
+                <p className="text-gray-500 text-sm leading-relaxed mb-8 max-w-[80%]">
+                    Create a free account or login to create your QR code.
+                </p>
 
-                    <div className="space-y-3">
-                        <button
-                            onClick={handleLogin}
-                            className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
-                        >
-                            Login to Create QR Code
-                        </button>
+                <div className="w-full max-w-sm space-y-4">
+                    <div className="flex gap-3 w-full">
                         <button
                             onClick={handleSignup}
-                            className="w-full px-6 py-3 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition font-medium"
+                            className="flex-1 px-4 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 transition-all font-medium flex items-center justify-center gap-2"
                         >
-                            Create Free Account
+                            <UserPlus size={18} />
+                            <span>Sign Up</span>
                         </button>
+
                         <button
-                            onClick={onClose}
-                            className="w-full px-6 py-3 text-gray-600 hover:text-gray-900 transition"
+                            onClick={handleLogin}
+                            className="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all font-medium flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20"
                         >
-                            Cancel
+                            <LogIn size={18} />
+                            <span>Login</span>
                         </button>
                     </div>
+
+                    <button
+                        onClick={onClose}
+                        className="text-gray-400 hover:text-gray-600 transition font-medium text-xs"
+                    >
+                        Continue as Guest
+                    </button>
                 </div>
             </div>
-        </div>
+        </Modal>
     );
 }
