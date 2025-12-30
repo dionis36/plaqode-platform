@@ -4,8 +4,14 @@ import { Logo } from "@plaqode-platform/ui";
 
 export default function Footer() {
     return (
-        <footer className="bg-[#efefef] py-16 px-8 text-dark font-sans border-t border-dark/5">
-            <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 text-left">
+        <footer className="bg-[#efefef] py-16 px-8 text-dark font-sans border-t border-dark/5 relative overflow-hidden">
+            {/* Background Decor - Aurora Effect */}
+            <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+                <div className="absolute -bottom-[50%] left-[10%] w-[800px] h-[800px] bg-secondary/5 rounded-full blur-[120px] mix-blend-multiply" />
+                <div className="absolute -bottom-[50%] right-[10%] w-[800px] h-[800px] bg-primary/5 rounded-full blur-[120px] mix-blend-multiply" />
+            </div>
+
+            <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 text-left relative z-10">
 
                 {/* Column 1: Logo & Intro */}
                 <div className="flex flex-col items-start gap-6">
