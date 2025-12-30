@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { Suspense, useEffect, useState, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CardTemplate } from "@/types/template";
 import TemplateCard from "@/components/templates/TemplateCard";
@@ -11,7 +11,7 @@ import { Pagination } from "@/components/ui/Pagination";
 import StaticNavbar from "@/components/layout/StaticNavbar";
 import SmartNavbar from "@/components/layout/SmartNavbar";
 
-const TemplatesPage = () => {
+const TemplatesContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -32,7 +32,6 @@ const TemplatesPage = () => {
       try {
         console.log('[Templates] Fetching from /api/templates...');
         const response = await fetch('/api/templates');
-        console.log('[Templates] Response status:', response.status);
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -41,23 +40,51 @@ const TemplatesPage = () => {
         const baseTemplates = await response.json();
         console.log('[Templates] Loaded base templates:', baseTemplates.length);
 
-        // Generate color variations for each template
-        const { generateVariations } = await import('@/lib/templateVariations');
-        const { shuffleArray } = await import('@/lib/utils');
-
-        console.log('[Templates] Generating variations...');
-        const allTemplatesNested = await Promise.all(
-          baseTemplates.map((t: CardTemplate) => generateVariations(t))
-        );
-        const allTemplates = allTemplatesNested.flat();
-
-        // Shuffle so variations aren't grouped together
-        const shuffled = shuffleArray(allTemplates);
-
-        console.log('[Templates] Total with variations:', shuffled.length);
-        setTemplates(shuffled);
+        // IMMEDIATE RENDER: Show base templates first
+        // This unblocks the UI immediately
+        setTemplates(baseTemplates);
         setIsLoaded(true);
         setIsLoading(false);
+
+        // BACKGROUND: Generate variations
+        // Use setTimeout to yield to main thread for rendering
+        setTimeout(async () => {
+          try {
+            const { generateVariations } = await import('@/lib/templateVariations');
+            const { shuffleArray } = await import('@/lib/utils');
+
+            console.log('[Templates] Generating variations in background...');
+
+            // Process in chunks to avoid freezing the UI if there are many templates
+            const allVariations: CardTemplate[] = [];
+            const batchSize = 3;
+
+            for (let i = 0; i < baseTemplates.length; i += batchSize) {
+              const chunk = baseTemplates.slice(i, i + batchSize);
+              const chunkVars = await Promise.all(
+                chunk.map((t: CardTemplate) => generateVariations(t))
+              );
+              allVariations.push(...chunkVars.flat());
+
+              // Optional: Update state progressively (might cause UI jumping, so maybe wait for all?)
+              // For now, let's collect all then update once to keep filter stability
+              await new Promise(r => setTimeout(r, 0)); // Yield
+            }
+
+            // Combine original base templates (which might not be in variations if generateVariations assumes so? 
+            // Looking at generateVariations source: it returns [base, ...vars])
+            // So allVariations includes base templates.
+
+            const allTemplates = allVariations;
+            const shuffled = shuffleArray(allTemplates);
+
+            console.log('[Templates] Total with variations:', shuffled.length);
+            setTemplates(shuffled);
+          } catch (err) {
+            console.error("Error generating variations", err);
+          }
+        }, 100);
+
       } catch (error) {
         console.error('[Templates] Failed to load templates:', error);
         setIsLoading(false);
@@ -221,5 +248,20 @@ const TemplatesPage = () => {
     </main>
   );
 };
+
+const TemplatesPage = () => {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="animate-pulse flex flex-col items-center">
+          <div className="h-12 w-12 bg-gray-200 rounded-full mb-4"></div>
+          <div className="h-4 w-32 bg-gray-200 rounded"></div>
+        </div>
+      </div>
+    }>
+      <TemplatesContent />
+    </Suspense>
+  )
+}
 
 export default TemplatesPage;

@@ -1,12 +1,20 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Logo } from "@plaqode-platform/ui";
 
 export default function LoginPage() {
+    return (
+        <React.Suspense fallback={<div>Loading...</div>}>
+            <LoginForm />
+        </React.Suspense>
+    );
+}
+
+function LoginForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -139,3 +147,4 @@ export default function LoginPage() {
         </div>
     );
 }
+

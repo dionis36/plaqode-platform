@@ -6,6 +6,7 @@ import { AuthProvider } from '@/lib/auth-context';
 import { PlatformNav } from '@/components/layout/PlatformNav';
 import { PlatformNavWrapper } from '@/components/layout/PlatformNavWrapper';
 import { Toaster } from "@plaqode-platform/ui";
+import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 
 // Keep Inter for UI consistency
 const inter = Inter({
@@ -23,8 +24,41 @@ const merriweather = Merriweather({
 });
 
 export const metadata: Metadata = {
-  title: "Cardify – Business Card Designer",
-  description: "Create stunning business cards effortlessly with Cardify.",
+  metadataBase: new URL("https://cardify.plaqode.com"), // Assuming subdomain or use main domain/cardify
+  title: {
+    default: "Cardify by Plaqode - Professional Business Card Designer",
+    template: "%s | Cardify by Plaqode",
+  },
+  description: "The professional business card designer powered by Plaqode. Create stunning cards effortlessly.",
+  keywords: ["Business Cards", "Card Designer", "Print Ready", "Digital Business Card", "Design Templates"],
+  authors: [{ name: "Plaqode Team" }],
+  creator: "Plaqode",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://cardify.plaqode.com",
+    title: "Cardify - Professional Business Card Designer",
+    description: "Create stunning, professional business cards effortlessly.",
+    siteName: "Cardify by Plaqode",
+    images: [
+      {
+        url: "/cardify-og.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Cardify Designer",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Cardify - Professional Business Card Designer",
+    description: "Create stunning, professional business cards effortlessly.",
+    images: ["/cardify-og.jpg"],
+    creator: "@plaqode",
+  },
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
@@ -41,6 +75,7 @@ export default function RootLayout({
           {children}
           <Toaster />
         </AuthProvider>
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
       </body>
     </html>
   );

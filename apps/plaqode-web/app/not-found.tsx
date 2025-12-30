@@ -15,20 +15,13 @@ export default function NotFound() {
             </div>
 
             <div className="relative z-10 flex flex-col items-center text-center max-w-md mx-auto">
-                <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                >
+                <div>
                     <h1 className="text-[8rem] font-bold leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/10 select-none font-merriweather">
                         404
                     </h1>
-                </motion.div>
+                </div>
 
-                <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.1 }}
+                <div
                     className="mt-6 space-y-6"
                 >
                     <div className="space-y-2">
@@ -41,12 +34,13 @@ export default function NotFound() {
                     </div>
 
                     <div className="flex items-center justify-center gap-4 pt-4">
-                        <GradientButton
+                        <a
                             href="/"
-                            text="Go Home"
-                            size="md"
-                            icon={<Home size={16} />}
-                        />
+                            className="bg-white text-black px-6 py-2.5 rounded-lg flex items-center gap-2 font-medium hover:bg-white/90 transition-colors"
+                        >
+                            <Home size={16} />
+                            Go Home
+                        </a>
 
                         <button
                             onClick={() => window.history.back()}
@@ -56,7 +50,7 @@ export default function NotFound() {
                             Go Back
                         </button>
                     </div>
-                </motion.div>
+                </div>
             </div>
 
             {/* Minimal Footer */}

@@ -13,12 +13,12 @@ export default function Home() {
       <SmartNavbar />
 
       <Hero />
-      <div id="about">
+      <section id="about" aria-label="About Plaqode">
         <AboutSection />
-      </div>
-      <div id="services">
+      </section>
+      <section id="services" aria-label="Our Services">
         <BusinessSection />
-      </div>
+      </section>
       <Testimonials />
 
       <Footer />

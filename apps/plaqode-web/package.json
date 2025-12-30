@@ -16,6 +16,7 @@
     "@iconify-json/mdi": "^1.2.3",
     "@iconify/types": "^2.0.0",
     "@iconify/utils": "^3.1.0",
+    "@next/third-parties": "^16.1.1",
     "@plaqode-platform/ui": "*",
     "@types/qrcode": "^1.5.6",
     "@types/recharts": "^1.8.29",

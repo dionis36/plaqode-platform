@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getCuratedPhotos } from '@/lib/pexelsService';
 
+export const dynamic = 'force-dynamic';
+
+
 /**
  * API Proxy for Pexels Curated Photos
  * Protects API key by keeping it server-side
