@@ -161,7 +161,7 @@ export function Sidebar({ isOpen, setIsOpen, isMobile, onCloseMobile }: SidebarP
                                     }
                                     rounded-lg border border-transparent
                                     ${active
-                                        ? 'bg-gradient-to-r from-secondary/10 to-primary/10 border-white/10 text-white'
+                                        ? 'bg-white/10 text-red-500'
                                         : 'text-light/70 hover:bg-white/5 hover:text-white'
                                     }
                                 `}
@@ -169,7 +169,7 @@ export function Sidebar({ isOpen, setIsOpen, isMobile, onCloseMobile }: SidebarP
                             >
                                 <item.icon
                                     size={!isOpen && !isMobile ? 24 : 20}
-                                    className={`shrink-0 transition-colors ${active ? 'text-secondary' : 'text-light/50 group-hover:text-light'}`}
+                                    className={`shrink-0 transition-colors ${active ? 'text-red-500' : 'text-light/50 group-hover:text-light'}`}
                                 />
 
                                 {/* Label: Show normally if open, show small below if collapsed */}
