@@ -15,6 +15,7 @@ interface AuthContextType {
     loading: boolean;
     isAuthenticated: boolean;
     hasCardifyAccess: boolean;
+    isAdmin: boolean;
     logout: () => Promise<void>;
 }
 
@@ -70,9 +71,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     const hasCardifyAccess = user?.products.includes('cardify') || false;
+    const isAdmin = user?.roles.includes('admin') || user?.roles.includes('superadmin') || false;
 
     return (
-        <AuthContext.Provider value={{ user, loading, isAuthenticated, hasCardifyAccess, logout }}>
+        <AuthContext.Provider value={{ user, loading, isAuthenticated, hasCardifyAccess, isAdmin, logout }}>
             {children}
         </AuthContext.Provider>
     );

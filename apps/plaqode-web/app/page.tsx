@@ -16,6 +16,12 @@ export default function Home() {
       <section id="about" aria-label="About Plaqode">
         <AboutSection />
       </section>
+
+      {/* Subtle Divider */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <hr className="border-t border-gray-200/60 dark:border-gray-800/60" />
+      </div>
+
       <section id="services" aria-label="Our Services">
         <BusinessSection />
       </section>

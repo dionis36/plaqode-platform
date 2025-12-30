@@ -5,6 +5,7 @@ import { X, FileImage, FileText, Download, Loader, Save, LayoutTemplate, Tag, Li
 import { toast, Modal } from "@plaqode-platform/ui";
 import { ExportOptions, ExportFormat, TemplateExportMetadata } from "@/types/template";
 import { TEMPLATE_CATEGORIES, TemplateCategoryKey } from "@/lib/templateCategories";
+import { useAuth } from "@/lib/auth-context";
 
 interface ExportModalProps {
     isOpen: boolean;
@@ -160,27 +161,19 @@ export default function ExportModal({
 
 
 
+    const { isAdmin } = useAuth();
+
     return (
         <Modal
             isOpen={isOpen}
             onClose={onClose}
             size="lg"
+            title="Export Design"
             noPadding
         >
             <div className="flex flex-col h-full max-h-[90vh]">
                 {/* Header & Tabs */}
-                <div className="bg-gray-50 border-b border-gray-200">
-                    <div className="px-4 lg:px-6 py-3 lg:py-4 flex items-center justify-between">
-                        <h2 className="text-lg lg:text-xl font-bold text-gray-900">Export Design</h2>
-                        <button
-                            onClick={onClose}
-                            className="p-2 lg:p-2 hover:bg-gray-200 rounded-full transition-colors text-gray-500 hover:text-gray-700 min-w-[44px] min-h-[44px] flex items-center justify-center"
-                            title="Close"
-                        >
-                            <X size={22} className="lg:w-5 lg:h-5" />
-                        </button>
-                    </div>
-
+                <div className="bg-gray-50 border-b border-gray-200 pt-4">
                     {/* Tabs - Segmented Control Style */}
                     <div className="px-4 lg:px-6 pb-0">
                         <div className="flex border-b border-gray-200">
@@ -200,7 +193,7 @@ export default function ExportModal({
                                 )}
                             </button>
 
-                            {onExportAsTemplate && (
+                            {onExportAsTemplate && isAdmin && (
                                 <button
                                     onClick={() => setActiveTab('template')}
                                     className={`pb-3 px-3 lg:px-4 text-sm font-medium transition-all relative min-h-[48px] flex items-center ${activeTab === 'template'

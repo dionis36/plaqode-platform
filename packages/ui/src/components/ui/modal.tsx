@@ -84,7 +84,7 @@ export function Modal({
             <div
                 ref={modalRef}
                 className={clsx(
-                    "bg-white rounded-2xl shadow-2xl w-full mx-auto animate-in zoom-in-95 duration-300 ease-out relative max-h-[90vh] flex flex-col",
+                    "bg-white rounded-2xl shadow-2xl w-full mx-auto animate-in zoom-in-95 duration-300 ease-out relative max-h-[90vh] flex flex-col overflow-hidden",
                     sizeClasses[size]
                 )}
                 onClick={(e) => e.stopPropagation()}
@@ -122,7 +122,7 @@ export function Modal({
                     {children}
                 </div>
             </div>
-        </div>,
+        </div >,
         document.body
     );
 }
