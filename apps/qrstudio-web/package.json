@@ -27,6 +27,7 @@
         "react-helmet-async": "^2.0.5",
         "react-hook-form": "^7.69.0",
         "react-icons": "^5.5.0",
+        "react-is": "^19.2.3",
         "react-qrcode-logo": "^2.9.0",
         "recharts": "^3.5.1",
         "tailwind-merge": "^2.2.1",

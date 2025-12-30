@@ -9,6 +9,8 @@ import { PhoneMockup } from '@/components/common/PhoneMockup';
 import { SEO } from '@/components/common/SEO';
 import { useAuth } from '@/lib/auth-context';
 import { QRAuthModal } from '@/components/auth/QRAuthModal';
+import { toast } from '@plaqode-platform/ui';
+
 
 
 // Accordion Section Component (matching MenuForm style)
@@ -70,8 +72,6 @@ export default function DesignPage({ params }: { params: { template: string } })
     const editId = searchParams.get('edit');
 
     const [isGenerating, setIsGenerating] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState(false);
     const [qrName, setQrName] = useState('');
     const [showAuthModal, setShowAuthModal] = useState(false);
     const { type, payload, design, updateDesign, editMode, loadQrData } = useWizardStore();
@@ -110,7 +110,7 @@ export default function DesignPage({ params }: { params: { template: string } })
             }
         } catch (error) {
             console.error('Failed to load QR code:', error);
-            setError('Failed to load QR code for editing');
+            toast.error('Failed to load QR code for editing');
         }
     }
 
@@ -155,55 +155,33 @@ export default function DesignPage({ params }: { params: { template: string } })
 
         // Validate QR name
         if (!qrName.trim()) {
-            setError('Please enter a name for your QR code');
+            toast.error('Please enter a name for your QR code');
             return;
         }
 
-        setError(null);
-        setSuccess(false);
         setIsGenerating(true);
+
+        const plaqodeUrl = process.env.NEXT_PUBLIC_PLAQODE_WEB_URL || 'http://localhost:3000';
 
         try {
             // Import API client
             const { qrApi } = await import('@/lib/api-client');
 
-
-            console.log('=== QR CODE UPDATE DEBUG ===');
-            console.log('editMode:', editMode);
-            console.log('editId:', editId);
-            console.log('qrName:', qrName);
-            console.log('payload:', payload);
-            console.log('design:', design);
-
             if (editMode && editId) {
                 // Update existing QR code
-                console.log('Calling qrApi.update with:', {
-                    id: editId,
-                    name: qrName,
-                    payload,
-                    design
-                });
-
                 const response = await qrApi.update(editId, {
                     name: qrName,
                     payload: payload,
                     design: design,
                 });
 
-                console.log('Update response:', response);
-
                 if (response.success && response.data) {
                     // Show success message
-                    setSuccess(true);
-                    setError(null);
+                    toast.success('QR Code updated successfully! Redirecting...');
 
-                    console.log('Update successful! Redirecting...');
-
-                    // Wait a moment to show success, then redirect with cache refresh
+                    // Redirect to Plaqode Dashboard
                     setTimeout(() => {
-                        // Force router to refresh and clear cache
-                        router.refresh();
-                        router.push(`/qrcodes?updated=${Date.now()}`);
+                        window.location.href = `${plaqodeUrl}/app/qrcodes?updated=${Date.now()}`;
                     }, 1000);
                 } else {
                     throw new Error(response.error || 'Failed to update QR code');
@@ -219,20 +197,16 @@ export default function DesignPage({ params }: { params: { template: string } })
 
                 if (response.success && response.data) {
                     const qrId = response.data.id;
-
-                    // Store QR ID in sessionStorage
                     sessionStorage.setItem('newlyCreatedQrId', qrId);
 
-                    // Navigate to /create page
-                    // This puts /create in the browser history
-                    // The /create page will then redirect to QR detail
-                    router.push('/create');
+                    // Redirect to Plaqode Dashboard
+                    window.location.href = `${plaqodeUrl}/app/qrcodes?newId=${qrId}`;
                 } else {
                     throw new Error(response.error || 'Failed to create QR code');
                 }
             }
         } catch (err: any) {
-            setError(err.message || 'Failed to save QR code. Please try again.');
+            toast.error(err.message || 'Failed to save QR code. Please try again.');
         } finally {
             setIsGenerating(false);
         }
@@ -653,18 +627,7 @@ export default function DesignPage({ params }: { params: { template: string } })
                         </AccordionSection>
                     </div>
 
-                    {/* Error/Success Messages */}
-                    {error && (
-                        <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-                            <p className="text-sm text-red-600">{error}</p>
-                        </div>
-                    )}
 
-                    {success && (
-                        <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-                            <p className="text-sm text-green-600">QR code generated and downloaded successfully!</p>
-                        </div>
-                    )}
 
                     {/* Create/Update Button */}
                     <div className="mt-8 pt-6 border-t border-slate-100 flex justify-end">
