@@ -3,16 +3,21 @@ import jwt, { JsonWebTokenError } from 'jsonwebtoken';
 import fs from 'fs';
 import path from 'path';
 
+import { config } from '../config';
+
 // Load public key from auth-service
-// This key is copied from plaqode2/auth-service/keys/public.pem
-const publicKeyPath = path.join(__dirname, '../../keys/public.pem');
+// Defaults to dev path, overrides via Env Var in Prod
+const publicKeyPath = path.isAbsolute(config.jwtPublicKeyPath)
+    ? config.jwtPublicKeyPath
+    : path.resolve(process.cwd(), config.jwtPublicKeyPath);
+
 let publicKey: string;
 
 try {
     publicKey = fs.readFileSync(publicKeyPath, 'utf8');
 } catch (error) {
-    console.error('Failed to load public key:', error);
-    console.error('Make sure to copy public.pem from auth-service to apps/api/keys/');
+    console.error('Failed to load public key from:', publicKeyPath);
+    console.error('Error:', error);
     throw new Error('Public key not found. Cannot verify JWT tokens.');
 }
 

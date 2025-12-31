@@ -86,11 +86,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             const decoded = decodeURIComponent(url);
             const parsed = new URL(decoded);
 
-            // Allow only our own domains
-            const allowedHosts = [
+            // Default allowed hosts for Dev and Production
+            const defaultAllowed = [
                 'localhost:3002', // Cardify dev
-                'localhost:3003', // QR Studio dev  
+                'localhost:3003', // QR Studio dev
+                'plaqode.com',
+                'create.plaqode.com',
+                'cardify.plaqode.com'
             ];
+
+            // Add hosts from Env Var (comma separated)
+            const envAllowed = process.env.NEXT_PUBLIC_ALLOWED_REDIRECT_HOSTS
+                ? process.env.NEXT_PUBLIC_ALLOWED_REDIRECT_HOSTS.split(',').map(h => h.trim())
+                : [];
+
+            const allowedHosts = [...defaultAllowed, ...envAllowed];
 
             // Check if host matches any allowed host
             return allowedHosts.some(host => parsed.host === host);

@@ -11,34 +11,34 @@ import SplitText from "../ui/SplitText";
 
 const testimonials = [
     {
-        text: "We generated over 5,000 unique entry badges for our tech conference. The scanning speed and reliability were flawless.",
-        author: "Sarah Jenkins",
-        role: "Event Director, NexusConf",
-        initials: "SJ"
+        text: "I used to carry stacks of paper business cards to meetings in Posta. Now, I just show my Plaqode digital card. It's professional and instantly saves my details.",
+        author: "Juma Issa",
+        role: "Financial Consultant, Dar es Salaam",
+        initials: "JI"
     },
     {
-        text: "Updating menus across our 12 restaurant locations used to be a nightmare. Now with dynamic QR codes, it takes seconds.",
-        author: "Michael Chen",
-        role: "Operations Manager, Urban Bites",
-        initials: "MC"
+        text: "Updating our seasonal menu used to mean expensive reprinting. With the smart menu QR, I can change prices and add specials in seconds.",
+        author: "Neema Kimaro",
+        role: "Owner, Coastal Flavors Bistro, Masaki",
+        initials: "NK"
     },
     {
-        text: "Secure data handling was non-negotiable for our law firm. Plaqode's enterprise-grade encryption gave us the confidence to switch.",
-        author: "David Ross",
-        role: "Partner, Ross & Associates",
-        initials: "DR"
+        text: "Our hotel guests used to struggle with long WiFi passwords. Now they just scan the QR code at reception and connect instantly. It's a huge upgrade.",
+        author: "Hassan Abdallah",
+        role: "Manager, City Center Suites",
+        initials: "HA"
     },
     {
-        text: "The analytics are game-changing. Knowing exactly when and where our product packaging is scanned helps us optimize distribution.",
-        author: "Elena Rodriguez",
-        role: "Supply Chain Lead, FreshFoods",
-        initials: "ER"
+        text: "As a real estate agent, I attach document QRs to my property listings. Clients scan to download the full brochure PDF immediately—no more printed handouts.",
+        author: "Grace Lyimo",
+        role: "Senior Agent, Sunrise Estate",
+        initials: "GL"
     },
     {
-        text: "As a real estate agency, we use Plaqode to link virtual tours on 'For Sale' signs. The lead conversion rate has doubled.",
-        author: "James Wilson",
-        role: "Senior Agent, Prime Realty",
-        initials: "JW"
+        text: "I use the 'Link in Bio' QR for my marketing campaigns. It directs customers to our Instagram and WhatsApp automatically, solving our traffic routing issues.",
+        author: "Baraka Mushi",
+        role: "Digital Marketer, GrowthWave TZ",
+        initials: "BM"
     }
 ];
 

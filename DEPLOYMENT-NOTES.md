@@ -2,67 +2,89 @@
 
 This guide details the specific environment variables and configurations required when moving from a **Local Environment** to **Production** (Vercel, Railway, etc.).
 
-## 1. Frontend (`apps/plaqode-web`)
-**Deployment Platform:** Vercel (Recommended)
+> [!IMPORTANT]
+> **Security First**: Never check in `.env` files. Use your hosting provider's Secrets Management.
 
-| Variable Name | Local Value (`.env.local`) | Production Value (Vercel Settings) | Description |
-| :--- | :--- | :--- | :--- |
-| `NEXT_PUBLIC_APP_URL` | `http://localhost:3000` | `https://plaqode.com` | **CRITICAL:** Used to generate the visible QR code links (e.g., `plaqode.com/r/abc`). Must match `FRONTEND_URL` in backend. |
-| `NEXT_PUBLIC_QRSTUDIO_API_URL` | `http://localhost:3005` | `https://api.plaqode.com` | Used by the Frontend to talk to the API and for URL rewrites. |
+## 1. Global Security Requirements
 
-### Configuration Files
--   **`next.config.mjs`**: Contains a `rewrite` rule that proxies `/q/:path*` to `NEXT_PUBLIC_QRSTUDIO_API_URL`.
-    -   *No changes needed if Env Vars are set correctly.*
--   **`app/app/qrcodes/[id]/page.tsx`**: Generates the display link.
-    -   *Automatically uses `NEXT_PUBLIC_APP_URL`.*
+### Keys Management (Critical)
+The authentication system uses RSA keys (Private/Public) for signing JWTs.
+-   **Local**: Keys are stored in `file system` at `./keys/`.
+-   **Production**: You **MUST** inject these keys via Environment Variables or a mounted secure volume.
+    -   **`plaqode-auth`**: Needs `JWT_PRIVATE_KEY_PATH` (or inject content directly/base64 encoded if code supports it - currently code expects a PATH).
+    -   **Recommendation**: In Docker/Railway, mount the keys as secret files and point the `_PATH` env vars to them `/etc/secrets/private.pem`.
 
----
-
-## 2. Backend (`apps/qrstudio-api`)
-**Deployment Platform:** Railway / Render / DigitalOcean (Node.js Service)
-
-| Variable Name | Local Value (`.env`) | Production Value (Cloud Settings) | Description |
-| :--- | :--- | :--- | :--- |
-| `HOST` | `0.0.0.0` | `0.0.0.0` | Binding address (required for most cloud containers). |
-| `PORT` | `3005` | `3005` (or provided by host) | The port the API listens on. |
-| `FRONTEND_URL` | `http://localhost:3000` | `https://plaqode.com` | **CRITICAL:** Points to the MAIN APP (plaqode-web). The API redirects scanned users here (e.g., `https://plaqode.com/r/abc`). |
-| `DATABASE_URL` | `postgresql://...` | `postgresql://...` | Connection string to your Production Database (Supabase/Neon/Railway). |
-
-### Important Backend Notes
-1.  **Geolocation**: Ensure your hosting provider allows outbound requests (for `geoip-lite` updates) if applicable, though the library is mostly offline.
-2.  **Proxy Headers**: If behind a load balancer (like common cloud setups), ensure your server trusts `X-Forwarded-For` headers so correct IPs are logged.
-    -   *If you see all IPs as 127.0.0.1 or ::1, you need to configure Fastify `trustProxy: true`.*
-
-## 3. Deployment Checklist
-- [ ] **Database**: Run `prisma migrate deploy` on your production database (for both `qrstudio-api` and `plaqode-auth` if they share valid schemas, otherwise run for each service).
-- [ ] **Frontend**: Add `plaqode.com` to your Vercel Domains.
-- [ ] **Backend (API)**: Map `api.plaqode.com` to your backend service.
-- [ ] **Auth Service**: Map `auth.plaqode.com` (or similar internal URL) and ensure `plaqode-web` can reach it via `NEXT_PUBLIC_AUTH_SERVICE_URL`.
-- [ ] **DNS**:
-    -   `plaqode.com` -> Vercel IP
-    -   `api.plaqode.com` -> Backend Service IP/CNAME
+### CORS & Cookies
+-   **Cookies**: We use `httpOnly` cookies. In production, `DOMAIN` must be set to `.plaqode.com` to share cookies between `api.plaqode.com` and `plaqode.com`.
+-   **CORS**: `ALLOWED_ORIGINS` must include all your frontend domains.
 
 ---
 
-## 4. Creator App (`apps/qrstudio-web`)
-**Deployment Platform:** Vercel (Recommended) - Separate Project
+## 2. Frontend (`apps/plaqode-web`)
+**Type**: Next.js App
+**Deployment**: Vercel (Recommended)
 
-| Variable Name | Local Value (`.env.local`) | Production Value (Vercel Settings) | Description |
+| Variable Name | Local Value | Production Example | Description |
 | :--- | :--- | :--- | :--- |
-| `NEXT_PUBLIC_APP_URL` | `http://localhost:3001` | `https://create.plaqode.com` (or similar) | The URL of this creator app itself. |
+| `NEXT_PUBLIC_APP_URL` | `http://localhost:3000` | `https://plaqode.com` | Main URL. |
+| `NEXT_PUBLIC_QRSTUDIO_API_URL` | `http://localhost:3005` | `https://api.plaqode.com` | Backend API URL for rewrites and data. |
+| `NEXT_PUBLIC_AUTH_SERVICE_URL` | `http://localhost:3001` | `https://auth.plaqode.com` | Auth Service URL. |
+| `NEXT_PUBLIC_ALLOWED_REDIRECT_HOSTS` | *(Optional)* | `another-app.plaqode.com` | Comma-separated list of extra domains allowed for login redirects. |
+| `NEXT_PUBLIC_GA_ID` | `""` | `G-XXXXXXXX` | Google Analytics ID. |
+
+### Configuration Notes
+-   **Redirects**: `lib/auth-context.tsx` checks allowed hosts. By default, `plaqode.com`, `create.plaqode.com`, and `cardify.plaqode.com` are allowed. Use `NEXT_PUBLIC_ALLOWED_REDIRECT_HOSTS` to add more.
 
 ---
 
-## 5. Auth Service (`apps/plaqode-auth`)
-**Deployment Platform:** Railway / Render / DigitalOcean (Node.js Service)
+## 3. Backend API (`apps/qrstudio-api`)
+**Type**: Node.js / Fastify
+**Deployment**: Railway / Render (Docker)
 
-| Variable Name | Local Value (`.env`) | Production Value (Cloud Settings) | Description |
+| Variable Name | Local Value | Production Example | Description |
 | :--- | :--- | :--- | :--- |
 | `HOST` | `0.0.0.0` | `0.0.0.0` | Binding address. |
-| `PORT` | `3001` | `3001` (or provided by host) | Port the Auth API listens on. |
-| `DATABASE_URL` | `postgresql://...` | `postgresql://...` | Connection string to your Production Database (Must match other services if sharing DB). |
-| `JWT_SECRET` | `super-secret` | `ReallYlongRandoMStrinG...` | **CRITICAL**: Used to sign session tokens. |
-| `RESEND_API_KEY` | `re_...` | `re_...` | **CRITICAL**: Required for sending password reset emails. Get from Resend.com. |
-| `EMAIL_FROM` | `onboarding@resend.dev` | `noreply@plaqode.com` | The sender address for emails. Must be verified in Resend for Production. |
-| `WEB_URL` | `http://localhost:3000` | `https://plaqode.com` | Used to construct link URLs in emails (e.g. password reset links). |
+| `PORT` | `3005` | `3005` | Service port. |
+| `FRONTEND_URL` | `http://localhost:3000` | `https://plaqode.com` | Redirect destination for scanned QRs. |
+| `DATABASE_URL` | `postgresql://...` | `postgresql://...` | DB Connection string. |
+| `ALLOWED_ORIGINS` | `http://localhost:3000` | `https://plaqode.com,https://create.plaqode.com` | CORS allowed origins. |
+
+---
+
+## 4. Auth Service (`apps/plaqode-auth`)
+**Type**: Node.js / Fastify
+**Deployment**: Railway / Render (Docker)
+
+| Variable Name | Local Value | Production Example | Description |
+| :--- | :--- | :--- | :--- |
+| `HOST` | `0.0.0.0` | `0.0.0.0` | Binding address. |
+| `PORT` | `3001` | `3001` | Service port. |
+| `DATABASE_URL` | `postgresql://...` | `postgresql://...` | DB Connection string. |
+| `JWT_PRIVATE_KEY_PATH` | `./keys/private.pem` | `/etc/secrets/private.pem` | **CRITICAL**: Path to private key file. |
+| `JWT_PUBLIC_KEY_PATH` | `./keys/public.pem` | `/etc/secrets/public.pem` | **CRITICAL**: Path to public key file. |
+| `COOKIE_DOMAIN` | *(undefined)* | `.plaqode.com` | **CRITICAL**: Root domain for cookie sharing. |
+| `COOKIE_SECURE` | `false` | `true` | Must be true for HTTPS. |
+| `ALLOWED_ORIGINS` | `http://localhost:3000` | `https://plaqode.com,https://create.plaqode.com` | CORS allowed origins. |
+| `RESEND_API_KEY` | `re_...` | `re_...` | Email service key. |
+| `WEB_URL` | `http://localhost:3000` | `https://plaqode.com` | Used in email links. |
+
+---
+
+## 5. Creator App (`apps/qrstudio-web`)
+**Type**: Next.js App
+**Deployment**: Vercel
+
+| Variable Name | Local Value | Production Example | Description |
+| :--- | :--- | :--- | :--- |
+| `NEXT_PUBLIC_APP_URL` | `http://localhost:3003` | `https://create.plaqode.com` | App URL. |
+| `NEXT_PUBLIC_API_URL` | `http://localhost:3005` | `https://api.plaqode.com` | Backend API URL. |
+
+---
+
+## 6. Pre-Flight Checklist
+- [ ] **Keys**: Securely upload `private.pem` and `public.pem` to your hosting provider (Secrets/Mounts).
+- [ ] **Database**: Run `prisma migrate deploy` on production DB.
+- [ ] **DNS**: Map all subdomains (`api`, `auth`, `create`, `cardify`) in your DNS provider.
+- [ ] **CORS**: Verify `ALLOWED_ORIGINS` covers all your frontend domains.
+- [ ] **Cookies**: Verify `COOKIE_DOMAIN` is set to `.plaqode.com` (note the dot).
 
