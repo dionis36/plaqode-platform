@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface User {
     id: string;
@@ -28,6 +29,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
+    const router = useRouter();
 
     useEffect(() => {
         checkAuth();
@@ -73,8 +75,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (redirectUrl && isValidRedirect(redirectUrl)) {
             window.location.href = decodeURIComponent(redirectUrl);
         } else {
-            // Default to dashboard
-            window.location.href = '/app';
+            // Default to dashboard using client-side routing to preserve toast
+            router.push('/app');
         }
     };
 
@@ -114,7 +116,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(data.user);
 
         // Auto-login after signup
-        window.location.href = '/app';
+        router.push('/app');
     };
 
     const logout = async () => {
@@ -124,7 +126,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         });
 
         setUser(null);
-        window.location.href = '/';
+        router.push('/');
     };
 
     const resetPassword = async (email: string) => {

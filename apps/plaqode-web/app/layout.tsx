@@ -74,7 +74,7 @@ export default function RootLayout({
         <AuthProvider>
           <FontLoader />
           {children}
-          <Toaster />
+          <Toaster richColors theme="light" />
         </AuthProvider>
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
       </body>

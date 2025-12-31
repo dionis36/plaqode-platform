@@ -10,22 +10,22 @@ export default function SignupPage() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [name, setName] = useState('');
-    const [error, setError] = useState('');
+
     const [loading, setLoading] = useState(false);
     const { signup } = useAuth();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError('');
+
 
         // Validation
         if (password.length < 8) {
-            setError('Password must be at least 8 characters');
+            toast.error('Password must be at least 8 characters');
             return;
         }
 
         if (password !== confirmPassword) {
-            setError('Passwords do not match');
+            toast.error('Passwords do not match');
             return;
         }
 
@@ -91,11 +91,7 @@ export default function SignupPage() {
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-5">
-                        {error && (
-                            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm">
-                                {error}
-                            </div>
-                        )}
+
 
                         <div className="space-y-5">
                             <div>

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { Logo } from "@plaqode-platform/ui";
+import { Logo, toast } from "@plaqode-platform/ui";
 
 export default function LoginPage() {
     return (
