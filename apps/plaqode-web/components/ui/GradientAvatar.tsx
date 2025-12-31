@@ -57,14 +57,19 @@ export default function GradientAvatar({ user, className = "", textColor = "text
         }
     };
 
+    // Close on scroll to prevent "ghost menu" floating when Smart Navbar hides
     useEffect(() => {
+        const handleScroll = () => {
+            if (isOpen) setIsOpen(false);
+        };
+
         if (isOpen) {
             updatePosition();
-            window.addEventListener('scroll', updatePosition);
+            window.addEventListener('scroll', handleScroll, { passive: true });
             window.addEventListener('resize', updatePosition);
         }
         return () => {
-            window.removeEventListener('scroll', updatePosition);
+            window.removeEventListener('scroll', handleScroll);
             window.removeEventListener('resize', updatePosition);
         };
     }, [isOpen]);
