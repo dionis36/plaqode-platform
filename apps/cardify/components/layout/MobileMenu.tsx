@@ -1,6 +1,6 @@
 "use client";
 
-const PLATFORM_URL = 'http://localhost:3000';
+const HOME_URL = process.env.NEXT_PUBLIC_PLAQODE_WEB_URL || "http://localhost:3000";
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
@@ -80,7 +80,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                         {["Home", "About", "Services", "Contact"].map((item) => (
                             <div key={item} className="border-b border-light/10 pb-4">
                                 <a
-                                    href={item === "Home" ? PLATFORM_URL : `${PLATFORM_URL}/${item.toLowerCase()}`}
+                                    href={item === "Home" ? HOME_URL : `${HOME_URL}/${item.toLowerCase()}`}
                                     className="text-lg font-medium hover:text-secondary transition-colors block"
                                     onClick={onClose}
                                 >
@@ -90,7 +90,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                         ))}
                         <div className="pt-4">
                             <a
-                                href={`${PLATFORM_URL}/auth/login`}
+                                href={`${HOME_URL}/auth/login`}
                                 className="block w-full py-3 text-center rounded-full bg-gradient-to-r from-secondary to-primary text-white font-bold text-lg"
                                 onClick={onClose}
                             >

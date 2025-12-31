@@ -23,17 +23,17 @@ export default function StaticNavbar() {
                 {/* Desktop Nav & Auth */}
                 <div className="flex items-center gap-8">
                     <nav className="hidden md:flex gap-8">
-                        <Link href={HOME_URL} className="text-slate-700 hover:text-secondary transition-colors font-medium">Home</Link>
-                        <Link href={`${HOME_URL}/about`} className="text-slate-700 hover:text-secondary transition-colors font-medium">About</Link>
-                        <Link href={`${HOME_URL}/services`} className="text-slate-700 hover:text-secondary transition-colors font-medium">Services</Link>
-                        <Link href={`${HOME_URL}/contact`} className="text-slate-700 hover:text-secondary transition-colors font-medium">Contact</Link>
+                        <a href={HOME_URL} className="text-slate-700 hover:text-secondary transition-colors font-medium">Home</a>
+                        <a href={`${HOME_URL}/about`} className="text-slate-700 hover:text-secondary transition-colors font-medium">About</a>
+                        <a href={`${HOME_URL}/services`} className="text-slate-700 hover:text-secondary transition-colors font-medium">Services</a>
+                        <a href={`${HOME_URL}/contact`} className="text-slate-700 hover:text-secondary transition-colors font-medium">Contact</a>
                     </nav>
 
                     <div className="hidden md:block">
                         {user ? (
                             <GradientAvatar user={user} logout={logout} textColor="text-dark" />
                         ) : (
-                            <GradientButton href={`${process.env.NEXT_PUBLIC_PLATFORM_URL}/auth/login`} text="Login" size="sm" />
+                            <GradientButton href={`${HOME_URL}/auth/login`} text="Login" size="sm" />
                         )}
                     </div>
 

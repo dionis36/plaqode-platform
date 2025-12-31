@@ -29,10 +29,10 @@ export default function StaticNavbar() {
                         {/* Adjusting links to point to PlaQode main site if needed, or keeping local routes if they exist.
                             Assuming relative routes for now, user can correct if they need absolute URLs to plaqode-web.
                         */}
-                        <Link href={HOME_URL} className="text-light hover:text-secondary transition-colors font-medium">Home</Link>
-                        <Link href={`${HOME_URL}/about`} className="text-light hover:text-secondary transition-colors font-medium">About</Link>
-                        <Link href={`${HOME_URL}/services`} className="text-light hover:text-secondary transition-colors font-medium">Services</Link>
-                        <Link href={`${HOME_URL}/contact`} className="text-light hover:text-secondary transition-colors font-medium">Contact</Link>
+                        <a href={HOME_URL} className="text-light hover:text-secondary transition-colors font-medium">Home</a>
+                        <a href={`${HOME_URL}/about`} className="text-light hover:text-secondary transition-colors font-medium">About</a>
+                        <a href={`${HOME_URL}/services`} className="text-light hover:text-secondary transition-colors font-medium">Services</a>
+                        <a href={`${HOME_URL}/contact`} className="text-light hover:text-secondary transition-colors font-medium">Contact</a>
                     </nav>
 
                     <div className="hidden md:block">

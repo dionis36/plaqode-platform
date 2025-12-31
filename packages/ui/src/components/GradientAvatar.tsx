@@ -1,10 +1,11 @@
 "use client";
 
-import Link from 'next/link';
 import React, { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { LayoutDashboard, LogOut, UserCircle, Shield } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
+
+const HOME_URL = process.env.NEXT_PUBLIC_PLAQODE_WEB_URL || "http://localhost:3000";
 
 // Define a minimal User interface if one isn't available globally
 interface User {
@@ -128,33 +129,33 @@ export function GradientAvatar({ user, logout, className = "", textColor = "text
 
                     {/* Menu Items */}
                     <div className="p-2 space-y-1">
-                        <Link
-                            href="/app"
+                        <a
+                            href={`${HOME_URL}/app`}
                             className="flex items-center gap-3 px-3 py-2.5 text-sm text-light/80 hover:text-white hover:bg-white/10 rounded-xl transition-all group"
                             onClick={() => setIsOpen(false)}
                         >
                             <LayoutDashboard size={18} className="text-light/50 group-hover:text-secondary transition-colors" />
                             Dashboard
-                        </Link>
+                        </a>
 
-                        <Link
-                            href="/app/profile"
+                        <a
+                            href={`${HOME_URL}/app/profile`}
                             className="flex items-center gap-3 px-3 py-2.5 text-sm text-light/80 hover:text-white hover:bg-white/10 rounded-xl transition-all group"
                             onClick={() => setIsOpen(false)}
                         >
                             <UserCircle size={18} className="text-light/50 group-hover:text-secondary transition-colors" />
                             Profile
-                        </Link>
+                        </a>
 
                         {isAdmin && (
-                            <Link
-                                href="/app/admin"
+                            <a
+                                href={`${HOME_URL}/app/admin`}
                                 className="flex items-center gap-3 px-3 py-2.5 text-sm text-light/80 hover:text-white hover:bg-white/10 rounded-xl transition-all group"
                                 onClick={() => setIsOpen(false)}
                             >
                                 <Shield size={18} className="text-light/50 group-hover:text-secondary transition-colors" />
                                 Admin
-                            </Link>
+                            </a>
                         )}
                     </div>
 

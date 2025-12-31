@@ -48,23 +48,23 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                             <nav className="flex flex-col gap-4">
                                 {["Home", "About", "Services", "Contact"].map((item) => (
                                     <div key={item} className="border-b border-white/10 pb-4">
-                                        <Link
+                                        <a
                                             href={`${HOME_URL}${item === "Home" ? "/" : `/${item.toLowerCase()}`}`}
                                             className="text-lg font-medium hover:text-blue-400 transition-colors block"
                                             onClick={onClose}
                                         >
                                             {item}
-                                        </Link>
+                                        </a>
                                     </div>
                                 ))}
                                 <div className="pt-4">
-                                    <Link
-                                        href={`${process.env.NEXT_PUBLIC_PLATFORM_URL || "http://localhost:3000"}/auth/login`}
+                                    <a
+                                        href={`${HOME_URL}/auth/login`}
                                         className="block w-full py-3 text-center rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-lg hover:shadow-lg transition-all"
                                         onClick={onClose}
                                     >
                                         Login
-                                    </Link>
+                                    </a>
                                 </div>
                             </nav>
                         </div>
