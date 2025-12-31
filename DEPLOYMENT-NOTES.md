@@ -34,9 +34,10 @@ This guide details the specific environment variables and configurations require
     -   *If you see all IPs as 127.0.0.1 or ::1, you need to configure Fastify `trustProxy: true`.*
 
 ## 3. Deployment Checklist
-- [ ] **Database**: Run `prisma migrate deploy` on your production database.
+- [ ] **Database**: Run `prisma migrate deploy` on your production database (for both `qrstudio-api` and `plaqode-auth` if they share valid schemas, otherwise run for each service).
 - [ ] **Frontend**: Add `plaqode.com` to your Vercel Domains.
-- [ ] **Backend**: Map `api.plaqode.com` to your backend service.
+- [ ] **Backend (API)**: Map `api.plaqode.com` to your backend service.
+- [ ] **Auth Service**: Map `auth.plaqode.com` (or similar internal URL) and ensure `plaqode-web` can reach it via `NEXT_PUBLIC_AUTH_SERVICE_URL`.
 - [ ] **DNS**:
     -   `plaqode.com` -> Vercel IP
     -   `api.plaqode.com` -> Backend Service IP/CNAME
@@ -48,6 +49,20 @@ This guide details the specific environment variables and configurations require
 
 | Variable Name | Local Value (`.env.local`) | Production Value (Vercel Settings) | Description |
 | :--- | :--- | :--- | :--- |
-| `NEXT_PUBLIC_PLATFORM_URL` | `http://localhost:3000` | `https://plaqode.com` | **CRITICAL**: The generated QR codes will point to this URL (e.g. `plaqode.com/r/...`). Must match `FRONTEND_URL` in backend. |
-| `NEXT_PUBLIC_API_URL` | `http://localhost:3005` | `https://api.plaqode.com` | Backend API URL. |
 | `NEXT_PUBLIC_APP_URL` | `http://localhost:3001` | `https://create.plaqode.com` (or similar) | The URL of this creator app itself. |
+
+---
+
+## 5. Auth Service (`apps/plaqode-auth`)
+**Deployment Platform:** Railway / Render / DigitalOcean (Node.js Service)
+
+| Variable Name | Local Value (`.env`) | Production Value (Cloud Settings) | Description |
+| :--- | :--- | :--- | :--- |
+| `HOST` | `0.0.0.0` | `0.0.0.0` | Binding address. |
+| `PORT` | `3001` | `3001` (or provided by host) | Port the Auth API listens on. |
+| `DATABASE_URL` | `postgresql://...` | `postgresql://...` | Connection string to your Production Database (Must match other services if sharing DB). |
+| `JWT_SECRET` | `super-secret` | `ReallYlongRandoMStrinG...` | **CRITICAL**: Used to sign session tokens. |
+| `RESEND_API_KEY` | `re_...` | `re_...` | **CRITICAL**: Required for sending password reset emails. Get from Resend.com. |
+| `EMAIL_FROM` | `onboarding@resend.dev` | `noreply@plaqode.com` | The sender address for emails. Must be verified in Resend for Production. |
+| `WEB_URL` | `http://localhost:3000` | `https://plaqode.com` | Used to construct link URLs in emails (e.g. password reset links). |
+
