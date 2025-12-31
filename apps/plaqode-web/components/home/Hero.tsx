@@ -1,17 +1,20 @@
 "use client";
 
+import { useState } from "react"; // Added useState
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { GradientButton } from "@plaqode-platform/ui";
 import { GradientAvatar } from "@plaqode-platform/ui";
 import { Logo } from "@plaqode-platform/ui";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Menu } from "lucide-react"; // Added Menu
 import SplitText from "@/components/ui/SplitText";
+import MobileMenu from "@/components/layout/MobileMenu"; // Added MobileMenu
 
 import { useAuth } from "@/lib/auth-context";
 
 export default function Hero() {
     const { user, logout } = useAuth();
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // Added state
 
     return (
         <section className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-dark text-light">
@@ -21,6 +24,8 @@ export default function Hero() {
             {/* Hero Header (Static) */}
             <div className="absolute top-0 left-0 w-full z-20 px-4 md:px-8 py-4 flex justify-between items-center max-w-[1400px] mx-auto">
                 <Logo />
+
+                {/* Desktop Nav */}
                 <div className="hidden md:flex items-center gap-8">
                     <nav className="flex gap-8">
                         <Link href="/" className="hover:text-secondary transition-colors">Home</Link>
@@ -34,7 +39,18 @@ export default function Hero() {
                         <GradientButton href="/auth/login" text="Login" size="sm" className="text-light" />
                     )}
                 </div>
+
+                {/* Mobile Toggle */}
+                <button
+                    className="md:hidden text-light text-2xl"
+                    onClick={() => setIsMobileMenuOpen(true)}
+                >
+                    <Menu />
+                </button>
             </div>
+
+            <MobileMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
+
 
             {/* Content */}
             <div className="relative z-10 container mx-auto px-4 md:px-8 flex flex-col justify-center h-full pt-20">

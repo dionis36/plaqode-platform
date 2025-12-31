@@ -1,8 +1,13 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
-import { X, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { X, Facebook, Twitter, Instagram, Linkedin, LogIn, ChevronRight, Home, Info, Briefcase, Mail, LogOut, User, LayoutDashboard } from "lucide-react";
+import { Drawer } from "@plaqode-platform/ui";
+import { Logo } from "@plaqode-platform/ui";
+import { GradientButton } from "@plaqode-platform/ui";
+import { GradientAvatar } from "@plaqode-platform/ui";
+import { useAuth } from "@/lib/auth-context";
 
 interface MobileMenuProps {
     isOpen: boolean;
@@ -12,77 +17,128 @@ interface MobileMenuProps {
 const HOME_URL = process.env.NEXT_PUBLIC_PLAQODE_WEB_URL || "http://localhost:3000";
 
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
-    return (
-        <AnimatePresence>
-            {isOpen && (
-                <>
-                    {/* Overlay */}
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="fixed inset-0 bg-black/50 z-[20] backdrop-blur-sm"
-                        onClick={onClose}
-                    />
+    const { user, logout } = useAuth(); // Assuming auth-context provides similar interface
 
-                    {/* Drawer */}
-                    <motion.div
-                        initial={{ x: "100%" }}
-                        animate={{ x: 0 }}
-                        exit={{ x: "100%" }}
-                        transition={{ type: "tween", duration: 0.3, ease: "easeOut" }}
-                        className="fixed top-0 right-0 h-full w-[80%] min-w-[300px] max-w-sm bg-slate-900/95 backdrop-blur-md z-[1000] p-6 text-white flex flex-col justify-between shadow-2xl"
+    const navItems = [
+        { label: "Home", href: `${HOME_URL}/`, icon: Home },
+        { label: "About", href: `${HOME_URL}/about`, icon: Info },
+        { label: "Services", href: `${HOME_URL}/services`, icon: Briefcase },
+        { label: "Contact", href: `${HOME_URL}/contact`, icon: Mail },
+    ];
+
+    // Helper for initials (replicated locally as it's small)
+    const getInitials = (name?: string, email?: string) => {
+        if (name) {
+            const parts = name.split(' ');
+            if (parts.length >= 2) return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+            return name.substring(0, 2).toUpperCase();
+        }
+        if (email) return email.substring(0, 2).toUpperCase();
+        return 'U';
+    };
+
+    // Close on resize (desktop)
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth >= 768) {
+                onClose();
+            }
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, [onClose]);
+
+    return (
+        <Drawer
+            isOpen={isOpen}
+            onClose={onClose}
+            className="w-80 border-l border-white/10 bg-[#121212]/95 backdrop-blur-xl shadow-2xl" // Used slate-900 to match file's previous tone but aligned with dark theme
+        >
+            <div className="flex flex-col h-full">
+                {/* Header */}
+                <div className="h-20 flex items-center justify-between px-6 border-b border-white/5 shrink-0">
+                    <div className="flex items-center gap-2">
+                        {/* Using Logo component if it supports white color, matching other apps */}
+                        <Logo color="white" />
+                    </div>
+                    <button
+                        onClick={onClose}
+                        className="p-1.5 rounded-lg hover:bg-white/10 text-white/70 transition-colors"
                     >
-                        <div>
-                            <div className="flex justify-between items-center mb-8">
-                                <div className="flex items-center gap-2">
-                                    <img src="/img/qr-code-2.png" alt="Plaqode" className="w-10 h-10 object-contain" />
-                                    <p className="font-serif text-xl font-bold">Plaqode</p>
+                        <ChevronRight size={24} />
+                    </button>
+                </div>
+
+                {/* Navigation - Centered Vertically */}
+                <nav className="flex-1 overflow-y-auto py-6 px-4 flex flex-col justify-center gap-2">
+                    {navItems.map((item) => (
+                        <a // Using <a> for external links to main site
+                            key={item.label}
+                            href={item.href}
+                            className="flex items-center gap-4 px-4 py-4 rounded-xl border border-transparent text-white/80 hover:bg-white/5 hover:text-white transition-all duration-200 group"
+                            onClick={onClose}
+                        >
+                            <item.icon size={22} className="text-white/50 group-hover:text-white transition-colors" />
+                            <span className="font-medium text-lg">{item.label}</span>
+                        </a>
+                    ))}
+
+                    {/* Dashboard Link if logged in */}
+                    {user && (
+                        <Link
+                            href="/qrcodes" // Pointing to QR Codes listing as safe dashboard home
+                            className="flex items-center gap-4 px-4 py-4 rounded-xl border border-white/5 text-white/80 hover:text-white hover:bg-white/5 transition-all duration-200 group mt-2"
+                            onClick={onClose}
+                        >
+                            <LayoutDashboard size={22} className="text-blue-500 group-hover:text-blue-400 transition-colors" />
+                            <span className="font-medium text-lg">Dashboard</span>
+                        </Link>
+                    )}
+                </nav>
+
+                {/* Footer / Auth Section */}
+                <div className="p-6 border-t border-white/10 bg-black/20 shrink-0">
+
+                    {/* User Profile or Login */}
+                    <div className="mb-2">
+                        {user ? (
+                            <div className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5">
+                                <div className="flex items-center gap-3 overflow-hidden">
+                                    <GradientAvatar
+                                        user={user}
+                                        logout={logout}
+                                        disableDropdown
+                                        className="shrink-0"
+                                    />
+                                    <div className="min-w-0">
+                                        <p className="text-sm font-semibold text-white truncate">{user.name}</p>
+                                        <p className="text-xs text-white/50 truncate">{user.email}</p>
+                                    </div>
                                 </div>
-                                <button onClick={onClose} className="text-slate-400 hover:text-white transition-colors">
-                                    <X size={28} />
+                                <button
+                                    onClick={() => {
+                                        logout();
+                                        onClose();
+                                    }}
+                                    className="p-2 text-red-400 hover:bg-red-500/10 rounded-full transition-colors"
+                                    title="Logout"
+                                >
+                                    <LogOut size={20} />
                                 </button>
                             </div>
-
-                            <nav className="flex flex-col gap-4">
-                                {["Home", "About", "Services", "Contact"].map((item) => (
-                                    <div key={item} className="border-b border-white/10 pb-4">
-                                        <a
-                                            href={`${HOME_URL}${item === "Home" ? "/" : `/${item.toLowerCase()}`}`}
-                                            className="text-lg font-medium hover:text-blue-400 transition-colors block"
-                                            onClick={onClose}
-                                        >
-                                            {item}
-                                        </a>
-                                    </div>
-                                ))}
-                                <div className="pt-4">
-                                    <a
-                                        href={`${HOME_URL}/auth/login`}
-                                        className="block w-full py-3 text-center rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-lg hover:shadow-lg transition-all"
-                                        onClick={onClose}
-                                    >
-                                        Login
-                                    </a>
-                                </div>
-                            </nav>
-                        </div>
-
-                        <div>
-                            <p className="text-sm text-white/70 mb-6">
-                                Next Generation QR Code Solutions. Smart, Secure, Scalable.
-                            </p>
-                            <div className="flex gap-6">
-                                <a href="#" className="hover:text-blue-400 hover:scale-110 transition-all"><Facebook /></a>
-                                <a href="#" className="hover:text-blue-400 hover:scale-110 transition-all"><Twitter /></a>
-                                <a href="#" className="hover:text-blue-400 hover:scale-110 transition-all"><Instagram /></a>
-                                <a href="#" className="hover:text-blue-400 hover:scale-110 transition-all"><Linkedin /></a>
+                        ) : (
+                            <div onClick={onClose}>
+                                <GradientButton
+                                    href={`${HOME_URL}/auth/login`}
+                                    text="Login"
+                                    icon={<LogIn size={20} />}
+                                    className="w-full text-white"
+                                />
                             </div>
-                        </div>
-                    </motion.div>
-                </>
-            )}
-        </AnimatePresence>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </Drawer>
     );
 }

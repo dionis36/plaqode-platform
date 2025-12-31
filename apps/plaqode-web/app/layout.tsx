@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Open_Sans, Merriweather } from "next/font/google";
+import { Inter, Merriweather } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
 import { Toaster } from "@plaqode-platform/ui";
@@ -8,10 +8,10 @@ import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 import FontLoader from "@/components/FontLoader";
 
 // Global Body Font
-const openSans = Open_Sans({
+const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-open-sans', // CSS variable bridge
+  variable: '--font-inter', // CSS variable bridge
 });
 
 // Manual Heading Font
@@ -67,7 +67,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${openSans.variable} ${merriweather.variable}`}>
+    <html lang="en" className={`${inter.variable} ${merriweather.variable}`}>
       <body
         className="antialiased font-sans"
       >

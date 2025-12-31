@@ -3,8 +3,13 @@
 import { useEffect, useState } from 'react';
 import { analyticsApi, qrApi } from '@/lib/api-client';
 import { ArrowLeft, TrendingUp, Globe, Smartphone, Monitor } from 'lucide-react';
-import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
+
+// Dynamically import charts with SSR disabled
+const ScansChart = dynamic(() => import('@/components/analytics/AnalyticsCharts').then(mod => mod.ScansChart), { ssr: false });
+const DeviceChart = dynamic(() => import('@/components/analytics/AnalyticsCharts').then(mod => mod.DeviceChart), { ssr: false });
+const OSChart = dynamic(() => import('@/components/analytics/AnalyticsCharts').then(mod => mod.OSChart), { ssr: false });
 
 interface AnalyticsData {
     totalScans: number;
@@ -162,21 +167,7 @@ export default function AnalyticsPage({ params }: { params: { id: string } }) {
                 <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-8">
                     <h2 className="text-lg font-semibold text-slate-900 mb-4">Scans Over Time</h2>
                     {scansOverTimeData.length > 0 ? (
-                        <ResponsiveContainer width="100%" height={300}>
-                            <LineChart data={scansOverTimeData}>
-                                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                                <XAxis dataKey="date" stroke="#64748b" />
-                                <YAxis stroke="#64748b" />
-                                <Tooltip
-                                    contentStyle={{
-                                        backgroundColor: '#fff',
-                                        border: '1px solid #e2e8f0',
-                                        borderRadius: '8px',
-                                    }}
-                                />
-                                <Line type="monotone" dataKey="scans" stroke="#3b82f6" strokeWidth={2} dot={{ fill: '#3b82f6' }} />
-                            </LineChart>
-                        </ResponsiveContainer>
+                        <ScansChart data={scansOverTimeData} />
                     ) : (
                         <p className="text-center text-slate-500 py-8">No scan data available for this period</p>
                     )}
@@ -190,24 +181,7 @@ export default function AnalyticsPage({ params }: { params: { id: string } }) {
                             Device Breakdown
                         </h2>
                         {analytics.deviceBreakdown.length > 0 ? (
-                            <ResponsiveContainer width="100%" height={250}>
-                                <PieChart>
-                                    <Pie
-                                        data={analytics.deviceBreakdown}
-                                        dataKey="count"
-                                        nameKey="device"
-                                        cx="50%"
-                                        cy="50%"
-                                        outerRadius={80}
-                                        label={(entry: any) => `${entry.device}: ${entry.count}`}
-                                    >
-                                        {analytics.deviceBreakdown.map((entry, index) => (
-                                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                        ))}
-                                    </Pie>
-                                    <Tooltip />
-                                </PieChart>
-                            </ResponsiveContainer>
+                            <DeviceChart data={analytics.deviceBreakdown} colors={COLORS} />
                         ) : (
                             <p className="text-center text-slate-500 py-8">No device data available</p>
                         )}
@@ -220,21 +194,7 @@ export default function AnalyticsPage({ params }: { params: { id: string } }) {
                             Operating System
                         </h2>
                         {analytics.osBreakdown.length > 0 ? (
-                            <ResponsiveContainer width="100%" height={250}>
-                                <BarChart data={analytics.osBreakdown}>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                                    <XAxis dataKey="os" stroke="#64748b" />
-                                    <YAxis stroke="#64748b" />
-                                    <Tooltip
-                                        contentStyle={{
-                                            backgroundColor: '#fff',
-                                            border: '1px solid #e2e8f0',
-                                            borderRadius: '8px',
-                                        }}
-                                    />
-                                    <Bar dataKey="count" fill="#8b5cf6" />
-                                </BarChart>
-                            </ResponsiveContainer>
+                            <OSChart data={analytics.osBreakdown} />
                         ) : (
                             <p className="text-center text-slate-500 py-8">No OS data available</p>
                         )}

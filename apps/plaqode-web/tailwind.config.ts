@@ -17,7 +17,7 @@ const config: Config = {
                 bg: "#efefef",
             },
             fontFamily: {
-                sans: ["'Open Sans'", "var(--font-sans)", "ui-sans-serif", "system-ui"],
+                sans: ["'Inter'", "var(--font-inter)", "ui-sans-serif", "system-ui"],
                 merriweather: ["'Merriweather'", "var(--font-merriweather)", "serif"],
             },
 
