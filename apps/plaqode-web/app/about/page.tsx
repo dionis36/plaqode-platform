@@ -17,7 +17,7 @@ export default function AboutPage() {
                 <StaticNavbar />
 
                 <div className="relative z-10">
-                    <h1 className="text-5xl md:text-[4rem] font-merriweather font-bold text-light mb-4 bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent">About Us</h1>
+                    <h1 className="text-5xl md:text-7xl font-merriweather font-bold text-light mb-4 bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent">About Us</h1>
                     <p className="text-light/70 font-sans max-w-xl mx-auto">
                         Building trust, one code at a time.
                     </p>
