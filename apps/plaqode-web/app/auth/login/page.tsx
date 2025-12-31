@@ -5,6 +5,7 @@ import { useAuth } from '@/lib/auth-context';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Logo, toast } from "@plaqode-platform/ui";
+import { Eye, EyeOff } from 'lucide-react';
 
 export default function LoginPage() {
     return (
@@ -17,6 +18,7 @@ export default function LoginPage() {
 function LoginForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const { login } = useAuth();
     const searchParams = useSearchParams();
@@ -94,13 +96,20 @@ function LoginForm() {
                             <div>
                                 <div className="relative">
                                     <input
-                                        type="password"
+                                        type={showPassword ? "text" : "password"}
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         required
-                                        className="w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition text-dark placeholder-gray-500 font-sans font-medium"
+                                        className="w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition text-dark placeholder-gray-500 font-sans font-medium pr-12"
                                         placeholder="Password"
                                     />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-secondary transition-colors"
+                                    >
+                                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                    </button>
                                 </div>
                             </div>
                         </div>
