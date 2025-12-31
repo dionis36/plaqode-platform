@@ -1,9 +1,18 @@
 # CI/CD Setup Guide (Native Cloud Builds)
 
-This guide outlines how to set up Continuous Integration (CI) and Continuous Deployment (CD) for the Plaqode Monorepo using GitHub Actions and Native Cloud Providers (Vercel/Railway).
+This guide outlines how to set up Continuous Integration (CI) and Continuous Deployment (CD) for the Plaqode Monorepo.
+
+## 🚀 Phase 1 — Now (Budget $0)
+We are prioritizing **Zero Cost** and **High Performance** for the initial launch.
+
+*   **Frontend**: [Vercel](https://vercel.com) (Generous Free Tier for Next.js)
+*   **Backend**: [Fly.io](https://fly.io) (Waived bills <$5/mo = Free for small apps)
+*   **Database**: [Neon](https://neon.tech) (Free Tier Serverless Postgres)
 
 > [!NOTE]
-> **Why No Docker?**: We are utilizing "Native Native Builds" (Buildpacks/Nixpacks). This simplifies management as the hosting platform (Vercel/Railway) handles the OS and Runtime environment management for you.
+> **Why this stack?**: Vercel provides the best Next.js experience. Fly.io offers significantly faster "wake up" times than Render's free tier, making the API feel responsive even with low traffic. Neon separates storage from compute, allowing the DB to scale to zero (cost-wise) when not in use.
+
+---
 
 ## 1. Continuous Integration (CI)
 We use **GitHub Actions** to ensure every Pull Request is healthy before merging.
@@ -50,9 +59,9 @@ jobs:
 
 ---
 
-## 2. Continuous Deployment (CD)
+## 2. Continuous Deployment (CD) - Phase 1
 
-### A. Frontend Apps (`plaqode-web`, `qrstudio-web`)
+### A. Frontend Apps (`plaqode-web`, `qrstudio-web`, `cardify`)
 **Platform**: Vercel
 
 1.  **Project Setup**:
@@ -62,6 +71,7 @@ jobs:
     *   **Root Directory**: 
         *   For Main App: Edit to `apps/plaqode-web`.
         *   For Creator App: Create *another* project and set Root to `apps/qrstudio-web`.
+        *   For Cardify App: Create *another* project and set Root to `apps/cardify`.
 2.  **Environment Variables**:
     *   Copy values from `DEPLOYMENT-NOTES.md` into Vercel Project Settings -> Environment Variables.
 3.  **Deploy**:
@@ -69,29 +79,52 @@ jobs:
     *   **Result**: Live URL (e.g., `plaqode.com`).
 
 ### B. Backend Services (`qrstudio-api`, `plaqode-auth`)
-**Platform**: Railway (Recommended) or Render
-**Method**: Native Buildpacks (Nixpacks)
+**Platform**: Fly.io (Free Tier Strategy)
 
-1.  **Project Setup**:
-    *   Go to Railway Dashboard -> New Project -> GitHub Repo.
-    *   Select `plaqode-platform`.
-2.  **Service Configuration**:
-    *   Railway will detect the Monorepo. You might need to add the repo twice (once for each service) or configure monorepo settings.
-    *   **Service 1 (API)**:
-        *   **Root Directory**: `/apps/qrstudio-api`
-        *   **Build Command**: `npm run build`
-        *   **Start Command**: `npm run dev` (or `npm start` if compiled to JS)
-    *   **Service 2 (Auth)**:
-        *   **Root Directory**: `/apps/plaqode-auth`
-3.  **Variables**:
-    *   Add `JWT_PRIVATE_KEY_PATH` etc.
-    *   **Tip**: For file-based keys, Railway allows you to paste the content into a Variable, or use their "Config Files" feature to mount `private.pem` at a specific path.
+1.  **Install Fly CLI**: `PowerShell -Command "iwr https://fly.io/install.ps1 -useb | iex"`
+2.  **Login**: `fly auth login`
+3.  **Launch (Do one for each app)**:
+    *   `cd apps/qrstudio-api` -> `fly launch --no-deploy`
+    *   `cd apps/plaqode-auth` -> `fly launch --no-deploy`
+    *   *Note*: This creates a `fly.toml` file.
+4.  **Configure Secrets**:
+    *   `fly secrets set JWT_PRIVATE_KEY_PATH="/app/keys/private.pem" ...` (See Env Vars below)
+5.  **Deploy**:
+    *   `fly deploy`
+
+### C. Database
+**Platform**: Neon
+
+1.  Create 3 Projects in Neon console (one for each service that needs a DB):
+    *   `plaqode-auth-db`
+    *   `qrstudio-api-db`
+    *   `cardify-db`
+2.  Get the Connection String for each.
+3.  Add these strings to their respective Environment Variables:
+    *   `plaqode-auth` (Fly.io) -> `DATABASE_URL`
+    *   `qrstudio-api` (Fly.io) -> `DATABASE_URL`
+    *   `cardify` (Vercel) -> `DATABASE_URL`
 
 ---
 
-## 3. Post-Deployment Analysis & Monitoring
+## 3. Future Roadmap: Docker Strategy
+While Phase 1 uses "Native" builds, scaling may require Docker.
 
-Once deployed, you need to know if it works.
+### When to switch to Docker?
+1.  **Complex Dependencies**: If you need system-level libraries not present in standard Vercel/Fly runtimes (e.g., specific versions of `FFmpeg`, `Canvas`).
+2.  **Vendor Lock-in Concerns**: Docker containers can run anywhere (AWS ECS, Google Cloud Run, DigitalOcean App Platform), freeing you from Vercel/Fly specific logic.
+3.  **Reproducibility**: "It works on my machine" -> Docker makes sure the *OS* is the same too.
+
+### Implementation Plan
+1.  **Create Dockerfiles**: Add a `Dockerfile` to each `apps/*` directory.
+    *   Use highly optimized base images like `node:20-alpine` or `gcr.io/distroless/nodejs`.
+2.  **Docker Compose**: Create `docker-compose.yml` in the root for local dev orchestration of DB + API + Frontend.
+3.  **CI Update**: Update GitHub Actions to `docker build` and push to GitHub Container Registry (GHCR).
+4.  **Deploy**: Update Fly.io/Render to pull the image from GHCR instead of building from source.
+
+---
+
+## 4. Post-Deployment Analysis & Monitoring
 
 ### 📊 Error Tracking: Sentry
 Catch crashes in real-time.
@@ -107,9 +140,3 @@ Catch crashes in real-time.
 ### 💓 Uptime: BetterStack / UptimeRobot
 1.  Set up a monitor for `https://api.plaqode.com/health`.
 2.  **Benefit**: Get alerted if your API goes down completely.
-
----
-
-## 4. Recommendation Note
-**Why this approach works**: Next.js and Node.js are standard technologies. Platforms like Vercel and Railway have spent years optimizing their "Native" build pipelines to support them out of the box.  
-**When to switch**: Only enable Docker if you encounter "It works on my machine but not on the server" issues specifically related to system libraries (like Image Processing libraries `sharp` or `canvas`), as Docker guarantees the OS files are identical. For now, Native Builds are faster to maintain.

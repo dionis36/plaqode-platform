@@ -14,8 +14,9 @@ This document outlines the optimal workflow to take `plaqode-platform` from its 
 
 ### 2. Connect Cloud Providers (Limit: 1 day)
 *   **Action**:
-    *   **Frontend**: Connect `plaqode-web` to **Vercel**.
-    *   **Backend**: Connect `qrstudio-api` and `plaqode-auth` to **Railway**.
+    *   **Frontend**: Connect `plaqode-web`, `qrstudio-web`, and `cardify` to **Vercel**.
+    *   **Backend**: Connect `qrstudio-api` and `plaqode-auth` to **Fly.io**.
+    *   **Database**: Connect **Neon** (Free Tier).
 *   **Configuration**: Input all Env Vars from `DEPLOYMENT-NOTES.md`.
 *   **Why**: "Works on my machine" is not enough. You need to see it live on the web to catch CORS/Cookie issues early.
 
