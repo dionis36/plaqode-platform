@@ -181,18 +181,13 @@ export default function GradientAvatar({ user, className = "", textColor = "text
             <motion.button
                 ref={buttonRef}
                 onClick={toggleDropdown}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
                 className={`group relative inline-flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 ${disableDropdown ? 'cursor-default' : 'cursor-pointer'} ${className}`}
             >
                 {/* 1. The Gradient Border (Masked) with Glow Effect */}
                 <span className="absolute inset-0 rounded-full gradient-border-mask pointer-events-none" />
 
-                {/* Glow behind */}
-                <span className="absolute inset-0 rounded-full bg-gradient-to-r from-secondary/20 to-primary/20 hover:from-secondary/50 hover:to-primary/50 blur-sm transition-all duration-300" />
-
                 {/* 2. Initials (Transparent Center) */}
-                <span className={`relative z-10 font-inter font-bold text-sm tracking-wider ${textColor}`}>
+                <span className={`relative z-10 font-merriweather font-bold text-sm tracking-wider ${textColor}`}>
                     {getInitials(user)}
                 </span>
             </motion.button>
