@@ -5,7 +5,21 @@ import { generateTokenPair, verifyToken, getPublicKey } from '../utils/jwt.js';
 import { signupSchema, loginSchema } from '../schemas/auth.js';
 import { config } from '../config.js';
 import { authMiddleware } from '../middleware/auth.js';
+import { Resend } from 'resend';
+import crypto from 'crypto';
+import { z } from 'zod';
 
+const resend = new Resend(process.env.RESEND_API_KEY);
+const WEB_URL = process.env.WEB_URL || 'http://localhost:3000';
+
+const forgotPasswordSchema = z.object({
+    email: z.string().email(),
+});
+
+const resetPasswordSchema = z.object({
+    token: z.string(),
+    password: z.string().min(8),
+});
 export async function authRoutes(app: FastifyInstance) {
     // POST /auth/signup - User registration
     app.post('/auth/signup', async (request, reply) => {
@@ -441,4 +455,113 @@ export async function authRoutes(app: FastifyInstance) {
             publicKey: getPublicKey(),
         });
     });
+    // POST /auth/forgot-password
+    app.post('/auth/forgot-password', async (request, reply) => {
+        try {
+            const { email } = forgotPasswordSchema.parse(request.body);
+
+            // Generic response to prevent enumeration
+            const genericResponse = {
+                success: true,
+                message: 'If an account exists for this email, you will receive a reset link shortly.',
+            };
+
+            const user = await prisma.user.findUnique({ where: { email } });
+            if (!user) return reply.send(genericResponse);
+
+            // Generate secure token
+            const resetToken = crypto.randomBytes(32).toString('hex');
+            const tokenHash = crypto.createHash('sha256').update(resetToken).digest('hex');
+
+            // Store in DB (expires in 30 mins)
+            const expiresAt = new Date(Date.now() + 30 * 60 * 1000);
+
+            await prisma.resetToken.create({
+                data: {
+                    userId: user.id,
+                    tokenHash,
+                    expiresAt,
+                },
+            });
+
+            // Send Email
+            const resetLink = `${WEB_URL}/auth/reset-password?token=${resetToken}`;
+
+            await resend.emails.send({
+                from: 'Plaqode Security <security@plaqo.de>',
+                to: email,
+                subject: 'Reset your password',
+                html: `
+                    <h1>Reset your password</h1>
+                    <p>Click the link below to reset your password. This link expires in 30 minutes.</p>
+                    <a href="${resetLink}">Reset Password</a>
+                    <p>If you didn't request this, please ignore this email.</p>
+                `,
+            });
+
+            return reply.send(genericResponse);
+
+        } catch (error: any) {
+            console.error('Forgot password error:', error);
+            if (error instanceof z.ZodError) {
+                return reply.status(400).send({ success: false, error: 'Invalid email format' });
+            }
+            // Return generic success even on internal error to avoid leaking info, or generic 500
+            return reply.status(500).send({ success: false, error: 'Internal server error' });
+        }
+    });
+
+    // POST /auth/reset-password
+    app.post('/auth/reset-password', async (request, reply) => {
+        try {
+            const { token, password } = resetPasswordSchema.parse(request.body);
+
+            const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
+
+            const storedToken = await prisma.resetToken.findUnique({
+                where: { tokenHash },
+                include: { user: true },
+            });
+
+            if (!storedToken || storedToken.expiresAt < new Date()) {
+                // Delete expired token if found
+                if (storedToken) {
+                    await prisma.resetToken.delete({ where: { id: storedToken.id } });
+                }
+                return reply.status(400).send({ success: false, error: 'Invalid or expired token' });
+            }
+
+            // Update password
+            const passwordHash = await hashPassword(password);
+            await prisma.user.update({
+                where: { id: storedToken.userId },
+                data: { passwordHash },
+            });
+
+            // Invalidate all sessions and delete used token
+            await prisma.$transaction([
+                prisma.resetToken.delete({ where: { id: storedToken.id } }),
+                prisma.refreshToken.deleteMany({ where: { userId: storedToken.userId } }),
+            ]);
+
+            // Notify user of change (optional but recommended)
+            await resend.emails.send({
+                from: 'Plaqode Security <security@plaqo.de>',
+                to: storedToken.user.email,
+                subject: 'Your password has been changed',
+                html: `<p>Your password was successfully changed. If this wasn't you, contact support immediately.</p>`,
+            });
+
+            return reply.send({ success: true, message: 'Password reset successfully' });
+
+        } catch (error) {
+            console.error('Reset password error:', error);
+            if (error instanceof z.ZodError) {
+                return reply.status(400).send({ success: false, error: 'Invalid input' });
+            }
+            return reply.status(500).send({ success: false, error: 'Internal server error' });
+        }
+    });
+
 }
+

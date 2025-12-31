@@ -19,6 +19,8 @@ interface AuthContextType {
     isAdmin: boolean;
     isSuperAdmin: boolean;
     hasProduct: (product: string) => boolean;
+    resetPassword: (email: string) => Promise<void>;
+    confirmPasswordReset: (password: string, token: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -125,12 +127,40 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         window.location.href = '/';
     };
 
+    const resetPassword = async (email: string) => {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/forgot-password`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email }),
+        });
+
+        if (!response.ok) {
+            // We generally don't want to expose if email failed due to non-existence, but the backend handles that.
+            // If it fails here, it's likely a 400 or 500.
+            const error = await response.json();
+            throw new Error(error.error || 'Failed to request password reset');
+        }
+    };
+
+    const confirmPasswordReset = async (password: string, token: string) => {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/reset-password`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password, token }),
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error || 'Failed to reset password');
+        }
+    };
+
     const isSuperAdmin = user?.roles.includes('superadmin') || false;
     const isAdmin = user?.roles.includes('admin') || isSuperAdmin;
     const hasProduct = (product: string) => user?.products.includes(product) || false;
 
     return (
-        <AuthContext.Provider value={{ user, loading, login, signup, logout, isAdmin, isSuperAdmin, hasProduct }}>
+        <AuthContext.Provider value={{ user, loading, login, signup, logout, isAdmin, isSuperAdmin, hasProduct, resetPassword, confirmPasswordReset }}>
             {children}
         </AuthContext.Provider>
     );
