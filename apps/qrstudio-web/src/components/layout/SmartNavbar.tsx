@@ -6,14 +6,14 @@ import { Menu } from "lucide-react";
 import MobileMenu from "@/components/layout/MobileMenu";
 import { Logo } from "@plaqode-platform/ui";
 import { GradientButton } from "@plaqode-platform/ui";
-import GradientAvatar from "@/components/ui/GradientAvatar";
+import { GradientAvatar } from "@plaqode-platform/ui";
 
 import { useAuth } from "@/lib/auth-context";
 
 const HOME_URL = process.env.NEXT_PUBLIC_PLAQODE_WEB_URL || "http://localhost:3000";
 
 export default function SmartNavbar() {
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
     const [isVisible, setIsVisible] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const lastScrollY = useRef(0);
@@ -63,7 +63,7 @@ export default function SmartNavbar() {
 
                         <div className="hidden md:block">
                             {user ? (
-                                <GradientAvatar user={user} />
+                                <GradientAvatar user={user} logout={logout} />
                             ) : (
                                 <GradientButton href={`${process.env.NEXT_PUBLIC_PLATFORM_URL}/auth/login`} text="Login" size="sm" />
                             )}

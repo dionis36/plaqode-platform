@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { GradientButton } from "@plaqode-platform/ui";
-import GradientAvatar from "@/components/ui/GradientAvatar";
+import { GradientAvatar } from "@plaqode-platform/ui";
 import { Logo } from "@plaqode-platform/ui";
 import { ArrowRight } from "lucide-react";
 import SplitText from "@/components/ui/SplitText";
@@ -11,7 +11,7 @@ import SplitText from "@/components/ui/SplitText";
 import { useAuth } from "@/lib/auth-context";
 
 export default function Hero() {
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
 
     return (
         <section className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-dark text-light">
@@ -29,7 +29,7 @@ export default function Hero() {
                         <Link href="/contact" className="hover:text-secondary transition-colors">Contact</Link>
                     </nav>
                     {user ? (
-                        <GradientAvatar user={user} />
+                        <GradientAvatar user={user} logout={logout} />
                     ) : (
                         <GradientButton href="/auth/login" text="Login" size="sm" className="text-light" />
                     )}

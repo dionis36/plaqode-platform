@@ -4,7 +4,7 @@ import { Menu, Search, Home } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
 import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
-import GradientAvatar from '@/components/ui/GradientAvatar';
+import { GradientAvatar } from '@plaqode-platform/ui';
 import { Logo, Input } from '@plaqode-platform/ui';
 
 interface DashboardHeaderProps {
@@ -61,7 +61,7 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
                 {/* Gradient Avatar */}
                 {user && (
                     <div className="hidden lg:block relative z-50">
-                        <GradientAvatar user={user} textColor="text-dark" />
+                        <GradientAvatar user={user} logout={logout} textColor="text-dark" />
                     </div>
                 )}
 

@@ -5,21 +5,23 @@ const PLATFORM_URL = 'http://localhost:3000';
 
 import Link from "next/link";
 import { GradientButton } from "@plaqode-platform/ui";
-import GradientAvatar from "@/components/ui/GradientAvatar";
+import { GradientAvatar } from "@plaqode-platform/ui";
 import { Logo } from "@plaqode-platform/ui";
 import { useAuth } from "@/lib/auth-context";
 import { Menu } from "lucide-react";
 import { useState } from "react";
 import MobileMenu from "./MobileMenu";
 
+const HOME_URL = process.env.NEXT_PUBLIC_PLAQODE_WEB_URL || "http://localhost:3000";
+
 export default function StaticNavbar() {
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     return (
         <>
-            <div className="absolute top-0 left-0 w-full z-20 px-4 md:px-8 py-4 flex justify-between items-center max-w-[1400px] mx-auto left-0 right-0">
-                <Logo href={PLATFORM_URL} />
+            <div className="absolute top-0 left-0 w-full z-20 px-4 md:px-8 py-4 flex justify-between items-center max-w-[1400px] mx-auto right-0 bg-transparent">
+                <Logo color="white" href={HOME_URL} />
 
                 {/* Desktop Nav & Auth */}
                 <div className="flex items-center gap-8">
@@ -27,19 +29,17 @@ export default function StaticNavbar() {
                         {/* Adjusting links to point to PlaQode main site if needed, or keeping local routes if they exist.
                             Assuming relative routes for now, user can correct if they need absolute URLs to plaqode-web.
                         */}
-                        <a href={PLATFORM_URL} className="text-light hover:text-secondary transition-colors">Home</a>
-                        <a href={`${PLATFORM_URL}/about`} className="text-light hover:text-secondary transition-colors">About</a>
-                        <a href={`${PLATFORM_URL}/services`} className="text-light hover:text-secondary transition-colors">Services</a>
-                        <a href={`${PLATFORM_URL}/contact`} className="text-light hover:text-secondary transition-colors">Contact</a>
+                        <Link href={HOME_URL} className="text-light hover:text-secondary transition-colors font-medium">Home</Link>
+                        <Link href={`${HOME_URL}/about`} className="text-light hover:text-secondary transition-colors font-medium">About</Link>
+                        <Link href={`${HOME_URL}/services`} className="text-light hover:text-secondary transition-colors font-medium">Services</Link>
+                        <Link href={`${HOME_URL}/contact`} className="text-light hover:text-secondary transition-colors font-medium">Contact</Link>
                     </nav>
 
                     <div className="hidden md:block">
                         {user ? (
-                            <div className="relative z-50">
-                                <GradientAvatar user={user} />
-                            </div>
+                            <GradientAvatar user={user} logout={logout} />
                         ) : (
-                            <GradientButton href={`${PLATFORM_URL}/auth/login`} text="Login" size="sm" className="text-light"/>
+                            <GradientButton href={`${PLATFORM_URL}/auth/login`} text="Login" size="sm" className="text-light" />
                         )}
                     </div>
 

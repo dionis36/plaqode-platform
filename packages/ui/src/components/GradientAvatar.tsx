@@ -3,23 +3,29 @@
 import Link from 'next/link';
 import React, { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { useAuth } from '@/lib/auth-context';
 import { LayoutDashboard, LogOut, UserCircle, Shield } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
+// Define a minimal User interface if one isn't available globally
+interface User {
+    name?: string;
+    email: string;
+    roles?: string[];
+}
+
+// We rely on passing the logout function and user object as props
+// because the shared UI component shouldn't depend on app-specific context directly
+// unless we move the AuthContext to the shared package (which is a larger refactor).
+// For now, we'll accept `logout` as a prop to keep it pure.
 interface GradientAvatarProps {
-    user: {
-        name?: string;
-        email: string;
-        roles?: string[];
-    };
+    user: User;
+    logout: () => void; // Passed explicitly to avoid context dependency issues across apps
     className?: string;
     textColor?: "text-white" | "text-dark";
     disableDropdown?: boolean;
 }
 
-export default function GradientAvatar({ user, className = "", textColor = "text-white", disableDropdown = false }: GradientAvatarProps) {
-    const { logout } = useAuth();
+export function GradientAvatar({ user, logout, className = "", textColor = "text-white", disableDropdown = false }: GradientAvatarProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [position, setPosition] = useState({ top: 0, right: 0 });
     const [mounted, setMounted] = useState(false);
@@ -43,12 +49,6 @@ export default function GradientAvatar({ user, className = "", textColor = "text
     const updatePosition = () => {
         if (buttonRef.current) {
             const rect = buttonRef.current.getBoundingClientRect();
-            // Calculate position: Top is bottom of button + gap, Right is window width - right of button
-            // Since we want to align the right edge of the dropdown with the right edge of the button:
-            // right = windowWidth - rect.right (distance from right edge of screen)
-            // But we can also use 'left'. 
-            // Let's use 'top' and 'right' styles on the fixed element.
-            // window.innerWidth - rect.right gives the 'right' CSS value relative to viewport right edge.
 
             setPosition({
                 top: rect.bottom + 12,

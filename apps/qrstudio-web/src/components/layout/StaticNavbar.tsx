@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { GradientButton } from "@plaqode-platform/ui";
-import GradientAvatar from "@/components/ui/GradientAvatar";
+import { GradientAvatar } from "@plaqode-platform/ui";
 import { Logo } from "@plaqode-platform/ui";
 import { useAuth } from "@/lib/auth-context";
 import { Menu } from "lucide-react";
@@ -12,7 +12,7 @@ import MobileMenu from "@/components/layout/MobileMenu";
 const HOME_URL = process.env.NEXT_PUBLIC_PLAQODE_WEB_URL || "http://localhost:3000";
 
 export default function StaticNavbar() {
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     return (
@@ -31,7 +31,7 @@ export default function StaticNavbar() {
 
                     <div className="hidden md:block">
                         {user ? (
-                            <GradientAvatar user={user} textColor="text-dark" />
+                            <GradientAvatar user={user} logout={logout} textColor="text-dark" />
                         ) : (
                             <GradientButton href={`${process.env.NEXT_PUBLIC_PLATFORM_URL}/auth/login`} text="Login" size="sm" />
                         )}

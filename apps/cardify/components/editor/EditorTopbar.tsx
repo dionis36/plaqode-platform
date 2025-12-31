@@ -6,7 +6,7 @@ import { Download, Undo, Redo, Save, ArrowLeft, Loader, Shuffle, RotateCcw } fro
 import Image from "next/image";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
-import GradientAvatar from "@/components/ui/GradientAvatar";
+import { GradientAvatar } from "@plaqode-platform/ui";
 import { GradientButton } from "@plaqode-platform/ui";
 
 interface EditorTopbarProps {
@@ -42,7 +42,7 @@ export default function EditorTopbar({
     onShuffleLogo,
     hasLogo = false,
 }: EditorTopbarProps) {
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
 
     return (
         <div className="absolute top-0 left-0 right-0 h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4 z-[100] shadow-sm hidden lg:flex">
@@ -144,7 +144,7 @@ export default function EditorTopbar({
 
                 {/* User Auth */}
                 {user ? (
-                    <GradientAvatar user={user} textColor="text-dark" />
+                    <GradientAvatar user={user} logout={logout} textColor="text-dark" />
                 ) : (
                     <GradientButton
                         href={`${process.env.NEXT_PUBLIC_PLATFORM_URL}/auth/login`}

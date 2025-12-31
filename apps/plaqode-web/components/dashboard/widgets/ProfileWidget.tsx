@@ -1,12 +1,12 @@
 'use client';
 
 import { useAuth } from '@/lib/auth-context';
-import GradientAvatar from '@/components/ui/GradientAvatar';
+import { GradientAvatar } from '@plaqode-platform/ui';
 import { Settings, Award } from 'lucide-react';
 import Link from 'next/link';
 
 export function ProfileWidget() {
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
     if (!user) return null;
 
     return (
@@ -19,7 +19,7 @@ export function ProfileWidget() {
             </div>
 
             <div className="flex items-start gap-4 mb-6">
-                <GradientAvatar user={user} className="w-16 h-16 text-2xl" disableDropdown={true} textColor="text-dark" />
+                <GradientAvatar user={user} logout={logout} className="w-16 h-16 text-2xl" disableDropdown={true} textColor="text-dark" />
                 <div>
                     <h3 className="font-bold text-lg text-gray-900">{user.name}</h3>
                     <p className="text-gray-500 text-sm">{user.email}</p>
