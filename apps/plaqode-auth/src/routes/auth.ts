@@ -467,7 +467,13 @@ export async function authRoutes(app: FastifyInstance) {
             };
 
             const user = await prisma.user.findUnique({ where: { email } });
-            if (!user) return reply.send(genericResponse);
+
+            if (!user) {
+                console.log(`[Forgot Password] User not found for email: ${email}`);
+                return reply.send(genericResponse);
+            }
+
+            console.log(`[Forgot Password] User found: ${user.id}. Generating token...`);
 
             // Generate secure token
             const resetToken = crypto.randomBytes(32).toString('hex');
@@ -486,9 +492,12 @@ export async function authRoutes(app: FastifyInstance) {
 
             // Send Email
             const resetLink = `${WEB_URL}/auth/reset-password?token=${resetToken}`;
+            const emailFrom = process.env.EMAIL_FROM || 'onboarding@resend.dev';
+
+            console.log(`[Forgot Password] Sending email to ${email} from ${emailFrom}`);
 
             await resend.emails.send({
-                from: 'Plaqode Security <security@plaqo.de>',
+                from: emailFrom,
                 to: email,
                 subject: 'Reset your password',
                 html: `
@@ -498,6 +507,8 @@ export async function authRoutes(app: FastifyInstance) {
                     <p>If you didn't request this, please ignore this email.</p>
                 `,
             });
+
+            console.log(`[Forgot Password] Email sent successfully.`);
 
             return reply.send(genericResponse);
 

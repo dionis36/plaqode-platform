@@ -17,7 +17,6 @@ export default function LoginPage() {
 function LoginForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const { login } = useAuth();
     const searchParams = useSearchParams();
@@ -25,13 +24,13 @@ function LoginForm() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError('');
         setLoading(true);
 
         try {
             await login(email, password, redirect || undefined);
+            toast.success('Welcome back!');
         } catch (err: any) {
-            setError(err.message || 'Login failed');
+            toast.error(err.message || 'Login failed');
             setLoading(false);
         }
     };
@@ -80,12 +79,6 @@ function LoginForm() {
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-6">
-                        {error && (
-                            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm">
-                                {error}
-                            </div>
-                        )}
-
                         <div className="space-y-5">
                             <div>
                                 <input

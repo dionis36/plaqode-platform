@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import Link from 'next/link';
-import { Logo } from "@plaqode-platform/ui";
+import { Logo, toast } from "@plaqode-platform/ui";
 
 export default function SignupPage() {
     const [email, setEmail] = useState('');
@@ -33,9 +33,10 @@ export default function SignupPage() {
 
         try {
             await signup(email, password, name || undefined);
+            toast.success('Account created successfully! Welcome aboard.');
             // Redirect is handled in the signup function
         } catch (err: any) {
-            setError(err.message || 'Signup failed');
+            toast.error(err.message || 'Signup failed');
             setLoading(false);
         }
     };
