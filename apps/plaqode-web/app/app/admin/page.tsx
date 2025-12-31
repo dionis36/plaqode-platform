@@ -24,6 +24,8 @@ export default function AdminPage() {
     const [showRoleModal, setShowRoleModal] = useState(false);
     const [showProductModal, setShowProductModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [roleToRevoke, setRoleToRevoke] = useState<string | null>(null);
+    const [productToRevoke, setProductToRevoke] = useState<string | null>(null);
     const [actionLoading, setActionLoading] = useState(false);
     const [filter, setFilter] = useState<'all' | 'admins' | 'users'>('all');
     const [openActionMenu, setOpenActionMenu] = useState<string | null>(null);
@@ -104,12 +106,18 @@ export default function AdminPage() {
         }
     };
 
-    const revokeRole = async (userId: string, role: string) => {
-        if (!confirm(`Revoke "${role}" role from this user?`)) return;
+    const promptRevokeRole = (user: User, role: string) => {
+        setSelectedUser(user);
+        setRoleToRevoke(role);
+    };
 
+    const executeRevokeRole = async () => {
+        if (!selectedUser || !roleToRevoke) return;
+
+        // Optimistic UI update or wait for load? We'll wait.
         try {
             const response = await fetch(
-                `${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/users/${userId}/roles/${role}`,
+                `${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/users/${selectedUser.id}/roles/${roleToRevoke}`,
                 {
                     method: 'DELETE',
                     credentials: 'include',
@@ -117,11 +125,15 @@ export default function AdminPage() {
             );
 
             if (response.ok) {
-                toast.success(`Role "${role}" revoked successfully!`);
+                toast.success(`Role "${roleToRevoke}" revoked successfully!`);
                 fetchUsers();
+                setRoleToRevoke(null);
+            } else {
+                toast.error('Failed to revoke role');
             }
         } catch (error) {
             console.error('Failed to revoke role:', error);
+            toast.error('Failed to revoke role');
         }
     };
 
@@ -150,12 +162,18 @@ export default function AdminPage() {
         }
     };
 
-    const revokeProduct = async (userId: string, product: string) => {
-        if (!confirm(`Revoke ${product} access?`)) return;
+    const promptRevokeProduct = (user: User, product: string) => {
+        setSelectedUser(user);
+        setProductToRevoke(product);
+    };
 
+    const executeRevokeProduct = async () => {
+        if (!selectedUser || !productToRevoke) return;
+
+        setActionLoading(true);
         try {
             const response = await fetch(
-                `${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/users/${userId}/products/${product}`,
+                `${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/users/${selectedUser.id}/products/${productToRevoke}`,
                 {
                     method: 'DELETE',
                     credentials: 'include',
@@ -163,11 +181,17 @@ export default function AdminPage() {
             );
 
             if (response.ok) {
-                toast.success(`Product "${product}" revoked successfully!`);
+                toast.success(`Product "${productToRevoke}" revoked successfully!`);
                 fetchUsers();
+                setProductToRevoke(null);
+            } else {
+                toast.error('Failed to revoke product');
             }
         } catch (error) {
             console.error('Failed to revoke product:', error);
+            toast.error('Failed to revoke product');
+        } finally {
+            setActionLoading(false);
         }
     };
 
@@ -240,7 +264,7 @@ export default function AdminPage() {
                             <button
                                 onClick={() => setFilter('all')}
                                 className={`px-6 py-3 font-medium transition border-b-2 ${filter === 'all'
-                                    ? 'border-purple-600 text-purple-600'
+                                    ? 'border-blue-600 text-blue-600'
                                     : 'border-transparent text-gray-600 hover:text-gray-900'
                                     }`}
                             >
@@ -249,7 +273,7 @@ export default function AdminPage() {
                             <button
                                 onClick={() => setFilter('admins')}
                                 className={`px-6 py-3 font-medium transition border-b-2 ${filter === 'admins'
-                                    ? 'border-purple-600 text-purple-600'
+                                    ? 'border-blue-600 text-blue-600'
                                     : 'border-transparent text-gray-600 hover:text-gray-900'
                                     }`}
                             >
@@ -258,7 +282,7 @@ export default function AdminPage() {
                             <button
                                 onClick={() => setFilter('users')}
                                 className={`px-6 py-3 font-medium transition border-b-2 ${filter === 'users'
-                                    ? 'border-purple-600 text-purple-600'
+                                    ? 'border-blue-600 text-blue-600'
                                     : 'border-transparent text-gray-600 hover:text-gray-900'
                                     }`}
                             >
@@ -405,7 +429,7 @@ export default function AdminPage() {
                                                             </span>
                                                             {isSuperAdmin && (
                                                                 <button
-                                                                    onClick={() => revokeRole(u.id, role)}
+                                                                    onClick={() => promptRevokeRole(u, role)}
                                                                     className="text-red-600 hover:text-red-700 text-xs"
                                                                     title="Revoke role"
                                                                 >
@@ -427,7 +451,7 @@ export default function AdminPage() {
                                                                         {product}
                                                                     </span>
                                                                     <button
-                                                                        onClick={() => revokeProduct(u.id, product)}
+                                                                        onClick={() => promptRevokeProduct(u, product)}
                                                                         className="text-red-600 hover:text-red-700 text-xs"
                                                                         title="Revoke access"
                                                                     >
@@ -711,6 +735,30 @@ export default function AdminPage() {
                 title="Delete User"
                 message={`Are you sure you want to delete ${selectedUser?.name || selectedUser?.email}? All their data, designs, and access will be permanently removed.`}
                 confirmText="Delete User"
+                variant="danger"
+                isLoading={actionLoading}
+            />
+
+            {/* Revoke Role Modal */}
+            <ConfirmationModal
+                isOpen={!!roleToRevoke}
+                onClose={() => setRoleToRevoke(null)}
+                onConfirm={executeRevokeRole}
+                title="Revoke Role"
+                message={`Are you sure you want to remove the "${roleToRevoke}" role from ${selectedUser?.name || selectedUser?.email}?`}
+                confirmText="Revoke Role"
+                variant="danger"
+                isLoading={actionLoading}
+            />
+
+            {/* Revoke Product Modal */}
+            <ConfirmationModal
+                isOpen={!!productToRevoke}
+                onClose={() => setProductToRevoke(null)}
+                onConfirm={executeRevokeProduct}
+                title="Revoke Product Access"
+                message={`Are you sure you want to remove access to ${productToRevoke}?`}
+                confirmText="Revoke Access"
                 variant="danger"
                 isLoading={actionLoading}
             />
