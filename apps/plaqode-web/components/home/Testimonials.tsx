@@ -6,6 +6,7 @@ import { Pagination, Autoplay } from 'swiper/modules';
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/pagination';
+import ScrollReveal from "../ui/ScrollReveal";
 
 const testimonials = [
     {
@@ -50,12 +51,14 @@ export default function Testimonials() {
             </div>
 
             <div className="max-w-[1400px] mx-auto text-center relative z-10">
-                <h2 className="text-3xl md:text-[3rem] font-merriweather font-bold mb-6 text-light">What Clients Say</h2>
-                <p className="text-light/80 text-md max-w-2xl mx-auto mb-16 font-sans">
-                    Join thousands of businesses scaling their reach with Plaqode.
-                </p>
+                <ScrollReveal variant="fade-up">
+                    <h2 className="text-3xl md:text-[3rem] font-merriweather font-bold mb-6 text-light">What Clients Say</h2>
+                    <p className="text-light/80 text-md max-w-2xl mx-auto mb-16 font-sans">
+                        Join thousands of businesses scaling their reach with Plaqode.
+                    </p>
+                </ScrollReveal>
 
-                <div className="w-full relative">
+                <ScrollReveal variant="fade-in" delay={0.2} className="w-full relative">
                     <Swiper
                         modules={[Pagination, Autoplay]}
                         spaceBetween={30}
@@ -100,7 +103,7 @@ export default function Testimonials() {
                             </SwiperSlide>
                         ))}
                     </Swiper>
-                </div>
+                </ScrollReveal>
             </div>
         </section>
     );

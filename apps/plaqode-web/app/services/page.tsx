@@ -4,6 +4,7 @@ import ServicesContent from "@/components/services/ServicesContent";
 import ToolsCatalog from "@/components/services/ToolsCatalog";
 import WhyChooseSection from "@/components/services/WhyChooseSection";
 import StaticNavbar from "@/components/layout/StaticNavbar";
+import ScrollReveal from "@/components/ui/ScrollReveal";
 
 export default function ServicesPage() {
     return (
@@ -17,10 +18,14 @@ export default function ServicesPage() {
                 <StaticNavbar />
 
                 <div className="relative z-10">
-                    <h1 className="text-5xl md:text-7xl font-merriweather font-bold text-light mb-4 bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent">Our Services</h1>
-                    <p className="text-light/70 font-sans max-w-xl mx-auto">
-                        Transforming Tanzanian businesses with innovative QR code solutions.
-                    </p>
+                    <ScrollReveal variant="fade-up">
+                        <h1 className="text-5xl md:text-7xl font-merriweather font-bold text-light mb-4 bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent">Our Services</h1>
+                    </ScrollReveal>
+                    <ScrollReveal variant="fade-up" delay={0.2}>
+                        <p className="text-light/70 font-sans max-w-xl mx-auto">
+                            Transforming Tanzanian businesses with innovative QR code solutions.
+                        </p>
+                    </ScrollReveal>
                 </div>
             </div>
 

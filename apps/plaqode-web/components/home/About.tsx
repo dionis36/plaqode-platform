@@ -1,4 +1,5 @@
 import { GradientButton } from "@plaqode-platform/ui";
+import ScrollReveal from "../ui/ScrollReveal";
 
 export default function AboutSection() {
     return (
@@ -8,7 +9,7 @@ export default function AboutSection() {
                     The Story So Far...
                 </h2>
 
-                <div className="space-y-6 text-lg md:text-xl font-sans text-text leading-relaxed mb-10">
+                <ScrollReveal variant="fade-up" className="space-y-6 text-lg md:text-xl font-sans text-text leading-relaxed mb-10">
                     <p>
                         We're a creative tech company in <span className="font-bold text-text">Tanzania</span>, passionate about helping people and organizations simplify how they share information. Our team blends design, strategy, and innovation to create QR codes that are not only functional—but memorable.
                     </p>
@@ -25,11 +26,11 @@ export default function AboutSection() {
                             "Connect Smarter. Share Faster. Grow Bigger."
                         </p>
                     </div>
-                </div>
+                </ScrollReveal>
 
-                <div className="mt-4">
+                <ScrollReveal variant="fade-up" delay={0.2} className="mt-4">
                     <GradientButton href="/about" text="Learn More" size="lg" />
-                </div>
+                </ScrollReveal>
             </div>
         </section>
     );

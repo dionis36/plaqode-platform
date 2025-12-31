@@ -20,6 +20,8 @@ const values = [
     },
 ];
 
+import ScrollReveal from "../ui/ScrollReveal";
+
 export default function AboutContent() {
     return (
         <section className="relative bg-dark text-light pt-0 pb-36 px-4 overflow-hidden">
@@ -33,7 +35,8 @@ export default function AboutContent() {
             <div className="relative z-10 flex flex-col gap-24 md:gap-32">
 
                 {/* 1. Intro Section Content */}
-                <div className="max-w-[1000px] mx-auto text-center font-sans space-y-8 text-lg md:text-xl leading-relaxed">
+                {/* 1. Intro Section Content */}
+                <ScrollReveal variant="fade-up" className="max-w-[1000px] mx-auto text-center font-sans space-y-8 text-lg md:text-xl leading-relaxed">
                     <p className="font-bold text-white">
                         At PlaQode, we believe that connection should be simple, smart, and meaningful. Founded with a passion for bridging the gap between physical and digital spaces, we specialize in creating customized QR code solutions for individuals, associations, and businesses across Tanzania and beyond.
                     </p>
@@ -45,23 +48,27 @@ export default function AboutContent() {
                     <p className="text-light/80">
                         We understand that every client is unique. That’s why we offer personalized designs, multi-functional QR categories, and high-quality printing services tailored to your goals. From concept to execution, our team is committed to making your digital access seamless and impactful.
                     </p>
-                </div>
+                </ScrollReveal>
 
                 {/* 2. Values Section Content */}
                 <div className="max-w-[900px] mx-auto w-full">
                     <div className="mb-16">
-                        <h2 className="text-4xl md:text-[3.5rem] font-merriweather font-bold text-white mb-8">What Drives Us</h2>
+                        <ScrollReveal variant="fade-up">
+                            <h2 className="text-4xl md:text-[3.5rem] font-merriweather font-bold text-white mb-8">What Drives Us</h2>
+                        </ScrollReveal>
 
                         <div className="space-y-6 font-sans text-lg md:text-xl leading-relaxed">
                             {values.map((v, i) => (
-                                <div key={i} className="flex flex-col md:flex-row md:gap-2">
-                                    <span className="font-bold bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent shrink-0">
-                                        {v.title}:
-                                    </span>
-                                    <span className="text-light/90">
-                                        {v.desc}
-                                    </span>
-                                </div>
+                                <ScrollReveal key={i} variant="slide-right" delay={i * 0.1}>
+                                    <div className="flex flex-col md:flex-row md:gap-2">
+                                        <span className="font-bold bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent shrink-0">
+                                            {v.title}:
+                                        </span>
+                                        <span className="text-light/90">
+                                            {v.desc}
+                                        </span>
+                                    </div>
+                                </ScrollReveal>
                             ))}
                         </div>
                     </div>

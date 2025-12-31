@@ -5,6 +5,7 @@ import { Facebook, Twitter, Linkedin, Instagram, Phone, Mail, MessageCircle, Loa
 import { useFormState } from "react-dom";
 import { useEffect, useRef } from "react";
 import { sendContactEmail, ContactState } from "@/actions/contact";
+import ScrollReveal from "../ui/ScrollReveal";
 
 const initialState: ContactState = {
     success: false,
@@ -68,7 +69,8 @@ export default function ContactContent() {
             <div className="relative z-10 max-w-[1000px] mx-auto flex flex-col gap-24">
 
                 {/* 1. Intro & Contact Details */}
-                <div className="text-center space-y-12">
+                {/* 1. Intro & Contact Details */}
+                <ScrollReveal variant="fade-up" className="text-center space-y-12">
                     <p className="text-lg md:text-xl font-sans text-light/90 leading-relaxed max-w-4xl mx-auto">
                         Ready to Simplify Your Business? Contact us today to learn how PlaQode's QR code solutions can streamline your data, processes, and tasks.
                     </p>
@@ -105,10 +107,10 @@ export default function ContactContent() {
                             </div>
                         </div>
                     </div>
-                </div>
+                </ScrollReveal>
 
                 {/* 2. Contact Form */}
-                <div className="w-full max-w-2xl mx-auto">
+                <ScrollReveal variant="fade-up" delay={0.2} className="w-full max-w-2xl mx-auto">
                     <h2 className="text-4xl md:text-[3.5rem] font-merriweather font-bold mb-12 bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent leading-tight">
                         Send Us A Message
                     </h2>
@@ -170,7 +172,7 @@ export default function ContactContent() {
 
                         <SubmitButton />
                     </form>
-                </div>
+                </ScrollReveal>
 
             </div>
         </section>

@@ -1,7 +1,6 @@
-"use client";
-
 import { GradientButton } from "@plaqode-platform/ui";
 import { Link, IdCard, Share2, Smartphone, Utensils, Wifi, FileText, ArrowRight } from "lucide-react";
+import ScrollReveal from "../ui/ScrollReveal";
 
 // Environment URLs
 const CARDIFY_URL = process.env.NEXT_PUBLIC_CARDIFY_URL || 'http://localhost:3002';
@@ -66,27 +65,29 @@ export default function ServicesContent() {
 
                 <div className="relative z-10 max-w-[1200px] mx-auto">
                     {/* Intro */}
-                    <div className="text-center mb-16 max-w-4xl mx-auto">
+                    <ScrollReveal variant="fade-up" className="text-center mb-16 max-w-4xl mx-auto">
                         <p className="text-lg md:text-xl text-light/80 leading-relaxed">
                             Discover innovative QR code solutions that simplify data, processes, and tasks across various industries and applications. We help you create customized digital experiences that drive growth and efficiency.
                         </p>
-                    </div>
+                    </ScrollReveal>
 
                     {/* Solutions Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {solutions.map((item, idx) => (
-                            <div key={idx} className="bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-2xl hover:bg-white/10 transition-colors group">
-                                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-secondary to-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                    <item.icon className="text-white w-6 h-6" />
+                            <ScrollReveal key={idx} variant="fade-up" delay={idx * 0.05}>
+                                <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-2xl hover:bg-white/10 transition-colors group h-full">
+                                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-secondary to-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                        <item.icon className="text-white w-6 h-6" />
+                                    </div>
+                                    <h3 className="text-xl font-bold font-merriweather mb-4 text-white">{item.title}</h3>
+                                    <p className="text-light/70 mb-8 leading-relaxed">
+                                        {item.desc}
+                                    </p>
+                                    <div className="mt-auto">
+                                        <GradientButton href={item.href} text={item.cta} size="md" />
+                                    </div>
                                 </div>
-                                <h3 className="text-xl font-bold font-merriweather mb-4 text-white">{item.title}</h3>
-                                <p className="text-light/70 mb-8 leading-relaxed">
-                                    {item.desc}
-                                </p>
-                                <div className="mt-auto">
-                                    <GradientButton href={item.href} text={item.cta} size="md" />
-                                </div>
-                            </div>
+                            </ScrollReveal>
                         ))}
                     </div>
                 </div>

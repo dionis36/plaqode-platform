@@ -3,6 +3,7 @@ import Footer from "@/components/layout/Footer";
 import StaticNavbar from "@/components/layout/StaticNavbar";
 
 import AboutContent from "@/components/about/AboutContent";
+import ScrollReveal from "@/components/ui/ScrollReveal";
 
 export default function AboutPage() {
     return (
@@ -17,10 +18,14 @@ export default function AboutPage() {
                 <StaticNavbar />
 
                 <div className="relative z-10">
-                    <h1 className="text-5xl md:text-7xl font-merriweather font-bold text-light mb-4 bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent">About Us</h1>
-                    <p className="text-light/70 font-sans max-w-xl mx-auto">
-                        Building trust, one code at a time.
-                    </p>
+                    <ScrollReveal variant="fade-up">
+                        <h1 className="text-5xl md:text-7xl font-merriweather font-bold text-light mb-4 bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent">About Us</h1>
+                    </ScrollReveal>
+                    <ScrollReveal variant="fade-up" delay={0.2}>
+                        <p className="text-light/70 font-sans max-w-xl mx-auto">
+                            Building trust, one code at a time.
+                        </p>
+                    </ScrollReveal>
                 </div>
             </div>
 
