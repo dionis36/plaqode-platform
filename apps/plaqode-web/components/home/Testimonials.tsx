@@ -7,6 +7,7 @@ import { Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import ScrollReveal from "../ui/ScrollReveal";
+import SplitText from "../ui/SplitText";
 
 const testimonials = [
     {
@@ -52,7 +53,11 @@ export default function Testimonials() {
 
             <div className="max-w-[1400px] mx-auto text-center relative z-10">
                 <ScrollReveal variant="fade-up">
-                    <h2 className="text-3xl md:text-[3rem] font-merriweather font-bold mb-6 text-light">What Clients Say</h2>
+                    <SplitText
+                        text="What Clients Say"
+                        className="text-3xl md:text-[3rem] font-merriweather font-bold mb-6 text-light"
+                        type="chars"
+                    />
                     <p className="text-light/80 text-md max-w-2xl mx-auto mb-16 font-sans">
                         Join thousands of businesses scaling their reach with Plaqode.
                     </p>

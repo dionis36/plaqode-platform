@@ -1,13 +1,16 @@
 import { GradientButton } from "@plaqode-platform/ui";
 import ScrollReveal from "../ui/ScrollReveal";
+import SplitText from "../ui/SplitText";
 
 export default function AboutSection() {
     return (
         <section className="bg-bg text-dark py-24 text-center">
             <div className="max-w-[1000px] mx-auto px-8 relative flex flex-col items-center">
-                <h2 className="text-4xl md:text-[3.5rem] font-merriweather font-bold mb-8 leading-tight">
-                    The Story So Far...
-                </h2>
+                <SplitText
+                    text="The Story So Far..."
+                    className="text-4xl md:text-[3.5rem] font-merriweather font-bold mb-8 leading-tight"
+                    type="words"
+                />
 
                 <ScrollReveal variant="fade-up" className="space-y-6 text-lg md:text-xl font-sans text-text leading-relaxed mb-10">
                     <p>

@@ -6,44 +6,9 @@ import { GradientButton } from "@plaqode-platform/ui";
 import GradientAvatar from "@/components/ui/GradientAvatar";
 import { Logo } from "@plaqode-platform/ui";
 import { ArrowRight } from "lucide-react";
+import SplitText from "@/components/ui/SplitText";
 
 import { useAuth } from "@/lib/auth-context";
-
-const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-        opacity: 1,
-        transition: {
-            staggerChildren: 0.03,
-            delayChildren: 0.2,
-        },
-    },
-};
-
-const charVariants = {
-    hidden: { opacity: 0, x: 20 },
-    visible: {
-        opacity: 1,
-        x: 0,
-        transition: {
-            type: "spring",
-            damping: 12,
-            stiffness: 100,
-        },
-    },
-};
-
-const SplitText = ({ text, className }: { text: string, className?: string }) => {
-    return (
-        <motion.span className={`inline-block ${className}`} variants={containerVariants} initial="hidden" animate="visible">
-            {text.split("").map((char, index) => (
-                <motion.span key={index} variants={charVariants} className="inline-block">
-                    {char === " " ? "\u00A0" : char}
-                </motion.span>
-            ))}
-        </motion.span>
-    );
-};
 
 export default function Hero() {
     const { user } = useAuth();
@@ -79,15 +44,13 @@ export default function Hero() {
                     <SplitText
                         text="Scan Smart,"
                         className="font-merriweather text-secondary bg-clip-text text-transparent bg-gradient-to-r from-secondary to-primary block w-fit"
+                        delay={0.2}
                     />
-                    <motion.span
+                    <SplitText
+                        text="Stay Safe"
                         className="font-merriweather block"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.8, duration: 0.8 }}
-                    >
-                        Stay Safe
-                    </motion.span>
+                        delay={0.8}
+                    />
                 </h1>
 
                 {/* Subtitle */}

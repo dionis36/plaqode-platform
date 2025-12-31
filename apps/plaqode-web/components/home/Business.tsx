@@ -2,15 +2,18 @@
 import { Share2, Shield, TrendingUp, Zap } from "lucide-react";
 import { WobbleCard } from "@/components/ui/wobble-card";
 import ScrollReveal from "../ui/ScrollReveal";
+import SplitText from "../ui/SplitText";
 
 export default function BusinessSection() {
     return (
         <section className="bg-bg pt-8 pb-24 px-4 relative overflow-hidden">
             <div className="max-w-[1200px] mx-auto relative z-10">
                 <ScrollReveal variant="fade-up" className="text-center mb-16">
-                    <h2 className="text-3xl md:text-[3rem] font-merriweather font-bold mb-6 text-dark max-w-4xl mx-auto leading-tight">
-                        Everything you need to manage your QR Codes
-                    </h2>
+                    <SplitText
+                        text="Everything you need to manage your QR Codes"
+                        className="text-3xl md:text-[3rem] font-merriweather font-bold mb-6 text-dark max-w-4xl mx-auto leading-tight"
+                        type="words"
+                    />
                     <p className="text-text/80 text-md max-w-2xl mx-auto font-sans">
                         Streamline your workflow with tools designed for performance, security, and scale.
                     </p>
