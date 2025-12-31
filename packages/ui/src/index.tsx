@@ -6,3 +6,4 @@ export * from "./components/ui/confirmation-modal";
 export * from "./components/ui/modal";
 export * from "./components/ui/input";
 export { toast } from "sonner";
+export * from "./components/NotFoundPage";

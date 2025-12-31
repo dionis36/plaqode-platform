@@ -5,6 +5,7 @@ import { Inter, Merriweather } from "next/font/google";
 import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from '@/lib/auth-context';
 import { PlatformNavWrapper } from '@/components/layout/PlatformNavWrapper';
+import { NavVisibilityProvider } from '@/components/layout/NavVisibilityContext';
 import { Toaster } from "@plaqode-platform/ui";
 import "./globals.css";
 
@@ -24,11 +25,13 @@ export default function RootLayout({
         <html lang="en">
             <body className={`${inter.variable} ${merriweather.variable} font-sans`}>
                 <AuthProvider>
-                    <PlatformNavWrapper />
-                    <HelmetProvider>
-                        {children}
-                        <Toaster />
-                    </HelmetProvider>
+                    <NavVisibilityProvider>
+                        <PlatformNavWrapper />
+                        <HelmetProvider>
+                            {children}
+                            <Toaster />
+                        </HelmetProvider>
+                    </NavVisibilityProvider>
                 </AuthProvider>
             </body>
         </html>

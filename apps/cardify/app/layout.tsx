@@ -5,6 +5,7 @@ import { Inter, Merriweather } from 'next/font/google';
 import { AuthProvider } from '@/lib/auth-context';
 import { PlatformNav } from '@/components/layout/PlatformNav';
 import { PlatformNavWrapper } from '@/components/layout/PlatformNavWrapper';
+import { NavVisibilityProvider } from '@/components/layout/NavVisibilityContext';
 import { Toaster } from "@plaqode-platform/ui";
 import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 
@@ -70,10 +71,12 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${merriweather.variable}`}>
       <body className="bg-bg text-text font-sans">
         <AuthProvider>
-          <PlatformNavWrapper />
-          <FontLoader />
-          {children}
-          <Toaster />
+          <NavVisibilityProvider>
+            <PlatformNavWrapper />
+            <FontLoader />
+            {children}
+            <Toaster />
+          </NavVisibilityProvider>
         </AuthProvider>
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
       </body>

@@ -1,41 +1,21 @@
 'use client';
 
 import { useAuth } from '@/lib/auth-context';
-import { PlatformNav } from './PlatformNav';
+import { useNavVisibility } from './NavVisibilityContext';
+// import { PlatformNav } from './PlatformNav';
+import StaticNavbar from './StaticNavbar';
 import { usePathname } from 'next/navigation';
 
 export function PlatformNavWrapper() {
     const { user } = useAuth();
     const pathname = usePathname();
+    const { isVisible } = useNavVisibility();
 
     // Hide PlatformNav (Dashboard Sidebar) on public templates page and design editor
-    if (pathname?.startsWith('/templates') || pathname?.startsWith('/design')) {
+    if (pathname?.startsWith('/templates') || pathname?.startsWith('/design') || !isVisible) {
         return null;
     }
 
-    const handleLogout = async () => {
-        // Call logout endpoint
-        try {
-            await fetch(`${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/logout`, {
-                method: 'POST',
-                credentials: 'include',
-            });
-        } catch (error) {
-            console.error('Logout failed:', error);
-        }
-
-        // Redirect to platform login
-        window.location.href = `${process.env.NEXT_PUBLIC_PLATFORM_URL}/auth/login`;
-    };
-
-    return (
-        <PlatformNav
-            user={user ? {
-                email: user.email,
-                name: user.name,
-                roles: user.roles || []
-            } : null}
-            onLogout={handleLogout}
-        />
-    );
+    // Use StaticNavbar as the standard for Cardify app
+    return <StaticNavbar />;
 }
