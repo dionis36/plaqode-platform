@@ -1,9 +1,8 @@
 'use client';
 
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, Suspense } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { useSearchParams, useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { Logo, toast } from "@plaqode-platform/ui";
 
 export default function ResetPasswordPage() {
@@ -62,8 +61,7 @@ function ResetPasswordContent() {
 function ResetPasswordForm() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-    const [message, setMessage] = useState('');
+    const [loading, setLoading] = useState(false);
     const { confirmPasswordReset } = useAuth();
     const searchParams = useSearchParams();
     const router = useRouter();
@@ -73,62 +71,36 @@ function ResetPasswordForm() {
         e.preventDefault();
 
         if (!token) {
-            setStatus('error');
-            setMessage('Invalid or missing reset token.');
+            toast.error('Invalid or missing reset token.');
             return;
         }
 
         if (password !== confirmPassword) {
-            setStatus('error');
-            setMessage('Passwords do not match.');
+            toast.error('Passwords do not match.');
             return;
         }
 
         if (password.length < 8) {
-            setStatus('error');
-            setMessage('Password must be at least 8 characters.');
+            toast.error('Password must be at least 8 characters.');
             return;
         }
 
-        setStatus('loading');
-        setMessage('');
+        setLoading(true);
 
         try {
             await confirmPasswordReset(password, token);
-            setStatus('success');
-            setMessage('Your password has been reset successfully.');
-            // Optional: Auto redirect after few seconds
+            toast.success('Your password has been reset successfully.');
+            // Auto redirect after few seconds
             setTimeout(() => router.push('/auth/login'), 2000);
         } catch (err: any) {
-            setStatus('error');
-            setMessage(err.message || 'Failed to reset password. The link may have moved or expired.');
+            toast.error(err.message || 'Failed to reset password. The link may have moved or expired.');
+        } finally {
+            setLoading(false);
         }
     };
 
-    if (status === 'success') {
-        return (
-            <div className="text-center space-y-6">
-                <div className="bg-green-50 border border-green-200 text-green-700 px-6 py-4 rounded-xl text-sm font-medium">
-                    {message}
-                </div>
-                <p className="text-gray-500 text-sm">Redirecting to login...</p>
-                <Link
-                    href="/auth/login"
-                    className="block w-full py-4 bg-black text-white rounded-2xl font-bold font-sans hover:opacity-80 transition-all duration-300 shadow-lg shadow-black/10"
-                >
-                    Login Now
-                </Link>
-            </div>
-        );
-    }
-
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
-            {status === 'error' && (
-                <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm">
-                    {message}
-                </div>
-            )}
             {!token && (
                 <div className="bg-yellow-50 border border-yellow-200 text-yellow-700 px-4 py-3 rounded-xl text-sm mb-4">
                     Missing reset token. Please check your email link.
@@ -160,10 +132,10 @@ function ResetPasswordForm() {
 
             <button
                 type="submit"
-                disabled={status === 'loading' || !token}
+                disabled={loading || !token}
                 className="w-full py-4 bg-black text-white rounded-2xl font-bold font-sans hover:opacity-80 transition-all duration-300 disabled:opacity-50 shadow-lg shadow-black/10"
             >
-                {status === 'loading' ? 'Resetting Password...' : 'Reset Password'}
+                {loading ? 'Resetting Password...' : 'Reset Password'}
             </button>
         </form>
     );
