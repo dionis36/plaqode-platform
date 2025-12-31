@@ -3,12 +3,14 @@
 import Link from 'next/link';
 import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '@/lib/auth-context';
-import { LayoutDashboard, LogOut, Code, User, Settings } from 'lucide-react';
+import { LayoutDashboard, LogOut, UserCircle, Shield } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
 
 interface GradientAvatarProps {
     user: {
         name?: string;
         email: string;
+        roles?: string[];
     };
     className?: string;
     textColor?: "text-white" | "text-dark";
@@ -26,6 +28,8 @@ export default function GradientAvatar({ user, className = "", textColor = "text
         }
         return u.email.substring(0, 2).toUpperCase();
     };
+
+    const isAdmin = user.roles?.includes('admin') || user.roles?.includes('superadmin');
 
     // Close on click outside
     useEffect(() => {
@@ -47,63 +51,92 @@ export default function GradientAvatar({ user, className = "", textColor = "text
 
     return (
         <div className="relative" ref={dropdownRef}>
-            <button
+            <motion.button
                 onClick={toggleDropdown}
-                className={`group relative inline-flex items-center justify-center w-10 h-10 rounded-full transition-transform duration-300 hover:scale-105 ${disableDropdown ? 'cursor-default' : 'cursor-pointer'} ${className}`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`group relative inline-flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 ${disableDropdown ? 'cursor-default' : 'cursor-pointer'} ${className}`}
             >
-                {/* 1. The Gradient Border (Masked) */}
-                <span
-                    className="absolute inset-0 rounded-full gradient-border-mask pointer-events-none"
-                />
+                {/* 1. The Gradient Border (Masked) with Glow Effect */}
+                <span className="absolute inset-0 rounded-full gradient-border-mask pointer-events-none" />
+
+                {/* Glow behind */}
+                <span className="absolute inset-0 rounded-full bg-gradient-to-r from-secondary/20 to-primary/20 hover:from-secondary/50 hover:to-primary/50 blur-sm transition-all duration-300" />
 
                 {/* 2. Initials (Transparent Center) */}
                 <span className={`relative z-10 font-inter font-bold text-sm tracking-wider ${textColor}`}>
                     {getInitials(user)}
                 </span>
-            </button>
+            </motion.button>
 
             {/* Dropdown Menu */}
-            {isOpen && (
-                <div className="absolute right-0 mt-3 w-56 bg-[#121212]/80 backdrop-blur-md shadow-md border-b border-white/5 rounded-2xl overflow-hidden origin-top-right animate-in fade-in zoom-in-95 duration-200 z-50">
-                    <div className="px-4 py-3 border-b border-white/5">
-                        <p className="text-base font-medium text-white truncate font-merriweather">{user.name || "User"}</p>
-                        <p className="text-xs text-white/70 truncate font-sans">{user.email}</p>
-                    </div>
+            <AnimatePresence>
+                {isOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                        transition={{ duration: 0.2, ease: "easeOut" }}
+                        className="absolute right-0 mt-4 w-60 bg-[#121212]/90 backdrop-blur-xl shadow-2xl border border-white/10 rounded-2xl overflow-hidden z-50 origin-top-right ring-1 ring-white/5"
+                    >
+                        {/* User Header */}
+                        <div className="px-5 py-4 border-b border-white/5">
+                            <p className="text-sm font-semibold text-white truncate font-merriweather">
+                                {user.name || "User"}
+                            </p>
+                            <p className="text-xs text-white/50 truncate font-sans mt-0.5">
+                                {user.email}
+                            </p>
+                        </div>
 
-                    <div className="p-2 space-y-1">
-                        <Link
-                            href="/app"
-                            className="flex items-center gap-3 px-3 py-2 text-sm text-light hover:bg-white/10 rounded-lg transition-colors group"
-                            onClick={() => setIsOpen(false)}
-                        >
-                            <LayoutDashboard size={18} className="text-gray-400 group-hover:text-white transition-colors" />
-                            Dashboard
-                        </Link>
+                        {/* Menu Items */}
+                        <div className="p-2 space-y-1">
+                            <Link
+                                href="/app"
+                                className="flex items-center gap-3 px-3 py-2.5 text-sm text-light/80 hover:text-white hover:bg-white/10 rounded-xl transition-all group"
+                                onClick={() => setIsOpen(false)}
+                            >
+                                <LayoutDashboard size={18} className="text-light/50 group-hover:text-secondary transition-colors" />
+                                Dashboard
+                            </Link>
 
-                        <Link
-                            href="/app/qrcodes"
-                            className="flex items-center gap-3 px-3 py-2 text-sm text-light hover:bg-white/10 rounded-lg transition-colors group"
-                            onClick={() => setIsOpen(false)}
-                        >
-                            <Code size={18} className="text-gray-400 group-hover:text-white transition-colors" />
-                            My QR Codes
-                        </Link>
-                    </div>
+                            <Link
+                                href="/app/profile"
+                                className="flex items-center gap-3 px-3 py-2.5 text-sm text-light/80 hover:text-white hover:bg-white/10 rounded-xl transition-all group"
+                                onClick={() => setIsOpen(false)}
+                            >
+                                <UserCircle size={18} className="text-light/50 group-hover:text-secondary transition-colors" />
+                                Profile
+                            </Link>
 
-                    <div className="border-t border-white/10 p-2">
-                        <button
-                            onClick={() => {
-                                logout();
-                                setIsOpen(false);
-                            }}
-                            className="flex w-full items-center gap-3 px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
-                        >
-                            <LogOut size={18} />
-                            Log Out
-                        </button>
-                    </div>
-                </div>
-            )}
+                            {isAdmin && (
+                                <Link
+                                    href="/app/admin"
+                                    className="flex items-center gap-3 px-3 py-2.5 text-sm text-light/80 hover:text-white hover:bg-white/10 rounded-xl transition-all group"
+                                    onClick={() => setIsOpen(false)}
+                                >
+                                    <Shield size={18} className="text-light/50 group-hover:text-secondary transition-colors" />
+                                    Admin
+                                </Link>
+                            )}
+                        </div>
+
+                        {/* Footer / Logout */}
+                        <div className="border-t border-white/5 p-2 mt-1">
+                            <button
+                                onClick={() => {
+                                    logout();
+                                    setIsOpen(false);
+                                }}
+                                className="flex w-full items-center gap-3 px-3 py-2.5 text-sm text-red-400 hover:text-white hover:bg-red-500/20 rounded-xl transition-all group"
+                            >
+                                <LogOut size={18} className="group-hover:text-red-400 transition-colors" />
+                                Log Out
+                            </button>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }

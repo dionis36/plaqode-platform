@@ -70,7 +70,7 @@ export default function AboutContent() {
                         <p className="text-xl font-bold text-white mb-10 max-w-3xl mx-auto leading-relaxed">
                             Whether you're launching a campaign, hosting an event, or building your brand, we're here to help you connect with confidence, one scan at a time.
                         </p>
-                        <GradientButton href="/register" text="Get Started" size="lg" />
+                        <GradientButton href="/auth/login" text="Get Started" size="lg" />
                     </div>
                 </div>
 
