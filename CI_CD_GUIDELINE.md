@@ -81,15 +81,34 @@ jobs:
 ### B. Backend Services (`qrstudio-api`, `plaqode-auth`)
 **Platform**: Fly.io (Free Tier Strategy)
 
+**Does Fly.io require Docker?**
+Technically, yes, Fly.io runs everything as a Firecracker VM (micro-container). However, you have two options:
+1.  **"Magic" Mode (Default)**: If you run `fly launch` without a Dockerfile, Fly's "Builders" (buildpacks) will try to auto-detect your Node.js app and build it for you.
+2.  **"Manual" Mode (Recommended for Control)**: You provide a `Dockerfile`, and Fly uses that exact recipe.
+
+**Step-by-Step Deployment (Manual Mode - Recommended)**
+
 1.  **Install Fly CLI**: `PowerShell -Command "iwr https://fly.io/install.ps1 -useb | iex"`
 2.  **Login**: `fly auth login`
-3.  **Launch (Do one for each app)**:
-    *   `cd apps/qrstudio-api` -> `fly launch --no-deploy`
-    *   `cd apps/plaqode-auth` -> `fly launch --no-deploy`
-    *   *Note*: This creates a `fly.toml` file.
-4.  **Configure Secrets**:
-    *   `fly secrets set JWT_PRIVATE_KEY_PATH="/app/keys/private.pem" ...` (See Env Vars below)
-5.  **Deploy**:
+3.  **Prepare Dockerfile**:
+    Create a `Dockerfile` in `apps/qrstudio-api` (and `plaqode-auth`):
+    ```dockerfile
+    FROM node:20-alpine
+    WORKDIR /app
+    COPY package*.json ./
+    RUN npm ci --omit=dev
+    COPY . .
+    RUN npm run build
+    EXPOSE 8080
+    CMD ["npm", "start"]
+    ```
+4.  **Launch**:
+    *   `cd apps/qrstudio-api`
+    *   `fly launch --no-deploy`
+    *   *Note*: When asked to "Copy configuration to the new app?", say **Yes**.
+5.  **Configure Secrets**:
+    *   `fly secrets set JWT_PRIVATE_KEY_PATH="/app/keys/private.pem" ...`
+6.  **Deploy**:
     *   `fly deploy`
 
 ### C. Database
