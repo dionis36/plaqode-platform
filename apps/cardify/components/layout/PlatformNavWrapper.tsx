@@ -17,5 +17,9 @@ export function PlatformNavWrapper() {
     }
 
     // Use StaticNavbar as the standard for Cardify app
-    return <StaticNavbar />;
+    // For Admin pages (Light BG), use 'light' theme (Dark Text)
+    // For other pages (Dark BG), use default 'dark' theme (Light Text)
+    const isAdminPage = pathname?.startsWith('/admin');
+
+    return <StaticNavbar theme={isAdminPage ? 'light' : 'dark'} />;
 }
