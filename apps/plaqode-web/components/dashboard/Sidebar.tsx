@@ -69,9 +69,16 @@ export function Sidebar({ isOpen, setIsOpen, isMobile, onCloseMobile }: SidebarP
 
     if (user?.roles.includes('admin') || user?.roles.includes('superadmin')) {
         navItems.push({
-            label: 'Admin',
+            label: 'Admin Panel',
             href: '/app/admin',
             icon: Shield
+        });
+
+        // Add Cardify Manager Link
+        navItems.push({
+            label: 'Manage Cards',
+            href: `${process.env.NEXT_PUBLIC_CARDIFY_URL || 'http://localhost:3002'}/admin/templates`,
+            icon: Layout // Reusing Layout icon or maybe a better one like FileText
         });
     }
 

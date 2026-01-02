@@ -75,7 +75,7 @@ export default function TemplatePreview({ template, width: initialWidth = 400, h
         const regenerateQRCodes = async () => {
             const newQrImages = new Map<string, string>();
 
-            for (const layer of template.layers) {
+            for (const layer of (template.layers || [])) {
                 // Check if this is a QR code with metadata
                 if (layer.type === 'Image' && (layer.props as any).qrMetadata) {
                     const qrMetadata = (layer.props as any).qrMetadata;
@@ -447,7 +447,7 @@ export default function TemplatePreview({ template, width: initialWidth = 400, h
             >
                 <Layer listening={false}>
                     {renderBackground()}
-                    {template.layers.map((layer, index) => renderLayer(layer, index))}
+                    {(template.layers || []).map((layer, index) => renderLayer(layer, index))}
                 </Layer>
             </Stage>
         </div>

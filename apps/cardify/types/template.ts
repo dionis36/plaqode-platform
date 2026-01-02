@@ -317,6 +317,10 @@ export interface CardTemplate {
     id: string;
     name: string;
     description?: string; // Optional description for template management
+    isFeatured?: boolean;
+    isPublic?: boolean;
+    version?: number;
+    updatedAt?: string;
     width: number;
     height: number;
     orientation: Orientation;
