@@ -302,6 +302,9 @@ export default function Editor() {
     // NEW: Mobile Menu State
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+    // SMART SAVE STATE
+    const [lastSavedPages, setLastSavedPages] = useState<CardTemplate[] | null>(null);
+
     // Load saved design effect
     useEffect(() => {
         if (!loadId || !isAuthenticated) return;
@@ -322,6 +325,8 @@ export default function Editor() {
                             type: 'SET_PAGES',
                             pages: savedDesign.designData.pages
                         });
+                        // Initialize smart save reference
+                        setLastSavedPages(savedDesign.designData.pages);
                         // IMPORTANT: Set current page index too if needed, though usually 0
                     }
                 }
@@ -862,11 +867,29 @@ export default function Editor() {
             return;
         }
 
+        // Prevent double submission
+        if (saving) return;
+
         console.log('Starting save process...');
         setSaving(true);
         setSaveMessage(null);
 
         try {
+            // SMART SAVE CHECK
+            if (lastSavedPages) {
+                // Remove potential non-data properties if any (though state.pages should be clean)
+                // Using simple JSON stringify for deep comparison
+                const currentData = JSON.stringify(state.pages);
+                const lastSavedData = JSON.stringify(lastSavedPages);
+
+                if (currentData === lastSavedData) {
+                    console.log('Smart Save: No changes detected');
+                    toast.info("No changes to save");
+                    setSaving(false);
+                    return;
+                }
+            }
+
             // Generate thumbnail
             let thumbnail: string | undefined;
             if (stageRef.current) {
@@ -906,6 +929,18 @@ export default function Editor() {
                 console.log('Save successful:', result);
                 toast.success("Design saved successfully!");
                 setSaveMessage('Design saved successfully!');
+
+                // Update smart save reference
+                setLastSavedPages(state.pages);
+
+                // Update URL with loadId if this was a new save
+                // This ensures that a refresh loads THIS saved card instead of a new template instance
+                if (!loadId && result.id) {
+                    const newUrl = new URL(window.location.href);
+                    newUrl.searchParams.set('loadId', result.id);
+                    window.history.replaceState({}, '', newUrl.toString());
+                    console.log('Updated URL with loadId:', result.id);
+                }
             } else {
                 const error = await response.json();
                 console.error('Save failed:', error);
@@ -921,7 +956,7 @@ export default function Editor() {
         } finally {
             setSaving(false);
         }
-    }, [isAuthenticated, state.pages, state.current, currentPage.name, templateId]);
+    }, [isAuthenticated, state.pages, state.current, currentPage.name, templateId, lastSavedPages, saving]);
 
     // --- OUTPUT / EXPORT HANDLERS ---
 
