@@ -5,6 +5,7 @@ import { Upload, Download, Trash2, Star, Eye, EyeOff, RefreshCw, Search, Filter,
 import Link from 'next/link';
 import AdminTemplateCard from '@/components/templates/AdminTemplateCard';
 import { CardTemplate } from '@/types/template';
+import { ConfirmationModal, toast } from "@plaqode-platform/ui";
 
 export default function TemplateManagementPage() {
     // Note: Using CardTemplate type which might need adaptation depending on API response
@@ -14,6 +15,10 @@ export default function TemplateManagementPage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [loading, setLoading] = useState(true);
     const [categories, setCategories] = useState<{ name: string; count: number }[]>([]);
+
+    // Modal State
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [templateToDelete, setTemplateToDelete] = useState<CardTemplate | null>(null);
 
     // Load templates
     useEffect(() => {
@@ -46,6 +51,7 @@ export default function TemplateManagementPage() {
             setTemplates(templatesWithMeta);
         } catch (error) {
             console.error('Failed to load templates:', error);
+            toast.error("Failed to load templates");
         } finally {
             setLoading(false);
         }
@@ -78,7 +84,7 @@ export default function TemplateManagementPage() {
 
             if (response.ok) {
                 await loadTemplates();
-                alert('Template imported successfully!');
+                toast.success('Template imported successfully!');
             } else {
                 const error = await response.json();
                 if (response.status === 409) {
@@ -90,16 +96,16 @@ export default function TemplateManagementPage() {
                         });
                         if (retryResponse.ok) {
                             await loadTemplates();
-                            alert('Template updated successfully!');
+                            toast.success('Template updated successfully!');
                         }
                     }
                 } else {
-                    alert(`Import failed: ${error.error}`);
+                    toast.error(`Import failed: ${error.error}`);
                 }
             }
         } catch (error) {
             console.error('Upload failed:', error);
-            alert('Failed to upload template');
+            toast.error('Failed to upload template');
         }
 
         // Reset file input
@@ -108,18 +114,28 @@ export default function TemplateManagementPage() {
 
 
     // Actions for Cards
-    const handleDelete = async (template: CardTemplate) => {
-        if (!confirm(`Delete template "${template.name}"?`)) return;
+    const handleDelete = (template: CardTemplate) => {
+        setTemplateToDelete(template);
+        setDeleteModalOpen(true);
+    };
+
+    const confirmDelete = async () => {
+        if (!templateToDelete) return;
 
         try {
-            const response = await fetch(`/api/templates/${template.id}`, { method: 'DELETE' });
+            const response = await fetch(`/api/templates/${templateToDelete.id}`, { method: 'DELETE' });
             if (response.ok) {
+                toast.success("Template deleted successfully");
                 loadTemplates(); // Reload to refresh grid
             } else {
-                alert('Failed to delete template');
+                toast.error('Failed to delete template');
             }
         } catch (error) {
             console.error('Delete failed:', error);
+            toast.error('Error deleting template');
+        } finally {
+            setDeleteModalOpen(false);
+            setTemplateToDelete(null);
         }
     };
 
@@ -133,9 +149,11 @@ export default function TemplateManagementPage() {
             });
             if (response.ok) {
                 loadTemplates();
+                toast.success(template.isFeatured ? "Removed from featured" : "Added to featured");
             }
         } catch (error) {
             console.error('Update failed:', error);
+            toast.error("Failed to update status");
         }
     };
 
@@ -156,9 +174,10 @@ export default function TemplateManagementPage() {
             a.download = `${template.id}.json`;
             a.click();
             URL.revokeObjectURL(url);
+            toast.success("Template exported");
         } catch (error) {
             console.error('Export failed:', error);
-            alert('Failed to export template');
+            toast.error('Failed to export template');
         }
     };
 
@@ -274,6 +293,17 @@ export default function TemplateManagementPage() {
                     </div>
                 )}
             </div>
+
+            {/* Confirmation Modal */}
+            <ConfirmationModal
+                isOpen={deleteModalOpen}
+                onClose={() => setDeleteModalOpen(false)}
+                onConfirm={confirmDelete}
+                title="Delete Template"
+                message={`Are you sure you want to delete "${templateToDelete?.name}"? This action cannot be undone.`}
+                confirmText="Delete Template"
+                variant="danger"
+            />
         </div>
     );
 }

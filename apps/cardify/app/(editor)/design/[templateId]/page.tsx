@@ -846,6 +846,7 @@ export default function Editor() {
         dispatch({ type: 'RESET', template: originalTemplate });
         setSelectedIndices([]);
         setShowResetConfirm(false);
+        toast.info("Canvas reset to original");
     }, [templateId]);
 
 

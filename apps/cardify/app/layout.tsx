@@ -75,7 +75,7 @@ export default function RootLayout({
             <PlatformNavWrapper />
             <FontLoader />
             {children}
-            <Toaster />
+            <Toaster richColors theme="light" />
           </NavVisibilityProvider>
         </AuthProvider>
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
