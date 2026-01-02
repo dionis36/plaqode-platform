@@ -1,5 +1,5 @@
 import { GradientButton } from "@plaqode-platform/ui";
-import { Link, IdCard, Share2, Smartphone, Utensils, Wifi, FileText, ArrowRight } from "lucide-react";
+import { Link, IdCard, Share2, Smartphone, Utensils, Wifi, FileText, ArrowRight, Contact } from "lucide-react";
 import ScrollReveal from "../ui/ScrollReveal";
 
 // Environment URLs
@@ -23,11 +23,11 @@ const solutions = [
         href: `${QRSTUDIO_URL}/create/menu`
     },
     {
-        icon: Share2,
-        title: "Social Media Hub",
-        desc: "Consolidate your digital presence. Instagram, TikTok, LinkedIn, and more — accessible from one unified 'Link in Bio' page.",
-        cta: "Build Bio Page",
-        href: `${QRSTUDIO_URL}/create/socialmedia`
+        icon: Contact,
+        title: "vCard Plus",
+        desc: "Share full contact details with a single scan. Save directly to phone contacts, including email, website, and address.",
+        cta: "Create vCard",
+        href: `${QRSTUDIO_URL}/create/vcard`
     },
     {
         icon: Wifi,
