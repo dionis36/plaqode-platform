@@ -28,6 +28,7 @@ This guide details the specific environment variables and configurations require
 | `COOKIE_DOMAIN` | `localhost` | `.plaqode.com` | Root domain for cookie sharing. |
 | `NEXT_PUBLIC_GA_ID` | `""` | `G-XXXXXXXX` | Google Analytics ID. |
 | `NEXT_PUBLIC_ALLOWED_REDIRECT_HOSTS` | *(Optional)* | `another.plaqode.com` | Extra allowed redirect domains. |
+| `RESEND_API_KEY` | `re_...` | `re_...` | For server-side contact form. |
 
 ### B. Creator App (`apps/qrstudio-web`)
 **Port**: `3001`

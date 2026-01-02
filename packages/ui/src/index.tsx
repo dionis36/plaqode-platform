@@ -11,3 +11,4 @@ export * from "./components/Drawer";
 
 export { toast } from "sonner";
 export * from "./components/NotFoundPage";
+export * from "./components/ErrorPage";

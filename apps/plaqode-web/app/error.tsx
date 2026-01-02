@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect } from 'react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, RotateCcw } from 'lucide-react';
+import { ErrorPage } from '@plaqode-platform/ui';
 
 export default function Error({
     error,
@@ -16,28 +17,25 @@ export default function Error({
     }, [error]);
 
     return (
-        <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
-            <div className="text-center max-w-md">
-                <h2 className="text-2xl font-bold text-slate-900 mb-4">Something went wrong!</h2>
-                <p className="text-slate-600 mb-8">
-                    {error.message || 'An unexpected error occurred.'}
-                </p>
-                <div className="flex justify-center gap-4">
-                    <button
-                        onClick={() => window.location.href = '/'}
-                        className="flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 font-medium transition-colors"
-                    >
-                        <ArrowLeft size={16} />
-                        Go Home
-                    </button>
-                    <button
-                        onClick={reset}
-                        className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 font-medium transition-colors"
-                    >
-                        Try again
-                    </button>
-                </div>
-            </div>
-        </div>
+        <ErrorPage
+            code="500"
+            title="Something went wrong!"
+            description={error.message || 'An unexpected error occurred.'}
+        >
+            <button
+                onClick={() => window.location.href = '/'}
+                className="bg-white text-black px-6 py-2.5 rounded-lg flex items-center gap-2 font-medium hover:bg-white/90 transition-colors"
+            >
+                <ArrowLeft size={16} />
+                Go Home
+            </button>
+            <button
+                onClick={reset}
+                className="px-6 py-2.5 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 text-white text-sm font-medium transition-colors flex items-center gap-2"
+            >
+                <RotateCcw size={16} />
+                Try again
+            </button>
+        </ErrorPage>
     );
 }
