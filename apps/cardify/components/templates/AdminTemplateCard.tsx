@@ -20,18 +20,20 @@ export default function AdminTemplateCard({
     onExport
 }: AdminTemplateCardProps) {
     const [isHovered, setIsHovered] = useState(false);
+    const [showMobileMenu, setShowMobileMenu] = useState(false);
 
     // Helper to prevent navigation when clicking actions
     const handleAction = (e: React.MouseEvent, action: () => void) => {
         e.preventDefault();
         e.stopPropagation();
         action();
+        setShowMobileMenu(false);
     };
 
     return (
         <Link
             href={`/admin/templates/${template.id}/edit`}
-            className="group block"
+            className="group block relative" // Added relative for positioning mobile menu
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
@@ -39,8 +41,8 @@ export default function AdminTemplateCard({
             <div className="relative aspect-[1.75/1] bg-gray-100 rounded-lg overflow-hidden mb-3 border border-gray-200 group-hover:shadow-md transition-all duration-300">
                 <TemplatePreview template={template} />
 
-                {/* Overlay for actions on hover */}
-                <div className={`absolute inset-0 bg-black/40 transition-opacity duration-300 flex items-center justify-center gap-3 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
+                {/* Overlay for actions on hover (Desktop) */}
+                <div className={`hidden md:flex absolute inset-0 bg-black/40 transition-opacity duration-300 items-center justify-center gap-3 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
                     <button
                         onClick={(e) => handleAction(e, () => onExport(template))}
                         className="p-2 bg-white rounded-full text-slate-700 hover:text-green-600 hover:scale-110 transition-all shadow-lg"
@@ -80,8 +82,8 @@ export default function AdminTemplateCard({
                     </p>
                 </div>
 
-                {/* Quick Actions (Star/Delete) - Subtle next to title */}
-                <div className={`flex gap-1 transition-opacity duration-200 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
+                {/* Quick Actions (Desktop) */}
+                <div className={`hidden md:flex gap-1 transition-opacity duration-200 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
                     <button
                         onClick={(e) => handleAction(e, () => onToggleFeatured(template))}
                         className={`p-1 rounded-md transition-colors ${template.isFeatured ? 'text-yellow-500' : 'text-gray-400 hover:text-yellow-500 hover:bg-gray-50'}`}
@@ -96,6 +98,63 @@ export default function AdminTemplateCard({
                     >
                         <Trash2 size={14} />
                     </button>
+                </div>
+
+                {/* Mobile Menu Button */}
+                <div className="md:hidden relative">
+                    <button
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setShowMobileMenu(!showMobileMenu);
+                        }}
+                        className="p-1 text-gray-400 hover:text-gray-600"
+                    >
+                        <MoreVertical size={20} />
+                    </button>
+
+                    {/* Mobile Menu Dropdown */}
+                    {showMobileMenu && (
+                        <>
+                            <div
+                                className="fixed inset-0 z-10"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    setShowMobileMenu(false);
+                                }}
+                            />
+                            <div className="absolute right-0 bottom-full mb-2 w-48 bg-white rounded-lg shadow-xl border border-gray-100 z-20 py-1 overflow-hidden">
+                                <Link
+                                    href={`/admin/templates/${template.id}/edit`}
+                                    className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    <Edit size={16} /> Edit Template
+                                </Link>
+                                <button
+                                    onClick={(e) => handleAction(e, () => onExport(template))}
+                                    className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors text-left"
+                                >
+                                    <Download size={16} /> Export JSON
+                                </button>
+                                <button
+                                    onClick={(e) => handleAction(e, () => onToggleFeatured(template))}
+                                    className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors text-left"
+                                >
+                                    <Star size={16} className={template.isFeatured ? "fill-yellow-500 text-yellow-500" : ""} />
+                                    {template.isFeatured ? "Unfeature" : "Feature"}
+                                </button>
+                                <div className="h-px bg-gray-100 my-1" />
+                                <button
+                                    onClick={(e) => handleAction(e, () => onDelete(template))}
+                                    className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors text-left font-medium"
+                                >
+                                    <Trash2 size={16} /> Delete
+                                </button>
+                            </div>
+                        </>
+                    )}
                 </div>
             </div>
         </Link>
