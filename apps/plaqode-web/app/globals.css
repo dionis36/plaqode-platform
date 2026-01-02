@@ -55,3 +55,9 @@
     font-family: 'Merriweather', serif !important;
   }
 }
+
+/* Remove Edge/IE native password reveal and clear buttons */
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}

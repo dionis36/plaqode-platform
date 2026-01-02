@@ -67,6 +67,13 @@
 }
 
 .pattern-grid-lg {
-  background-image: linear-gradient(currentColor 1px, transparent 1px), linear-gradient(90deg, currentColor 1px, transparent 1px);
+  background-image: linear-gradient(currentColor 1px, transparent 1px),
+    linear-gradient(90deg, currentColor 1px, transparent 1px);
   background-size: 40px 40px;
+}
+
+/* Remove Edge/IE native password reveal and clear buttons */
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
 }

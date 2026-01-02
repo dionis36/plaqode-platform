@@ -153,7 +153,7 @@ export function Sidebar({ isOpen, setIsOpen, isMobile, onCloseMobile }: SidebarP
 
 
                 {/* Navigation */}
-                <nav className="flex-1 overflow-y-auto py-8 px-3 flex flex-col gap-2">
+                <nav className="flex-1 overflow-y-auto py-8 px-3 flex flex-col gap-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]">
                     {navItems.map((item) => {
                         const active = isActive(item.href);
                         return (
@@ -181,7 +181,7 @@ export function Sidebar({ isOpen, setIsOpen, isMobile, onCloseMobile }: SidebarP
 
                                 {/* Label: Show normally if open, show small below if collapsed */}
                                 {(!isOpen && !isMobile) ? (
-                                    <span className="text-[10px] font-medium text-center leading-tight opacity-70">
+                                    <span className="text-[10px] font-medium text-center leading-3 opacity-70 w-full px-0.5 break-words">
                                         {item.label}
                                     </span>
                                 ) : (
