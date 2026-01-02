@@ -174,7 +174,7 @@ export default function TemplateManagementPage() {
     return (
         <div className="min-h-screen bg-gray-50 pb-20">
             {/* Header Section */}
-            <div className="bg-white border-b border-gray-200 pt-6 md:pt-10 pb-6 md:pb-8 px-4 sm:px-6 lg:px-8">
+            <div className="pt-6 md:pt-10 pb-6 md:pb-8 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-7xl mx-auto">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div>

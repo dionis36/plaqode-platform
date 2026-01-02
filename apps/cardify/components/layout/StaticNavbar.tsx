@@ -30,7 +30,7 @@ export default function StaticNavbar({ theme = 'dark' }: StaticNavbarProps) {
 
     // For light theme (admin), use relative positioning so it doesn't overlap content
     // For dark theme (home/templates), use absolute positioning for hero overlay
-    const positionClass = isLightTheme ? 'relative bg-white/50 backdrop-blur-md border-b border-slate-200' : 'absolute top-0 left-0 bg-transparent';
+    const positionClass = isLightTheme ? 'relative bg-gray-50' : 'absolute top-0 left-0 bg-transparent';
 
     return (
         <>
