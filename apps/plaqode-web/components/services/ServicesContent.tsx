@@ -2,9 +2,11 @@ import { GradientButton } from "@plaqode-platform/ui";
 import { Link, IdCard, Share2, Smartphone, Utensils, Wifi, FileText, ArrowRight, Contact } from "lucide-react";
 import ScrollReveal from "../ui/ScrollReveal";
 
+import { config } from "../../lib/config";
+
 // Environment URLs
-const CARDIFY_URL = process.env.NEXT_PUBLIC_CARDIFY_URL || 'http://localhost:3002';
-const QRSTUDIO_URL = process.env.NEXT_PUBLIC_QRSTUDIO_URL || 'http://localhost:3001';
+const CARDIFY_URL = config.app.cardifyUrl;
+const QRSTUDIO_URL = config.app.qrstudioUrl;
 
 // Section 1 Data: The "Power 6" High-Value Verticals
 const solutions = [

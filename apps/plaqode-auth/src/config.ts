@@ -9,17 +9,17 @@ export const config = {
     databaseUrl: process.env.DATABASE_URL!,
 
     // JWT
-    jwtPrivateKeyPath: process.env.JWT_PRIVATE_KEY_PATH || './keys/private.pem',
-    jwtPublicKeyPath: process.env.JWT_PUBLIC_KEY_PATH || './keys/public.pem',
+    jwtPrivateKeyPath: process.env.JWT_PRIVATE_KEY_PATH!,
+    jwtPublicKeyPath: process.env.JWT_PUBLIC_KEY_PATH!,
     jwtAccessTokenExpiry: process.env.JWT_ACCESS_TOKEN_EXPIRY || '15m',
     jwtRefreshTokenExpiry: process.env.JWT_REFRESH_TOKEN_EXPIRY || '7d',
 
     // Cookie
-    cookieDomain: process.env.COOKIE_DOMAIN || '.plaqode.com',
+    cookieDomain: process.env.COOKIE_DOMAIN!,
     cookieSecure: process.env.COOKIE_SECURE === 'true',
 
     // CORS
-    allowedOrigins: process.env.ALLOWED_ORIGINS?.split(',').map(o => o.trim()) || ['http://localhost:3000'],
+    allowedOrigins: process.env.ALLOWED_ORIGINS?.split(',').map(o => o.trim()) || [],
 
     // Rate Limiting
     rateLimitMax: parseInt(process.env.RATE_LIMIT_MAX || '100'),
