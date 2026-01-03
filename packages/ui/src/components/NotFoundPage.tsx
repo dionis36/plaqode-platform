@@ -4,6 +4,7 @@ import { ArrowLeft, Home } from "lucide-react";
 import { ErrorPage } from "./ErrorPage";
 
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export interface NotFoundPageProps {
     homeUrl?: string; // Optional override for Home link
@@ -11,6 +12,15 @@ export interface NotFoundPageProps {
 
 export function NotFoundPage({ homeUrl = "/" }: NotFoundPageProps) {
     const router = useRouter();
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    if (!isMounted) {
+        return null;
+    }
 
     return (
         <ErrorPage
