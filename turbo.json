@@ -3,6 +3,21 @@
     "globalDependencies": [
         "**/.env"
     ],
+    "globalEnv": [
+        "NODE_ENV",
+        "DATABASE_URL",
+        "NEXT_PUBLIC_APP_URL",
+        "NEXT_PUBLIC_PLATFORM_URL",
+        "NEXT_PUBLIC_QRSTUDIO_URL",
+        "NEXT_PUBLIC_QRSTUDIO_API_URL",
+        "NEXT_PUBLIC_AUTH_SERVICE_URL",
+        "NEXT_PUBLIC_CARDIFY_URL",
+        "AUTH_SERVICE_INTERNAL_URL",
+        "COOKIE_DOMAIN",
+        "RESEND_API_KEY",
+        "NEXT_PUBLIC_GA_ID",
+        "NEXT_PUBLIC_ALLOWED_REDIRECT_HOSTS"
+    ],
     "tasks": {
         "build": {
             "dependsOn": [
