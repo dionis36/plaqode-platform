@@ -96,10 +96,6 @@ function DesignPageContent({ params }: { params: { template: string } }) {
         logo: false
     });
 
-    if (!isMounted) {
-        return null;
-    }
-
     const [copiedColor, setCopiedColor] = useState<string | null>(null);
 
     // Load existing QR data if in edit mode (but only if not already loaded)
@@ -116,6 +112,10 @@ function DesignPageContent({ params }: { params: { template: string } }) {
             setQrName(useWizardStore.getState().qrName);
         }
     }, [editMode]);
+
+    if (!isMounted) {
+        return null;
+    }
 
     async function loadExistingQr() {
         try {
