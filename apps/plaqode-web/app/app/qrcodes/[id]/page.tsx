@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { qrApi } from '@/lib/api-client';
-import { ArrowLeft, Download, Edit, Trash2, QrCode as QrCodeIcon, BarChart3, Eye, EyeOff, Smartphone } from 'lucide-react';
+import { ArrowLeft, Download, Edit, Trash2, QrCode as QrCodeIcon, BarChart3, Eye, EyeOff, Smartphone, Copy, ExternalLink, Globe, Check } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import QRCodeStyling from 'qr-code-styling';
@@ -36,6 +36,14 @@ export default function QrCodeDetailPage({ params }: { params: { id: string } })
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
     const [previewModalOpen, setPreviewModalOpen] = useState(false);
+
+    const baseUrl = env.NEXT_PUBLIC_APP_URL || (typeof window !== 'undefined' ? window.location.origin : 'https://plaqode.com');
+    const fullQrUrl = qrCode ? `${baseUrl}/q/${qrCode.shortcode}` : '';
+
+    const handleCopy = (text: string) => {
+        navigator.clipboard.writeText(text);
+        toast.success('Copied to clipboard');
+    };
 
     const loadQrCode = useCallback(async () => {
         try {
@@ -213,23 +221,44 @@ export default function QrCodeDetailPage({ params }: { params: { id: string } })
                     {/* Title Row with Status Badge */}
                     <div className="flex items-center justify-between mb-2">
                         <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">{qrCode.name}</h1>
-                        <button
-                            onClick={handleToggleStatus}
-                            className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium transition-all ${qrCode.isActive
-                                ? 'bg-green-100 text-green-700 hover:bg-green-200 border border-green-200'
-                                : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200'
-                                }`}
-                        >
-                            {qrCode.isActive ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
-                            <span>{qrCode.isActive ? 'Active' : 'Inactive'}</span>
-                        </button>
+                        <div className="flex items-center gap-3">
+                            <span className={`text-sm font-medium ${qrCode.isActive ? 'text-green-600' : 'text-slate-500'}`}>
+                                {qrCode.isActive ? 'Active' : 'Inactive'}
+                            </span>
+                            <button
+                                onClick={handleToggleStatus}
+                                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${qrCode.isActive ? 'bg-green-500' : 'bg-slate-200'
+                                    }`}
+                                title={qrCode.isActive ? 'Deactivate' : 'Activate'}
+                            >
+                                <span
+                                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${qrCode.isActive ? 'translate-x-6' : 'translate-x-1'
+                                        }`}
+                                />
+                            </button>
+                        </div>
                     </div>
 
                     {/* URL Row with Action Buttons */}
                     <div className="flex items-center justify-between">
-                        <p className="text-sm sm:text-base text-slate-600">
-                            {(env.NEXT_PUBLIC_APP_URL || 'https://plaqode.com').replace(/^https?:\/\//, '')}/q/{qrCode.shortcode}
-                        </p>
+                        <div className="flex items-center gap-2 text-slate-600">
+                            <a
+                                href={fullQrUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-sm sm:text-base hover:text-blue-600 hover:underline flex items-center gap-1.5"
+                            >
+                                {fullQrUrl.replace(/^https?:\/\//, '')}
+                                <ExternalLink className="w-3.5 h-3.5 opacity-50" />
+                            </a>
+                            <button
+                                onClick={() => handleCopy(fullQrUrl)}
+                                className="p-1 text-slate-400 hover:text-blue-600 transition-colors"
+                                title="Copy URL"
+                            >
+                                <Copy className="w-3.5 h-3.5" />
+                            </button>
+                        </div>
 
                         {/* Icon-Only Action Buttons */}
                         <div className="flex gap-2">
@@ -350,14 +379,30 @@ export default function QrCodeDetailPage({ params }: { params: { id: string } })
                                 <div>
                                     <dt className="text-sm font-medium text-slate-600">Public URL</dt>
                                     <dd className="mt-1">
-                                        <a
-                                            href={`${env.NEXT_PUBLIC_APP_URL || 'https://plaqode.com'}/q/${qrCode.shortcode}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="text-sm text-blue-600 hover:underline"
-                                        >
-                                            {env.NEXT_PUBLIC_APP_URL || 'https://plaqode.com'}/q/{qrCode.shortcode}
-                                        </a>
+                                        <div className="flex items-center gap-2 max-w-full">
+                                            <div className="flex-1 flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-md px-3 py-2">
+                                                <Globe className="w-4 h-4 text-slate-400 shrink-0" />
+                                                <div className="text-sm text-slate-600 truncate font-mono select-all">
+                                                    {fullQrUrl}
+                                                </div>
+                                            </div>
+                                            <button
+                                                onClick={() => handleCopy(fullQrUrl)}
+                                                className="p-2 border border-slate-200 rounded-md hover:bg-slate-50 text-slate-600 transition-colors"
+                                                title="Copy URL"
+                                            >
+                                                <Copy className="w-4 h-4" />
+                                            </button>
+                                            <a
+                                                href={fullQrUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="p-2 border border-slate-200 rounded-md hover:bg-slate-50 text-slate-600 transition-colors"
+                                                title="Open in new tab"
+                                            >
+                                                <ExternalLink className="w-4 h-4" />
+                                            </a>
+                                        </div>
                                     </dd>
                                 </div>
                             </dl>
