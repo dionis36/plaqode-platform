@@ -1,6 +1,8 @@
 "use client";
 
-const HOME_URL = process.env.NEXT_PUBLIC_PLAQODE_WEB_URL || "http://localhost:3000";
+import { env } from '@/lib/env';
+
+const HOME_URL = env.NEXT_PUBLIC_PLATFORM_URL;
 
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";

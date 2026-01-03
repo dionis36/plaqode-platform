@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuth } from '@/lib/auth-context';
+import { env } from '@/lib/env';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
@@ -16,7 +17,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 // Not logged in -> Redirect to login
                 // We use window.location to ensure full refresh/exit from current state if needed,
                 // but router.push is usually fine.
-                const HOME_URL = process.env.NEXT_PUBLIC_PLAQODE_WEB_URL || "http://localhost:3000";
+                const HOME_URL = env.NEXT_PUBLIC_PLATFORM_URL;
                 window.location.href = `${HOME_URL}/auth/login`;
             } else if (!user.roles.includes('admin') && !user.roles.includes('superadmin')) {
                 // Logged in but not admin -> Redirect to home

@@ -1,5 +1,7 @@
 'use client';
 
+import { env } from '@/lib/env';
+
 import { createContext, useContext, useEffect, useState } from 'react';
 
 interface User {
@@ -67,7 +69,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(null);
         setIsAuthenticated(false);
         // Redirect to platform login
-        window.location.href = `${process.env.NEXT_PUBLIC_PLATFORM_URL || 'http://localhost:3000'}/auth/login`;
+        window.location.href = `${env.NEXT_PUBLIC_PLATFORM_URL}/auth/login`;
     };
 
     const hasCardifyAccess = user?.products.includes('cardify') || false;

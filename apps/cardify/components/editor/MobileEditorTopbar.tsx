@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Undo, Redo, MoreVertical, RotateCcw, Menu, Save, Download } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { env } from '@/lib/env';
 
 interface MobileEditorTopbarProps {
     templateName: string;
@@ -41,8 +42,9 @@ export default function MobileEditorTopbar({
         <div className="lg:hidden fixed top-0 inset-x-0 h-14 bg-white border-b border-gray-200 z-50 flex items-center justify-between px-3 safe-area-inset-top">
             {/* Left: Back, Undo, Redo */}
             <div className="flex items-center gap-1">
+
                 <Link
-                    href={process.env.NEXT_PUBLIC_PLATFORM_URL || 'http://localhost:3000'}
+                    href={env.NEXT_PUBLIC_PLATFORM_URL}
                     className="flex-shrink-0 -ml-1"
                     aria-label="Back to Home"
                 >

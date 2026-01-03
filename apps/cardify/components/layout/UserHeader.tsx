@@ -1,6 +1,7 @@
 'use client';
 
 import { useAuth } from '@/lib/auth-context';
+import { env } from '@/lib/env';
 
 export function UserHeader() {
     const { user, isAuthenticated, loading } = useAuth();
@@ -20,8 +21,9 @@ export function UserHeader() {
         <div className="bg-white border-b border-gray-200 px-6 py-3">
             <div className="flex items-center justify-between max-w-7xl mx-auto">
                 <div className="flex items-center gap-4">
+
                     <a
-                        href={process.env.NEXT_PUBLIC_PLATFORM_URL || 'http://localhost:3000'}
+                        href={env.NEXT_PUBLIC_PLATFORM_URL}
                         className="text-purple-600 hover:text-purple-700 text-sm font-medium transition"
                     >
                         ← Back to Platform
@@ -35,13 +37,13 @@ export function UserHeader() {
                 ) : (
                     <div className="flex items-center gap-3">
                         <a
-                            href={`${process.env.NEXT_PUBLIC_PLATFORM_URL || 'http://localhost:3000'}/auth/login?redirect=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`}
+                            href={`${env.NEXT_PUBLIC_PLATFORM_URL}/auth/login?redirect=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`}
                             className="text-sm text-gray-600 hover:text-gray-900 transition font-medium"
                         >
                             Login
                         </a>
                         <a
-                            href={`${process.env.NEXT_PUBLIC_PLATFORM_URL || 'http://localhost:3000'}/auth/signup`}
+                            href={`${env.NEXT_PUBLIC_PLATFORM_URL}/auth/signup`}
                             className="text-sm px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition font-medium"
                         >
                             Sign Up

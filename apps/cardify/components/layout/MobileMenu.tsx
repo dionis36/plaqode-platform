@@ -14,7 +14,9 @@ interface MobileMenuProps {
     onClose: () => void;
 }
 
-const HOME_URL = process.env.NEXT_PUBLIC_PLAQODE_WEB_URL || "http://localhost:3000";
+import { env } from '@/lib/env';
+
+const HOME_URL = env.NEXT_PUBLIC_PLATFORM_URL;
 
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
     const { user, logout } = useAuth(); // Assuming auth-context provides similar interface

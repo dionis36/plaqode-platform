@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { env } from '@/lib/env';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
@@ -9,7 +10,7 @@ export function middleware(request: NextRequest) {
 
     // Protect /admin routes
     if (pathname.startsWith('/admin')) {
-        const webUrl = process.env.NEXT_PUBLIC_PLAQODE_WEB_URL || 'http://localhost:3000';
+        const webUrl = env.NEXT_PUBLIC_PLATFORM_URL;
 
         // 1. Unauthenticated: No token present
         if (!token) {

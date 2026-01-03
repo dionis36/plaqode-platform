@@ -1,8 +1,10 @@
 'use client';
 
+import { env } from '@/lib/env';
+
 // Explicitly pointing to the main Plaqode Platform application (Port 3000)
-// We hardcode this to ensure navigation always exits the Cardify app context
-const PLATFORM_URL = 'http://localhost:3000';
+// We use env var with fallback to localhost:3000
+const PLATFORM_URL = env.NEXT_PUBLIC_PLATFORM_URL;
 
 import { usePathname } from 'next/navigation';
 import { useState, useRef, useEffect } from 'react';

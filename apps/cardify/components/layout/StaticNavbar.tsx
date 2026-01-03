@@ -10,7 +10,9 @@ import { Menu } from "lucide-react";
 import { useState, useEffect } from "react";
 import MobileMenu from "./MobileMenu";
 
-const HOME_URL = process.env.NEXT_PUBLIC_PLAQODE_WEB_URL || "http://localhost:3000";
+import { env } from '@/lib/env';
+
+const HOME_URL = env.NEXT_PUBLIC_PLATFORM_URL;
 
 interface StaticNavbarProps {
     theme?: 'light' | 'dark';

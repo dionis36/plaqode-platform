@@ -6,6 +6,7 @@ import { Download, Undo, Redo, Save, ArrowLeft, Loader, Shuffle, RotateCcw } fro
 import Image from "next/image";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
+import { env } from '@/lib/env';
 import { GradientAvatar } from "@plaqode-platform/ui";
 import { GradientButton } from "@plaqode-platform/ui";
 
@@ -49,8 +50,9 @@ export default function EditorTopbar({
 
             {/* 1. Left: Back (Logo) & Title */}
             <div className="flex items-center space-x-4">
+
                 <Link
-                    href={process.env.NEXT_PUBLIC_PLATFORM_URL || 'http://localhost:3000'}
+                    href={env.NEXT_PUBLIC_PLATFORM_URL}
                     className="flex-shrink-0"
                     title="Back to Home"
                 >
