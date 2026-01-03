@@ -1,12 +1,10 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
-import { config } from 'dotenv';
+import { config } from './config';
 import { routes } from './routes';
-// Load environment variables
-config();
 
-const PORT = parseInt(process.env.PORT || '3005', 10);
-const HOST = process.env.HOST || '0.0.0.0';
+const PORT = config.port;
+const HOST = config.host;
 
 // Create Fastify instance
 const app = Fastify({

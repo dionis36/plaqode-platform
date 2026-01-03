@@ -1,6 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import { qrService } from '../services/qr.service';
 import { analyticsService } from '../services/analytics.service';
+import { config } from '../config';
 
 export async function redirectRoutes(fastify: FastifyInstance) {
     // Main redirect route - handles shortcode resolution
@@ -52,7 +53,7 @@ export async function redirectRoutes(fastify: FastifyInstance) {
 
                 // 4. For all other cases, redirect to the landing page
                 // This will be handled by the Next.js frontend
-                return reply.redirect(302, `${process.env.FRONTEND_URL}/r/${shortcode}`);
+                return reply.redirect(302, `${config.frontendUrl}/r/${shortcode}`);
 
             } catch (error: any) {
                 fastify.log.error('Redirect error:', error);
