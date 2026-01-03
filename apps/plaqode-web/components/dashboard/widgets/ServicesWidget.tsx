@@ -1,13 +1,14 @@
 'use client';
 
 import { useAuth } from '@/lib/auth-context';
+import { env } from '@/lib/env';
 import { QrCode, CreditCard, ExternalLink, Lock } from 'lucide-react';
 import Link from 'next/link';
 
 export function ServicesWidget() {
     const { user, hasProduct } = useAuth();
-    const qrStudioUrl = process.env.NEXT_PUBLIC_QRSTUDIO_URL || 'http://localhost:3001';
-    const cardifyUrl = process.env.NEXT_PUBLIC_CARDIFY_URL || 'http://localhost:3002';
+    const qrStudioUrl = env.NEXT_PUBLIC_QRSTUDIO_URL;
+    const cardifyUrl = env.NEXT_PUBLIC_CARDIFY_URL;
 
     const services = [
         {

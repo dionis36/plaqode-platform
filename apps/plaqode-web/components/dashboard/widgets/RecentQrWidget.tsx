@@ -2,6 +2,7 @@
 
 import { QrCode, ArrowRight, Smartphone, Trash2, BarChart2, Edit } from 'lucide-react';
 import Link from 'next/link';
+import { env } from '@/lib/env';
 
 interface QrDisplayItem {
     id: string;
@@ -21,7 +22,7 @@ interface RecentQrWidgetProps {
 }
 
 export function RecentQrWidget({ qrCodes, loading, onDelete, onPreview }: RecentQrWidgetProps) {
-    const qrStudioUrl = process.env.NEXT_PUBLIC_QRSTUDIO_URL || 'http://localhost:3001';
+    const qrStudioUrl = env.NEXT_PUBLIC_QRSTUDIO_URL;
 
     const getTypeColor = (type: string) => {
         const colors: Record<string, string> = {

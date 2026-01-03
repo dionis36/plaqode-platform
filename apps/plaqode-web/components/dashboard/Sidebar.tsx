@@ -1,6 +1,7 @@
 'use client';
 
 import { useAuth } from '@/lib/auth-context';
+import { env } from '@/lib/env';
 import { usePathname } from 'next/navigation';
 import {
     LayoutDashboard,
@@ -77,7 +78,7 @@ export function Sidebar({ isOpen, setIsOpen, isMobile, onCloseMobile }: SidebarP
         // Add Cardify Manager Link
         navItems.push({
             label: 'Manage Cards',
-            href: `${process.env.NEXT_PUBLIC_CARDIFY_URL || 'http://localhost:3002'}/admin/templates`,
+            href: `${env.NEXT_PUBLIC_CARDIFY_URL}/admin/templates`,
             icon: Layout // Reusing Layout icon or maybe a better one like FileText
         });
     }

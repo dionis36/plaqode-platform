@@ -139,7 +139,7 @@ function LoginForm() {
                     </form>
 
                     <div className="mt-8 text-center text-sm text-text font-sans">
-                        Don't have an account?{' '}
+                        Don&apos;t have an account?{' '}
                         <a href="/auth/signup" className="text-dark font-bold hover:text-secondary transition-colors">
                             Sign Up
                         </a>

@@ -96,7 +96,7 @@ export default function Testimonials() {
                                     </div>
 
                                     <p className="text-base text-neutral-200 leading-relaxed mb-6 flex-grow font-sans relative">
-                                        <span className="text-4xl absolute -top-3 -left-2 text-white/10 font-serif leading-none">"</span>
+                                        <span className="text-4xl absolute -top-3 -left-2 text-white/10 font-serif leading-none">&quot;</span>
                                         <span className="relative z-10">{t.text}</span>
                                     </p>
 

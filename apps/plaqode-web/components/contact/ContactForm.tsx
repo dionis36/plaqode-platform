@@ -6,7 +6,7 @@ export default function ContactForm() {
             <div className="max-w-[1200px] mx-auto">
                 <div className="text-center mb-16">
                     <h2 className="text-4xl font-serif font-bold mb-4">Get in Touch</h2>
-                    <p className="text-light/70">We'd love to hear from you. Fill out the form below.</p>
+                    <p className="text-light/70">We&apos;d love to hear from you. Fill out the form below.</p>
                 </div>
 
                 <div className="flex flex-col lg:flex-row bg-background rounded-lg overflow-hidden shadow-box-shadow">

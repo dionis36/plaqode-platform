@@ -4,7 +4,9 @@ import { Link, AlignLeft, AtSign, Mail, MapPin, Wifi, Calendar, Share2, Smartpho
 import { GradientButton } from "@plaqode-platform/ui";
 
 // Comprehensive list of tools
-const QR_STUDIO_URL = process.env.NEXT_PUBLIC_QRSTUDIO_URL || 'http://localhost:3001';
+import { env } from '@/lib/env';
+
+const QR_STUDIO_URL = env.NEXT_PUBLIC_QRSTUDIO_URL;
 
 // Comprehensive list of tools
 const tools = [
@@ -64,7 +66,7 @@ export default function ToolsCatalog() {
                 {/* <div className="mt-16 text-center">
                     <p className="text-light/60 mb-6">Ready to start creating?</p>
                     <GradientButton
-                        href={`${process.env.NEXT_PUBLIC_QRSTUDIO_URL || 'http://localhost:3001'}/create`}
+                        href={`${env.NEXT_PUBLIC_QRSTUDIO_URL}/create`}
                         text="Open QR Studio"
                         size="lg"
                     />

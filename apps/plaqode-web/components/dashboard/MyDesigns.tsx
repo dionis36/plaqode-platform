@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { env } from '@/lib/env';
 
 interface SavedDesign {
     id: string;
@@ -21,7 +22,7 @@ export function MyDesigns() {
 
     const fetchDesigns = async () => {
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/api/designs`, {
+            const response = await fetch(`${env.NEXT_PUBLIC_AUTH_SERVICE_URL}/api/designs`, {
                 credentials: 'include',
             });
 
@@ -52,7 +53,7 @@ export function MyDesigns() {
             <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-bold text-gray-900">My Designs</h2>
                 <a
-                    href={process.env.NEXT_PUBLIC_CARDIFY_URL || 'http://localhost:3002'}
+                    href={env.NEXT_PUBLIC_CARDIFY_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-sm"
@@ -69,7 +70,7 @@ export function MyDesigns() {
                     <p className="text-gray-600 mb-2">No saved designs yet</p>
                     <p className="text-sm text-gray-500 mb-4">Start creating beautiful business cards</p>
                     <a
-                        href={process.env.NEXT_PUBLIC_CARDIFY_URL || 'http://localhost:3002'}
+                        href={env.NEXT_PUBLIC_CARDIFY_URL}
                         className="inline-block px-4 py-2"
                     >
                         Create Your First Design
@@ -80,7 +81,7 @@ export function MyDesigns() {
                     {designs.map((design) => (
                         <a
                             key={design.id}
-                            href={`${process.env.NEXT_PUBLIC_CARDIFY_URL || 'http://localhost:3002'}/design/${design.templateId}?loadId=${design.id}`}
+                            href={`${env.NEXT_PUBLIC_CARDIFY_URL}/design/${design.templateId}?loadId=${design.id}`}
                             className="group"
                         >
                             <div className="aspect-[3/2] bg-gray-100 rounded-lg overflow-hidden mb-2 border border-gray-200 group-hover:border-purple-400 transition">

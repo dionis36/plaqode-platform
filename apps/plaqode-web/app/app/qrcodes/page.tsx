@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { qrApi } from '@/lib/api-client';
 import { QrCode, Search, Filter, BarChart2, Edit, Trash2, Smartphone } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { QrContentPreviewModal } from '@/components/common/QrContentPreviewModal';
 import { GradientButton, toast, ConfirmationModal, Input } from "@plaqode-platform/ui";
+import { env } from '@/lib/env';
 
 interface QrCodeItem {
     id: string;
@@ -34,13 +35,9 @@ export default function QrCodesPage() {
     const [previewModalOpen, setPreviewModalOpen] = useState(false);
     const [qrToPreview, setQrToPreview] = useState<any>(null);
 
-    const qrStudioUrl = process.env.NEXT_PUBLIC_QRSTUDIO_URL || 'http://localhost:3001';
+    const qrStudioUrl = env.NEXT_PUBLIC_QRSTUDIO_URL;
 
-    useEffect(() => {
-        loadQrCodes();
-    }, [page, search, typeFilter]);
-
-    async function loadQrCodes() {
+    const loadQrCodes = useCallback(async () => {
         try {
             setLoading(true);
             const response = await qrApi.list({
@@ -67,7 +64,11 @@ export default function QrCodesPage() {
         } finally {
             setLoading(false);
         }
-    }
+    }, [page, search, typeFilter]);
+
+    useEffect(() => {
+        loadQrCodes();
+    }, [loadQrCodes]);
 
     async function handleDelete(id: string) {
         setQrToDelete(id);

@@ -7,6 +7,7 @@ import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 import { Suspense } from "react";
 
 import FontLoader from "@/components/FontLoader";
+import { env } from '@/lib/env';
 
 // Global Body Font
 const inter = Inter({
@@ -98,7 +99,7 @@ export default function RootLayout({
             <Toaster richColors theme="light" />
           </AuthProvider>
         </Suspense>
-        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
+        <GoogleAnalytics gaId={env.NEXT_PUBLIC_GA_ID || ""} />
       </body>
     </html>
   );

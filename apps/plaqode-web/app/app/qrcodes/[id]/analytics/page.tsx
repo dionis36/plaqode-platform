@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { analyticsApi, qrApi } from '@/lib/api-client';
 import { ArrowLeft, TrendingUp, Globe, Smartphone, Monitor } from 'lucide-react';
 import dynamic from 'next/dynamic';
@@ -29,11 +29,7 @@ export default function AnalyticsPage({ params }: { params: { id: string } }) {
     const [loading, setLoading] = useState(true);
     const [dateRange, setDateRange] = useState<'7d' | '30d' | 'all'>('30d');
 
-    useEffect(() => {
-        loadAnalytics();
-    }, [params.id, dateRange]);
-
-    async function loadAnalytics() {
+    const loadAnalytics = useCallback(async () => {
         try {
             setLoading(true);
 
@@ -71,7 +67,11 @@ export default function AnalyticsPage({ params }: { params: { id: string } }) {
         } finally {
             setLoading(false);
         }
-    }
+    }, [params.id, dateRange]);
+
+    useEffect(() => {
+        loadAnalytics();
+    }, [loadAnalytics]);
 
     if (loading) {
         return (

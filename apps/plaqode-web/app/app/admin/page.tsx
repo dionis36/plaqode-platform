@@ -2,9 +2,10 @@
 
 import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { toast, Modal, ConfirmationModal } from "@plaqode-platform/ui";
 import { Shield, ShieldAlert, User as UserIcon, CheckCircle, CreditCard, QrCode, X } from "lucide-react";
+import { env } from '@/lib/env';
 
 interface User {
     id: string;
@@ -30,38 +31,9 @@ export default function AdminPage() {
     const [filter, setFilter] = useState<'all' | 'admins' | 'users'>('all');
     const [openActionMenu, setOpenActionMenu] = useState<string | null>(null);
 
-    useEffect(() => {
-        // Wait for auth to load before checking admin status
-        if (loading) return;
-
-        if (!isAdmin) {
-            router.push('/app');
-            return;
-        }
-
-        fetchUsers();
-    }, [isAdmin, loading]);
-
-    // Close dropdown when clicking outside
-    useEffect(() => {
-        const handleClickOutside = () => {
-            if (openActionMenu) {
-                setOpenActionMenu(null);
-            }
-        };
-
-        if (openActionMenu) {
-            document.addEventListener('click', handleClickOutside);
-        }
-
-        return () => {
-            document.removeEventListener('click', handleClickOutside);
-        };
-    }, [openActionMenu]);
-
-    const fetchUsers = async () => {
+    const fetchUsers = useCallback(async () => {
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/users`, {
+            const response = await fetch(`${env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/users`, {
                 credentials: 'include',
             });
 
@@ -74,14 +46,26 @@ export default function AdminPage() {
         } finally {
             setUsersLoading(false);
         }
-    };
+    }, []);
+
+    useEffect(() => {
+        // Wait for auth to load before checking admin status
+        if (loading) return;
+
+        if (!isAdmin) {
+            router.push('/app');
+            return;
+        }
+
+        fetchUsers();
+    }, [isAdmin, loading, fetchUsers, router]);
 
     const assignRole = async (userId: string, role: string) => {
         setActionLoading(true);
         setActionLoading(true);
         try {
             const response = await fetch(
-                `${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/users/${userId}/roles`,
+                `${env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/users/${userId}/roles`,
                 {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -117,7 +101,7 @@ export default function AdminPage() {
         // Optimistic UI update or wait for load? We'll wait.
         try {
             const response = await fetch(
-                `${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/users/${selectedUser.id}/roles/${roleToRevoke}`,
+                `${env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/users/${selectedUser.id}/roles/${roleToRevoke}`,
                 {
                     method: 'DELETE',
                     credentials: 'include',
@@ -141,7 +125,7 @@ export default function AdminPage() {
         setActionLoading(true);
         try {
             const response = await fetch(
-                `${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/users/${userId}/products`,
+                `${env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/users/${userId}/products`,
                 {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -173,7 +157,7 @@ export default function AdminPage() {
         setActionLoading(true);
         try {
             const response = await fetch(
-                `${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/users/${selectedUser.id}/products/${productToRevoke}`,
+                `${env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/users/${selectedUser.id}/products/${productToRevoke}`,
                 {
                     method: 'DELETE',
                     credentials: 'include',
@@ -199,7 +183,7 @@ export default function AdminPage() {
         setActionLoading(true);
         try {
             const response = await fetch(
-                `${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/users/${userId}`,
+                `${env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/users/${userId}`,
                 {
                     method: 'DELETE',
                     credentials: 'include',

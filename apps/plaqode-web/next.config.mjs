@@ -12,7 +12,7 @@ const nextConfig = {
         return [
             {
                 source: '/q/:path*',
-                destination: `${process.env.NEXT_PUBLIC_QRSTUDIO_API_URL || 'http://localhost:3005'}/:path*`,
+                destination: `${process.env.NEXT_PUBLIC_QRSTUDIO_API_URL}/:path*`,
             },
         ];
     },

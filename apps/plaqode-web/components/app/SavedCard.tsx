@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Calendar, User, Trash2 } from 'lucide-react';
 import TemplatePreview from '@/components/app/TemplatePreview';
 import { CardTemplate } from '@/types/template';
+import { env } from '@/lib/env';
 
 interface SavedDesign {
     id: string;
@@ -21,7 +22,7 @@ interface SavedCardProps {
 
 export default function SavedCard({ design, onDelete }: SavedCardProps) {
     // strict PLATFORM URL usage for consistency
-    const EDITOR_URL = process.env.NEXT_PUBLIC_CARDIFY_URL || 'http://localhost:3002';
+    const EDITOR_URL = env.NEXT_PUBLIC_CARDIFY_URL;
 
     // Extract current page template from designData
     const template: CardTemplate | null = design.designData?.pages?.[design.designData.current || 0] || null;

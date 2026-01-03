@@ -143,7 +143,7 @@ export function PDFPreview({ data }: PDFPreviewProps) {
         } finally {
             setIsGenerating(false);
         }
-    }, [pdfFile.file_data]);
+    }, [pdfFile.file_data, fileExtension]);
 
     useEffect(() => {
         if (pdfFile.file_data && !pdfFile.fullscreen_mode) {

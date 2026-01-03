@@ -72,7 +72,7 @@ export default function ContactContent() {
                 {/* 1. Intro & Contact Details */}
                 <ScrollReveal variant="fade-up" className="text-center space-y-12">
                     <p className="text-lg md:text-xl font-sans text-light/90 leading-relaxed max-w-4xl mx-auto">
-                        Ready to Simplify Your Business? Contact us today to learn how PlaQode's QR code solutions can streamline your data, processes, and tasks.
+                        Ready to Simplify Your Business? Contact us today to learn how PlaQode&apos;s QR code solutions can streamline your data, processes, and tasks.
                     </p>
 
                     {/* Social Icons Row */}

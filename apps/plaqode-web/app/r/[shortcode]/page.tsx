@@ -2,6 +2,7 @@
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { SmartLandingPage } from '@/components/redirect/SmartLandingPage';
+import { env } from '@/lib/env';
 
 // Import All Preview Components
 import { MenuPreview } from '@/components/qrcodes/preview/MenuPreview';
@@ -24,7 +25,7 @@ interface ViewerPageProps {
 
 async function getQRCodeByShortcode(shortcode: string) {
     try {
-        const apiUrl = process.env.NEXT_PUBLIC_QRSTUDIO_API_URL || 'http://localhost:3005';
+        const apiUrl = env.NEXT_PUBLIC_QRSTUDIO_API_URL;
         const response = await fetch(`${apiUrl}/q/${shortcode}`, {
             cache: 'no-store',
         });
@@ -60,7 +61,7 @@ export default async function ViewerPage({ params }: ViewerPageProps) {
                 <div className="text-center p-8">
                     <div className="text-6xl mb-4">🔍</div>
                     <h1 className="text-2xl font-bold text-slate-900">QR Code Not Found</h1>
-                    <p className="text-slate-600 mt-2">This code doesn't exist.</p>
+                    <p className="text-slate-600 mt-2">This code doesn&apos;t exist.</p>
                 </div>
             </div>
         );

@@ -11,6 +11,7 @@ import { useState, useEffect } from 'react';
 import { qrApi } from '@/lib/api-client';
 import { ConfirmationModal, toast } from '@plaqode-platform/ui';
 import { QrContentPreviewModal } from '@/components/common/QrContentPreviewModal';
+import { env } from '@/lib/env';
 
 export default function DashboardPage() {
     const { user } = useAuth();
@@ -43,7 +44,7 @@ export default function DashboardPage() {
             ]);
 
             // 2. Fetch Designs (Saved Cards)
-            const designsRes = await fetch(`${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/api/designs`, {
+            const designsRes = await fetch(`${env.NEXT_PUBLIC_AUTH_SERVICE_URL}/api/designs`, {
                 credentials: 'include',
             }).catch(() => null);
 
@@ -110,7 +111,7 @@ export default function DashboardPage() {
         if (!designToDelete) return;
         try {
             setIsDeleting(true);
-            const response = await fetch(`${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/api/designs/${designToDelete.id}`, {
+            const response = await fetch(`${env.NEXT_PUBLIC_AUTH_SERVICE_URL}/api/designs/${designToDelete.id}`, {
                 method: 'DELETE',
                 credentials: 'include',
             });
@@ -149,7 +150,7 @@ export default function DashboardPage() {
                 <h1 className="text-3xl sm:text-4xl font-merriweather font-bold text-dark mb-3">
                     Welcome back, <span className="bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent">{user?.name?.split(' ')[0] || 'Creator'}</span>
                 </h1>
-                <p className="text-text/70 font-sans text-lg">Here's what's happening in your workspace today.</p>
+                <p className="text-text/70 font-sans text-lg">Here&apos;s what&apos;s happening in your workspace today.</p>
             </div>
 
             {/* 2. Stats Overview Row */}

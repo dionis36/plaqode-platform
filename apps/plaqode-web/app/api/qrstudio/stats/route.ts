@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
+import { env } from '@/lib/env';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,7 +18,7 @@ export async function GET() {
         }
 
         // Fetch stats from QR Studio API
-        const qrStudioApiUrl = process.env.NEXT_PUBLIC_QRSTUDIO_API_URL;
+        const qrStudioApiUrl = env.NEXT_PUBLIC_QRSTUDIO_API_URL;
         if (!qrStudioApiUrl) {
             throw new Error('NEXT_PUBLIC_QRSTUDIO_API_URL is not defined');
         }

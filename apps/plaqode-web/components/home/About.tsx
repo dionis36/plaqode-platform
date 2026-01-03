@@ -14,19 +14,19 @@ export default function AboutSection() {
 
                 <ScrollReveal variant="fade-up" className="space-y-6 text-lg md:text-xl font-sans text-text leading-relaxed mb-10">
                     <p>
-                        We're a creative tech company in <span className="font-bold text-text">Tanzania</span>, passionate about helping people and organizations simplify how they share information. Our team blends design, strategy, and innovation to create QR codes that are not only functional—but memorable.
+                        We&apos;re a creative tech company in <span className="font-bold text-text">Tanzania</span>, passionate about helping people and organizations simplify how they share information. Our team blends design, strategy, and innovation to create QR codes that are not only functionalΓÇöbut memorable.
                     </p>
 
                     <p>
-                        Whether you're launching a campaign, distributing learning materials, or printing business cards, we make sure your QR codes are clear, stylish, and built for impact. We believe in turning everyday interactions into digital opportunities.
+                        Whether you&apos;re launching a campaign, distributing learning materials, or printing business cards, we make sure your QR codes are clear, stylish, and built for impact. We believe in turning everyday interactions into digital opportunities.
                     </p>
 
                     <div className="pt-4 space-y-2">
                         <p className="font-bold text-text">
-                            For us, a QR code is more than just a link, it's a door opening to new possibilities. We're here to help you.
+                            For us, a QR code is more than just a link, it&apos;s a door opening to new possibilities. We&apos;re here to help you.
                         </p>
                         <p className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-secondary to-primary italic">
-                            "Connect Smarter. Share Faster. Grow Bigger."
+                            &quot;Connect Smarter. Share Faster. Grow Bigger.&quot;
                         </p>
                     </div>
                 </ScrollReveal>

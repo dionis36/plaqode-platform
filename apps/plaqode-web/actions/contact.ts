@@ -2,8 +2,9 @@
 
 import { Resend } from "resend";
 import { z } from "zod";
+import { env } from '@/lib/env';
 
-const resend = new Resend(process.env.RESEND_API_KEY || "re_missing_api_key");
+const resend = new Resend(env.RESEND_API_KEY || "re_missing_api_key");
 
 const contactSchema = z.object({
     name: z.string().min(2, "Name is required"),

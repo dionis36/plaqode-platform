@@ -22,7 +22,7 @@ export default function ContactPage() {
                     </ScrollReveal>
                     <ScrollReveal variant="fade-up" delay={0.2}>
                         <p className="text-light/70 font-sans max-w-xl mx-auto">
-                            We'd love to hear from you.
+                            We&apos;d love to hear from you.
                         </p>
                     </ScrollReveal>
                 </div>

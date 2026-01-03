@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { qrApi } from '@/lib/api-client';
 import { ArrowLeft, Download, Edit, Trash2, QrCode as QrCodeIcon, BarChart3, Eye, EyeOff, Smartphone } from 'lucide-react';
 import Link from 'next/link';
@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import QRCodeStyling from 'qr-code-styling';
 import { QrContentPreviewModal } from '@/components/common/QrContentPreviewModal';
 import { ConfirmationModal, toast } from "@plaqode-platform/ui";
+import { env } from '@/lib/env';
 
 interface QrCodeDetail {
     id: string;
@@ -36,17 +37,7 @@ export default function QrCodeDetailPage({ params }: { params: { id: string } })
     const [isDeleting, setIsDeleting] = useState(false);
     const [previewModalOpen, setPreviewModalOpen] = useState(false);
 
-    useEffect(() => {
-        loadQrCode();
-    }, [params.id]);
-
-    useEffect(() => {
-        if (qrCode) {
-            document.title = `${qrCode.name} | QR Studio`;
-        }
-    }, [qrCode]);
-
-    async function loadQrCode() {
+    const loadQrCode = useCallback(async () => {
         try {
             const response = await qrApi.getById(params.id);
             if (response.success && response.data) {
@@ -58,11 +49,15 @@ export default function QrCodeDetailPage({ params }: { params: { id: string } })
         } finally {
             setLoading(false);
         }
-    }
+    }, [params.id]);
+
+    useEffect(() => {
+        loadQrCode();
+    }, [loadQrCode]);
 
     function generateQrCode(data: QrCodeDetail) {
         // Use configured app URL or fallback to window origin
-        const baseUrl = process.env.NEXT_PUBLIC_APP_URL || (typeof window !== 'undefined' ? window.location.origin : 'https://plaqode.com');
+        const baseUrl = env.NEXT_PUBLIC_APP_URL || (typeof window !== 'undefined' ? window.location.origin : 'https://plaqode.com');
         const qrUrl = `${baseUrl}/q/${data.shortcode}`;
 
         const qr = new QRCodeStyling({
@@ -233,7 +228,7 @@ export default function QrCodeDetailPage({ params }: { params: { id: string } })
                     {/* URL Row with Action Buttons */}
                     <div className="flex items-center justify-between">
                         <p className="text-sm sm:text-base text-slate-600">
-                            {(process.env.NEXT_PUBLIC_APP_URL || 'https://plaqode.com').replace(/^https?:\/\//, '')}/q/{qrCode.shortcode}
+                            {(env.NEXT_PUBLIC_APP_URL || 'https://plaqode.com').replace(/^https?:\/\//, '')}/q/{qrCode.shortcode}
                         </p>
 
                         {/* Icon-Only Action Buttons */}
@@ -356,12 +351,12 @@ export default function QrCodeDetailPage({ params }: { params: { id: string } })
                                     <dt className="text-sm font-medium text-slate-600">Public URL</dt>
                                     <dd className="mt-1">
                                         <a
-                                            href={`${process.env.NEXT_PUBLIC_APP_URL || 'https://plaqode.com'}/q/${qrCode.shortcode}`}
+                                            href={`${env.NEXT_PUBLIC_APP_URL || 'https://plaqode.com'}/q/${qrCode.shortcode}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="text-sm text-blue-600 hover:underline"
                                         >
-                                            {process.env.NEXT_PUBLIC_APP_URL || 'https://plaqode.com'}/q/{qrCode.shortcode}
+                                            {env.NEXT_PUBLIC_APP_URL || 'https://plaqode.com'}/q/{qrCode.shortcode}
                                         </a>
                                     </dd>
                                 </div>

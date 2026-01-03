@@ -42,11 +42,11 @@ export default function AboutContent() {
                     </p>
 
                     <p className="text-light/80">
-                        Our work goes beyond just generating codes—we design experiences. Whether you're an educator sharing learning materials, a professional networking with digital business cards, or an organization amplifying your social media presence, we craft QR codes that reflect your identity and purpose.
+                        Our work goes beyond just generating codes—we design experiences. Whether you&apos;re an educator sharing learning materials, a professional networking with digital business cards, or an organization amplifying your social media presence, we craft QR codes that reflect your identity and purpose.
                     </p>
 
                     <p className="text-light/80">
-                        We understand that every client is unique. That’s why we offer personalized designs, multi-functional QR categories, and high-quality printing services tailored to your goals. From concept to execution, our team is committed to making your digital access seamless and impactful.
+                        We understand that every client is unique. That&apos;s why we offer personalized designs, multi-functional QR categories, and high-quality printing services tailored to your goals. From concept to execution, our team is committed to making your digital access seamless and impactful.
                     </p>
                 </ScrollReveal>
 
@@ -75,7 +75,7 @@ export default function AboutContent() {
 
                     <div className="text-center mt-20 pt-10 border-t border-white/5">
                         <p className="text-xl font-bold text-white mb-10 max-w-3xl mx-auto leading-relaxed">
-                            Whether you're launching a campaign, hosting an event, or building your brand, we're here to help you connect with confidence, one scan at a time.
+                            Whether you&apos;re launching a campaign, hosting an event, or building your brand, we&apos;re here to help you connect with confidence, one scan at a time.
                         </p>
                         <GradientButton href="/auth/login" text="Get Started" size="lg" />
                     </div>
@@ -92,7 +92,7 @@ export default function AboutContent() {
                             PlaQode was founded with a mission to help businesses leverage QR code technology to improve customer experiences and streamline operations.
                         </p>
                         <p>
-                            Our team of local developers understands the unique challenges and opportunities facing businesses in Tanzania's growing digital economy.
+                            Our team of local developers understands the unique challenges and opportunities facing businesses in Tanzania&apos;s growing digital economy.
                         </p>
                     </div>
                 </div>

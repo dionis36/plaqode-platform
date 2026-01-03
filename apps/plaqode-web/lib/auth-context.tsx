@@ -3,6 +3,8 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+import { env } from '@/lib/env';
+
 interface User {
     id: string;
     email: string;
@@ -37,7 +39,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const checkAuth = async () => {
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/me`, {
+            const response = await fetch(`${env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/me`, {
                 credentials: 'include',
             });
 
@@ -56,7 +58,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     const login = async (email: string, password: string, redirectUrl?: string) => {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/login`, {
+        const response = await fetch(`${env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
@@ -97,9 +99,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             ];
 
             // Add hosts from Env Var (comma separated)
-            const envAllowed = process.env.NEXT_PUBLIC_ALLOWED_REDIRECT_HOSTS
-                ? process.env.NEXT_PUBLIC_ALLOWED_REDIRECT_HOSTS.split(',').map(h => h.trim())
-                : [];
+            // Add hosts from Env Var
+            const envAllowed = env.NEXT_PUBLIC_ALLOWED_REDIRECT_HOSTS;
 
             const allowedHosts = [...defaultAllowed, ...envAllowed];
 
@@ -111,7 +112,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     const signup = async (email: string, password: string, name?: string, redirectUrl?: string) => {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/signup`, {
+        const response = await fetch(`${env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/signup`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
@@ -137,7 +138,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     const logout = async () => {
-        await fetch(`${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/logout`, {
+        await fetch(`${env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/logout`, {
             method: 'POST',
             credentials: 'include',
         });
@@ -147,7 +148,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     const resetPassword = async (email: string) => {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/forgot-password`, {
+        const response = await fetch(`${env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/forgot-password`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email }),
@@ -162,7 +163,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     const confirmPasswordReset = async (password: string, token: string) => {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/reset-password`, {
+        const response = await fetch(`${env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/reset-password`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ password, token }),

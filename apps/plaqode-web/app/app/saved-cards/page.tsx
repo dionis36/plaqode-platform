@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Layout } from 'lucide-react';
 import SavedCard from '@/components/app/SavedCard';
 import { toast, ConfirmationModal, GradientButton } from "@plaqode-platform/ui";
+import { env } from '@/lib/env';
 
 interface SavedDesign {
     id: string;
@@ -29,7 +30,7 @@ export default function SavedCardsPage() {
 
     const fetchDesigns = async () => {
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/api/designs`, {
+            const response = await fetch(`${env.NEXT_PUBLIC_AUTH_SERVICE_URL}/api/designs`, {
                 credentials: 'include',
             });
 
@@ -53,7 +54,7 @@ export default function SavedCardsPage() {
         if (!cardToDelete) return;
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/api/designs/${cardToDelete.id}`, {
+            const response = await fetch(`${env.NEXT_PUBLIC_AUTH_SERVICE_URL}/api/designs/${cardToDelete.id}`, {
                 method: 'DELETE',
                 credentials: 'include',
             });
@@ -100,7 +101,7 @@ export default function SavedCardsPage() {
                         <p className="text-base text-text/70 font-sans mt-2">Manage your saved business card designs</p>
                     </div>
                     <GradientButton
-                        href={`${process.env.NEXT_PUBLIC_CARDIFY_URL || 'http://localhost:3002'}/templates`}
+                        href={`${env.NEXT_PUBLIC_CARDIFY_URL}/templates`}
                         text="Create New Card"
                     />
                 </div>
@@ -112,7 +113,7 @@ export default function SavedCardsPage() {
                         <p className="text-slate-600 mb-6">Start creating beautiful business cards</p>
                         <div className="flex justify-center">
                             <GradientButton
-                                href={`${process.env.NEXT_PUBLIC_CARDIFY_URL || 'http://localhost:3002'}/templates`}
+                                href={`${env.NEXT_PUBLIC_CARDIFY_URL}/templates`}
                                 text="Create Your First Design"
                             />
                         </div>

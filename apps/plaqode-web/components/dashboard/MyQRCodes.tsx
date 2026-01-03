@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { qrApi } from '@/lib/api-client';
+import { env } from '@/lib/env';
 import {
     QrCode,
     Smartphone,
@@ -72,7 +73,7 @@ export function MyQRCodes() {
         );
     }
 
-    const qrStudioUrl = process.env.NEXT_PUBLIC_QRSTUDIO_URL || 'http://localhost:3001';
+    const qrStudioUrl = env.NEXT_PUBLIC_QRSTUDIO_URL;
 
     return (
         <div className="bg-white rounded-xl border border-gray-200 p-6">

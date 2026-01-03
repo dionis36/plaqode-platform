@@ -3,6 +3,7 @@
 import { useAuth } from '@/lib/auth-context';
 import { useState } from 'react';
 import { GradientButton, toast, Input } from "@plaqode-platform/ui";
+import { env } from '@/lib/env';
 
 export default function ProfilePage() {
     const { user } = useAuth();
@@ -15,7 +16,7 @@ export default function ProfilePage() {
         setLoading(true);
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/profile`, {
+            const response = await fetch(`${env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/profile`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
