@@ -15,7 +15,8 @@ export function QRAuthModal({ isOpen, onClose }: QRAuthModalProps) {
     };
 
     const handleSignup = () => {
-        window.location.href = `${process.env.NEXT_PUBLIC_PLATFORM_URL || 'http://localhost:3000'}/auth/signup`;
+        const currentUrl = typeof window !== 'undefined' ? encodeURIComponent(window.location.href) : '';
+        window.location.href = `${process.env.NEXT_PUBLIC_PLATFORM_URL || 'http://localhost:3000'}/auth/signup?redirect=${currentUrl}`;
     };
 
     return (

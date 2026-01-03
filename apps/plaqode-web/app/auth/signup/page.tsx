@@ -1,12 +1,21 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Logo, toast } from "@plaqode-platform/ui";
 import { Eye, EyeOff } from 'lucide-react';
 
 export default function SignupPage() {
+    return (
+        <React.Suspense fallback={<div>Loading...</div>}>
+            <SignupForm />
+        </React.Suspense>
+    );
+}
+
+function SignupForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -18,6 +27,8 @@ export default function SignupPage() {
 
     const [loading, setLoading] = useState(false);
     const { signup } = useAuth();
+    const searchParams = useSearchParams();
+    const redirect = searchParams.get('redirect');
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -37,7 +48,7 @@ export default function SignupPage() {
         setLoading(true);
 
         try {
-            await signup(email, password, name || undefined);
+            await signup(email, password, name || undefined, redirect || undefined);
             toast.success('Account created successfully! Welcome aboard.');
             // Redirect is handled in the signup function
         } catch (err: any) {

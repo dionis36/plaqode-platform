@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
 interface WizardState {
     step: number;
@@ -19,7 +20,7 @@ interface WizardState {
     reset: () => void;
 }
 
-export const useWizardStore = create<WizardState>((set) => ({
+export const useWizardStore = create<WizardState>()(persist((set) => ({
     step: 1,
     type: null,
     editMode: false,
@@ -117,4 +118,7 @@ export const useWizardStore = create<WizardState>((set) => ({
             margin: 1
         }
     }),
+}), {
+    name: 'wizard-storage',
+    storage: createJSONStorage(() => localStorage),
 }));

@@ -15,7 +15,7 @@ interface AuthContextType {
     user: User | null;
     loading: boolean;
     login: (email: string, password: string, redirectUrl?: string) => Promise<void>;
-    signup: (email: string, password: string, name?: string) => Promise<void>;
+    signup: (email: string, password: string, name?: string, redirectUrl?: string) => Promise<void>;
     logout: () => Promise<void>;
     isAdmin: boolean;
     isSuperAdmin: boolean;
@@ -88,6 +88,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
             // Default allowed hosts for Dev and Production
             const defaultAllowed = [
+                'localhost:3001', // QR Studio dev (local)
                 'localhost:3002', // Cardify dev
                 'localhost:3003', // QR Studio dev
                 'plaqode.com',
@@ -109,7 +110,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
     };
 
-    const signup = async (email: string, password: string, name?: string) => {
+    const signup = async (email: string, password: string, name?: string, redirectUrl?: string) => {
         const response = await fetch(`${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/signup`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -126,7 +127,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(data.user);
 
         // Auto-login after signup
-        router.push('/app');
+        // Auto-login after signup
+        // Validate and use redirect URL if provided
+        if (redirectUrl && isValidRedirect(redirectUrl)) {
+            window.location.href = decodeURIComponent(redirectUrl);
+        } else {
+            router.push('/app');
+        }
     };
 
     const logout = async () => {
