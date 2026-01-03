@@ -9,8 +9,10 @@ import { Resend } from 'resend';
 import crypto from 'crypto';
 import { z } from 'zod';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-const WEB_URL = process.env.WEB_URL || 'http://localhost:3000';
+import { env } from '../lib/env.js';
+
+const resend = new Resend(env.RESEND_API_KEY);
+const WEB_URL = env.WEB_URL;
 
 const forgotPasswordSchema = z.object({
     email: z.string().email(),
@@ -492,7 +494,7 @@ export async function authRoutes(app: FastifyInstance) {
 
             // Send Email
             const resetLink = `${WEB_URL}/auth/reset-password?token=${resetToken}`;
-            const emailFrom = process.env.EMAIL_FROM || 'onboarding@resend.dev';
+            const emailFrom = env.EMAIL_FROM;
 
             console.log(`[Forgot Password] Sending email to ${email} from ${emailFrom}`);
 
