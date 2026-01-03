@@ -54,6 +54,16 @@ function VCardQrPageContent() {
         }
     }
 
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    if (!isMounted) {
+        return null;
+    }
+
     if (loading) {
         return (
             <div className="w-full px-4 pb-20 flex items-center justify-center min-h-[400px]">
