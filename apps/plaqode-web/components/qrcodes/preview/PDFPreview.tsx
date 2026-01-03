@@ -1,6 +1,7 @@
 'use client';
 
 import { FileText, ExternalLink, File, FileImage, FileArchive, FileCode, Music, Video } from 'lucide-react';
+import Image from 'next/image';
 import { useState, useEffect, useCallback } from 'react';
 
 type PDFPreviewProps = {
@@ -198,15 +199,25 @@ export function PDFPreview({ data }: PDFPreviewProps) {
                 {/* File Preview: Image, PDF Thumbnail, or Icon */}
                 {fileCategory === 'image' && pdfFile.file_data ? (
                     <div className="w-full max-w-[160px] bg-white rounded-lg shadow-lg overflow-hidden border-2" style={{ borderColor: lightPrimary }}>
-                        <img
+                        <Image
                             src={`data:${fileType};base64,${pdfFile.file_data}`}
                             alt="File Preview"
+                            width={0}
+                            height={0}
+                            sizes="100vw"
                             className="w-full h-auto"
                         />
                     </div>
                 ) : thumbnailUrl ? (
                     <div className="w-full max-w-[160px] bg-white rounded-lg shadow-lg overflow-hidden border border-slate-200">
-                        <img src={thumbnailUrl} alt="PDF Preview" className="w-full h-auto" />
+                        <Image
+                            src={thumbnailUrl}
+                            alt="PDF Preview"
+                            width={0}
+                            height={0}
+                            sizes="100vw"
+                            className="w-full h-auto"
+                        />
                     </div>
                 ) : isGenerating ? (
                     <div className="w-20 h-20 rounded-full shadow-lg flex items-center justify-center" style={{ backgroundColor: secondaryColor }}>

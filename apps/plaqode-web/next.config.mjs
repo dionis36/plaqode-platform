@@ -8,6 +8,14 @@ const nextConfig = {
         config.externals = [...config.externals, { canvas: "canvas" }];
         return config;
     },
+    images: {
+        remotePatterns: [
+            {
+                protocol: "https",
+                hostname: "**",
+            },
+        ],
+    },
     async rewrites() {
         return [
             {

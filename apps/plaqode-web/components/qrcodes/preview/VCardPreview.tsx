@@ -6,6 +6,7 @@ import {
     FaGithub, FaBehance, FaDribbble, FaMedium, FaTwitch, FaFlickr,
     FaGlobe, FaTelegram, FaWhatsapp, FaReddit, FaSpotify, FaSkype
 } from 'react-icons/fa6';
+import Image from 'next/image';
 
 // Social network configuration with brand colors
 const SOCIAL_NETWORK_CONFIG: Record<string, { icon: any; color: string }> = {
@@ -93,7 +94,7 @@ export function VCardPreview({ data }: { data: any }) {
                     }}
                 >
                     {personal.avatar_image ? (
-                        <img src={personal.avatar_image} alt="Profile" className="w-full h-full object-cover" />
+                        <Image src={personal.avatar_image} alt="Profile" fill className="object-cover" />
                     ) : (
                         <div
                             className="w-full h-full flex items-center justify-center font-bold"

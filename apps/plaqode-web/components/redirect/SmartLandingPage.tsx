@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { ExternalLink, ArrowRight, Loader2 } from 'lucide-react';
+import Image from 'next/image';
 
 interface SmartLandingPageProps {
     qrCode: {
@@ -96,10 +97,12 @@ export function SmartLandingPage({ qrCode }: SmartLandingPageProps) {
                 {/* Logo */}
                 {urlDetails?.logo && (
                     <div className="flex justify-center">
-                        <img
+                        <Image
                             src={urlDetails.logo}
                             alt="Logo"
-                            className="h-20 w-20 object-contain rounded-xl bg-white/90 p-2 shadow-lg"
+                            width={80}
+                            height={80}
+                            className="object-contain rounded-xl bg-white/90 p-2 shadow-lg"
                         />
                     </div>
                 )}

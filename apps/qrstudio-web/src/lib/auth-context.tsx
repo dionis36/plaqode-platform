@@ -1,6 +1,10 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from 'react';
+import { env } from "@/lib/env";
+
+const AUTH_SERVICE_URL = env.NEXT_PUBLIC_AUTH_SERVICE_URL;
+const PLATFORM_URL = env.NEXT_PUBLIC_PLATFORM_URL;
 
 interface User {
     id: string;

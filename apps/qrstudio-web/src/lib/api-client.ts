@@ -1,9 +1,12 @@
+import { env } from "@/lib/env";
+
 /**
  * API Client for QR Studio Backend
  * Handles all communication with the API
  */
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3005';
+const API_BASE_URL = env.NEXT_PUBLIC_QRSTUDIO_API_URL;
+const AUTH_SERVICE_URL = env.NEXT_PUBLIC_AUTH_SERVICE_URL;
 
 interface ApiResponse<T> {
     success: boolean;

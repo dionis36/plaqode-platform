@@ -8,21 +8,20 @@ import { Logo } from "@plaqode-platform/ui";
 import { GradientButton } from "@plaqode-platform/ui";
 import { GradientAvatar } from "@plaqode-platform/ui";
 import { useAuth } from "@/lib/auth-context";
+import { env } from "@/lib/env";
 
 interface MobileMenuProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
-const HOME_URL = process.env.NEXT_PUBLIC_PLATFORM_URL;
+const HOME_URL = env.NEXT_PUBLIC_PLATFORM_URL;
+const AUTH_URL = env.NEXT_PUBLIC_AUTH_SERVICE_URL;
 
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
     const { user, logout } = useAuth(); // Assuming auth-context provides similar interface
 
     const navItems = [
-        { label: "Home", href: `${HOME_URL}/`, icon: Home },
-        { label: "About", href: `${HOME_URL}/about`, icon: Info },
-        { label: "Services", href: `${HOME_URL}/services`, icon: Briefcase },
         { label: "Contact", href: `${HOME_URL}/contact`, icon: Mail },
     ];
 

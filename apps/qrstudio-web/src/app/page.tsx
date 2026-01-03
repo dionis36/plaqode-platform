@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
+import { env } from "@/lib/env";
 
 export default function Home() {
-    const platformUrl = process.env.NEXT_PUBLIC_PLATFORM_URL || 'http://localhost:3000';
+    const platformUrl = env.NEXT_PUBLIC_PLATFORM_URL;
     redirect(`${platformUrl}/services#qr-tools-catalog`);
 }

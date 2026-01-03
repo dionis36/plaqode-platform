@@ -1,6 +1,7 @@
 'use client';
 
 import { User, Share2, ChevronRight } from 'lucide-react';
+import Image from 'next/image';
 import {
     FaInstagram, FaFacebook, FaYoutube, FaTiktok, FaLinkedin,
     FaXTwitter, FaWhatsapp, FaTelegram, FaSnapchat, FaPinterest,
@@ -99,8 +100,8 @@ export function SocialMediaPagePreview({ data }: { data: any }) {
                 <div className="flex flex-col items-center pt-24 px-6">
                     {/* Profile Photo - Larger, cleaner */}
                     {profilePhoto ? (
-                        <div className="w-24 h-24 rounded-full overflow-hidden shadow-lg mb-4 ring-4 ring-white">
-                            <img src={profilePhoto} alt={displayName} className="w-full h-full object-cover" />
+                        <div className="w-24 h-24 rounded-full overflow-hidden shadow-lg mb-4 ring-4 ring-white relative">
+                            <Image src={profilePhoto} alt={displayName} fill className="object-cover" />
                         </div>
                     ) : (
                         <div
@@ -131,12 +132,13 @@ export function SocialMediaPagePreview({ data }: { data: any }) {
                             {galleryImages.map((image: string, index: number) => (
                                 <div
                                     key={index}
-                                    className="flex-shrink-0 w-32 h-40 rounded-2xl overflow-hidden shadow-lg border-4 border-white/30 backdrop-blur-sm"
+                                    className="flex-shrink-0 w-32 h-40 rounded-2xl overflow-hidden shadow-lg border-4 border-white/30 backdrop-blur-sm relative"
                                 >
-                                    <img
+                                    <Image
                                         src={image}
                                         alt={`Gallery ${index + 1}`}
-                                        className="w-full h-full object-cover"
+                                        fill
+                                        className="object-cover"
                                     />
                                 </div>
                             ))}

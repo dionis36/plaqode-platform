@@ -7,6 +7,9 @@ import { LiveQrPreview } from '@/components/wizard/preview/LiveQrPreview';
 import { ArrowLeft, Palette, Grid3x3, Frame, Image as ImageIcon, ChevronDown, CheckCircle2, Copy, Check, AlertTriangle } from 'lucide-react';
 import { PhoneMockup } from '@/components/common/PhoneMockup';
 import { SEO } from '@/components/common/SEO';
+import { env } from "@/lib/env";
+
+const PLATFORM_URL = env.NEXT_PUBLIC_PLATFORM_URL;
 import { useAuth } from '@/lib/auth-context';
 import { QRAuthModal } from '@/components/auth/QRAuthModal';
 import { toast } from '@plaqode-platform/ui';
@@ -178,7 +181,7 @@ function DesignPageContent({ params }: { params: { template: string } }) {
 
         setIsGenerating(true);
 
-        const plaqodeUrl = process.env.NEXT_PUBLIC_PLAQODE_WEB_URL || 'http://localhost:3000';
+        const plaqodeUrl = env.NEXT_PUBLIC_PLATFORM_URL;
 
         try {
             // Import API client

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Calendar, User, Trash2 } from 'lucide-react';
 import TemplatePreview from '@/components/app/TemplatePreview';
 import { CardTemplate } from '@/types/template';
@@ -38,10 +39,11 @@ export default function SavedCard({ design, onDelete }: SavedCardProps) {
                     {template && Array.isArray(template.layers) ? (
                         <TemplatePreview template={template} />
                     ) : design.thumbnail ? (
-                        <img
+                        <Image
                             src={design.thumbnail}
                             alt={design.name}
-                            className="w-full h-full object-cover"
+                            fill
+                            className="object-cover"
                         />
                     ) : (
                         <div className="w-full h-full flex items-center justify-center text-slate-300 bg-slate-50">

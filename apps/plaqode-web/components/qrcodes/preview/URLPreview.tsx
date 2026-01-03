@@ -1,6 +1,7 @@
 'use client';
 
 import { ExternalLink, ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 
 interface URLPreviewProps {
     data: any;
@@ -88,10 +89,10 @@ export function URLPreview({ data }: URLPreviewProps) {
                 {logo && (
                     <div className="mb-8">
                         <div
-                            className="w-24 h-24 rounded-2xl overflow-hidden shadow-lg border-4 mx-auto"
+                            className="w-24 h-24 rounded-2xl overflow-hidden shadow-lg border-4 mx-auto relative"
                             style={{ borderColor: lightPrimary }}
                         >
-                            <img src={logo} alt="Logo" className="w-full h-full object-cover" />
+                            <Image src={logo} alt="Logo" fill className="object-cover" />
                         </div>
                     </div>
                 )}

@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation';
+import { env } from "@/lib/env";
 import { SmartLandingPage } from '@/components/redirect/SmartLandingPage';
 
 interface RedirectPageProps {
@@ -9,7 +10,7 @@ interface RedirectPageProps {
 
 async function getQRCodeByShortcode(shortcode: string) {
     try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+        const apiUrl = env.NEXT_PUBLIC_QRSTUDIO_API_URL;
         const response = await fetch(`${apiUrl}/api/q/${shortcode}`, {
             cache: 'no-store', // Always fetch fresh data
         });

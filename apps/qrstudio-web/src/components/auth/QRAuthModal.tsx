@@ -1,7 +1,9 @@
 'use client';
 
+import { useState } from 'react';
 import { Modal } from "@plaqode-platform/ui";
 import { LogIn, QrCode, UserPlus, Lock } from "lucide-react";
+import { env } from "@/lib/env";
 
 interface QRAuthModalProps {
     isOpen: boolean;
@@ -9,14 +11,29 @@ interface QRAuthModalProps {
 }
 
 export function QRAuthModal({ isOpen, onClose }: QRAuthModalProps) {
+    const [isLoading, setIsLoading] = useState(false); // Added isLoading state
+
     const handleLogin = () => {
-        const currentUrl = typeof window !== 'undefined' ? encodeURIComponent(window.location.href) : '';
-        window.location.href = `${process.env.NEXT_PUBLIC_PLATFORM_URL}/auth/login?redirect=${currentUrl}`;
+        setIsLoading(true); // Set loading state
+        try {
+            // Redirect to platform login
+            window.location.href = `${env.NEXT_PUBLIC_AUTH_SERVICE_URL}/login?from=qrstudio&redirect=${encodeURIComponent(window.location.href)}`;
+        } catch (error) {
+            console.error('Login error:', error);
+        } finally {
+            setIsLoading(false); // Reset loading state
+        }
     };
 
     const handleSignup = () => {
-        const currentUrl = typeof window !== 'undefined' ? encodeURIComponent(window.location.href) : '';
-        window.location.href = `${process.env.NEXT_PUBLIC_PLATFORM_URL}/auth/signup?redirect=${currentUrl}`;
+        setIsLoading(true); // Set loading state
+        try {
+            window.location.href = `${env.NEXT_PUBLIC_AUTH_SERVICE_URL}/signup?from=qrstudio&redirect=${encodeURIComponent(window.location.href)}`;
+        } catch (error) {
+            console.error('Signup error:', error);
+        } finally {
+            setIsLoading(false); // Reset loading state
+        }
     };
 
     return (

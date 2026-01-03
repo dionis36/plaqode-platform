@@ -1,6 +1,7 @@
 'use client';
 
 import { Utensils, MapPin, Clock, Phone, Globe } from 'lucide-react';
+import Image from 'next/image';
 import { useEffect } from 'react';
 import { usePreviewContext } from './PreviewContext';
 
@@ -83,10 +84,11 @@ export function MenuPreview({ data }: { data: MenuData }) {
             {/* Hero Banner - Taller with Better Content Spacing */}
             <div className="h-72 bg-gray-200 relative shrink-0">
                 {info.cover_image ? (
-                    <img
+                    <Image
                         src={info.cover_image}
                         alt="Restaurant Cover"
-                        className="w-full h-full object-cover"
+                        fill
+                        className="object-cover"
                     />
                 ) : (
                     <div
@@ -105,11 +107,12 @@ export function MenuPreview({ data }: { data: MenuData }) {
                 <div className="absolute bottom-0 left-0 w-full px-5 pt-5 pb-14 text-white">
                     <div className="flex items-center gap-3">
                         {info.logo && (
-                            <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-lg bg-white shrink-0">
-                                <img
+                            <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-lg bg-white shrink-0 relative">
+                                <Image
                                     src={info.logo}
                                     alt="Restaurant Logo"
-                                    className="w-full h-full object-cover"
+                                    fill
+                                    className="object-cover"
                                 />
                             </div>
                         )}

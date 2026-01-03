@@ -1,10 +1,11 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { qrApi } from '@/lib/api-client';
-import { ArrowLeft, Download, Edit, Trash2, QrCode as QrCodeIcon, BarChart3, Eye, EyeOff, Smartphone } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { ArrowLeft, Download, ExternalLink, Link as LinkIcon, Pencil, Trash2, QrCode as QrCodeIcon, Eye, EyeOff, Smartphone, BarChart3, Edit } from 'lucide-react';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { env } from '@/lib/env';
 import { SEO } from '@/components/common/SEO';
 import QRCodeStyling from 'qr-code-styling';
 import { QrContentPreviewModal } from '@/components/common/QrContentPreviewModal';
@@ -59,7 +60,7 @@ export default function QrCodeDetailPage({ params }: { params: { id: string } })
 
     function generateQrCode(data: QrCodeDetail) {
         const baseUrl = process.env.NEXT_PUBLIC_PLATFORM_URL || 'https://plaqode.com';
-        const qrUrl = `${baseUrl}/q/${data.shortcode}`;
+        const qrUrl = `${baseUrl} /q/${data.shortcode} `;
 
         const qr = new QRCodeStyling({
             width: 300,
@@ -132,7 +133,7 @@ export default function QrCodeDetailPage({ params }: { params: { id: string } })
 
         try {
             await qrApi.update(qrCode.id, { isActive: !qrCode.isActive });
-            toast.success(`QR Code ${!qrCode.isActive ? 'activated' : 'deactivated'}`);
+            toast.success(`QR Code ${!qrCode.isActive ? 'activated' : 'deactivated'} `);
             loadQrCode(); // Reload
         } catch (error) {
             console.error('Failed to update status:', error);
@@ -222,10 +223,10 @@ export default function QrCodeDetailPage({ params }: { params: { id: string } })
                         <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">{qrCode.name}</h1>
                         <button
                             onClick={handleToggleStatus}
-                            className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium transition-all ${qrCode.isActive
+                            className={`flex items - center gap - 1.5 px - 3 py - 1 rounded - full text - sm font - medium transition - all ${qrCode.isActive
                                 ? 'bg-green-100 text-green-700 hover:bg-green-200 border border-green-200'
                                 : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200'
-                                }`}
+                                } `}
                         >
                             {qrCode.isActive ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
                             <span>{qrCode.isActive ? 'Active' : 'Inactive'}</span>
@@ -249,12 +250,12 @@ export default function QrCodeDetailPage({ params }: { params: { id: string } })
                             </button>
 
                             <Link
-                                href={`/qrcodes/${qrCode.id}/analytics`}
+                                href={`/ qrcodes / ${qrCode.id}/analytics`}
                                 className="flex items-center justify-center p-2.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors"
                                 title="Analytics"
                             >
                                 <BarChart3 className="w-4 h-4" />
-                            </Link>
+                            </Link >
 
                             <Link
                                 href={`/create/${qrCode.type}?edit=${qrCode.id}`}
@@ -271,9 +272,9 @@ export default function QrCodeDetailPage({ params }: { params: { id: string } })
                             >
                                 <Trash2 className="w-4 h-4" />
                             </button>
-                        </div>
-                    </div>
-                </div>
+                        </div >
+                    </div >
+                </div >
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* QR Code Preview */}
@@ -357,14 +358,10 @@ export default function QrCodeDetailPage({ params }: { params: { id: string } })
                                 <div>
                                     <dt className="text-sm font-medium text-slate-600">Public URL</dt>
                                     <dd className="mt-1">
-                                        <a
-                                            href={`${process.env.NEXT_PUBLIC_PLATFORM_URL || 'https://plaqode.com'}/q/${qrCode.shortcode}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="text-sm text-blue-600 hover:underline"
-                                        >
-                                            {process.env.NEXT_PUBLIC_PLATFORM_URL || 'https://plaqode.com'}/q/{qrCode.shortcode}
-                                        </a>
+                                        <div className="flex items-center gap-2 text-sm text-gray-400 bg-gray-900/50 p-2 rounded border border-gray-800 break-all">
+                                            <LinkIcon className="w-4 h-4 flex-shrink-0" />
+                                            <span>{`${env.NEXT_PUBLIC_QRSTUDIO_URL}/r/${qrCode.shortcode}`}</span>
+                                        </div>
                                     </dd>
                                 </div>
                             </dl>
@@ -389,7 +386,7 @@ export default function QrCodeDetailPage({ params }: { params: { id: string } })
                     onClose={() => setPreviewModalOpen(false)}
                     qrCode={qrCode}
                 />
-            </div>
-        </div>
+            </div >
+        </div >
     );
 }

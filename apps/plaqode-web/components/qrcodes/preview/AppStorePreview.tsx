@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+
 import { Download, Star, Globe, Smartphone, Tablet, Clock, ShieldCheck, Store } from 'lucide-react';
 
 export function AppStorePreview({ data }: { data: any }) {
@@ -137,8 +139,8 @@ export function AppStorePreview({ data }: { data: any }) {
                 {/* App Logo */}
                 <div className="flex justify-center mb-4">
                     {appLogo ? (
-                        <div className="w-20 h-20 rounded-2xl overflow-hidden shadow-lg border-4 border-white/30 backdrop-blur-sm">
-                            <img src={appLogo} alt={appName} className="w-full h-full object-cover" />
+                        <div className="w-20 h-20 rounded-2xl overflow-hidden shadow-lg border-4 border-white/30 backdrop-blur-sm relative">
+                            <Image src={appLogo} alt={appName} fill className="object-cover" />
                         </div>
                     ) : (
                         <div className="p-3 bg-white/20 backdrop-blur-sm rounded-2xl border border-white/30">

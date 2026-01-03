@@ -9,8 +9,9 @@ import { GradientButton } from "@plaqode-platform/ui";
 import { GradientAvatar } from "@plaqode-platform/ui";
 
 import { useAuth } from "@/lib/auth-context";
+import { env } from "@/lib/env";
 
-const HOME_URL = process.env.NEXT_PUBLIC_PLATFORM_URL;
+const HOME_URL = env.NEXT_PUBLIC_PLATFORM_URL;
 
 export default function SmartNavbar() {
     const { user, logout } = useAuth();

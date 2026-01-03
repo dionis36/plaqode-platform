@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import QRCodeStyling from 'qr-code-styling';
 import { useWizardStore } from '../store';
+import { env } from "@/lib/env";
 
 export function LiveQrPreview() {
     const { type, payload, design, shortcode, editMode } = useWizardStore();
@@ -20,12 +21,12 @@ export function LiveQrPreview() {
 
             // IMPORTANT: QR code should ALWAYS encode the shortcode URL
             // In edit mode, use existing shortcode; in create mode, use placeholder
-            const baseUrl = process.env.NEXT_PUBLIC_PLATFORM_URL || 'https://plaqode.com';
-
+            const baseUrl = env.NEXT_PUBLIC_PLATFORM_URL;
+            const qrUrl = `${baseUrl.replace(/^https?:\/\//, '')} /q/preview`;
             let content = '';
             if (editMode && shortcode) {
                 // Edit mode: Use actual shortcode
-                content = `${baseUrl}/q/${shortcode}`;
+                content = `${baseUrl} /q/${shortcode} `;
             } else {
                 // Create mode: Use placeholder (will be replaced with real shortcode after creation)
                 content = baseUrl;
@@ -114,7 +115,7 @@ export function LiveQrPreview() {
         <div className="flex items-center justify-center w-full h-full">
             <div
                 ref={qrRef}
-                className={`flex items-center justify-center transition-opacity duration-200 ${isUpdating ? 'opacity-90' : 'opacity-100'}`}
+                className={`flex items - center justify - center transition - opacity duration - 200 ${isUpdating ? 'opacity-90' : 'opacity-100'} `}
             />
         </div>
     );

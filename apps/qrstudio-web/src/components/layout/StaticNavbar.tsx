@@ -8,8 +8,9 @@ import { useAuth } from "@/lib/auth-context";
 import { Menu } from "lucide-react";
 import { useState, useEffect } from "react";
 import MobileMenu from "@/components/layout/MobileMenu";
+import { env } from "@/lib/env";
 
-const HOME_URL = process.env.NEXT_PUBLIC_PLATFORM_URL;
+const HOME_URL = env.NEXT_PUBLIC_PLATFORM_URL;
 
 export default function StaticNavbar() {
     const { user, logout } = useAuth();

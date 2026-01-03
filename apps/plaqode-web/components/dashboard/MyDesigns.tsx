@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { env } from '@/lib/env';
 
 interface SavedDesign {
@@ -84,12 +85,13 @@ export function MyDesigns() {
                             href={`${env.NEXT_PUBLIC_CARDIFY_URL}/design/${design.templateId}?loadId=${design.id}`}
                             className="group"
                         >
-                            <div className="aspect-[3/2] bg-gray-100 rounded-lg overflow-hidden mb-2 border border-gray-200 group-hover:border-purple-400 transition">
+                            <div className="aspect-[3/2] bg-gray-100 rounded-lg overflow-hidden mb-2 border border-gray-200 group-hover:border-purple-400 transition relative">
                                 {design.thumbnail ? (
-                                    <img
+                                    <Image
                                         src={design.thumbnail}
                                         alt={design.name}
-                                        className="w-full h-full object-cover"
+                                        fill
+                                        className="object-cover"
                                     />
                                 ) : (
                                     <div className="w-full h-full flex items-center justify-center text-gray-400">

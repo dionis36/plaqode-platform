@@ -1,6 +1,7 @@
 'use client';
 
 import { Wifi, Lock, Shield, Eye, EyeOff } from 'lucide-react';
+import Image from 'next/image';
 import { useState } from 'react';
 
 type WiFiPreviewProps = {
@@ -92,8 +93,8 @@ export function WiFiPreview({ data }: WiFiPreviewProps) {
             <div className="flex-1 flex flex-col items-center justify-center px-6 py-8 space-y-6">
                 {/* Network Logo */}
                 {network.logo && (
-                    <div className="w-24 h-24 rounded-full bg-white shadow-lg flex items-center justify-center overflow-hidden">
-                        <img src={network.logo} alt="Network Logo" className="w-full h-full object-cover" />
+                    <div className="w-24 h-24 rounded-full bg-white shadow-lg flex items-center justify-center overflow-hidden relative">
+                        <Image src={network.logo} alt="Network Logo" fill className="object-cover" />
                     </div>
                 )}
 
