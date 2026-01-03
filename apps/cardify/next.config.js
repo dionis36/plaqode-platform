@@ -34,6 +34,14 @@ const nextConfig = {
         ];
     },
 
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: '**',
+            },
+        ],
+    },
     reactStrictMode: true,
     poweredByHeader: false
 };

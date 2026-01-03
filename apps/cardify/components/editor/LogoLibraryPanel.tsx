@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { AVAILABLE_LOGOS, LogoVariant } from '@/lib/logoIndex';
 import { Search } from 'lucide-react';
+import Image from 'next/image';
 
 interface LogoLibraryPanelProps {
     onSelectLogo: (logoVariant: LogoVariant) => void;
@@ -57,10 +58,11 @@ export default function LogoLibraryPanel({ onSelectLogo }: LogoLibraryPanelProps
                                     title={`${logoFamily.name} - ${variant.color}`}
                                 >
                                     {/* Logo Image */}
-                                    <img
+                                    <Image
                                         src={variant.path}
                                         alt={`${logoFamily.name} ${variant.color}`}
-                                        className="w-full h-full object-contain"
+                                        fill
+                                        className="object-contain"
                                     />
 
                                     {/* Color Label - Shows on hover */}

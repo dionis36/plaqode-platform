@@ -11,6 +11,7 @@ import {
     clearRecentImages,
 } from '@/lib/imageHelpers';
 import { Upload, Search, Clock, Loader2, AlertCircle, X, Image as ImageIcon } from 'lucide-react';
+import Image from 'next/image';
 
 interface ImageLibraryPanelProps {
     onAddNode: (node: KonvaNodeDefinition) => void;
@@ -352,10 +353,11 @@ const ImageLibraryPanel: React.FC<ImageLibraryPanelProps> = ({ onAddNode }) => {
                                     className="relative aspect-square rounded-lg overflow-hidden transition-all ring-1 ring-gray-200 hover:ring-2 hover:ring-blue-400 hover:shadow-lg group"
                                 >
                                     {/* Background Image */}
-                                    <img
+                                    <Image
                                         src={category.bgImage}
                                         alt={category.label}
-                                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                        fill
+                                        className="object-cover group-hover:scale-105 transition-transform duration-300"
                                     />
                                     {/* Gradient Overlay */}
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
@@ -381,10 +383,11 @@ const ImageLibraryPanel: React.FC<ImageLibraryPanelProps> = ({ onAddNode }) => {
                                     onClick={() => handlePexelsImageClick(photo)}
                                     className="relative aspect-square rounded-lg overflow-hidden group hover:ring-2 hover:ring-blue-500 transition-all"
                                 >
-                                    <img
+                                    <Image
                                         src={photo.src.medium}
                                         alt={photo.alt || 'Photo'}
-                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-200"
+                                        fill
+                                        className="object-cover group-hover:scale-110 transition-transform duration-200"
                                     />
                                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
                                     <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
@@ -462,10 +465,11 @@ const ImageLibraryPanel: React.FC<ImageLibraryPanelProps> = ({ onAddNode }) => {
                             onClick={() => handleRecentImageClick(imageUrl)}
                             className="relative aspect-square rounded-lg overflow-hidden group hover:ring-2 hover:ring-blue-500 transition-all"
                         >
-                            <img
+                            <Image
                                 src={imageUrl}
                                 alt={`Recent image ${index + 1}`}
-                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-200"
+                                fill
+                                className="object-cover group-hover:scale-110 transition-transform duration-200"
                             />
                             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
                         </button>

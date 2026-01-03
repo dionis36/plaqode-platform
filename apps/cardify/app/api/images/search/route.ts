@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { searchPhotos } from '@/lib/pexelsService';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * API Proxy for Pexels Image Search
  * Protects API key by keeping it server-side

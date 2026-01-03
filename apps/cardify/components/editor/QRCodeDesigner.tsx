@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { QRCode } from 'react-qrcode-logo';
 import { Download, Upload, Plus, RefreshCw, ChevronDown } from 'lucide-react';
+import Image from 'next/image';
 import { KonvaNodeDefinition, KonvaNodeProps } from '@/types/template';
 import { AVAILABLE_LOGOS, LogoVariant } from '@/lib/logoIndex';
 import ColorPicker from '@/components/editor/ColorPicker';
@@ -507,14 +508,15 @@ export default function QRCodeDesigner({ onAddImage, onAddNode, onNodeChange, se
                                                 <button
                                                     key={`${logoFamily.id}_${variant.color}`}
                                                     onClick={() => handleLogoFromLibrary(variant)}
-                                                    className={`aspect-square p-1 bg-white border rounded hover:border-blue-500 hover:shadow-md transition-all ${logoFile === variant.path ? 'border-blue-500 ring-2 ring-blue-500' : 'border-gray-200'
+                                                    className={`aspect-square p-1 bg-white border rounded hover:border-blue-500 hover:shadow-md transition-all relative ${logoFile === variant.path ? 'border-blue-500 ring-2 ring-blue-500' : 'border-gray-200'
                                                         }`}
                                                     title={logoFamily.name}
                                                 >
-                                                    <img
+                                                    <Image
                                                         src={variant.path}
                                                         alt={logoFamily.name}
-                                                        className="w-full h-full object-contain"
+                                                        fill
+                                                        className="object-contain"
                                                     />
                                                 </button>
                                             ))
@@ -543,7 +545,13 @@ export default function QRCodeDesigner({ onAddImage, onAddNode, onNodeChange, se
                                 </label>
                                 {logoFile && logoSource === 'custom' && (
                                     <div className="relative group">
-                                        <img src={logoFile} alt="Logo" className="w-10 h-10 object-contain border rounded bg-white" />
+                                        <Image
+                                            src={logoFile}
+                                            alt="Logo"
+                                            width={40}
+                                            height={40}
+                                            className="object-contain border rounded bg-white"
+                                        />
                                         <button
                                             onClick={() => { setLogoFile(undefined); setLogoSource(null); }}
                                             className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
@@ -598,6 +606,6 @@ export default function QRCodeDesigner({ onAddImage, onAddNode, onNodeChange, se
                     </button>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
