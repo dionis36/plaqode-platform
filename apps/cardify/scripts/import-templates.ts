@@ -1,4 +1,4 @@
-import { PrismaClient } from '../lib/generated/client';
+import { PrismaClient } from '@prisma/client';
 import fs from 'fs';
 import path from 'path';
 import { CardTemplate } from '@/types/template';
