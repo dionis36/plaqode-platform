@@ -17,16 +17,36 @@ This guide details the specific environment variables and configurations require
 > **Chicken & Egg Problem**: Since you haven't deployed the backend yet, the frontend won't have a real API to talk to.
 > Use these **Bootstrap Values** for your *very first* deploy to Vercel just to get the build green.
 >
-> | Variable Name | Initial Bootstrap Value |
+> ### Bootstrap: Plaqode Web (`apps/plaqode-web`)
+> | Variable Name | Value |
 > | :--- | :--- |
-> | `NEXT_PUBLIC_APP_URL` | `https://project-name.vercel.app` (Your Vercel URL) |
+> | `NEXT_PUBLIC_APP_URL` | `https://[PROJECT-NAME].vercel.app` (Your Vercel URL) |
 > | `NEXT_PUBLIC_QRSTUDIO_API_URL` | `https://temp.fly.dev` |
 > | `NEXT_PUBLIC_AUTH_SERVICE_URL` | `https://temp.fly.dev` |
 > | `NEXT_PUBLIC_CARDIFY_URL` | `https://cardify-temp.vercel.app` |
 > | `NEXT_PUBLIC_QRSTUDIO_URL` | `https://qrstudio-temp.vercel.app` |
 > | `AUTH_SERVICE_INTERNAL_URL` | `https://temp.fly.dev` |
 > | `COOKIE_DOMAIN` | `.vercel.app` |
-> | `NEXT_PUBLIC_ALLOWED_REDIRECT_HOSTS` | `plaqode.vercel.app,cardify.vercel.app` |
+> | `NEXT_PUBLIC_ALLOWED_REDIRECT_HOSTS` | `plaqode.vercel.app,cardify.vercel.app,qrstudio-web.vercel.app` |
+>
+> ### Bootstrap: Creator App (`apps/qrstudio-web`)
+> | Variable Name | Value |
+> | :--- | :--- |
+> | `NEXT_PUBLIC_QRSTUDIO_API_URL` | `https://temp.fly.dev` |
+> | `NEXT_PUBLIC_AUTH_SERVICE_URL` | `https://temp.fly.dev` |
+> | `NEXT_PUBLIC_PLATFORM_URL` | `https://[PLAQODE-WEB-URL].vercel.app` (From Step 1) |
+> | `NEXT_PUBLIC_QRSTUDIO_URL` | `https://[PROJECT-NAME].vercel.app` (Your Vercel URL) |
+> | `NEXT_PUBLIC_GA_ID` | `""` |
+>
+> ### Bootstrap: Cardify (`apps/cardify`)
+> ⚠️ **Critical**: Cardify build requires a real `DATABASE_URL` to generate admin pages.
+> | Variable Name | Value |
+> | :--- | :--- |
+> | `NEXT_PUBLIC_APP_URL` | `https://[PROJECT-NAME].vercel.app` (Your Vercel URL) |
+> | `NEXT_PUBLIC_PLATFORM_URL` | `https://[PLAQODE-WEB-URL].vercel.app` (From Step 1) |
+> | `NEXT_PUBLIC_AUTH_SERVICE_URL` | `https://temp.fly.dev` |
+> | `DATABASE_URL` | `postgresql://...` (Real Neon Connection String) |
+> | `JWT_SECRET` | `temp_secret_123` |
 
 ### A. Plaqode Web (`apps/plaqode-web`)
 **Port**: `3000`
