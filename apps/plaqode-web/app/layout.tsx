@@ -25,7 +25,7 @@ const merriweather = Merriweather({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://plaqode.com"),
+  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
   title: {
     default: "Plaqode - The All-in-One QR & Design Platform",
     template: "%s | Plaqode Platform",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://plaqode.com",
+    url: env.NEXT_PUBLIC_APP_URL,
     title: "Plaqode - Next Gen QR Code Solutions",
     description: "Create, manage, and track dynamic QR codes for your business.",
     siteName: "Plaqode",

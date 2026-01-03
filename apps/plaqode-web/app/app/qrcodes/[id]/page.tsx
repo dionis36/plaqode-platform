@@ -37,7 +37,7 @@ export default function QrCodeDetailPage({ params }: { params: { id: string } })
     const [isDeleting, setIsDeleting] = useState(false);
     const [previewModalOpen, setPreviewModalOpen] = useState(false);
 
-    const baseUrl = env.NEXT_PUBLIC_APP_URL || (typeof window !== 'undefined' ? window.location.origin : 'https://plaqode.com');
+    const baseUrl = env.NEXT_PUBLIC_APP_URL;
     const fullQrUrl = qrCode ? `${baseUrl}/q/${qrCode.shortcode}` : '';
 
     const handleCopy = (text: string) => {
@@ -65,7 +65,7 @@ export default function QrCodeDetailPage({ params }: { params: { id: string } })
 
     function generateQrCode(data: QrCodeDetail) {
         // Use configured app URL or fallback to window origin
-        const baseUrl = env.NEXT_PUBLIC_APP_URL || (typeof window !== 'undefined' ? window.location.origin : 'https://plaqode.com');
+        const baseUrl = env.NEXT_PUBLIC_APP_URL;
         const qrUrl = `${baseUrl}/q/${data.shortcode}`;
 
         const qr = new QRCodeStyling({

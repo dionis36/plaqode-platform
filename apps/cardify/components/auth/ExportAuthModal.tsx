@@ -1,6 +1,6 @@
 'use client';
 
-const PLATFORM_URL = 'http://localhost:3000';
+import { env } from '@/lib/env';
 
 interface ExportAuthModalProps {
     isOpen: boolean;
@@ -21,7 +21,7 @@ export function ExportAuthModal({ isOpen, onClose, onSaveBeforeAuth }: ExportAut
             }
         }
         const currentUrl = typeof window !== 'undefined' ? encodeURIComponent(window.location.href) : '';
-        window.location.href = `${PLATFORM_URL}/auth/login?redirect=${currentUrl}`;
+        window.location.href = `${env.NEXT_PUBLIC_PLATFORM_URL}/auth/login?redirect=${currentUrl}`;
     };
 
     const handleSignup = async () => {
@@ -32,7 +32,7 @@ export function ExportAuthModal({ isOpen, onClose, onSaveBeforeAuth }: ExportAut
                 console.error('Failed to save design before signup:', error);
             }
         }
-        window.location.href = `${PLATFORM_URL}/auth/signup`;
+        window.location.href = `${env.NEXT_PUBLIC_PLATFORM_URL}/auth/signup`;
     };
 
     return (
