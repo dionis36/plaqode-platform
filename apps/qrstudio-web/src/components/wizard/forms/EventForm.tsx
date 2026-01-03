@@ -177,9 +177,7 @@ export function EventForm() {
         mode: 'onChange'
     });
 
-    if (!isMounted) {
-        return null;
-    }
+
 
     // Reset form ONCE when entering edit mode with loaded data
     useEffect(() => {
