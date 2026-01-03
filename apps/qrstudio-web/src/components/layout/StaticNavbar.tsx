@@ -6,7 +6,7 @@ import { GradientAvatar } from "@plaqode-platform/ui";
 import { Logo } from "@plaqode-platform/ui";
 import { useAuth } from "@/lib/auth-context";
 import { Menu } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MobileMenu from "@/components/layout/MobileMenu";
 
 const HOME_URL = process.env.NEXT_PUBLIC_PLAQODE_WEB_URL || "http://localhost:3000";
@@ -14,6 +14,13 @@ const HOME_URL = process.env.NEXT_PUBLIC_PLAQODE_WEB_URL || "http://localhost:30
 export default function StaticNavbar() {
     const { user, logout } = useAuth();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    const showUser = isMounted && user;
 
     return (
         <>
@@ -30,7 +37,7 @@ export default function StaticNavbar() {
                     </nav>
 
                     <div className="hidden md:block">
-                        {user ? (
+                        {showUser ? (
                             <GradientAvatar user={user} logout={logout} textColor="text-dark" />
                         ) : (
                             <GradientButton href={`${HOME_URL}/auth/login`} text="Login" size="sm" />
@@ -38,12 +45,14 @@ export default function StaticNavbar() {
                     </div>
 
                     {/* Mobile Toggle (Visible only on mobile) */}
-                    <button
-                        className="md:hidden text-slate-800 text-2xl"
-                        onClick={() => setIsMobileMenuOpen(true)}
-                    >
-                        <Menu />
-                    </button>
+                    {isMounted && (
+                        <button
+                            className="md:hidden text-slate-800 text-2xl"
+                            onClick={() => setIsMobileMenuOpen(true)}
+                        >
+                            <Menu />
+                        </button>
+                    )}
                 </div>
             </div>
 

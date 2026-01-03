@@ -35,6 +35,12 @@ function AccordionSection({
     onToggle: () => void;
     children: React.ReactNode;
 }) {
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
     return (
         <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
             <button
@@ -44,16 +50,18 @@ function AccordionSection({
             >
                 <div className="flex items-center gap-3 sm:gap-4">
                     <div className={`p-3 sm:p-4 rounded-xl ${color} flex items-center justify-center flex-shrink-0`}>
-                        <Icon className="w-5 h-5 sm:w-7 sm:h-7" />
+                        {isMounted && <Icon className="w-5 h-5 sm:w-7 sm:h-7" />}
                     </div>
                     <div className="text-left">
                         <h3 className="text-sm sm:text-base font-bold text-slate-900">{title}</h3>
                         <p className="text-xs sm:text-sm text-slate-500">{subtitle}</p>
                     </div>
                 </div>
-                <ChevronDown
-                    className={`w-5 h-5 text-slate-400 transition-transform duration-300 flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}
-                />
+                {isMounted && (
+                    <ChevronDown
+                        className={`w-5 h-5 text-slate-400 transition-transform duration-300 flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}
+                    />
+                )}
             </button>
 
             <div
@@ -70,6 +78,12 @@ function AccordionSection({
 
 export function TextForm() {
     const { payload, updatePayload, editMode } = useWizardStore();
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
     const { register, watch, setValue, reset } = useForm<FormValues>({
         defaultValues: {
             text_content: {
@@ -122,6 +136,10 @@ export function TextForm() {
             hasLoadedEditData.current = false;
         }
     }, [editMode, payload, reset]);
+
+    if (!isMounted) {
+        return null;
+    }
 
     return (
         <div className="space-y-4">

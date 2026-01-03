@@ -7,7 +7,7 @@ import { GradientAvatar } from "@plaqode-platform/ui";
 import { Logo } from "@plaqode-platform/ui";
 import { useAuth } from "@/lib/auth-context";
 import { Menu } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MobileMenu from "./MobileMenu";
 
 const HOME_URL = process.env.NEXT_PUBLIC_PLAQODE_WEB_URL || "http://localhost:3000";
@@ -19,6 +19,13 @@ interface StaticNavbarProps {
 export default function StaticNavbar({ theme = 'dark' }: StaticNavbarProps) {
     const { user, logout } = useAuth();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    const showUser = isMounted && user;
 
     // Determine colors based on theme
     // theme="dark" -> Dark Background, Light Text (Default for Cardify Home/Templates)
@@ -50,7 +57,7 @@ export default function StaticNavbar({ theme = 'dark' }: StaticNavbarProps) {
                     </nav>
 
                     <div className="hidden md:block">
-                        {user ? (
+                        {showUser ? (
                             <GradientAvatar user={user} logout={logout} textColor={isLightTheme ? "text-dark" : "text-white"} />
                         ) : (
                             <GradientButton href={`${HOME_URL}/auth/login`} text="Login" size="sm" className={textColor} />
@@ -58,12 +65,14 @@ export default function StaticNavbar({ theme = 'dark' }: StaticNavbarProps) {
                     </div>
 
                     {/* Mobile Toggle (Visible only on mobile) */}
-                    <button
-                        className={`md:hidden ${mobileToggleColor} text-2xl`}
-                        onClick={() => setIsMobileMenuOpen(true)}
-                    >
-                        <Menu />
-                    </button>
+                    {isMounted && (
+                        <button
+                            className={`md:hidden ${mobileToggleColor} text-2xl`}
+                            onClick={() => setIsMobileMenuOpen(true)}
+                        >
+                            <Menu />
+                        </button>
+                    )}
                 </div>
             </div>
 

@@ -6,12 +6,19 @@ import { GradientAvatar } from "@plaqode-platform/ui";
 import { Logo } from "@plaqode-platform/ui";
 import { useAuth } from "@/lib/auth-context";
 import { Menu } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MobileMenu from "./MobileMenu";
 
 export default function StaticNavbar() {
     const { user, logout } = useAuth();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    const showUser = isMounted && user;
 
     return (
         <>
@@ -28,7 +35,7 @@ export default function StaticNavbar() {
                     </nav>
 
                     <div className="hidden md:block">
-                        {user ? (
+                        {showUser ? (
                             <GradientAvatar user={user} logout={logout} />
                         ) : (
                             <GradientButton href="/auth/login" text="Login" size="sm" className="text-light" />
@@ -36,12 +43,14 @@ export default function StaticNavbar() {
                     </div>
 
                     {/* Mobile Toggle (Visible only on mobile) */}
-                    <button
-                        className="md:hidden text-light text-2xl"
-                        onClick={() => setIsMobileMenuOpen(true)}
-                    >
-                        <Menu />
-                    </button>
+                    {isMounted && (
+                        <button
+                            className="md:hidden text-light text-2xl"
+                            onClick={() => setIsMobileMenuOpen(true)}
+                        >
+                            <Menu />
+                        </button>
+                    )}
                 </div>
             </div>
 

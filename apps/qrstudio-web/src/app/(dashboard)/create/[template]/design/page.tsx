@@ -1,7 +1,7 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState, Suspense } from 'react';
 import { useWizardStore } from '@/components/wizard/store';
 import { LiveQrPreview } from '@/components/wizard/preview/LiveQrPreview';
 import { ArrowLeft, Palette, Grid3x3, Frame, Image as ImageIcon, ChevronDown, CheckCircle2, Copy, Check, AlertTriangle } from 'lucide-react';
@@ -31,6 +31,12 @@ function AccordionSection({
     onToggle: () => void;
     children: React.ReactNode;
 }) {
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
     return (
         <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
             {/* Header */}
@@ -41,16 +47,18 @@ function AccordionSection({
             >
                 <div className="flex items-center gap-3 sm:gap-4">
                     <div className={`p-3 sm:p-4 rounded-xl ${color} flex items-center justify-center flex-shrink-0`}>
-                        <Icon className="w-5 h-5 sm:w-7 sm:h-7" />
+                        {isMounted && <Icon className="w-5 h-5 sm:w-7 sm:h-7" />}
                     </div>
                     <div className="text-left">
                         <h3 className="text-sm sm:text-base font-bold text-slate-900">{title}</h3>
                         <p className="text-xs sm:text-sm text-slate-500">{subtitle}</p>
                     </div>
                 </div>
-                <ChevronDown
-                    className={`w-5 h-5 text-slate-400 transition-transform duration-300 flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}
-                />
+                {isMounted && (
+                    <ChevronDown
+                        className={`w-5 h-5 text-slate-400 transition-transform duration-300 flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}
+                    />
+                )}
             </button>
 
             {/* Content */}
@@ -66,10 +74,15 @@ function AccordionSection({
     );
 }
 
-export default function DesignPage({ params }: { params: { template: string } }) {
+function DesignPageContent({ params }: { params: { template: string } }) {
     const router = useRouter();
-    const searchParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
+    const searchParams = useSearchParams();
     const editId = searchParams.get('edit');
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     const [isGenerating, setIsGenerating] = useState(false);
     const [qrName, setQrName] = useState('');
@@ -82,6 +95,10 @@ export default function DesignPage({ params }: { params: { template: string } })
         corners: false,
         logo: false
     });
+
+    if (!isMounted) {
+        return null;
+    }
 
     const [copiedColor, setCopiedColor] = useState<string | null>(null);
 
@@ -670,5 +687,17 @@ export default function DesignPage({ params }: { params: { template: string } })
                 onClose={() => setShowAuthModal(false)}
             />
         </div>
+    );
+}
+
+export default function DesignPage(props: { params: { template: string } }) {
+    return (
+        <Suspense fallback={
+            <div className="w-full h-screen flex items-center justify-center">
+                <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+            </div>
+        }>
+            <DesignPageContent {...props} />
+        </Suspense>
     );
 }

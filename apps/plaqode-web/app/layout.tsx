@@ -4,6 +4,7 @@ import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
 import { Toaster } from "@plaqode-platform/ui";
 import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
+import { Suspense } from "react";
 
 import FontLoader from "@/components/FontLoader";
 
@@ -21,6 +22,7 @@ const merriweather = Merriweather({
   display: 'swap',
   variable: '--font-merriweather', // CSS variable bridge
 });
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://plaqode.com"),
   title: {
@@ -89,11 +91,13 @@ export default function RootLayout({
       <body
         className="antialiased font-sans"
       >
-        <AuthProvider>
-          <FontLoader />
-          {children}
-          <Toaster richColors theme="light" />
-        </AuthProvider>
+        <Suspense fallback={null}>
+          <AuthProvider>
+            <FontLoader />
+            {children}
+            <Toaster richColors theme="light" />
+          </AuthProvider>
+        </Suspense>
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
       </body>
     </html>

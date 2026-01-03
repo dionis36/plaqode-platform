@@ -8,8 +8,17 @@ interface BackButtonProps {
     className?: string;
 }
 
+import { useState, useEffect } from 'react';
+
 export function BackButton({ label = 'Back', className = '' }: BackButtonProps) {
     const router = useRouter();
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    if (!isMounted) return null;
 
     return (
         <button

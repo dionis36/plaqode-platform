@@ -6,7 +6,7 @@ import { AppStorePreview } from '@/components/wizard/preview/AppStorePreview';
 import { useWizardStore } from '@/components/wizard/store';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ArrowRight, Eye } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { qrApi } from '@/lib/api-client';
 import { SEO } from '@/components/common/SEO';
 import { BackButton } from '@/components/common/BackButton';
@@ -14,7 +14,7 @@ import { EnhancedPreviewModal } from '@/components/common/EnhancedPreviewModal';
 import { PreviewProvider } from '@/components/wizard/preview/PreviewContext';
 import { useTemplateValidation } from '@/hooks/useTemplateValidation';
 
-export default function AppStorePage() {
+function AppStorePageContent() {
     const { payload, setEditMode, loadQrData } = useWizardStore();
     const { isValid } = useTemplateValidation('appstore');
     const router = useRouter();
@@ -125,5 +125,20 @@ export default function AppStorePage() {
                 </PreviewProvider>
             </EnhancedPreviewModal>
         </div>
+    );
+}
+
+export default function AppStorePage() {
+    return (
+        <Suspense fallback={
+            <div className="w-full px-4 pb-20 flex items-center justify-center min-h-[400px]">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                    <p className="text-slate-600">Loading...</p>
+                </div>
+            </div>
+        }>
+            <AppStorePageContent />
+        </Suspense>
     );
 }

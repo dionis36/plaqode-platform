@@ -53,6 +53,12 @@ function AccordionSection({
     onToggle: () => void;
     children: React.ReactNode;
 }) {
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
     return (
         <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
             {/* Header */}
@@ -63,16 +69,18 @@ function AccordionSection({
             >
                 <div className="flex items-center gap-3 sm:gap-4">
                     <div className={`p-3 sm:p-4 rounded-xl ${color} flex items-center justify-center flex-shrink-0`}>
-                        <Icon className="w-5 h-5 sm:w-7 sm:h-7" />
+                        {isMounted && <Icon className="w-5 h-5 sm:w-7 sm:h-7" />}
                     </div>
                     <div className="text-left">
                         <h3 className="text-sm sm:text-base font-bold text-slate-900">{title}</h3>
                         <p className="text-xs sm:text-sm text-slate-500">{subtitle}</p>
                     </div>
                 </div>
-                <ChevronDown
-                    className={`w-5 h-5 text-slate-400 transition-transform duration-300 flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}
-                />
+                {isMounted && (
+                    <ChevronDown
+                        className={`w-5 h-5 text-slate-400 transition-transform duration-300 flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}
+                    />
+                )}
             </button>
 
             {/* Content */}
@@ -90,6 +98,11 @@ function AccordionSection({
 
 export function AppStoreForm() {
     const { payload, updatePayload, editMode } = useWizardStore();
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     // Main Sections State
     const [openSections, setOpenSections] = useState({
@@ -101,19 +114,18 @@ export function AppStoreForm() {
     // Track if we've already loaded edit data
     const hasLoadedEditData = useRef(false);
 
-    const { register, watch, setValue, control, formState: { errors }, reset } = useForm<FormValues>({
+    const { register, control, watch, setValue, reset, formState: { errors } } = useForm<FormValues>({
         defaultValues: {
-            styles: {
-                primary_color: payload.styles?.primary_color || '#2563EB',
-                secondary_color: payload.styles?.secondary_color || '#EFF6FF',
-                gradient_type: payload.styles?.gradient_type || 'none',
-                gradient_angle: payload.styles?.gradient_angle || 135
-            },
+            styles: payload.styles || { primary_color: '#000000', secondary_color: '#F3F4F6' },
             app_name: payload.app_name || '',
             developer: payload.developer || '',
             description: payload.description || '',
             app_logo: payload.app_logo || '',
-            platforms: payload.platforms || []
+            platforms: payload.platforms || [],
+            // These fields are not defined in FormValues, but are present in the instruction.
+            // Assuming they are intended for a different form or a future extension of FormValues.
+            // app_store: payload.app_store || { app_url: '' },
+            // app_info: payload.app_info || { name: '', developer: '', category: '', price: '', description: '' }
         },
         mode: 'onChange'
     });
@@ -124,24 +136,6 @@ export function AppStoreForm() {
         name: 'platforms'
     });
 
-    // Reset form ONCE when entering edit mode with loaded data
-    useEffect(() => {
-        if (editMode && !hasLoadedEditData.current && payload.app_name) {
-            hasLoadedEditData.current = true;
-            reset({
-                styles: payload.styles || { primary_color: '#2563EB', secondary_color: '#EFF6FF' },
-                app_name: payload.app_name,
-                developer: payload.developer,
-                description: payload.description,
-                app_logo: payload.app_logo,
-                platforms: payload.platforms || []
-            });
-        }
-        if (!editMode) {
-            hasLoadedEditData.current = false;
-        }
-    }, [editMode, payload, reset]);
-
     // Watch for changes and update global store
     useEffect(() => {
         const subscription = watch((value) => {
@@ -149,6 +143,10 @@ export function AppStoreForm() {
         });
         return () => subscription.unsubscribe();
     }, [watch, updatePayload]);
+
+    if (!isMounted) {
+        return null;
+    }
 
     const toggleSection = (section: keyof typeof openSections) => {
         setOpenSections(prev => ({ ...prev, [section]: !prev[section] }));
@@ -373,7 +371,7 @@ export function AppStoreForm() {
                                 ))}
                             </div>
                         </div>
-                        
+
                         {/* Active Platforms List */}
                         <div className="space-y-3">
                             {platformFields.length > 0 && <h4 className="text-sm font-bold text-slate-800 border-b border-slate-100 pb-2">Active Platforms</h4>}
@@ -382,7 +380,7 @@ export function AppStoreForm() {
                                 const platformConfig = PLATFORMS_LIST.find(p => p.id === platformId);
                                 const Icon = platformConfig?.icon || FaGooglePlay;
                                 const brandColor = platformConfig?.color || '#64748b';
-                            
+
                                 return (
                                     <div key={field.id} className="flex gap-2 sm:gap-3 items-center animate-in slide-in-from-left-2 duration-300">
                                         <div

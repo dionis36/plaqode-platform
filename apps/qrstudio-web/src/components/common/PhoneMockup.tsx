@@ -8,10 +8,13 @@ interface PhoneMockupProps {
     className?: string;
     showViewButton?: boolean;
     onViewClick?: () => void;
+    backgroundColor?: string;
+    statusBarStyle?: 'dark' | 'light' | 'auto';
 }
 
-export function PhoneMockup({ children, header, className = '', showViewButton = false, onViewClick }: PhoneMockupProps) {
-    const { heroBackgroundColor } = usePreviewContext();
+export function PhoneMockup({ children, header, className = '', showViewButton = false, onViewClick, backgroundColor, statusBarStyle = 'auto' }: PhoneMockupProps) {
+    const { heroBackgroundColor: contextBgColor } = usePreviewContext();
+    const activeBackgroundColor = backgroundColor || contextBgColor;
 
     // Live time state
     const [currentTime, setCurrentTime] = useState('');
@@ -67,8 +70,10 @@ export function PhoneMockup({ children, header, className = '', showViewButton =
     };
 
     // Determine status bar color based on actual hero background from context
-    const isDark = isColorDark(heroBackgroundColor);
-    const statusBarColor = isDark ? 'text-white' : 'text-black';
+    const isDark = isColorDark(activeBackgroundColor);
+    const statusBarColor = statusBarStyle !== 'auto'
+        ? (statusBarStyle === 'light' ? 'text-white' : 'text-black')
+        : (isDark ? 'text-white' : 'text-black');
     const batteryBgColor = isDark ? 'bg-white/80' : 'bg-black/80';
 
     return (
