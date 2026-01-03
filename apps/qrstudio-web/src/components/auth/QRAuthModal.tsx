@@ -11,12 +11,12 @@ interface QRAuthModalProps {
 export function QRAuthModal({ isOpen, onClose }: QRAuthModalProps) {
     const handleLogin = () => {
         const currentUrl = typeof window !== 'undefined' ? encodeURIComponent(window.location.href) : '';
-        window.location.href = `${process.env.NEXT_PUBLIC_PLATFORM_URL || 'http://localhost:3000'}/auth/login?redirect=${currentUrl}`;
+        window.location.href = `${process.env.NEXT_PUBLIC_PLATFORM_URL}/auth/login?redirect=${currentUrl}`;
     };
 
     const handleSignup = () => {
         const currentUrl = typeof window !== 'undefined' ? encodeURIComponent(window.location.href) : '';
-        window.location.href = `${process.env.NEXT_PUBLIC_PLATFORM_URL || 'http://localhost:3000'}/auth/signup?redirect=${currentUrl}`;
+        window.location.href = `${process.env.NEXT_PUBLIC_PLATFORM_URL}/auth/signup?redirect=${currentUrl}`;
     };
 
     return (

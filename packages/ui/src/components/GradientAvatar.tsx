@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom';
 import { LayoutDashboard, LogOut, UserCircle, Shield } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
-const HOME_URL = process.env.NEXT_PUBLIC_PLAQODE_WEB_URL || "http://localhost:3000";
+const HOME_URL = process.env.NEXT_PUBLIC_PLATFORM_URL || process.env.NEXT_PUBLIC_APP_URL;
 
 // Define a minimal User interface if one isn't available globally
 interface User {

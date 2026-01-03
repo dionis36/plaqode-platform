@@ -17,9 +17,12 @@ export async function GET() {
         }
 
         // Fetch stats from QR Studio API
-        const qrStudioApiUrl = process.env.NEXT_PUBLIC_QRSTUDIO_URL?.replace('3004', '3001') || 'http://localhost:3001';
+        const qrStudioApiUrl = process.env.NEXT_PUBLIC_QRSTUDIO_API_URL;
+        if (!qrStudioApiUrl) {
+            throw new Error('NEXT_PUBLIC_QRSTUDIO_API_URL is not defined');
+        }
         const response = await fetch(
-            `http://localhost:3005/dashboard/stats`,
+            `${qrStudioApiUrl}/dashboard/stats`,
             {
                 headers: {
                     Cookie: `accessToken=${accessToken.value}`,

@@ -9,7 +9,7 @@ import { Menu } from "lucide-react";
 import { useState, useEffect } from "react";
 import MobileMenu from "@/components/layout/MobileMenu";
 
-const HOME_URL = process.env.NEXT_PUBLIC_PLAQODE_WEB_URL || "http://localhost:3000";
+const HOME_URL = process.env.NEXT_PUBLIC_PLATFORM_URL;
 
 export default function StaticNavbar() {
     const { user, logout } = useAuth();

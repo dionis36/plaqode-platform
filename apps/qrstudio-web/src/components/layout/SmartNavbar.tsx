@@ -10,7 +10,7 @@ import { GradientAvatar } from "@plaqode-platform/ui";
 
 import { useAuth } from "@/lib/auth-context";
 
-const HOME_URL = process.env.NEXT_PUBLIC_PLAQODE_WEB_URL || "http://localhost:3000";
+const HOME_URL = process.env.NEXT_PUBLIC_PLATFORM_URL;
 
 export default function SmartNavbar() {
     const { user, logout } = useAuth();

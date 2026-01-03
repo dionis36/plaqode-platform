@@ -12,5 +12,5 @@ export default function NotFound() {
         return () => setVisible(true);
     }, [setVisible]);
 
-    return <NotFoundPage homeUrl={process.env.NEXT_PUBLIC_PLATFORM_URL || 'http://localhost:3000'} />;
+    return <NotFoundPage homeUrl={process.env.NEXT_PUBLIC_PLATFORM_URL} />;
 }
