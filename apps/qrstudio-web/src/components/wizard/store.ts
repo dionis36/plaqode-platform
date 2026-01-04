@@ -120,5 +120,5 @@ export const useWizardStore = create<WizardState>()(persist((set) => ({
     }),
 }), {
     name: 'wizard-storage',
-    storage: createJSONStorage(() => typeof window !== 'undefined' ? localStorage : sessionStorage), // Fallback or handling
+    storage: createJSONStorage(() => typeof window !== 'undefined' ? localStorage : undefined),
 }));
