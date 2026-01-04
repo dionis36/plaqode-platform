@@ -5,20 +5,30 @@ import path from 'path';
 
 import { config } from '../config';
 
-// Load public key from auth-service
-// Defaults to dev path, overrides via Env Var in Prod
-const publicKeyPath = path.isAbsolute(config.jwtPublicKeyPath)
-    ? config.jwtPublicKeyPath
-    : path.resolve(process.cwd(), config.jwtPublicKeyPath);
+// Load public key logic
+let publicKey: string | null = null;
+const envKey = process.env.JWT_PUBLIC_KEY;
 
-let publicKey: string;
+if (envKey) {
+    publicKey = envKey;
+} else {
+    // Defaults to dev path, overrides via Env Var in Prod
+    const publicKeyPath = path.isAbsolute(config.jwtPublicKeyPath)
+        ? config.jwtPublicKeyPath
+        : path.resolve(process.cwd(), config.jwtPublicKeyPath);
 
-try {
-    publicKey = fs.readFileSync(publicKeyPath, 'utf8');
-} catch (error) {
-    console.error('Failed to load public key from:', publicKeyPath);
-    console.error('Error:', error);
-    throw new Error('Public key not found. Cannot verify JWT tokens.');
+    try {
+        publicKey = fs.readFileSync(publicKeyPath, 'utf8');
+        console.log('✅ Loaded JWT Public Key from file.');
+    } catch (error) {
+        console.warn('⚠️ JWT Public Key not found in filesystem or ENV.');
+    }
+}
+
+// Ensure key exists function
+function getPublicKey(): string {
+    if (!publicKey) throw new Error('Authentication unavailable: Public Key not configured.');
+    return publicKey;
 }
 
 /**
@@ -44,7 +54,7 @@ export async function authMiddleware(
         // Verify JWT with public key
         // Platform JWT payload structure:
         // { sub: 'user-id', email: '...', roles: [...], products: [...] }
-        const decoded = jwt.verify(accessToken, publicKey, {
+        const decoded = jwt.verify(accessToken, getPublicKey(), {
             algorithms: ['RS256']
         }) as { sub: string; email: string; roles: string[]; products: string[] };
 
@@ -74,7 +84,7 @@ export async function optionalAuthMiddleware(
         const accessToken = (request as any).cookies?.access_token;
 
         if (accessToken) {
-            const decoded = jwt.verify(accessToken, publicKey, {
+            const decoded = jwt.verify(accessToken, getPublicKey(), {
                 algorithms: ['RS256']
             }) as { sub: string };
 
