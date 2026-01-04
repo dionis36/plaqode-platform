@@ -8,19 +8,18 @@ const PLATFORM_URL = env.NEXT_PUBLIC_PLATFORM_URL;
 
 import { usePathname } from 'next/navigation';
 import { useState, useRef, useEffect } from 'react';
-
-interface User {
-    email: string;
-    name?: string;
-    roles: string[];
-}
+import { useAuth } from '@/lib/auth-context'; // Import useAuth
 
 interface PlatformNavProps {
+    // Props are no longer mandatory for user state
     user?: User | null;
     onLogout?: () => void;
 }
 
-export function PlatformNav({ user, onLogout }: PlatformNavProps) {
+export function PlatformNav({ onLogout }: PlatformNavProps) {
+    const { user: authUser, logout: authLogout } = useAuth(); // Use the hook
+    const user = authUser; // Prefer hook state
+
     const pathname = usePathname();
     const [showDropdown, setShowDropdown] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -58,8 +57,10 @@ export function PlatformNav({ user, onLogout }: PlatformNavProps) {
         setShowDropdown(false);
         if (onLogout) {
             onLogout();
+        } else if (authLogout) {
+            authLogout();
         } else {
-            // Default logout - redirect to platform
+            // Fallback
             window.location.href = `${PLATFORM_URL}/auth/login`;
         }
     };

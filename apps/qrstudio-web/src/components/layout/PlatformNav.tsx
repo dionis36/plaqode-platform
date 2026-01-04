@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import { useState, useRef, useEffect } from 'react';
 import { env } from "@/lib/env";
+import { useAuth } from '@/lib/auth-context'; // Import useAuth
 
 import Link from 'next/link';
 import { Home, Info, Briefcase, Mail } from 'lucide-react';
@@ -21,7 +22,10 @@ interface PlatformNavProps {
     onLogout?: () => void;
 }
 
-export function PlatformNav({ user, onLogout }: PlatformNavProps) {
+export function PlatformNav({ onLogout }: PlatformNavProps) {
+    const { user: authUser, logout: authLogout } = useAuth(); // Use the hook
+    const user = authUser; // Prefer hook data
+
     const pathname = usePathname();
     const [showDropdown, setShowDropdown] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -66,8 +70,10 @@ export function PlatformNav({ user, onLogout }: PlatformNavProps) {
         setShowDropdown(false);
         if (onLogout) {
             onLogout();
+        } else if (authLogout) {
+            authLogout();
         } else {
-            // Default logout - redirect to platform
+            // Fallback
             window.location.href = `${HOME_URL}/auth/login`;
         }
     };
