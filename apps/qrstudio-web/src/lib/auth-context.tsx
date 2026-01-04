@@ -36,7 +36,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const checkAuth = async () => {
         try {
             const response = await fetch(
-                `${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/me`,
+                `${env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/me`,
                 { credentials: 'include' }
             );
 
@@ -62,11 +62,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const logout = async () => {
         try {
-            await fetch(`${process.env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/logout`, {
+            await fetch(`${env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/logout`, {
                 method: 'POST',
                 credentials: 'include',
             });
-            window.location.href = `${process.env.NEXT_PUBLIC_PLATFORM_URL}/auth/login`;
+            window.location.href = `${env.NEXT_PUBLIC_PLATFORM_URL}/auth/login`;
         } catch (error) {
             console.error('Logout failed:', error);
             // Force redirect even if api fails
