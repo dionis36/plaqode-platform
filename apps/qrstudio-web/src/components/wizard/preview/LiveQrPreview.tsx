@@ -21,8 +21,8 @@ export function LiveQrPreview() {
 
             // IMPORTANT: QR code should ALWAYS encode the shortcode URL
             // In edit mode, use existing shortcode; in create mode, use placeholder
-            const baseUrl = env.NEXT_PUBLIC_PLATFORM_URL;
-            const qrUrl = `${baseUrl.replace(/^https?:\/\//, '')} /q/preview`;
+            const baseUrl = env.NEXT_PUBLIC_PLATFORM_URL || (typeof window !== 'undefined' ? window.location.origin : 'https://plaqode.com');
+            const qrUrl = `${baseUrl.replace(/^https?:\/\//, '')}/q/preview`;
             let content = '';
             if (editMode && shortcode) {
                 // Edit mode: Use actual shortcode

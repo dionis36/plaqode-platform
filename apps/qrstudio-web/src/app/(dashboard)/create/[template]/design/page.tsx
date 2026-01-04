@@ -2,8 +2,13 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState, Suspense } from 'react';
+import dynamic from 'next/dynamic';
 import { useWizardStore } from '@/components/wizard/store';
-import { LiveQrPreview } from '@/components/wizard/preview/LiveQrPreview';
+// Dynamically import LiveQrPreview to avoid SSR issues with canvas/window
+const LiveQrPreview = dynamic(
+    () => import('@/components/wizard/preview/LiveQrPreview').then(mod => mod.LiveQrPreview),
+    { ssr: false, loading: () => <div className="w-full h-64 bg-slate-100 animate-pulse rounded-lg" /> }
+);
 import { ArrowLeft, Palette, Grid3x3, Frame, Image as ImageIcon, ChevronDown, CheckCircle2, Copy, Check, AlertTriangle } from 'lucide-react';
 import { PhoneMockup } from '@/components/common/PhoneMockup';
 import { SEO } from '@/components/common/SEO';
