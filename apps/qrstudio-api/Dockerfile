@@ -4,39 +4,41 @@
 # --- Stage 1: The Builder (Compiling the code) ---
 FROM node:20-alpine AS builder
 WORKDIR /app
-
-# 1. Context matters! We copy the root files first to respect the Monorepo lockfile.
+# Context matters! We copy the root files first to respect the Monorepo lockfile.
 COPY package.json package-lock.json turbo.json ./
 COPY apps/qrstudio-api/package.json ./apps/qrstudio-api/
-
-# 2. Install ALL dependencies (Fast and Reliable)
+# Install ALL dependencies (Fast and Reliable)
 RUN npm ci
-
-# 3. Copy the actual source code
+# Copy the actual source code
 COPY apps/qrstudio-api ./apps/qrstudio-api
-
-# 4. Build the App
-# We go into the app folder to run its specific build commands
+# Build the App
 WORKDIR /app/apps/qrstudio-api
 RUN npx prisma generate
 RUN npm run build
 
-# --- Stage 2: The Runner (Production Image) ---
+# --- Stage 2: The Dependency Installer (Production Only) ---
+# We isolate this to ensure we get exactly what the api needs, no hoisting verification needed
+FROM node:20-alpine AS deps
+WORKDIR /app
+COPY apps/qrstudio-api/package.json ./
+# Install ONLY production dependencies
+RUN npm install --omit=dev
+
+# --- Stage 3: The Runner (Production Image) ---
 FROM node:20-alpine AS runner
 WORKDIR /app
 
-# 5. Copy only what we need from the Builder
-# We assume 'dist' is where the compiled JS lives
+# 1. Copy the Compiled Code from Builder
 COPY --from=builder /app/apps/qrstudio-api/dist ./dist
 COPY --from=builder /app/apps/qrstudio-api/package.json ./package.json
-COPY --from=builder /app/apps/qrstudio-api/keys ./keys
 
-# (Simplification: We copy all node_modules to avoid missing usage)
-COPY --from=builder /app/node_modules ./node_modules
+# 2. Copy the Clean Production Node Modules from Deps
+COPY --from=deps /app/node_modules ./node_modules
 
-# 6. Open the Door (Port)
+# 3. Environment & Port
 ENV PORT=3005
+ENV NODE_ENV=production
 EXPOSE 3005
 
-# 7. Start the Engine
+# 4. Start the Engine
 CMD ["node", "dist/app.js"]
