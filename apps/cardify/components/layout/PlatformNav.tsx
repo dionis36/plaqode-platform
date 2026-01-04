@@ -10,6 +10,12 @@ import { usePathname } from 'next/navigation';
 import { useState, useRef, useEffect } from 'react';
 import { useAuth } from '@/lib/auth-context'; // Import useAuth
 
+interface User {
+    email: string;
+    name?: string;
+    roles: string[];
+}
+
 interface PlatformNavProps {
     // Props are no longer mandatory for user state
     user?: User | null;
