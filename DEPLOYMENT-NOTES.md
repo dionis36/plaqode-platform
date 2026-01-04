@@ -48,6 +48,7 @@ This guide details the specific environment variables and configurations require
 > | `DATABASE_URL` | `postgresql://...` (Real Neon Connection String) |
 > | `JWT_SECRET` | `temp_secret_123` |
 
+
 ### A. Plaqode Web (`apps/plaqode-web`)
 **Port**: `3000`
 **Deployment**: Vercel
@@ -71,10 +72,11 @@ This guide details the specific environment variables and configurations require
 
 | Variable Name | Local Value | Production Example | Description |
 | :--- | :--- | :--- | :--- |
-| `NEXT_PUBLIC_APP_URL` | `http://localhost:3001` | `https://create.plaqode.com` | App URL. |
+| `NEXT_PUBLIC_QRSTUDIO_URL` | `http://localhost:3001` | `https://create.plaqode.com` | App URL. |
 | `NEXT_PUBLIC_PLATFORM_URL` | `http://localhost:3000` | `https://plaqode.com` | Link back to main platform. |
 | `NEXT_PUBLIC_AUTH_SERVICE_URL` | `http://localhost:3003` | `https://auth.plaqode.com` | Auth Service URL. |
-| `NEXT_PUBLIC_API_URL` | `http://localhost:3005` | `https://api.plaqode.com` | Backend QR API URL. |
+| `NEXT_PUBLIC_QRSTUDIO_API_URL` | `http://localhost:3005` | `https://api.plaqode.com` | Backend QR API URL. |
+| `NEXT_PUBLIC_GA_ID` | `""` | `G-XXXXXXXX` | Google Analytics ID. |
 
 ### C. Cardify (`apps/cardify`)
 **Port**: `3002`
@@ -121,10 +123,14 @@ This guide details the specific environment variables and configurations require
 | `DATABASE_URL` | `postgresql://...` | `postgresql://...` | DB Connection. |
 | `JWT_PUBLIC_KEY_PATH` | `./keys/public.pem` | `/etc/secrets/public.pem` | For validating tokens. |
 | `ALLOWED_ORIGINS` | `http://localhost:3000` | `https://plaqode.com,https://create.plaqode.com` | CORS Whitelist. |
+| `FRONTEND_URL` | `http://localhost:3001` | `https://create.plaqode.com` | **CRITICAL**: Required for redirections/links. |
+| `JWT_PUBLIC_KEY` | *(Optional)* | `-----BEGIN PUBLIC KEY...` | Alternative to file path (lazy load). |
 
 ---
 
 ## 4. Pre-Flight Checklist
-- [ ] **Review Ports**: Ensure your Production Environment variables (`PORT`) match what you expose in your `Dockerfile` or Cloud Config.
-- [ ] **Generate Keys**: Use `openssl` to generate fresh RSA keys for production.
-- [ ] **Set Origins**: Double check `ALLOWED_ORIGINS` includes *all* your Vercel domains.
+- [x] **Review Ports**: Ensure your Production Environment variables (`PORT`) match what you expose in your `Dockerfile` or Cloud Config.
+- [x] **Generate Keys**: Use `openssl` to generate fresh RSA keys for production.
+- [x] **Set Origins**: Double check `ALLOWED_ORIGINS` includes *all* your Vercel domains.
+- [x] **Set Frontend Config**: Ensure `qrstudio-api` has `FRONTEND_URL` set to avoid crashes.
+
