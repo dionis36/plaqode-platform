@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import QRCodeStyling from 'qr-code-styling';
+// import QRCodeStyling from 'qr-code-styling'; // Removed top-level import
 import { useWizardStore } from '../store';
 import { env } from "@/lib/env";
 
 export function LiveQrPreview() {
     const { type, payload, design, shortcode, editMode } = useWizardStore();
     const qrRef = useRef<HTMLDivElement>(null);
-    const qrCodeRef = useRef<QRCodeStyling | null>(null);
+    const qrCodeRef = useRef<any>(null); // Changed type to any since class is not imported
     const [isUpdating, setIsUpdating] = useState(false);
     const updateTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -16,92 +16,100 @@ export function LiveQrPreview() {
             clearTimeout(updateTimeoutRef.current);
         }
 
-        updateTimeoutRef.current = setTimeout(() => {
+        updateTimeoutRef.current = setTimeout(async () => {
             setIsUpdating(true);
 
-            // IMPORTANT: QR code should ALWAYS encode the shortcode URL
-            // In edit mode, use existing shortcode; in create mode, use placeholder
-            const baseUrl = env.NEXT_PUBLIC_PLATFORM_URL || (typeof window !== 'undefined' ? window.location.origin : 'https://plaqode.com');
-            const qrUrl = `${baseUrl.replace(/^https?:\/\//, '')}/q/preview`;
-            let content = '';
-            if (editMode && shortcode) {
-                // Edit mode: Use actual shortcode
-                content = `${baseUrl} /q/${shortcode} `;
-            } else {
-                // Create mode: Use placeholder (will be replaced with real shortcode after creation)
-                content = baseUrl;
-            }
+            try {
+                // Dynamically import the library ONLY on client
+                const { default: QRCodeStyling } = await import('qr-code-styling');
 
-            // Create or update QR code
-            if (!qrCodeRef.current) {
-                qrCodeRef.current = new QRCodeStyling({
-                    width: 256,
-                    height: 256,
-                    data: content,
-                    margin: design.margin ?? 1,
-                    qrOptions: {
-                        errorCorrectionLevel: 'M'
-                    },
-                    dotsOptions: {
-                        color: design.dots?.color ?? '#000000',
-                        type: design.dots?.style ?? 'square'
-                    },
-                    cornersSquareOptions: {
-                        color: design.cornersSquare?.color ?? design.dots?.color ?? '#000000',
-                        type: design.cornersSquare?.style ?? 'square'
-                    },
-                    cornersDotOptions: {
-                        color: design.cornersDot?.color ?? design.dots?.color ?? '#000000',
-                        type: design.cornersDot?.style ?? 'square'
-                    },
-                    backgroundOptions: {
-                        color: design.background?.color === 'transparent' ? 'rgba(0,0,0,0)' : (design.background?.color ?? '#ffffff')
-                    },
-                    image: design.image || undefined,
-                    imageOptions: {
-                        crossOrigin: 'anonymous',
-                        hideBackgroundDots: design.imageOptions?.hideBackgroundDots ?? true,
-                        imageSize: design.imageOptions?.imageSize ?? 0.4,
-                        margin: design.imageOptions?.margin ?? 10
-                    }
-                });
-
-                if (qrRef.current) {
-                    qrRef.current.innerHTML = '';
-                    qrCodeRef.current.append(qrRef.current);
+                // IMPORTANT: QR code should ALWAYS encode the shortcode URL
+                // In edit mode, use existing shortcode; in create mode, use placeholder
+                const baseUrl = env.NEXT_PUBLIC_PLATFORM_URL || (typeof window !== 'undefined' ? window.location.origin : 'https://plaqode.com');
+                const qrUrl = `${baseUrl.replace(/^https?:\/\//, '')}/q/preview`;
+                let content = '';
+                if (editMode && shortcode) {
+                    // Edit mode: Use actual shortcode
+                    content = `${baseUrl} /q/${shortcode} `;
+                } else {
+                    // Create mode: Use placeholder (will be replaced with real shortcode after creation)
+                    content = baseUrl;
                 }
-            } else {
-                // Update existing QR code
-                qrCodeRef.current.update({
-                    data: content,
-                    margin: design.margin ?? 1,
-                    dotsOptions: {
-                        color: design.dots?.color ?? '#000000',
-                        type: design.dots?.style ?? 'square'
-                    },
-                    cornersSquareOptions: {
-                        color: design.cornersSquare?.color ?? design.dots?.color ?? '#000000',
-                        type: design.cornersSquare?.style ?? 'square'
-                    },
-                    cornersDotOptions: {
-                        color: design.cornersDot?.color ?? design.dots?.color ?? '#000000',
-                        type: design.cornersDot?.style ?? 'square'
-                    },
-                    backgroundOptions: {
-                        color: design.background?.color === 'transparent' ? 'rgba(0,0,0,0)' : (design.background?.color ?? '#ffffff')
-                    },
-                    image: design.image || undefined,
-                    imageOptions: {
-                        crossOrigin: 'anonymous',
-                        hideBackgroundDots: design.imageOptions?.hideBackgroundDots ?? true,
-                        imageSize: design.imageOptions?.imageSize ?? 0.4,
-                        margin: design.imageOptions?.margin ?? 10
+
+                // Create or update QR code
+                if (!qrCodeRef.current) {
+                    qrCodeRef.current = new QRCodeStyling({
+                        width: 256,
+                        height: 256,
+                        data: content,
+                        margin: design.margin ?? 1,
+                        qrOptions: {
+                            errorCorrectionLevel: 'M'
+                        },
+                        dotsOptions: {
+                            color: design.dots?.color ?? '#000000',
+                            type: design.dots?.style ?? 'square'
+                        },
+                        cornersSquareOptions: {
+                            color: design.cornersSquare?.color ?? design.dots?.color ?? '#000000',
+                            type: design.cornersSquare?.style ?? 'square'
+                        },
+                        cornersDotOptions: {
+                            color: design.cornersDot?.color ?? design.dots?.color ?? '#000000',
+                            type: design.cornersDot?.style ?? 'square'
+                        },
+                        backgroundOptions: {
+                            color: design.background?.color === 'transparent' ? 'rgba(0,0,0,0)' : (design.background?.color ?? '#ffffff')
+                        },
+                        image: design.image || undefined,
+                        imageOptions: {
+                            crossOrigin: 'anonymous',
+                            hideBackgroundDots: design.imageOptions?.hideBackgroundDots ?? true,
+                            imageSize: design.imageOptions?.imageSize ?? 0.4,
+                            margin: design.imageOptions?.margin ?? 10
+                        }
+                    });
+
+                    if (qrRef.current) {
+                        qrRef.current.innerHTML = '';
+                        qrCodeRef.current.append(qrRef.current);
                     }
-                });
+                } else {
+                    // Update existing QR code
+                    qrCodeRef.current.update({
+                        data: content,
+                        margin: design.margin ?? 1,
+                        dotsOptions: {
+                            color: design.dots?.color ?? '#000000',
+                            type: design.dots?.style ?? 'square'
+                        },
+                        cornersSquareOptions: {
+                            color: design.cornersSquare?.color ?? design.dots?.color ?? '#000000',
+                            type: design.cornersSquare?.style ?? 'square'
+                        },
+                        cornersDotOptions: {
+                            color: design.cornersDot?.color ?? design.dots?.color ?? '#000000',
+                            type: design.cornersDot?.style ?? 'square'
+                        },
+                        backgroundOptions: {
+                            color: design.background?.color === 'transparent' ? 'rgba(0,0,0,0)' : (design.background?.color ?? '#ffffff')
+                        },
+                        image: design.image || undefined,
+                        imageOptions: {
+                            crossOrigin: 'anonymous',
+                            hideBackgroundDots: design.imageOptions?.hideBackgroundDots ?? true,
+                            imageSize: design.imageOptions?.imageSize ?? 0.4,
+                            margin: design.imageOptions?.margin ?? 10
+                        }
+                    });
+                }
+            } catch (err) {
+                console.error("Failed to load QR library", err);
+            } finally {
+                // Small delay to ensure smooth transition
+                setTimeout(() => setIsUpdating(false), 100);
             }
 
-            // Small delay to ensure smooth transition
-            setTimeout(() => setIsUpdating(false), 100);
         }, 150); // 150ms debounce
 
         return () => {
@@ -115,7 +123,7 @@ export function LiveQrPreview() {
         <div className="flex items-center justify-center w-full h-full">
             <div
                 ref={qrRef}
-                className={`flex items - center justify - center transition - opacity duration - 200 ${isUpdating ? 'opacity-90' : 'opacity-100'} `}
+                className={`flex items-center justify-center transition-opacity duration-200 ${isUpdating ? 'opacity-90' : 'opacity-100'}`}
             />
         </div>
     );
