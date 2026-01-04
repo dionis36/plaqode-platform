@@ -7,14 +7,10 @@ export function middleware(request: NextRequest) {
 
     // Only protect /app routes (dashboard and admin)
     // All other routes (/, /auth/*, public pages) are accessible to everyone
-    if (pathname.startsWith('/app')) {
-        // If no token, redirect to login
-        if (!token) {
-            const loginUrl = new URL('/auth/login', request.url);
-            loginUrl.searchParams.set('redirect', pathname);
-            return NextResponse.redirect(loginUrl);
-        }
-    }
+    // PROTECTION MOVED TO CLIENT-SIDE (Due to Cross-Domain Cookies)
+    // Middleware cannot see the Fly.io cookies, so we must allow the request
+    // and let the client-side useAuth() hook handle the redirect if not logged in.
+    return NextResponse.next();
 
     // Allow all other routes
     return NextResponse.next();

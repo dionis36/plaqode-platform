@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { authMiddleware } from '../middleware/auth';
+import { authMiddleware } from '../middleware/auth.js';
 import { prisma } from '../db.js';
 import { z } from 'zod';
 

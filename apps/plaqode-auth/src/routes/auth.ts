@@ -100,7 +100,7 @@ export async function authRoutes(app: FastifyInstance) {
                 .setCookie('access_token', tokens.accessToken, {
                     httpOnly: true,
                     secure: config.cookieSecure,
-                    sameSite: 'lax',
+                    sameSite: 'none',
                     domain: config.cookieDomain,
                     path: '/',
                     maxAge: 15 * 60, // 15 minutes
@@ -108,7 +108,7 @@ export async function authRoutes(app: FastifyInstance) {
                 .setCookie('refresh_token', tokens.refreshToken, {
                     httpOnly: true,
                     secure: config.cookieSecure,
-                    sameSite: 'lax',
+                    sameSite: 'none',
                     domain: config.cookieDomain,
                     path: '/',
                     maxAge: 7 * 24 * 60 * 60, // 7 days
@@ -203,7 +203,7 @@ export async function authRoutes(app: FastifyInstance) {
                 .setCookie('access_token', tokens.accessToken, {
                     httpOnly: true,
                     secure: config.cookieSecure,
-                    sameSite: 'lax',
+                    sameSite: 'none',
                     domain: config.cookieDomain,
                     path: '/',
                     maxAge: 15 * 60,
@@ -211,7 +211,7 @@ export async function authRoutes(app: FastifyInstance) {
                 .setCookie('refresh_token', tokens.refreshToken, {
                     httpOnly: true,
                     secure: config.cookieSecure,
-                    sameSite: 'lax',
+                    sameSite: 'none',
                     domain: config.cookieDomain,
                     path: '/',
                     maxAge: 7 * 24 * 60 * 60,
@@ -353,7 +353,7 @@ export async function authRoutes(app: FastifyInstance) {
                 .setCookie('access_token', tokens.accessToken, {
                     httpOnly: true,
                     secure: config.cookieSecure,
-                    sameSite: 'lax',
+                    sameSite: 'none',
                     domain: config.cookieDomain,
                     path: '/',
                     maxAge: 15 * 60,
@@ -361,7 +361,7 @@ export async function authRoutes(app: FastifyInstance) {
                 .setCookie('refresh_token', tokens.refreshToken, {
                     httpOnly: true,
                     secure: config.cookieSecure,
-                    sameSite: 'lax',
+                    sameSite: 'none',
                     domain: config.cookieDomain,
                     path: '/',
                     maxAge: 7 * 24 * 60 * 60,

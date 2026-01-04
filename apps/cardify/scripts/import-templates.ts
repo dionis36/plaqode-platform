@@ -6,8 +6,8 @@ import { CardTemplate } from '@/types/template';
 const prisma = new PrismaClient();
 
 async function importTemplates() {
-    const templatesDir = path.join(process.cwd(), 'public', 'templates');
-    const files = fs.readdirSync(templatesDir).filter(f => f.endsWith('.json') && f !== 'schema.json');
+    const templatesDir = path.join(process.cwd(), 'apps', 'cardify', 'public', 'templates');
+    const files = fs.readdirSync(templatesDir).filter(f => f.startsWith('template-') && f.endsWith('.json'));
 
     console.log(`\n📦 Found ${files.length} template files to import\n`);
 
