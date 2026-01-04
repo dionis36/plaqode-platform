@@ -2,8 +2,11 @@
 # Goal: Create a lightweight, runnable image of our app.
 
 # --- Stage 1: The Builder (Compiling the code) ---
-FROM node:20-alpine AS builder
+FROM node:20-slim AS builder
 WORKDIR /app
+# Install OpenSSL for Prisma
+RUN apt-get update -y && apt-get install -y openssl
+
 # Context matters! We copy the root files first to respect the Monorepo lockfile.
 COPY package.json package-lock.json turbo.json ./
 COPY apps/qrstudio-api/package.json ./apps/qrstudio-api/
@@ -18,15 +21,18 @@ RUN npm run build
 
 # --- Stage 2: The Dependency Installer (Production Only) ---
 # We isolate this to ensure we get exactly what the api needs, no hoisting verification needed
-FROM node:20-alpine AS deps
+FROM node:20-slim AS deps
 WORKDIR /app
 COPY apps/qrstudio-api/package.json ./
 # Install ONLY production dependencies
 RUN npm install --omit=dev
 
 # --- Stage 3: The Runner (Production Image) ---
-FROM node:20-alpine AS runner
+FROM node:20-slim AS runner
 WORKDIR /app
+
+# Install OpenSSL for Prisma Runtime
+RUN apt-get update -y && apt-get install -y openssl ca-certificates && rm -rf /var/lib/apt/lists/*
 
 # 1. Copy the Compiled Code from Builder
 COPY --from=builder /app/apps/qrstudio-api/dist ./dist
