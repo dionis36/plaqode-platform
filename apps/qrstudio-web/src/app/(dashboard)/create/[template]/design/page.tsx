@@ -19,6 +19,18 @@ import { useAuth } from '@/lib/auth-context';
 import { QRAuthModal } from '@/components/auth/QRAuthModal';
 import { toast } from '@plaqode-platform/ui';
 
+// Verify that this is a valid template type
+export async function generateStaticParams() {
+    const templates = [
+        'url', 'vcard', 'text', 'email', 'wifi',
+        'event', 'file', 'appstore', 'socialmedia', 'menu', 'message'
+    ];
+
+    return templates.map((template) => ({
+        template: template,
+    }));
+}
+
 
 
 // Accordion Section Component (matching MenuForm style)
