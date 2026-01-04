@@ -20,25 +20,25 @@ async function start() {
     try {
         // Register CORS
         await app.register(cors, {
-            origin: true, // strict CORS handled by middleware or internal logic if needed
+            origin: config.allowedOrigins, // Explicit whitelist from env
             credentials: true,
+            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
         });
 
         // Register cookie plugin
         await app.register(require('@fastify/cookie'));
 
-        // Register application routes
+        // 2. Register Routes & DB Logic
+        console.log('⏳ Loading routes...');
         await app.register(routes);
+        console.log(`✅ Routes registered successfully`);
 
-        // Start server
-        // Listen on all interfaces (0.0.0.0) for Fly.io
+        // 3. Open Port
         await app.listen({
             port: PORT,
             host: '0.0.0.0'
         });
-
-        console.log(`🚀 QR Studio API server running at http://${HOST}:${PORT}`);
-        console.log(`📋 Routes registered successfully`);
+        console.log(`🚀 QR Studio API server listening at http://${HOST}:${PORT}`);
     } catch (err) {
         app.log.error(err);
         process.exit(1);

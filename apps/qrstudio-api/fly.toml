@@ -6,7 +6,9 @@
 app = 'plaqode-api-v1'
 primary_region = 'lhr'
 
-[build]
+
+[deploy]
+  release_command = 'npx prisma migrate deploy'
 
 [http_service]
   internal_port = 3005

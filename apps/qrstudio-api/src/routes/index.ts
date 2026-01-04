@@ -14,8 +14,5 @@ export async function routes(fastify: FastifyInstance) {
     // This will be registered separately in app.ts
     fastify.register(redirectRoutes);
 
-    // Health check
-    fastify.get('/health', async () => {
-        return { status: 'ok', timestamp: new Date().toISOString() };
-    });
+
 }

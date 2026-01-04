@@ -6,11 +6,10 @@
 app = 'plaqode-auth-v1'
 primary_region = 'lhr'
 
-[build]
 
 [deploy]
   release_command = 'npx prisma migrate deploy'
-  seed_command = 'tsx prisma/seed.ts'
+  seed_command = 'npm run prisma:seed'
 
 [http_service]
   internal_port = 3003
