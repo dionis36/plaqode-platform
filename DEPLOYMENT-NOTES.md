@@ -1,136 +1,77 @@
 # Deployment Notes & Environment Configuration
 
-This guide details the specific environment variables and configurations required when moving from a **Local Environment** to **Production** (Vercel, Fly.io, Railway, etc.).
+This guide details the specific environment variables required for **Development (Localhost)** vs **Production (Vercel/Fly.io)**.
 
 > [!IMPORTANT]
-> **Source of Truth**: This document reflects the *actual* code defaults found in the repository.
-> **Security**: Never check in `.env` files. Use your hosting provider's Secrets Management.
+> **Source of Truth**: These variables have been audited against the codebase (`src/lib/env.ts` and usage).
+> **Consistency**: Ensure URLs match exactly (no trailing slashes, correct HTTPS).
 
-## 1. Global Security & Keys
-**Critical**: The authentication system uses RSA keys.
--   **Local**: Keys are stored at `./keys/`.
--   **Production**: You **MUST** inject these via Environment Variables or volume mounts.
-
-## 2. Frontend Applications
-
-> [!TIP]
-> **Chicken & Egg Problem**: Since you haven't deployed the backend yet, the frontend won't have a real API to talk to.
-> Use these **Bootstrap Values** for your *very first* deploy to Vercel just to get the build green.
->
-> ### Bootstrap: Plaqode Web (`apps/plaqode-web`)
-> | Variable Name | Value |
-> | :--- | :--- |
-> | `NEXT_PUBLIC_APP_URL` | `https://[PROJECT-NAME].vercel.app` (Your Vercel URL) |
-> | `NEXT_PUBLIC_QRSTUDIO_API_URL` | `https://temp.fly.dev` |
-> | `NEXT_PUBLIC_AUTH_SERVICE_URL` | `https://temp.fly.dev` |
-> | `NEXT_PUBLIC_CARDIFY_URL` | `https://cardify-temp.vercel.app` |
-> | `NEXT_PUBLIC_QRSTUDIO_URL` | `https://qrstudio-temp.vercel.app` |
-> | `AUTH_SERVICE_INTERNAL_URL` | `https://temp.fly.dev` |
-> | `COOKIE_DOMAIN` | `.vercel.app` |
-> | `NEXT_PUBLIC_ALLOWED_REDIRECT_HOSTS` | `plaqode.vercel.app,cardify.vercel.app,qrstudio-web.vercel.app` |
->
-> ### Bootstrap: Creator App (`apps/qrstudio-web`)
-> | Variable Name | Value |
-> | :--- | :--- |
-> | `NEXT_PUBLIC_QRSTUDIO_API_URL` | `https://temp.fly.dev` |
-> | `NEXT_PUBLIC_AUTH_SERVICE_URL` | `https://temp.fly.dev` |
-> | `NEXT_PUBLIC_PLATFORM_URL` | `https://[PLAQODE-WEB-URL].vercel.app` (From Step 1) |
-> | `NEXT_PUBLIC_QRSTUDIO_URL` | `https://[PROJECT-NAME].vercel.app` (Your Vercel URL) |
-> | `NEXT_PUBLIC_GA_ID` | `""` |
->
-> ### Bootstrap: Cardify (`apps/cardify`)
-> ⚠️ **Critical**: Cardify build requires a real `DATABASE_URL` to generate admin pages.
-> | Variable Name | Value |
-> | :--- | :--- |
-> | `NEXT_PUBLIC_APP_URL` | `https://[PROJECT-NAME].vercel.app` (Your Vercel URL) |
-> | `NEXT_PUBLIC_PLATFORM_URL` | `https://[PLAQODE-WEB-URL].vercel.app` (From Step 1) |
-> | `NEXT_PUBLIC_AUTH_SERVICE_URL` | `https://temp.fly.dev` |
-> | `DATABASE_URL` | `postgresql://...` (Real Neon Connection String) |
-> | `JWT_SECRET` | `temp_secret_123` |
-
+## 1. Frontend Applications (Vercel)
 
 ### A. Plaqode Web (`apps/plaqode-web`)
 **Port**: `3000`
-**Deployment**: Vercel
 
-| Variable Name | Local Value | Production Example | Description |
+| Variable Name | Localhost Value | Production Value (Reference) | Description |
 | :--- | :--- | :--- | :--- |
-| `NEXT_PUBLIC_APP_URL` | `http://localhost:3000` | `https://plaqode.com` | Main URL. |
-| `NEXT_PUBLIC_QRSTUDIO_API_URL` | `http://localhost:3005` | `https://api.plaqode.com` | Backend API URL. |
-| `NEXT_PUBLIC_AUTH_SERVICE_URL` | `http://localhost:3001` | `https://auth.plaqode.com` | Auth Service URL (Frontend fetch). |
-| `NEXT_PUBLIC_CARDIFY_URL` | `http://localhost:3002` | `https://cardify.plaqode.com` | Link to Cardify App. |
-| `NEXT_PUBLIC_QRSTUDIO_URL` | `http://localhost:3001` | `https://create.plaqode.com` | Link to Creator App. |
-| `AUTH_SERVICE_INTERNAL_URL` | `http://localhost:3001` | `http://plaqode-auth.internal:3003` | Server-side API calls (Docker/Internal). |
-| `COOKIE_DOMAIN` | `localhost` | `.plaqode.com` | Root domain for cookie sharing. |
-| `NEXT_PUBLIC_GA_ID` | `""` | `G-XXXXXXXX` | Google Analytics ID. |
-| `NEXT_PUBLIC_ALLOWED_REDIRECT_HOSTS` | *(Optional)* | `another.plaqode.com` | Extra allowed redirect domains. |
-| `RESEND_API_KEY` | `re_...` | `re_...` | For server-side contact form. |
+| `NEXT_PUBLIC_APP_URL` | `http://localhost:3000` | `https://plaqode-platform-plaqode-web.vercel.app` | Main Platform URL. |
+| `NEXT_PUBLIC_AUTH_SERVICE_URL` | `http://localhost:3001` | `https://plaqode-auth-v1.fly.dev` | Auth API. |
+| `NEXT_PUBLIC_QRSTUDIO_API_URL` | `http://localhost:3005` | `https://plaqode-api-v1.fly.dev` | QR Backend API. |
+| `NEXT_PUBLIC_QRSTUDIO_URL` | `http://localhost:3001` | `https://plaqode-platform-qrstudio-web.vercel.app` | Creator App URL. |
+| `NEXT_PUBLIC_CARDIFY_URL` | `http://localhost:3002` | `https://plaqode-platform-cardify.vercel.app` | Cardify App URL. |
+| `AUTH_SERVICE_INTERNAL_URL` | `http://localhost:3001` | `https://plaqode-auth-v1.fly.dev` | Server-to-Server Auth URL. |
+| `NEXT_PUBLIC_ALLOWED_REDIRECT_HOSTS` | `localhost:3000,localhost:3001,localhost:3002` | `plaqode-platform-plaqode-web.vercel.app, plaqode-platform-cardify.vercel.app, plaqode-platform-qrstudio-web.vercel.app` | Security Allowlist. |
+| `COOKIE_DOMAIN` | `localhost` | `.vercel.app` (or custom `.plaqode.com`) | **Critical**: Must start with dot for subdomains. |
+| `RESEND_API_KEY` | `re_...` | `re_...` (Your Real Key) | Contact Form Email. |
+| `NEXT_PUBLIC_GA_ID` | `""` | `""` | Google Analytics (Optional). |
 
 ### B. Creator App (`apps/qrstudio-web`)
 **Port**: `3001`
-**Deployment**: Vercel
 
-| Variable Name | Local Value | Production Example | Description |
+| Variable Name | Localhost Value | Production Value (Reference) | Description |
 | :--- | :--- | :--- | :--- |
-| `NEXT_PUBLIC_QRSTUDIO_URL` | `http://localhost:3001` | `https://create.plaqode.com` | App URL. |
-| `NEXT_PUBLIC_PLATFORM_URL` | `http://localhost:3000` | `https://plaqode.com` | Link back to main platform. |
-| `NEXT_PUBLIC_AUTH_SERVICE_URL` | `http://localhost:3003` | `https://auth.plaqode.com` | Auth Service URL. |
-| `NEXT_PUBLIC_QRSTUDIO_API_URL` | `http://localhost:3005` | `https://api.plaqode.com` | Backend QR API URL. |
-| `NEXT_PUBLIC_GA_ID` | `""` | `G-XXXXXXXX` | Google Analytics ID. |
+| `NEXT_PUBLIC_QRSTUDIO_URL` | `http://localhost:3001` | `https://plaqode-platform-qrstudio-web.vercel.app` | This App URL. |
+| `NEXT_PUBLIC_PLATFORM_URL` | `http://localhost:3000` | `https://plaqode-platform-plaqode-web.vercel.app` | Main Platform Link. |
+| `NEXT_PUBLIC_AUTH_SERVICE_URL` | `http://localhost:3003` | `https://plaqode-auth-v1.fly.dev` | Auth API. |
+| `NEXT_PUBLIC_QRSTUDIO_API_URL` | `http://localhost:3005` | `https://plaqode-api-v1.fly.dev` | QR Backend API. |
+| `NEXT_PUBLIC_GA_ID` | `""` | `""` | Google Analytics. |
 
 ### C. Cardify (`apps/cardify`)
 **Port**: `3002`
-**Deployment**: Vercel
 
-| Variable Name | Local Value | Production Example | Description |
+> [!WARNING]
+> **URL Consistency Flag**: Your config used `plaqode.com` for `NEXT_PUBLIC_APP_URL` but `vercel.app` elsewhere. The table below uses `vercel.app` to match the other apps for consistency, assuming no custom domain is active yet. If you HAVE set up `cardify.plaqode.com`, use that instead.
+
+| Variable Name | Localhost Value | Production Value (Reference) | Description |
 | :--- | :--- | :--- | :--- |
-| `NEXT_PUBLIC_APP_URL` | `http://localhost:3002` | `https://cardify.plaqode.com` | App URL. |
-| `NEXT_PUBLIC_PLATFORM_URL` | `http://localhost:3000` | `https://plaqode.com` | Link back to main platform. |
-| `NEXT_PUBLIC_AUTH_SERVICE_URL` | `http://localhost:3003` | `https://auth.plaqode.com` | Auth Service URL. |
-| `DATABASE_URL` | `postgresql://...` | `postgresql://...` | DB Connection. |
-| `PEXELS_API_KEY` | *(Optional)* | `563492...` | For Image Stock Search. |
-| `JWT_SECRET` | `secret` | `complex_string` | Session validation. |
+| `NEXT_PUBLIC_APP_URL` | `http://localhost:3002` | `https://plaqode-platform-cardify.vercel.app` | This App URL. |
+| `NEXT_PUBLIC_PLATFORM_URL` | `http://localhost:3000` | `https://plaqode-platform-plaqode-web.vercel.app` | Main Platform Link. |
+| `NEXT_PUBLIC_AUTH_SERVICE_URL` | `http://localhost:3003` | `https://plaqode-auth-v1.fly.dev` | Auth API. |
+| `DATABASE_URL` | `postgresql://...` | `postgresql://...` (Neon DB) | **Critical**: Required for Build. |
+| `JWT_SECRET` | `secret` | `temp_secret_123` | Session Encryption. |
 
 ---
 
-## 3. Backend Services
+## 2. Backend Services (Fly.io)
 
 ### A. Auth Service (`apps/plaqode-auth`)
-**Port**: `3003` (Default in code) or `4000` (Suggested in Docs)
-**Deployment**: Fly.io / Railway
+**Service**: `plaqode-auth-v1`
 
-| Variable Name | Local Value | Production Example | Description |
+| Variable Name | Localhost Value | Production Value | Description |
 | :--- | :--- | :--- | :--- |
-| `PORT` | `3003` | `3003` | Service port. |
-| `DATABASE_URL` | `postgresql://...` | `postgresql://...` | DB Connection. |
-| `JWT_PRIVATE_KEY_PATH` | `./keys/private.pem` | `/etc/secrets/private.pem` | **CRITICAL**: Private Key. |
-| `JWT_PUBLIC_KEY_PATH` | `./keys/public.pem` | `/etc/secrets/public.pem` | **CRITICAL**: Public Key. |
-| `COOKIE_DOMAIN` | `.plaqode.com` | `.plaqode.com` | Cookie Domain (must start with dot). |
-| `COOKIE_SECURE` | `false` | `true` | Must be true for HTTPS. |
-| `ALLOWED_ORIGINS` | `http://localhost:3000` | `https://plaqode.com,https://create.plaqode.com` | CORS Whitelist. |
-| `RESEND_API_KEY` | `re_...` | `re_...` | Email sending key. |
-| `WEB_URL` | `http://localhost:3000` | `https://plaqode.com` | Base URL for email links. |
-| `EMAIL_FROM` | `onboarding@resend.dev` | `noreply@plaqode.com` | Sender address. |
-| `RATE_LIMIT_MAX` | `100` | `1000` | Requests per window. |
+| `PORT` | `3003` | `3003` | Internal Port. |
+| `WEB_URL` | `http://localhost:3000` | `https://plaqode-platform-plaqode-web.vercel.app` | Redirect base for emails. |
+| `ALLOWED_ORIGINS` | `http://localhost:3000` | `https://plaqode-platform-plaqode-web.vercel.app,https://plaqode-platform-qrstudio-web.vercel.app` | CORS. |
+| `COOKIE_DOMAIN` | `localhost` | `.vercel.app` | Session Cookie Domain. |
+| `JWT_PRIVATE_KEY_PATH` | `./keys/private.pem` | `/etc/secrets/private.pem` | Auth Key. |
+| `JWT_PUBLIC_KEY_PATH` | `./keys/public.pem` | `/etc/secrets/public.pem` | Auth Key. |
 
 ### B. QR Studio API (`apps/qrstudio-api`)
-**Port**: `3005` (Default in dev script) or `4001` (Suggested in Docs)
-**Deployment**: Fly.io / Railway
+**Service**: `plaqode-api-v1`
 
-| Variable Name | Local Value | Production Example | Description |
+| Variable Name | Localhost Value | Production Value | Description |
 | :--- | :--- | :--- | :--- |
-| `PORT` | `3005` | `3005` | Service port. |
-| `DATABASE_URL` | `postgresql://...` | `postgresql://...` | DB Connection. |
-| `JWT_PUBLIC_KEY_PATH` | `./keys/public.pem` | `/etc/secrets/public.pem` | For validating tokens. |
-| `ALLOWED_ORIGINS` | `http://localhost:3000` | `https://plaqode.com,https://create.plaqode.com` | CORS Whitelist. |
-| `FRONTEND_URL` | `http://localhost:3001` | `https://create.plaqode.com` | **CRITICAL**: Required for redirections/links. |
-| `JWT_PUBLIC_KEY` | *(Optional)* | `-----BEGIN PUBLIC KEY...` | Alternative to file path (lazy load). |
-
----
-
-## 4. Pre-Flight Checklist
-- [x] **Review Ports**: Ensure your Production Environment variables (`PORT`) match what you expose in your `Dockerfile` or Cloud Config.
-- [x] **Generate Keys**: Use `openssl` to generate fresh RSA keys for production.
-- [x] **Set Origins**: Double check `ALLOWED_ORIGINS` includes *all* your Vercel domains.
-- [x] **Set Frontend Config**: Ensure `qrstudio-api` has `FRONTEND_URL` set to avoid crashes.
+| `PORT` | `3005` | `3005` | Internal Port. |
+| `FRONTEND_URL` | `http://localhost:3001` | `https://plaqode-platform-qrstudio-web.vercel.app` | For redirects. |
+| `ALLOWED_ORIGINS` | `http://localhost:3000` | `https://plaqode-platform-plaqode-web.vercel.app,https://plaqode-platform-qrstudio-web.vercel.app` | CORS. |
+| `JWT_PUBLIC_KEY` | *(Optional)* | `-----BEGIN PUBLIC KEY...` | Injected Key. |
 

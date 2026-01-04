@@ -17,7 +17,9 @@
         "qrstudio-web:dev": "npm run dev --workspace=apps/qrstudio-web",
         "qrstudio-api:dev": "npm run dev --workspace=apps/qrstudio-api",
         "plaqode-web:dev": "npm run dev --workspace=apps/plaqode-web",
-        "plaqode-auth:dev": "npm run dev --workspace=apps/plaqode-auth"
+        "plaqode-auth:dev": "npm run dev --workspace=apps/plaqode-auth",
+        "deploy:auth": "fly deploy --config apps/plaqode-auth/fly.toml --dockerfile apps/plaqode-auth/Dockerfile",
+        "deploy:api": "fly deploy --config apps/qrstudio-api/fly.toml --dockerfile apps/qrstudio-api/Dockerfile"
     },
     "devDependencies": {
         "turbo": "^2.0.0",

@@ -12,6 +12,11 @@ const app = Fastify({
     },
 });
 
+// 1. Immediate Health Check (Zero dependencies)
+app.get('/health', async () => {
+    return { status: 'ok', timestamp: new Date().toISOString() };
+});
+
 console.log('🔒 CORS Allowed Origins:', config.allowedOrigins);
 console.log('🍪 Cookie Domain:', config.cookieDomain);
 
@@ -24,11 +29,6 @@ await app.register(cors, {
 
 await app.register(cookie);
 
-// Health check
-app.get('/health', async () => {
-    return { status: 'ok', timestamp: new Date().toISOString() };
-});
-
 // Register routes
 await authRoutes(app);
 await adminRoutes(app);
@@ -37,6 +37,7 @@ await app.register(designRoutes, { prefix: '/api' });
 // Start server
 const start = async () => {
     try {
+        // Listen on all interfaces (0.0.0.0) for Fly.io
         await app.listen({ port: config.port, host: '0.0.0.0' });
         console.log(`🚀 Auth service running on http://localhost:${config.port}`);
     } catch (err) {
