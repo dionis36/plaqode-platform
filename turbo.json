@@ -16,7 +16,8 @@
         "COOKIE_DOMAIN",
         "RESEND_API_KEY",
         "NEXT_PUBLIC_GA_ID",
-        "NEXT_PUBLIC_ALLOWED_REDIRECT_HOSTS"
+        "NEXT_PUBLIC_ALLOWED_REDIRECT_HOSTS",
+        "JWT_SECRET"
     ],
     "tasks": {
         "build": {
