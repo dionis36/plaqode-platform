@@ -34,6 +34,7 @@ export const useWizardStore = create<WizardState>()(persist((set) => ({
             categories: [], // Empty menu
             language: 'en'
         },
+        url_details: { destination_url: '', title: '', description: '', logo: '' },
         // Shared Styles Default
         styles: { primary_color: '#2563EB', secondary_color: '#EFF6FF' }, // Neutral Blue
 
@@ -90,6 +91,7 @@ export const useWizardStore = create<WizardState>()(persist((set) => ({
                 categories: [],
                 language: 'en'
             },
+            url_details: { destination_url: '', title: '', description: '', logo: '' },
             styles: { primary_color: '#2563EB', secondary_color: '#EFF6FF' },
             // Add other reset defaults to match structure if needed, but these are the critical ones for conflict
             personal_info: { first_name: '', last_name: '' },

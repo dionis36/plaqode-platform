@@ -21,7 +21,11 @@ export const useTemplateValidation = (type: string) => {
             if (payload.url_details?.destination_url?.trim()) {
                 // Basic URL check
                 try {
-                    new URL(payload.url_details.destination_url);
+                    let urlString = payload.url_details.destination_url;
+                    if (!/^https?:\/\//i.test(urlString)) {
+                        urlString = 'https://' + urlString;
+                    }
+                    new URL(urlString);
                     isValid = true;
                 } catch {
                     errors.push('Invalid URL');
