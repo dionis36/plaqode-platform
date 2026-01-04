@@ -28,22 +28,14 @@ export const useWizardStore = create<WizardState>()(persist((set) => ({
     shortcode: null,
     qrName: '',
     payload: {
-        // Default structure for Menu
+        // Default structure must match, but empty strings
         restaurant_info: { name: '', description: '' },
         content: {
-            categories: [
-                {
-                    id: 'cat_1',
-                    name: 'Starters',
-                    items: [
-                        { id: 'item_1', name: 'Garlic Bread', description: 'Toasted french baguette with garlic butter', price: 6000, currency: 'TSH', available: true }
-                    ]
-                }
-            ],
+            categories: [], // Empty menu
             language: 'en'
         },
         // Shared Styles Default
-        styles: { primary_color: '#f97316', secondary_color: '#fff7ed' },
+        styles: { primary_color: '#2563EB', secondary_color: '#EFF6FF' }, // Neutral Blue
 
         // Default structure for VCard
         personal_info: { first_name: '', last_name: '' },
@@ -95,18 +87,16 @@ export const useWizardStore = create<WizardState>()(persist((set) => ({
         payload: {
             restaurant_info: { name: '', description: '' },
             content: {
-                categories: [
-                    {
-                        id: 'cat_1',
-                        name: 'Starters',
-                        items: [
-                            { id: 'item_1', name: 'Garlic Bread', description: 'Toasted french baguette with garlic butter', price: 6000, currency: 'TSH', available: true }
-                        ]
-                    }
-                ],
+                categories: [],
                 language: 'en'
             },
-            styles: { primary_color: '#f97316', secondary_color: '#fff7ed' }
+            styles: { primary_color: '#2563EB', secondary_color: '#EFF6FF' },
+            // Add other reset defaults to match structure if needed, but these are the critical ones for conflict
+            personal_info: { first_name: '', last_name: '' },
+            contact_details: { phone: '', email: '', website: '' },
+            company_details: { company_name: '', job_title: '' },
+            address: { street: '', city: '', country: '' },
+            social_networks: []
         },
         design: {
             dots: { color: '#000000', style: 'square' },
