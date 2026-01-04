@@ -32,6 +32,7 @@ WORKDIR /app
 COPY --from=builder /app/apps/qrstudio-api/dist ./dist
 COPY --from=builder /app/apps/qrstudio-api/src/generated ./dist/generated
 COPY --from=builder /app/apps/qrstudio-api/package.json ./package.json
+COPY --from=builder /app/apps/qrstudio-api/keys ./keys
 
 # 2. Copy the Clean Production Node Modules from Deps
 COPY --from=deps /app/node_modules ./node_modules
