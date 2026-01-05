@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import { useEffect, useState } from 'react';
 import { qrApi } from '@/lib/api-client';
 import Link from 'next/link';
