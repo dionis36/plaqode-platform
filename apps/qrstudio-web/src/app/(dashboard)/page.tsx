@@ -15,7 +15,7 @@ export default function DashboardPage() {
             {/* Header */}
             <div className="mb-8">
                 <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-2">
-                    QR Studio Dashboard
+                    QR Studio DashboardS
                 </h1>
                 <p className="text-slate-600 text-lg">
                     Create, manage, and track your QR codes
