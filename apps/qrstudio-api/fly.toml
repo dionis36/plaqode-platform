@@ -19,10 +19,10 @@ primary_region = 'lhr'
   processes = ['app']
 
 [[http_service.checks]]
-  grace_period = "10s"
+  grace_period = "30s"
   interval = "10s"
   method = "GET"
-  timeout = "2s"
+  timeout = "5s"
   path = "/health"
 
 [[vm]]
