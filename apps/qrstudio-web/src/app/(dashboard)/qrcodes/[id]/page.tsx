@@ -7,7 +7,7 @@ import { ArrowLeft, Download, ExternalLink, Link as LinkIcon, Pencil, Trash2, Qr
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { env } from '@/lib/env';
 import { SEO } from '@/components/common/SEO';
-import QRCodeStyling from 'qr-code-styling';
+import type QRCodeStyling from 'qr-code-styling';
 import { QrContentPreviewModal } from '@/components/common/QrContentPreviewModal';
 import { toast } from "@plaqode-platform/ui";
 
@@ -57,7 +57,7 @@ export default function QrCodeDetailPage({ params }: { params: { id: string } })
             const response = await qrApi.getById(params.id);
             if (response.success && response.data) {
                 setQrCode(response.data);
-                generateQrCode(response.data);
+                await generateQrCode(response.data);
             }
         } catch (error) {
             console.error('Failed to load QR code:', error);
@@ -66,9 +66,10 @@ export default function QrCodeDetailPage({ params }: { params: { id: string } })
         }
     }
 
-    function generateQrCode(data: QrCodeDetail) {
+    async function generateQrCode(data: QrCodeDetail) {
+        const QRCodeStyling = (await import('qr-code-styling')).default;
         const baseUrl = process.env.NEXT_PUBLIC_PLATFORM_URL || 'https://plaqode.com';
-        const qrUrl = `${baseUrl} /q/${data.shortcode} `;
+        const qrUrl = `${baseUrl}/q/${data.shortcode}`;
 
         const qr = new QRCodeStyling({
             width: 300,

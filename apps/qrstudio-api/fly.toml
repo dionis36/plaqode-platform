@@ -6,21 +6,20 @@
 app = 'plaqode-api-v1'
 primary_region = 'lhr'
 
-
-[deploy]
-  release_command = 'npx prisma migrate deploy'
+[env]
+  ALLOWED_ORIGINS = "https://plaqode.com,https://app.plaqode.com,https://card.plaqode.com,https://www.plaqode.com,http://localhost:3000,http://localhost:3001"
 
 [http_service]
   internal_port = 3005
   force_https = true
-  auto_stop_machines = 'stop'
+  auto_stop_machines = false
   auto_start_machines = true
-  min_machines_running = 0
+  min_machines_running = 1
   processes = ['app']
 
 [[http_service.checks]]
-  grace_period = "30s"
-  interval = "10s"
+  grace_period = "45s"
+  interval = "15s"
   method = "GET"
   timeout = "5s"
   path = "/health"

@@ -28,7 +28,7 @@ async function start() {
         // Register cookie plugin
         await app.register(require('@fastify/cookie'));
 
-        // 2. Register Routes & DB Logic
+        // 2. Register Routes & DB Logic (Async loading)
         console.log('⏳ Loading routes...');
         await app.register(routes);
         console.log(`✅ Routes registered successfully`);
