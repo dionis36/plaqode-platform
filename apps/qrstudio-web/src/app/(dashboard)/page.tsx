@@ -1,21 +1,19 @@
-'use client';
-
 import Link from 'next/link';
 import { QrCode, BarChart2, Plus, Grid3x3 } from 'lucide-react';
-import { SEO } from '@/components/common/SEO';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Dashboard | QR Studio',
+    description: 'Manage your QR codes and analytics',
+};
 
 export default function DashboardPage() {
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <SEO
-                title="Dashboard | QR Studio"
-                description="Manage your QR codes and analytics"
-            />
-
             {/* Header */}
             <div className="mb-8">
                 <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-2">
-                    QR Studio DashboardS
+                    QR Studio Dashboard
                 </h1>
                 <p className="text-slate-600 text-lg">
                     Create, manage, and track your QR codes
