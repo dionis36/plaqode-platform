@@ -16,14 +16,15 @@ const nextConfig = {
             },
         ],
     },
-    async rewrites() {
-        return [
-            {
-                source: '/q/:path*',
-                destination: `${process.env.NEXT_PUBLIC_QRSTUDIO_API_URL}/:path*`,
-            },
-        ];
-    },
+    // rewrites removed
+    // async rewrites() {
+    //     return [
+    //         {
+    //             source: '/q/:path*',
+    //             destination: `${process.env.NEXT_PUBLIC_QRSTUDIO_API_URL}/:path*`,
+    //         },
+    //     ];
+    // },
 };
 
 export default nextConfig;

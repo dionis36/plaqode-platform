@@ -105,7 +105,7 @@ export function RecentQrWidget({ qrCodes, loading, onDelete, onPreview }: Recent
                                             <Smartphone className="w-4 h-4" />
                                         </button>
                                         <a
-                                            href={`${qrStudioUrl}/qrcodes/${qr.id}/analytics`}
+                                            href={`${qrStudioUrl}/analytics?id=${qr.id}`}
                                             className="flex items-center justify-center p-2.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors flex-1"
                                             title="Analytics"
                                         >
@@ -183,7 +183,7 @@ export function RecentQrWidget({ qrCodes, loading, onDelete, onPreview }: Recent
                                                         <Smartphone className="w-4 h-4" />
                                                     </button>
                                                     <a
-                                                        href={`${qrStudioUrl}/qrcodes/${qr.id}/analytics`}
+                                                        href={`${qrStudioUrl}/analytics?id=${qr.id}`}
                                                         className="p-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
                                                         title="Analytics"
                                                     >
