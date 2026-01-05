@@ -228,7 +228,7 @@ export default function QrCodesPage() {
                             {qrCodes.map((qr) => (
                                 <div
                                     key={qr.id}
-                                    onClick={() => navigateToExternal(`/qrcodes/${qr.id}`)}
+                                    onClick={() => navigateToExternal(`/details?id=${qr.id}`)}
                                     className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 hover:shadow-md transition-shadow cursor-pointer"
                                 >
                                     <div className="flex items-start justify-between mb-3">
@@ -308,7 +308,7 @@ export default function QrCodesPage() {
                                     {qrCodes.map((qr) => (
                                         <tr
                                             key={qr.id}
-                                            onClick={() => navigateToExternal(`/qrcodes/${qr.id}`)}
+                                            onClick={() => navigateToExternal(`/details?id=${qr.id}`)}
                                             className="hover:bg-slate-50 transition-colors cursor-pointer"
                                         >
                                             <td className="px-6 py-4">
