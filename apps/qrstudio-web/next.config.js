@@ -2,8 +2,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 
-    // We trust our CI for type/lint checks, so we can skip them here to speed up deployment
-    eslint: { ignoreDuringBuilds: true },
+    // Fix for Vercel Monorepo deployment
+    output: 'standalone',
+    transpilePackages: ['@plaqode-platform/ui'],
     typescript: { ignoreBuildErrors: true }
 };
 
