@@ -1,5 +1,7 @@
 'use client';
 
+// Force Deploy: Fix 500 error on dynamic routes
+
 import type { Metadata } from "next";
 import { Inter, Merriweather } from "next/font/google";
 import { HelmetProvider } from 'react-helmet-async';
