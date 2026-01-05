@@ -68,7 +68,7 @@ export function Sidebar({ isOpen, setIsOpen, isMobile, onCloseMobile }: SidebarP
         },
     ];
 
-    if (user?.roles.includes('admin') || user?.roles.includes('superadmin')) {
+    if (user?.roles?.includes('admin') || user?.roles?.includes('superadmin')) {
         navItems.push({
             label: 'Admin Panel',
             href: '/app/admin',

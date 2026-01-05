@@ -120,7 +120,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(data.user);
 
         // Auto-login after signup
-        // Auto-login after signup
         // Validate and use redirect URL if provided
         if (redirectUrl && isValidRedirect(redirectUrl)) {
             window.location.href = decodeURIComponent(redirectUrl);
