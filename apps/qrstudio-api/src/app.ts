@@ -22,7 +22,7 @@ async function start() {
         await app.register(cors, {
             origin: config.allowedOrigins, // Explicit whitelist from env
             credentials: true,
-            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
         });
 
         // Register cookie plugin

@@ -166,9 +166,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
     };
 
-    const isSuperAdmin = user?.roles.includes('superadmin') || false;
-    const isAdmin = user?.roles.includes('admin') || isSuperAdmin;
-    const hasProduct = (product: string) => user?.products.includes(product) || false;
+    const isSuperAdmin = user?.roles?.includes('superadmin') || false;
+    const isAdmin = user?.roles?.includes('admin') || isSuperAdmin;
+    const hasProduct = (product: string) => user?.products?.includes(product) || false;
 
     return (
         <AuthContext.Provider value={{ user, loading, login, signup, logout, isAdmin, isSuperAdmin, hasProduct, resetPassword, confirmPasswordReset }}>

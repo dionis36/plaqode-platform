@@ -286,7 +286,7 @@ export function QrPageClient({ id }: QrPageClientProps) {
                             </button>
 
                             <Link
-                                href={`/ qrcodes / ${qrCode.id}/analytics`}
+                                href={`/analytics?id=${qrCode.id}`}
                                 className="flex items-center justify-center p-2.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors"
                                 title="Analytics"
                             >
