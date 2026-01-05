@@ -40,9 +40,15 @@ export async function authMiddleware(
     reply: FastifyReply
 ) {
     try {
-        // Get access token from cookie (using type assertion for @fastify/cookie)
-        // IMPORTANT: Platform sets cookie as 'access_token' not 'accessToken'!
-        const accessToken = (request as any).cookies?.access_token;
+        // Get access token from cookie OR Authorization header
+        let accessToken = (request as any).cookies?.access_token;
+
+        if (!accessToken) {
+            const authHeader = request.headers.authorization;
+            if (authHeader && authHeader.startsWith('Bearer ')) {
+                accessToken = authHeader.substring(7);
+            }
+        }
 
         if (!accessToken) {
             return reply.code(401).send({
@@ -81,7 +87,14 @@ export async function optionalAuthMiddleware(
     reply: FastifyReply
 ) {
     try {
-        const accessToken = (request as any).cookies?.access_token;
+        let accessToken = (request as any).cookies?.access_token;
+
+        if (!accessToken) {
+            const authHeader = request.headers.authorization;
+            if (authHeader && authHeader.startsWith('Bearer ')) {
+                accessToken = authHeader.substring(7);
+            }
+        }
 
         if (accessToken) {
             const decoded = jwt.verify(accessToken, getPublicKey(), {
