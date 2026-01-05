@@ -3,19 +3,24 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 
-export default function DebugFullPage({ params }: { params: { id: string } }) {
+export default function DebugFullPage() {
+    const params = useParams();
     const [status, setStatus] = useState('Loading...');
     const [data, setData] = useState<any>(null);
 
     useEffect(() => {
-        loadData();
-    }, []);
+        if (params?.id) {
+            loadData(params.id as string);
+        } else {
+            setStatus('No ID param found');
+        }
+    }, [params]);
 
-    async function loadData() {
+    async function loadData(id: string) {
         try {
             setStatus('Fetching API...');
             const baseUrl = 'https://api.plaqode.com';
-            const res = await fetch(`${baseUrl}/qrcodes/${params.id}`).then(r => r.json());
+            const res = await fetch(`${baseUrl}/qrcodes/${id}`).then(r => r.json());
             if (res.success) {
                 setData(res.data);
                 setStatus('Success');
@@ -23,6 +28,7 @@ export default function DebugFullPage({ params }: { params: { id: string } }) {
                 setStatus('API Error: ' + (res.error || 'Unknown'));
             }
         } catch (err: any) {
+            console.error('Fetch error:', err);
             setStatus('Fetch Exception: ' + err.message);
         }
     }
