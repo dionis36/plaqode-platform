@@ -1,30 +1,26 @@
+'use client';
+
+import { Suspense, useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
-import { Metadata } from 'next';
 
-export const metadata: Metadata = {
-    title: 'QR Code Details | QR Studio',
-    description: 'View and manage your QR code',
-};
+// Pure Client Component Wrapper
+function DetailsContent() {
+    const searchParams = useSearchParams();
+    const id = searchParams.get('id');
+    const [mounted, setMounted] = useState(false);
 
-// Reuse the working client component
-const QrPageClient = dynamic(
-    () => import('../qrcodes/[id]/client').then((mod) => mod.QrPageClient),
-    {
-        ssr: false,
-        loading: () => (
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    if (!mounted) {
+        return (
             <div className="flex items-center justify-center min-h-screen">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
             </div>
-        )
+        );
     }
-);
-
-export default function DetailsPage({
-    searchParams,
-}: {
-    searchParams: { [key: string]: string | string[] | undefined };
-}) {
-    const id = typeof searchParams.id === 'string' ? searchParams.id : null;
 
     if (!id) {
         return (
@@ -35,5 +31,23 @@ export default function DetailsPage({
         );
     }
 
+    // Dynamic import inside the client component to ensure no server trace
+    const QrPageClient = dynamic(
+        () => import('../qrcodes/[id]/client').then((mod) => mod.QrPageClient),
+        { ssr: false }
+    );
+
     return <QrPageClient id={id} />;
+}
+
+export default function DetailsPage() {
+    return (
+        <Suspense fallback={
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            </div>
+        }>
+            <DetailsContent />
+        </Suspense>
+    );
 }
