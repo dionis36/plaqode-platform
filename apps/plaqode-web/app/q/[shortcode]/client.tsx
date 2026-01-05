@@ -4,11 +4,8 @@ import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { env } from '@/lib/env';
 
-// Import preview components dynamically to avoid hydration issues and reduce bundle size
-const WifiPreview = dynamic(() => import('@/components/preview/WifiPreview').then(mod => mod.WifiPreview));
-const VCardPreview = dynamic(() => import('@/components/preview/VCardPreview').then(mod => mod.VCardPreview));
-const MenuPreview = dynamic(() => import('@/components/preview/MenuPreview').then(mod => mod.MenuPreview)); // Assuming this exists or using generic
-const UrlPreview = dynamic(() => import('@/components/preview/UrlPreview').then(mod => mod.UrlPreview));
+// Preview components handled via inline generic render to avoid dependency duplication
+// const WifiPreview = dynamic(...) - removed
 
 // If you don't have all preview components ready in plaqode-web, you might need to copy them or create a generic one
 // For now, I will use a Generic Viewer that tries to render based on type
