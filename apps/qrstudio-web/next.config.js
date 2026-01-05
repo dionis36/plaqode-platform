@@ -2,8 +2,6 @@ const path = require('path');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    // Fix for Vercel "ENOENT: no such file or directory" trace error
-    outputFileTracing: false,
 
     // We trust our CI for type/lint checks, so we can skip them here to speed up deployment
     eslint: { ignoreDuringBuilds: true },
