@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { qrApi } from '@/lib/api-client';
 import { useParams } from 'next/navigation';
 
 export default function DebugFullPage({ params }: { params: { id: string } }) {
@@ -15,7 +14,8 @@ export default function DebugFullPage({ params }: { params: { id: string } }) {
     async function loadData() {
         try {
             setStatus('Fetching API...');
-            const res = await qrApi.getById(params.id);
+            const baseUrl = 'https://api.plaqode.com';
+            const res = await fetch(`${baseUrl}/qrcodes/${params.id}`).then(r => r.json());
             if (res.success) {
                 setData(res.data);
                 setStatus('Success');
