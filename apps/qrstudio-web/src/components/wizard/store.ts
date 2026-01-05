@@ -112,6 +112,7 @@ export const useWizardStore = create<WizardState>()(persist((set) => ({
     }),
 }), {
     name: 'wizard-storage',
+    version: 1, // Increment to invalidate old cache with missing keys
     storage: createJSONStorage(() => {
         if (typeof window !== 'undefined') {
             return localStorage;
