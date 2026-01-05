@@ -1,0 +1,6 @@
+{
+    "framework": "nextjs",
+    "git": {
+        "ignoreCommand": "exit 1"
+    }
+}
