@@ -1,5 +1,7 @@
-import { GradientButton } from "@plaqode-platform/ui";
-import { Link, IdCard, Share2, Smartphone, Utensils, Wifi, FileText, ArrowRight, Contact } from "lucide-react";
+"use client";
+
+import { GradientButton, toast } from "@plaqode-platform/ui";
+import { IdCard, QrCode, Calendar } from "lucide-react";
 import ScrollReveal from "../ui/ScrollReveal";
 
 import { config } from "../../lib/config";
@@ -8,53 +10,46 @@ import { config } from "../../lib/config";
 const CARDIFY_URL = config.app.cardifyUrl;
 const QRSTUDIO_URL = config.app.qrstudioUrl;
 
-// Section 1 Data: The "Power 6" High-Value Verticals
-const solutions = [
+const services = [
     {
         icon: IdCard,
-        title: "Digital Business Cards",
-        desc: "Replace paper cards with dynamic identities. Share contact info, portfolios, and social links instantly with a single scan.",
-        cta: "Create Identity",
+        title: "Business Cards",
+        desc: "Design premium physical business cards in Cardify. Customize your layout, add QR codes, and export print-ready files instantly.",
+        cta: "Start Designing",
         href: `${CARDIFY_URL}/templates` // Deep link to Cardify
     },
     {
-        icon: Utensils,
-        title: "Smart Digital Menus",
-        desc: "Perfect for restaurants & cafes. Update items and prices instantly without re-printing QR codes. Contactless and efficient.",
-        cta: "Digitize Menu",
-        href: `${QRSTUDIO_URL}/create/menu`
+        icon: QrCode,
+        title: "QR Marketing Suite",
+        desc: "A complete toolkit for your business. Manage digital menus, WiFi access, app store links, and more from one dashboard.",
+        cta: "Explore Tools",
+        action: "scroll",
+        href: "#qr-tools-catalog"
     },
     {
-        icon: Contact,
-        title: "vCard Plus",
-        desc: "Share full contact details with a single scan. Save directly to phone contacts, including email, website, and address.",
-        cta: "Create vCard",
-        href: `${QRSTUDIO_URL}/create/vcard`
-    },
-    {
-        icon: Wifi,
-        title: "Instant WiFi Access",
-        desc: "Improve guest experience by eliminating complex passwords. One scan connects guests directly to your secure network.",
-        cta: "Create WiFi QR",
-        href: `${QRSTUDIO_URL}/create/wifi`
-    },
-    {
-        icon: Smartphone,
-        title: "App Store Growth",
-        desc: "Smart routing for your app. One QR code detects the user's device (iOS/Android) and directs them to the correct store.",
-        cta: "Boost Downloads",
-        href: `${QRSTUDIO_URL}/create/appstore`
-    },
-    {
-        icon: FileText,
-        title: "Document Distribution",
-        desc: "Securely share menus, whitepapers, and guides. Support for PDF, Docx, and Images with trackable scan analytics.",
-        cta: "Share Files",
-        href: `${QRSTUDIO_URL}/create/file`
+        icon: Calendar,
+        title: "Event Management",
+        desc: "Coming Soon. A powerful system to create, manage, and track events with integrated ticketing and guest management.",
+        cta: "Join Waitlist",
+        action: "toast"
+        // No href, effectively a button
     },
 ];
 
 export default function ServicesContent() {
+    const handleServiceClick = (e: React.MouseEvent, service: typeof services[0]) => {
+        if (service.action === 'toast') {
+            e.preventDefault();
+            toast.info("Event Management System is coming soon!");
+        } else if (service.action === 'scroll') {
+            e.preventDefault();
+            const element = document.getElementById('qr-tools-catalog');
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    };
+
     return (
         <div className="w-full">
             {/* 1. Services Section (Dark Mode with Decor) */}
@@ -68,25 +63,35 @@ export default function ServicesContent() {
                 <div className="relative z-10 max-w-[1200px] mx-auto">
                     {/* Intro */}
                     <ScrollReveal variant="fade-up" className="text-center mb-16 max-w-4xl mx-auto">
-                        <p className="text-lg md:text-xl text-light/80 leading-relaxed">
-                            Discover innovative QR code solutions that simplify data, processes, and tasks across various industries and applications. We help you create customized digital experiences that drive growth and efficiency.
+                        <p className="text-lg md:text-xl text-light/80 leading-relaxed font-sans">
+                            Discover innovative digital solutions that simplify connections, marketing, and management across your business.
                         </p>
                     </ScrollReveal>
 
                     {/* Solutions Grid */}
+                    {/* Desktop: 3 cols. Tablet: 2 cols, 3rd centered below. Mobile: 1 col. */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {solutions.map((item, idx) => (
-                            <ScrollReveal key={idx} variant="fade-up" delay={idx * 0.05}>
-                                <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-2xl hover:bg-white/10 transition-colors group h-full">
+                        {services.map((item, idx) => (
+                            <ScrollReveal
+                                key={idx}
+                                variant="fade-up"
+                                delay={idx * 0.1}
+                                className={`h-full ${idx === 2 ? 'md:col-span-2 lg:col-span-1 border-none' : ''}`}
+                            >
+                                <div className={`bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-2xl hover:bg-white/10 transition-colors group h-full flex flex-col ${idx === 2 ? 'md:w-1/2 md:mx-auto lg:w-full lg:mx-0' : ''}`}>
                                     <div className="w-12 h-12 rounded-full bg-gradient-to-br from-secondary to-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                                         <item.icon className="text-white w-6 h-6" />
                                     </div>
                                     <h3 className="text-xl font-bold font-merriweather mb-4 text-white">{item.title}</h3>
-                                    <p className="text-light/70 mb-8 leading-relaxed">
+                                    <p className="text-light/70 mb-8 leading-relaxed flex-1">
                                         {item.desc}
                                     </p>
-                                    <div className="mt-auto">
-                                        <GradientButton href={item.href} text={item.cta} size="md" />
+                                    <div className="mt-auto" onClick={(e) => handleServiceClick(e, item)}>
+                                        <GradientButton
+                                            href={item.href}
+                                            text={item.cta}
+                                            size="md"
+                                        />
                                     </div>
                                 </div>
                             </ScrollReveal>
