@@ -11,7 +11,9 @@ export default function DashboardLayout({
             <ScrollToTop />
             {/* Platform navbar is in root layout - no custom navbar needed */}
             <main className="flex-1 flex flex-col pt-20">
-                {children}
+                <AuthGuard>
+                    {children}
+                </AuthGuard>
             </main>
         </div>
     );
