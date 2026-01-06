@@ -56,30 +56,33 @@ export function ViewerClient({ data }: ViewerClientProps) {
     // Components handle their own responsiveness, but we provide a wrapper 
     // to ensure full height and consistent background if needed
 
+    // Unwrap payload if it exists (standard backend response), otherwise use data as is (flat structure)
+    const contentData = data?.payload ? { ...data.payload, ...data } : data;
+
     const renderContent = () => {
         switch (type) {
             case 'wifi':
-                return <WifiPreview data={data} />;
+                return <WifiPreview data={contentData} />;
             case 'vcard':
-                return <VCardPreview data={data} />;
+                return <VCardPreview data={contentData} />;
             case 'url':
-                return <UrlPreview data={data} />;
+                return <UrlPreview data={contentData} />;
             case 'text':
-                return <TextPreview data={data} />;
+                return <TextPreview data={contentData} />;
             case 'appstore':
-                return <AppStorePreview data={data} />;
+                return <AppStorePreview data={contentData} />;
             case 'email':
-                return <EmailPreview data={data} />;
+                return <EmailPreview data={contentData} />;
             case 'event':
-                return <EventPreview data={data} />;
+                return <EventPreview data={contentData} />;
             case 'menu':
-                return <MenuPreview data={data} />;
+                return <MenuPreview data={contentData} />;
             case 'message':
-                return <MessagePreview data={data} />;
+                return <MessagePreview data={contentData} />;
             case 'file':
-                return <PDFPreview data={data} />;
+                return <PDFPreview data={contentData} />;
             case 'socialmedia':
-                return <SocialMediaPagePreview data={data} />;
+                return <SocialMediaPagePreview data={contentData} />;
             default:
                 // Fallback for unhandled types
                 return (
