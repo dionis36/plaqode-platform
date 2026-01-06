@@ -10,19 +10,37 @@ interface PageProps {
 }
 
 async function getQrData(shortcode: string) {
-    try {
-        const res = await fetch(`${env.NEXT_PUBLIC_QRSTUDIO_API_URL}/q/${shortcode}`, {
-            next: { revalidate: 0 } // No cache for real-time updates
-        });
+    const MAX_RETRIES = 3;
+    const INITIAL_DELAY = 800;
 
-        if (!res.ok) return null;
+    for (let i = 0; i < MAX_RETRIES; i++) {
+        try {
+            const res = await fetch(`${env.NEXT_PUBLIC_QRSTUDIO_API_URL}/q/${shortcode}`, {
+                next: { revalidate: 0 }, // No cache for real-time updates
+                signal: AbortSignal.timeout(8000) // 8s timeout per request
+            });
 
-        const json = await res.json();
-        return json.success ? json.data : null;
-    } catch (error) {
-        console.error('Failed to fetch QR data:', error);
-        return null;
+            if (res.ok) {
+                const json = await res.json();
+                return json.success ? json.data : null;
+            }
+
+            // If 404, return null immediately (resource not found), don't retry
+            if (res.status === 404) return null;
+
+            // For 5xx errors or other non-ok statuses, iterate to retry
+            console.warn(`Attempt ${i + 1}: Fetch failed with status ${res.status}`);
+        } catch (error) {
+            console.warn(`Attempt ${i + 1}: Fetch network error`, error);
+        }
+
+        // Wait before retry (backoff), but not after the last attempt
+        if (i < MAX_RETRIES - 1) {
+            await new Promise(resolve => setTimeout(resolve, INITIAL_DELAY * Math.pow(1.5, i)));
+        }
     }
+
+    return null;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

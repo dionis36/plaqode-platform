@@ -4,29 +4,47 @@ import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { env } from '@/lib/env';
 
-// Import preview components dynamically
+// Loading Skeleton Component
+function LoadingPreview() {
+    return (
+        <div className="flex-1 w-full h-full flex flex-col relative bg-slate-50">
+            {/* Header Skeleton */}
+            <div className="h-48 bg-slate-200 animate-pulse relative">
+                <div className="absolute inset-0 flex flex-col items-center justify-center p-6">
+                    <div className="w-20 h-20 bg-white/30 rounded-full mb-4" />
+                    <div className="h-6 w-32 bg-white/30 rounded" />
+                </div>
+            </div>
+            {/* Content Skeleton */}
+            <div className="flex-1 px-6 space-y-4 -mt-6 relative z-10">
+                <div className="h-24 bg-white rounded-2xl shadow-sm animate-pulse" />
+                <div className="h-24 bg-white rounded-2xl shadow-sm animate-pulse" />
+                <div className="h-12 bg-slate-200 rounded-xl animate-pulse mt-4" />
+            </div>
+        </div>
+    );
+}
+
+// Import preview components dynamically with loading states
 // These components are now ported to strictly handle the 'data' structure
-const WifiPreview = dynamic(() => import('@/components/preview/WiFiPreview').then(mod => mod.WiFiPreview));
-const VCardPreview = dynamic(() => import('@/components/preview/VCardPreview').then(mod => mod.VCardPreview));
-const UrlPreview = dynamic(() => import('@/components/preview/URLPreview').then(mod => mod.URLPreview));
-const TextPreview = dynamic(() => import('@/components/preview/TextPreview').then(mod => mod.TextPreview));
-const AppStorePreview = dynamic(() => import('@/components/preview/AppStorePreview').then(mod => mod.AppStorePreview));
-const EmailPreview = dynamic(() => import('@/components/preview/EmailPreview').then(mod => mod.EmailPreview));
-const EventPreview = dynamic(() => import('@/components/preview/EventPreview').then(mod => mod.EventPreview));
-const MenuPreview = dynamic(() => import('@/components/preview/MenuPreview').then(mod => mod.MenuPreview));
-const MessagePreview = dynamic(() => import('@/components/preview/MessagePreview').then(mod => mod.MessagePreview));
-const PDFPreview = dynamic(() => import('@/components/preview/PDFPreview').then(mod => mod.PDFPreview));
-const SocialMediaPagePreview = dynamic(() => import('@/components/preview/SocialMediaPagePreview').then(mod => mod.SocialMediaPagePreview));
+const WifiPreview = dynamic(() => import('@/components/preview/WiFiPreview').then(mod => mod.WiFiPreview), { loading: () => <LoadingPreview /> });
+const VCardPreview = dynamic(() => import('@/components/preview/VCardPreview').then(mod => mod.VCardPreview), { loading: () => <LoadingPreview /> });
+const UrlPreview = dynamic(() => import('@/components/preview/URLPreview').then(mod => mod.URLPreview), { loading: () => <LoadingPreview /> });
+const TextPreview = dynamic(() => import('@/components/preview/TextPreview').then(mod => mod.TextPreview), { loading: () => <LoadingPreview /> });
+const AppStorePreview = dynamic(() => import('@/components/preview/AppStorePreview').then(mod => mod.AppStorePreview), { loading: () => <LoadingPreview /> });
+const EmailPreview = dynamic(() => import('@/components/preview/EmailPreview').then(mod => mod.EmailPreview), { loading: () => <LoadingPreview /> });
+const EventPreview = dynamic(() => import('@/components/preview/EventPreview').then(mod => mod.EventPreview), { loading: () => <LoadingPreview /> });
+const MenuPreview = dynamic(() => import('@/components/preview/MenuPreview').then(mod => mod.MenuPreview), { loading: () => <LoadingPreview /> });
+const MessagePreview = dynamic(() => import('@/components/preview/MessagePreview').then(mod => mod.MessagePreview), { loading: () => <LoadingPreview /> });
+const PDFPreview = dynamic(() => import('@/components/preview/PDFPreview').then(mod => mod.PDFPreview), { loading: () => <LoadingPreview /> });
+const SocialMediaPagePreview = dynamic(() => import('@/components/preview/SocialMediaPagePreview').then(mod => mod.SocialMediaPagePreview), { loading: () => <LoadingPreview /> });
 
 interface ViewerClientProps {
     data: any;
 }
 
 export function ViewerClient({ data }: ViewerClientProps) {
-    const [mounted, setMounted] = useState(false);
-
     useEffect(() => {
-        setMounted(true);
         if (data?.shortcode) {
             recordScan(data.shortcode);
         }
@@ -47,8 +65,6 @@ export function ViewerClient({ data }: ViewerClientProps) {
             console.error('Failed to record scan', err);
         }
     }
-
-    if (!mounted) return null;
 
     // The data object contains all fields (type, styles, personal_info, etc.) at root
     const { type } = data || {};
