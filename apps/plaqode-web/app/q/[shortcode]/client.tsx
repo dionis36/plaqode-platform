@@ -10,6 +10,13 @@ const WifiPreview = dynamic(() => import('@/components/preview/WiFiPreview').the
 const VCardPreview = dynamic(() => import('@/components/preview/VCardPreview').then(mod => mod.VCardPreview));
 const UrlPreview = dynamic(() => import('@/components/preview/URLPreview').then(mod => mod.URLPreview));
 const TextPreview = dynamic(() => import('@/components/preview/TextPreview').then(mod => mod.TextPreview));
+const AppStorePreview = dynamic(() => import('@/components/preview/AppStorePreview').then(mod => mod.AppStorePreview));
+const EmailPreview = dynamic(() => import('@/components/preview/EmailPreview').then(mod => mod.EmailPreview));
+const EventPreview = dynamic(() => import('@/components/preview/EventPreview').then(mod => mod.EventPreview));
+const MenuPreview = dynamic(() => import('@/components/preview/MenuPreview').then(mod => mod.MenuPreview));
+const MessagePreview = dynamic(() => import('@/components/preview/MessagePreview').then(mod => mod.MessagePreview));
+const PDFPreview = dynamic(() => import('@/components/preview/PDFPreview').then(mod => mod.PDFPreview));
+const SocialMediaPagePreview = dynamic(() => import('@/components/preview/SocialMediaPagePreview').then(mod => mod.SocialMediaPagePreview));
 
 interface ViewerClientProps {
     data: any;
@@ -59,6 +66,20 @@ export function ViewerClient({ data }: ViewerClientProps) {
                 return <UrlPreview data={data} />;
             case 'text':
                 return <TextPreview data={data} />;
+            case 'appstore':
+                return <AppStorePreview data={data} />;
+            case 'email':
+                return <EmailPreview data={data} />;
+            case 'event':
+                return <EventPreview data={data} />;
+            case 'menu':
+                return <MenuPreview data={data} />;
+            case 'message':
+                return <MessagePreview data={data} />;
+            case 'file':
+                return <PDFPreview data={data} />;
+            case 'socialmedia':
+                return <SocialMediaPagePreview data={data} />;
             default:
                 // Fallback for unhandled types
                 return (
@@ -79,9 +100,25 @@ export function ViewerClient({ data }: ViewerClientProps) {
     };
 
     return (
-        <div className="min-h-screen w-full bg-slate-100">
-            {/* Components will take full width/height of this container */}
-            {renderContent()}
+        <div className="min-h-screen w-full bg-slate-100 flex items-center justify-center">
+            {/* Desktop: Show as mobile app slice. Mobile: Full screen. */}
+            <div className="w-full h-full min-h-screen sm:min-h-[auto] sm:h-auto sm:max-w-[400px] sm:aspect-[9/19.5] sm:max-h-[85vh] sm:rounded-3xl sm:shadow-2xl sm:overflow-hidden bg-white relative flex flex-col">
+                {/* Scrollable content area */}
+                <div className="absolute inset-0 overflow-y-auto no-scrollbar">
+                    {renderContent()}
+                </div>
+            </div>
+
+            {/* Hide scrollbar utility for this component */}
+            <style jsx global>{`
+                .no-scrollbar::-webkit-scrollbar {
+                    display: none;
+                }
+                .no-scrollbar {
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+                }
+            `}</style>
         </div>
     );
 }
