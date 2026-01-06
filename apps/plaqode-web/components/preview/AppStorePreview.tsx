@@ -28,7 +28,8 @@ export function AppStorePreview({ data }: { data: any }) {
         (data?.app_name || '') !== '' ||
         (data?.developer || '') !== '' ||
         (data?.description || '') !== '' ||
-        (data?.app_logo || '') !== '';
+        (data?.app_logo || '') !== '' ||
+        (data?.platforms && data.platforms.length > 0);
 
     const activeData = hasUserInput ? data : fallback;
 

@@ -28,7 +28,7 @@ export function EventPreview({ data }: { data: any }) {
         }
     };
 
-    // Check if user has started entering ANY content
+    // Check if user has entered ANY visible content
     const hasUserInput =
         (data?.event_details?.title || '') !== '' ||
         (data?.event_details?.start_date || '') !== '' ||
