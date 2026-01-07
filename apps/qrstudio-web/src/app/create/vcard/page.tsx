@@ -27,8 +27,16 @@ function VCardQrPageContent() {
             // Load existing QR code data for editing
             loadExistingQr(editId);
         } else {
-            // Clear edit mode if no edit parameter
-            setEditMode(null);
+            // Check for stale state (different template type or stuck in edit mode)
+            const storeState = useWizardStore.getState();
+            if (storeState.editId || storeState.type !== 'vcard') {
+                useWizardStore.getState().reset();
+                useWizardStore.getState().setType('vcard');
+            } else {
+                // Just ensure type is correct if it was empty
+                useWizardStore.getState().setType('vcard');
+                setEditMode(null);
+            }
         }
     }, [editId]);
 

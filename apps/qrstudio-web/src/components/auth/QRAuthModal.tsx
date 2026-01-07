@@ -28,7 +28,7 @@ export function QRAuthModal({ isOpen, onClose }: QRAuthModalProps) {
     const handleSignup = () => {
         setIsLoading(true); // Set loading state
         try {
-            window.location.href = `${env.NEXT_PUBLIC_AUTH_SERVICE_URL}/signup?from=qrstudio&redirect=${encodeURIComponent(window.location.href)}`;
+            window.location.href = `${env.NEXT_PUBLIC_PLATFORM_URL}/auth/signup?from=qrstudio&redirect=${encodeURIComponent(window.location.href)}`;
         } catch (error) {
             console.error('Signup error:', error);
         } finally {
