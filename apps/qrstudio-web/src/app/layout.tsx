@@ -39,7 +39,7 @@ export default function RootLayout({
                         <PlatformNavWrapper />
                         <HelmetProvider>
                             {children}
-                            <Toaster />
+                            <Toaster richColors theme="light" />
                         </HelmetProvider>
                     </NavVisibilityProvider>
                 </AuthProvider>

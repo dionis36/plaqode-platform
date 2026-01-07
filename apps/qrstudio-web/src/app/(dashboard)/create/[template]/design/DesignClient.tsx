@@ -224,6 +224,8 @@ function DesignPageContent({ params }: { params: { template: string } }) {
                     const qrId = response.data.id;
                     sessionStorage.setItem('newlyCreatedQrId', qrId);
 
+                    toast.success('QR Code created successfully! Redirecting...');
+
                     // Redirect to Plaqode Dashboard
                     window.location.href = `${plaqodeUrl}/app/qrcodes?newId=${qrId}`;
                 } else {

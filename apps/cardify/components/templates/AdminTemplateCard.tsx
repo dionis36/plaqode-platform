@@ -33,12 +33,12 @@ export default function AdminTemplateCard({
     return (
         <Link
             href={`/admin/templates/${template.id}/edit`}
-            className="group relative block bg-white border border-gray-200 shadow-sm rounded-xl p-4 h-full hover:shadow-md transition-all duration-300"
+            className="group block relative"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
             {/* Visual Card Container */}
-            <div className="relative aspect-[1.75/1] bg-gray-100 rounded-lg overflow-hidden mb-4 group-hover:opacity-100 transition-all duration-300">
+            <div className="relative aspect-[1.75/1] bg-gray-100 rounded-lg overflow-hidden mb-3 border border-gray-200 group-hover:shadow-md transition-all duration-300">
                 <TemplatePreview template={template} />
 
                 {/* Overlay for actions on hover (Desktop) */}
