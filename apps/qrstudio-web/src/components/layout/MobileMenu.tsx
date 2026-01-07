@@ -22,6 +22,9 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
     const { user, logout } = useAuth(); // Assuming auth-context provides similar interface
 
     const navItems = [
+        { label: "Home", href: `${HOME_URL}/`, icon: Home },
+        { label: "About", href: `${HOME_URL}/about`, icon: Info },
+        { label: "Services", href: `${HOME_URL}/services`, icon: Briefcase },
         { label: "Contact", href: `${HOME_URL}/contact`, icon: Mail },
     ];
 
@@ -85,7 +88,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                     {/* Dashboard Link if logged in */}
                     {user && (
                         <Link
-                            href="/qrcodes" // Pointing to QR Codes listing as safe dashboard home
+                            href={`${HOME_URL}/app`}
                             className="flex items-center gap-4 px-4 py-4 rounded-xl border border-white/5 text-white/80 hover:text-white hover:bg-white/5 transition-all duration-200 group mt-2"
                             onClick={onClose}
                         >

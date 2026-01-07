@@ -86,7 +86,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
 
                     {user && (
                         <Link
-                            href="/templates" // Pointing to Templates as Dashboard Home
+                            href={`${HOME_URL}/app`}
                             className="flex items-center gap-4 px-4 py-4 rounded-xl border border-white/5 text-white/80 hover:text-white hover:bg-white/5 transition-all duration-200 group mt-2"
                             onClick={onClose}
                         >
