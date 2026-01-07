@@ -4,7 +4,7 @@ import {
     FaGithub, FaBehance, FaDribbble, FaMedium, FaTwitch, FaFlickr,
     FaGlobe, FaTelegram, FaWhatsapp, FaReddit, FaSpotify, FaSkype
 } from 'react-icons/fa6';
-import { HOVER_PREVIEW_DATA } from '../steps/hoverPreviewData';
+import { MOCKUP_PREVIEW_DATA } from '../steps/mockupPreviewData';
 
 // Social network configuration with brand colors
 const SOCIAL_NETWORK_CONFIG: Record<string, { icon: any; color: string }> = {
@@ -36,7 +36,7 @@ export function VCardPreview({ data }: { data: any }) {
     const styles = data?.styles || { primary_color: '#2563EB', secondary_color: '#EFF6FF' };
 
     // Use hover data as fallback for empty fields to provide a rich preview experience
-    const fallback = HOVER_PREVIEW_DATA.vcard;
+    const fallback = MOCKUP_PREVIEW_DATA.vcard;
 
     // We check if the data object exists, but we also want to fall back if the specific fields are empty strings
     // This allows the preview to start "full" and update as the user types

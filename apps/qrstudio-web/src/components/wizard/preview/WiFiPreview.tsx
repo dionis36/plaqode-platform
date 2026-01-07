@@ -1,7 +1,7 @@
 import { Wifi, Lock, Shield, Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
 
-import { HOVER_PREVIEW_DATA } from '../steps/hoverPreviewData';
+import { MOCKUP_PREVIEW_DATA } from '../steps/mockupPreviewData';
 
 type WiFiPreviewProps = {
     data: any;
@@ -10,7 +10,7 @@ type WiFiPreviewProps = {
 export function WiFiPreview({ data }: WiFiPreviewProps) {
     const [showPassword, setShowPassword] = useState(false);
 
-    const fallback = HOVER_PREVIEW_DATA.wifi;
+    const fallback = MOCKUP_PREVIEW_DATA.wifi;
 
     // Check if user has started entering ANY content
     const hasUserInput =

@@ -1,13 +1,13 @@
 import { ExternalLink, ArrowRight } from 'lucide-react';
 
-import { HOVER_PREVIEW_DATA } from '../steps/hoverPreviewData';
+import { MOCKUP_PREVIEW_DATA } from '../steps/mockupPreviewData';
 
 interface URLPreviewProps {
     data: any;
 }
 
 export function URLPreview({ data }: URLPreviewProps) {
-    const fallback = HOVER_PREVIEW_DATA.url;
+    const fallback = MOCKUP_PREVIEW_DATA.url;
 
     // Check if user has started entering ANY content
     // For URL, usually title/desc are empty initially.

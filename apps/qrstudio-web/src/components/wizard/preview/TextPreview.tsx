@@ -1,11 +1,11 @@
-import { HOVER_PREVIEW_DATA } from '../steps/hoverPreviewData';
+import { MOCKUP_PREVIEW_DATA } from '../steps/mockupPreviewData';
 
 type TextPreviewProps = {
     data: any;
 };
 
 export function TextPreview({ data }: TextPreviewProps) {
-    const fallback = HOVER_PREVIEW_DATA.text;
+    const fallback = MOCKUP_PREVIEW_DATA.text;
 
     // Check if user has started entering ANY content
     const hasUserInput =

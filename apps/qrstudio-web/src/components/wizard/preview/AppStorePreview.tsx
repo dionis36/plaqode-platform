@@ -1,9 +1,9 @@
 import { Store, Smartphone } from 'lucide-react';
 
-import { HOVER_PREVIEW_DATA } from '../steps/hoverPreviewData';
+import { MOCKUP_PREVIEW_DATA } from '../steps/mockupPreviewData';
 
 export function AppStorePreview({ data }: { data: any }) {
-    const fallback = HOVER_PREVIEW_DATA.appstore;
+    const fallback = MOCKUP_PREVIEW_DATA.appstore;
 
     // Check if user has started entering ANY content
     const hasUserInput =

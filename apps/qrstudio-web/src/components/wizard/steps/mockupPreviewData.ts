@@ -1,13 +1,13 @@
 // Sample data for template hover previews on the create page
 // This provides users with a visual preview of each template before selection
 
-export const HOVER_PREVIEW_DATA = {
+export const MOCKUP_PREVIEW_DATA = {
     menu: {
         restaurant_info: {
             name: "Mama's Kitchen",
             description: 'Authentic Tanzanian cuisine & local favorites',
-            phone: '+255 754 123 456',
-            website: 'https://mamaskitchen.co.tz',
+            phone: '+255 7XX XXX XXX',
+            website: 'https://example.com',
             logo: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=200&h=200&fit=crop',
             cover_image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&h=600&fit=crop',
         },
@@ -77,14 +77,14 @@ export const HOVER_PREVIEW_DATA = {
 
     vcard: {
         personal_info: {
-            first_name: 'Amani',
-            last_name: 'Mwangi',
+            first_name: 'Demo',
+            last_name: 'User',
             avatar_image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop',
         },
         contact_details: {
-            phone: '+255 713 456 789',
-            email: 'amani.mwangi@techtz.co.tz',
-            website: 'https://amanimwangi.co.tz',
+            phone: '+255 7XX XXX XXX',
+            email: 'user@example.com',
+            website: 'https://example.com',
         },
         company_details: {
             company_name: 'TechHub Tanzania',
@@ -97,10 +97,10 @@ export const HOVER_PREVIEW_DATA = {
             country: 'Tanzania',
         },
         social_networks: [
-            { network: 'linkedin', url: 'https://linkedin.com/in/amanimwangi' },
-            { network: 'twitter', url: 'https://twitter.com/amanimwangi' },
-            { network: 'github', url: 'https://github.com/amanimwangi' },
-            { network: 'whatsapp', url: 'https://wa.me/255713456789' },
+            { network: 'linkedin', url: 'https://linkedin.com/in/example-user' },
+            { network: 'twitter', url: 'https://twitter.com/example_user' },
+            { network: 'github', url: 'https://github.com/example-account' },
+            { network: 'whatsapp', url: 'https://wa.me/2557XXXXXXXX' },
         ],
         summary: 'Passionate software developer building innovative tech solutions for East Africa. Specialized in web and mobile app development with 5+ years of experience.',
         styles: {
@@ -111,7 +111,7 @@ export const HOVER_PREVIEW_DATA = {
 
     url: {
         url_details: {
-            destination_url: 'https://safaribookings.co.tz',
+            destination_url: 'https://example.com',
             title: 'Safari Bookings Tanzania',
             description: 'Book your dream safari adventure',
         },
@@ -191,9 +191,9 @@ export const HOVER_PREVIEW_DATA = {
         description: 'Join us for an evening of networking with local tech entrepreneurs and developers. Learn about the latest innovations in East African tech.',
         organizer: {
             name: 'TechHub Tanzania',
-            email: 'events@techhubtanzania.co.tz',
+            email: 'events@example.com',
         },
-        event_url: 'https://techhubtanzania.co.tz/events',
+        event_url: 'https://example.com',
         reminders: {
             enabled: true,
         },
@@ -205,7 +205,7 @@ export const HOVER_PREVIEW_DATA = {
 
     email: {
         email_details: {
-            recipient: 'info@safaribookings.co.tz',
+            recipient: 'info@example.com',
             subject: 'Safari Inquiry - Serengeti Tour',
             body: 'Hello,\n\nI am interested in booking a 5-day safari tour to Serengeti National Park. Could you please send me more information about available packages and pricing?\n\nAsante sana!',
         },
@@ -221,7 +221,7 @@ export const HOVER_PREVIEW_DATA = {
 
     message: {
         platform: 'whatsapp',
-        phone_number: '+255 754 123 456',
+        phone_number: '+255 7XX XXX XXX',
         username: '',
         message: 'Habari! I would like to confirm my safari booking for tomorrow at 6 AM. Asante sana!',
         message_only: false,
@@ -247,17 +247,17 @@ export const HOVER_PREVIEW_DATA = {
     },
 
     socialmedia: {
-        display_name: 'Amani Mwangi',
+        display_name: 'Sample Profile',
         bio: 'Software Developer | Tech Enthusiast | Building the future of East African tech 🇹🇿',
         profile_photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop',
         title: 'Connect With Me',
         tagline: 'Follow my journey in tech and innovation across Tanzania',
         gallery_images: [],
         social_links: [
-            { platform: 'linkedin', url: 'https://linkedin.com/in/amanimwangi' },
-            { platform: 'twitter', url: 'https://twitter.com/amanimwangi' },
-            { platform: 'github', url: 'https://github.com/amanimwangi' },
-            { platform: 'instagram', url: 'https://instagram.com/amanimwangi' },
+            { platform: 'linkedin', url: 'https://linkedin.com/in/example-user' },
+            { platform: 'twitter', url: 'https://twitter.com/example_user' },
+            { platform: 'github', url: 'https://github.com/example-account' },
+            { platform: 'instagram', url: 'https://instagram.com/example_profile' },
         ],
         styles: {
             primary_color: '#E11D48', // Rose-600
@@ -266,4 +266,4 @@ export const HOVER_PREVIEW_DATA = {
     },
 };
 
-export type TemplateType = keyof typeof HOVER_PREVIEW_DATA;
+export type TemplateType = keyof typeof MOCKUP_PREVIEW_DATA;

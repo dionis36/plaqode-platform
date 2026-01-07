@@ -6,10 +6,10 @@ import {
     FaReddit, FaSpotify, FaDiscord, FaThreads, FaGlobe
 } from 'react-icons/fa6';
 
-import { HOVER_PREVIEW_DATA } from '../steps/hoverPreviewData';
+import { MOCKUP_PREVIEW_DATA } from '../steps/mockupPreviewData';
 
 export function SocialMediaPagePreview({ data }: { data: any }) {
-    const fallback = HOVER_PREVIEW_DATA.socialmedia;
+    const fallback = MOCKUP_PREVIEW_DATA.socialmedia;
 
     // Check if user has started entering ANY content
     const hasUserInput =

@@ -17,7 +17,7 @@ export function QRAuthModal({ isOpen, onClose }: QRAuthModalProps) {
         setIsLoading(true); // Set loading state
         try {
             // Redirect to platform login
-            window.location.href = `${env.NEXT_PUBLIC_AUTH_SERVICE_URL}/login?from=qrstudio&redirect=${encodeURIComponent(window.location.href)}`;
+            window.location.href = `${env.NEXT_PUBLIC_PLATFORM_URL}/auth/login?from=qrstudio&redirect=${encodeURIComponent(window.location.href)}`;
         } catch (error) {
             console.error('Login error:', error);
         } finally {

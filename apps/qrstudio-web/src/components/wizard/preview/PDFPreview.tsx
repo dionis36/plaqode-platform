@@ -1,7 +1,7 @@
 import { FileText, ExternalLink, File, FileImage, FileArchive, FileCode, Music, Video } from 'lucide-react';
 import { useState, useEffect, useCallback } from 'react';
 
-import { HOVER_PREVIEW_DATA } from '../steps/hoverPreviewData';
+import { MOCKUP_PREVIEW_DATA } from '../steps/mockupPreviewData';
 
 type PDFPreviewProps = {
     data: any;
@@ -39,7 +39,7 @@ export function PDFPreview({ data }: PDFPreviewProps) {
     const [thumbnailUrl, setThumbnailUrl] = useState<string>('');
     const [isGenerating, setIsGenerating] = useState(false);
 
-    const fallback = HOVER_PREVIEW_DATA.file;
+    const fallback = MOCKUP_PREVIEW_DATA.file;
 
     // Check if user has started entering ANY content
     // We check file_data (upload) or text inputs

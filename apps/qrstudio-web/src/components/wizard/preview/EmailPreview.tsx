@@ -1,9 +1,9 @@
 import { Mail, User, FileText, Users, Eye } from 'lucide-react';
 
-import { HOVER_PREVIEW_DATA } from '../steps/hoverPreviewData';
+import { MOCKUP_PREVIEW_DATA } from '../steps/mockupPreviewData';
 
 export function EmailPreview({ data }: { data: any }) {
-    const fallback = HOVER_PREVIEW_DATA.email;
+    const fallback = MOCKUP_PREVIEW_DATA.email;
 
     // Check if user has started entering ANY content in the main email fields
     const hasUserInput =

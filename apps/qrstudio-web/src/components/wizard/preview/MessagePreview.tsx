@@ -1,9 +1,9 @@
 import { MessageSquare, Phone, User, Mail, Smartphone, Send } from 'lucide-react';
 
-import { HOVER_PREVIEW_DATA } from '../steps/hoverPreviewData';
+import { MOCKUP_PREVIEW_DATA } from '../steps/mockupPreviewData';
 
 export function MessagePreview({ data }: { data: any }) {
-    const fallback = HOVER_PREVIEW_DATA.message;
+    const fallback = MOCKUP_PREVIEW_DATA.message;
 
     // Platform might have a default value from form state even if empty, but usually it's 'sms'.
     // If we want the rich preview 'whatsapp' from fallback, we should check if data.platform is default?
@@ -12,7 +12,7 @@ export function MessagePreview({ data }: { data: any }) {
     // However, for consistency with other "rich" previews, maybe we prioritize user selection for TYPES (platform)
     // but fill in CONTENT from fallback if matching?
     // Actually, fallback is specifically for 'whatsapp'. If user is on 'sms' mode, showing whatsapp helper text is wrong.
-    // BUT the data structure in `hoverPreviewData` is specific to one example (whatsapp).
+    // BUT the data structure in `mockupPreviewData` is specific to one example (whatsapp).
     // If the user selects "SMS" template, the wizard initializes with type="message".
     // Does the wizard default the platform to 'sms'? Yes likely.
 

@@ -3,12 +3,12 @@ import { format, parseISO } from 'date-fns';
 import { useEffect } from 'react';
 import { usePreviewContext } from './PreviewContext';
 
-import { HOVER_PREVIEW_DATA } from '../steps/hoverPreviewData';
+import { MOCKUP_PREVIEW_DATA } from '../steps/mockupPreviewData';
 
 export function EventPreview({ data }: { data: any }) {
     const { setHeroBackgroundColor } = usePreviewContext();
 
-    const fallback = HOVER_PREVIEW_DATA.event;
+    const fallback = MOCKUP_PREVIEW_DATA.event;
 
     // Check if user has started entering ANY content
     const hasUserInput =

@@ -1,7 +1,7 @@
 import { Utensils, MapPin, Clock, Phone, Globe } from 'lucide-react';
 import { useEffect } from 'react';
 import { usePreviewContext } from './PreviewContext';
-import { HOVER_PREVIEW_DATA } from '../steps/hoverPreviewData';
+import { MOCKUP_PREVIEW_DATA } from '../steps/mockupPreviewData';
 
 interface MenuItem {
     id: string;
@@ -39,7 +39,7 @@ interface MenuData {
 }
 
 export function MenuPreview({ data }: { data: MenuData }) {
-    const fallback = HOVER_PREVIEW_DATA.menu;
+    const fallback = MOCKUP_PREVIEW_DATA.menu;
 
     // Check if user has started entering ANY content
     const hasUserInput =
@@ -89,9 +89,9 @@ export function MenuPreview({ data }: { data: MenuData }) {
     // But checking for the exact default string "Starters" / "Garlic Bread" is risky if they actually want that.
 
     // Compromise: The user specifically asked for the SAME preview placeholders.
-    // The create page preview uses `HOVER_PREVIEW_DATA.menu`.
+    // The create page preview uses `MOCKUP_PREVIEW_DATA.menu`.
     // That data has "Starters", "Main Dishes" etc.
-    // If I just swap the default store initialization to match HOVER_PREVIEW_DATA, that would be cleaner?
+    // If I just swap the default store initialization to match MOCKUP_PREVIEW_DATA, that would be cleaner?
     // But the request is about the *Page* showing placeholders.
     // If I change `MenuPreview` to ignore the props if they match the store default?
 
