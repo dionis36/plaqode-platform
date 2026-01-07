@@ -2,6 +2,7 @@ import { prisma } from '../lib/prisma';
 import crypto from 'crypto';
 
 import geoip from 'geoip-lite';
+import { UAParser } from 'ua-parser-js';
 
 export interface ScanMetadata {
     country?: string;
@@ -90,38 +91,35 @@ export class AnalyticsService {
     }
 
     /**
-     * Parse user agent string for device detection
+     * Parse user agent string for device detection using ua-parser-js
      */
     private parseUserAgent(userAgent: string): {
         device: string;
         os: string;
         browser: string;
     } {
-        const ua = userAgent.toLowerCase();
+        const parser = new UAParser(userAgent);
+        const result = parser.getResult();
 
-        // Detect device type
+        // Map device type
         let device = 'desktop';
-        if (/mobile|android|iphone|ipod|blackberry|iemobile|opera mini/i.test(ua)) {
+        if (result.device.type === 'mobile') {
             device = 'mobile';
-        } else if (/tablet|ipad/i.test(ua)) {
+        } else if (result.device.type === 'tablet') {
             device = 'tablet';
+        } else if (result.device.type === 'smarttv') {
+            device = 'smarttv';
+        } else if (result.device.type === 'wearable') {
+            device = 'wearable';
+        } else if (result.device.type === 'embedded') {
+            device = 'embedded';
         }
 
-        // Detect OS
-        let os = 'Unknown';
-        if (/windows/i.test(ua)) os = 'Windows';
-        else if (/mac os x/i.test(ua)) os = 'macOS';
-        else if (/linux/i.test(ua)) os = 'Linux';
-        else if (/android/i.test(ua)) os = 'Android';
-        else if (/iphone|ipad|ipod/i.test(ua)) os = 'iOS';
+        // Map OS
+        const os = result.os.name || 'Unknown';
 
-        // Detect browser
-        let browser = 'Unknown';
-        if (/edg/i.test(ua)) browser = 'Edge';
-        else if (/chrome/i.test(ua)) browser = 'Chrome';
-        else if (/safari/i.test(ua)) browser = 'Safari';
-        else if (/firefox/i.test(ua)) browser = 'Firefox';
-        else if (/opera|opr/i.test(ua)) browser = 'Opera';
+        // Map Browser
+        const browser = result.browser.name || 'Unknown';
 
         return { device, os, browser };
     }

@@ -2,6 +2,7 @@ import { FastifyInstance } from 'fastify';
 import { qrService } from '../services/qr.service';
 import { analyticsService } from '../services/analytics.service';
 import { config } from '../config';
+import { getClientIp } from '../utils/ip.utils';
 
 export async function redirectRoutes(fastify: FastifyInstance) {
     // Main redirect route - handles shortcode resolution
@@ -21,6 +22,8 @@ export async function redirectRoutes(fastify: FastifyInstance) {
                     });
                 }
 
+
+
                 // 2. Log analytics (scan event)
                 const referrerHeader = request.headers.referer || request.headers.referrer;
                 const referrerString = Array.isArray(referrerHeader) ? referrerHeader[0] : referrerHeader;
@@ -28,7 +31,7 @@ export async function redirectRoutes(fastify: FastifyInstance) {
                 const scanData = {
                     qrcodeId: qrCode.id,
                     shortcode: shortcode,
-                    ip: request.ip,
+                    ip: getClientIp(request),
                     userAgent: request.headers['user-agent'] || '',
                     referrer: referrerString || '',
                 };

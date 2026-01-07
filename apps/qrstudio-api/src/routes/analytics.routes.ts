@@ -2,6 +2,7 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { z } from 'zod';
 import { analyticsService } from '../services/analytics.service';
 import { authMiddleware, optionalAuthMiddleware } from '../middleware/auth';
+import { getClientIp } from '../utils/ip.utils';
 
 // Validation schemas
 const analyticsQuerySchema = z.object({
@@ -79,8 +80,10 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
                 const { shortcode } = request.params;
                 const metadata = scanMetadataSchema.parse(request.body);
 
-                // Get IP from request
-                const ipAddress = request.ip;
+
+
+                // Get IP from request (safe extraction)
+                const ipAddress = getClientIp(request);
 
                 const scan = await analyticsService.recordScan(shortcode, {
                     ...metadata,
