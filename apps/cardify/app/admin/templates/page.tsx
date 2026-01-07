@@ -191,7 +191,7 @@ export default function TemplateManagementPage() {
     );
 
     return (
-        <div className="min-h-screen bg-gray-50 pb-20">
+        <div className="min-h-screen bg-[#efefef] pb-20">
             {/* Header Section */}
             <div className="pt-6 md:pt-10 pb-6 md:pb-8 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-7xl mx-auto">
@@ -201,7 +201,7 @@ export default function TemplateManagementPage() {
                             <p className="mt-1 md:mt-2 text-sm md:text-base text-slate-600">Organize and manage business card templates.</p>
                         </div>
                         <div className="flex gap-3 w-full md:w-auto">
-                            <label className="flex-1 md:flex-none flex justify-center items-center gap-2 px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 cursor-pointer transition shadow-sm font-medium text-sm md:text-base">
+                            <label className="flex-1 md:flex-none flex justify-center items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 cursor-pointer transition shadow-sm font-medium text-sm md:text-base">
                                 <Upload size={18} />
                                 <span className="hidden sm:inline">Import JSON</span>
                                 <span className="inline sm:hidden">Import</span>
@@ -232,14 +232,14 @@ export default function TemplateManagementPage() {
                                 placeholder="Search templates..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                                className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all shadow-sm"
                             />
                         </div>
                         <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0 no-scrollbar">
                             <button
                                 onClick={() => setFilterCategory('all')}
-                                className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors whitespace-nowrap ${filterCategory === 'all'
-                                    ? 'bg-blue-600 text-white shadow-md'
+                                className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors whitespace-nowrap shadow-sm ${filterCategory === 'all'
+                                    ? 'bg-blue-600 text-white'
                                     : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
                                     }`}
                             >
@@ -249,8 +249,8 @@ export default function TemplateManagementPage() {
                                 <button
                                     key={cat.name}
                                     onClick={() => setFilterCategory(cat.name)}
-                                    className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors whitespace-nowrap ${filterCategory === cat.name
-                                        ? 'bg-blue-600 text-white shadow-md'
+                                    className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors whitespace-nowrap shadow-sm ${filterCategory === cat.name
+                                        ? 'bg-blue-600 text-white'
                                         : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
                                         }`}
                                 >

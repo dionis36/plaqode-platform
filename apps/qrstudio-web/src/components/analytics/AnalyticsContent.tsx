@@ -151,55 +151,55 @@ export function AnalyticsContent({ id }: { id: string }) {
                 </div>
 
                 {/* Stats Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
                     {/* Total Scans */}
-                    <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col items-center justify-center text-center">
-                        <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-3 text-blue-600">
+                    <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 hover:shadow-md transition flex flex-col items-center text-center">
+                        <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-3 text-blue-600">
                             <TrendingUp className="w-6 h-6" />
                         </div>
-                        <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Total Scans</p>
-                        <p className="text-3xl font-bold text-slate-900 mt-1">{analytics.totalScans.toLocaleString()}</p>
+                        <p className="text-sm text-gray-600 mb-1">Total Scans</p>
+                        <p className="text-xl sm:text-2xl font-bold text-gray-900">{analytics.totalScans.toLocaleString()}</p>
                     </div>
 
                     {/* Top Device */}
-                    <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col items-center justify-center text-center">
-                        <div className="w-12 h-12 bg-purple-50 rounded-full flex items-center justify-center mb-3 text-purple-600">
+                    <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 hover:shadow-md transition flex flex-col items-center text-center">
+                        <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-3 text-purple-600">
                             <Smartphone className="w-6 h-6" />
                         </div>
-                        <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Top Device</p>
-                        <p className="text-lg font-bold text-slate-900 mt-1 truncate w-full px-2">
+                        <p className="text-sm text-gray-600 mb-1">Top Device</p>
+                        <p className="text-xl sm:text-2xl font-bold text-gray-900 truncate w-full px-2">
                             {analytics.deviceBreakdown[0]?.device || 'N/A'}
                         </p>
-                        <p className="text-xs text-slate-400 mt-1">
-                            {analytics.deviceBreakdown[0] ? `${((analytics.deviceBreakdown[0].count / analytics.totalScans) * 100).toFixed(0)}% of scans` : '-'}
+                        <p className="text-xs text-gray-400 mt-1">
+                            {analytics.deviceBreakdown[0] ? `${((analytics.deviceBreakdown[0].count / analytics.totalScans) * 100).toFixed(0)}%` : '-'}
                         </p>
                     </div>
 
                     {/* Top Browser */}
-                    <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col items-center justify-center text-center">
-                        <div className="w-12 h-12 bg-orange-50 rounded-full flex items-center justify-center mb-3 text-orange-600">
+                    <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 hover:shadow-md transition flex flex-col items-center text-center">
+                        <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-3 text-orange-600">
                             <Monitor className="w-6 h-6" />
                         </div>
-                        <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Top Browser</p>
-                        <p className="text-lg font-bold text-slate-900 mt-1 truncate w-full px-2">
+                        <p className="text-sm text-gray-600 mb-1">Top Browser</p>
+                        <p className="text-xl sm:text-2xl font-bold text-gray-900 truncate w-full px-2">
                             {analytics.browserBreakdown[0]?.browser || 'N/A'}
                         </p>
-                        <p className="text-xs text-slate-400 mt-1">
-                            {analytics.browserBreakdown[0] ? `${((analytics.browserBreakdown[0].count / analytics.totalScans) * 100).toFixed(0)}% of scans` : '-'}
+                        <p className="text-xs text-gray-400 mt-1">
+                            {analytics.browserBreakdown[0] ? `${((analytics.browserBreakdown[0].count / analytics.totalScans) * 100).toFixed(0)}%` : '-'}
                         </p>
                     </div>
 
                     {/* Top Location */}
-                    <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col items-center justify-center text-center">
-                        <div className="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center mb-3 text-green-600">
+                    <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 hover:shadow-md transition flex flex-col items-center text-center">
+                        <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-3 text-green-600">
                             <Globe className="w-6 h-6" />
                         </div>
-                        <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Top Location</p>
-                        <p className="text-lg font-bold text-slate-900 mt-1 truncate w-full px-2">
+                        <p className="text-sm text-gray-600 mb-1">Top Location</p>
+                        <p className="text-xl sm:text-2xl font-bold text-gray-900 truncate w-full px-2">
                             {analytics.countryBreakdown[0]?.country || 'N/A'}
                         </p>
-                        <p className="text-xs text-slate-400 mt-1">
-                            {analytics.countryBreakdown[0] ? `${((analytics.countryBreakdown[0].count / analytics.totalScans) * 100).toFixed(0)}% of scans` : '-'}
+                        <p className="text-xs text-gray-400 mt-1">
+                            {analytics.countryBreakdown[0] ? `${((analytics.countryBreakdown[0].count / analytics.totalScans) * 100).toFixed(0)}%` : '-'}
                         </p>
                     </div>
                 </div>

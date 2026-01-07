@@ -235,7 +235,7 @@ export function QrPageClient({ id }: QrPageClientProps) {
 
     if (!qrCode) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
+            <div className="min-h-screen flex items-center justify-center">
                 <div className="text-center">
                     <QrCodeIcon className="w-16 h-16 text-slate-300 mx-auto mb-4" />
                     <h2 className="text-2xl font-bold text-slate-900 mb-2">QR Code Not Found</h2>
@@ -248,7 +248,7 @@ export function QrPageClient({ id }: QrPageClientProps) {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+        <div className="min-h-screen">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
                 <SEO
                     title={qrCode.name}
@@ -346,7 +346,7 @@ export function QrPageClient({ id }: QrPageClientProps) {
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Quick Actions (Mobile Only) */}
-                    <div className="lg:hidden bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+                    <div className="lg:hidden bg-white rounded-xl border border-gray-200 shadow-sm p-4">
                         <h2 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-3">Quick Actions</h2>
                         <div className="grid grid-cols-2 gap-3">
                             <button
@@ -384,7 +384,7 @@ export function QrPageClient({ id }: QrPageClientProps) {
                     </div>
                     {/* QR Code Preview */}
                     <div className="lg:col-span-1">
-                        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
                             <h2 className="text-lg font-semibold text-slate-900 mb-4">QR Code</h2>
                             <div id="qr-code-container" className="flex justify-center mb-4" ref={(el) => {
                                 if (el && qrCodeInstance && !el.hasChildNodes()) {
@@ -420,23 +420,38 @@ export function QrPageClient({ id }: QrPageClientProps) {
                     {/* Details & Analytics */}
                     <div className="lg:col-span-2 space-y-6">
                         {/* Stats */}
-                        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
                             <h2 className="text-lg font-semibold text-slate-900 mb-4">Statistics</h2>
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="p-4 bg-purple-50 rounded-lg">
-                                    <p className="text-sm text-purple-600 font-medium">Total Scans</p>
-                                    <p className="text-3xl font-bold text-purple-900 mt-1">{qrCode._count.scans}</p>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div className="p-4 bg-purple-50 rounded-xl border border-purple-100">
+                                    <div className="flex items-center gap-3 mb-2">
+                                        <div className="p-2 bg-purple-100 rounded-lg text-purple-600">
+                                            <BarChart3 className="w-5 h-5" />
+                                        </div>
+                                        <p className="text-sm font-medium text-slate-600">Total Scans</p>
+                                    </div>
+                                    <p className="text-2xl font-bold text-slate-900">{qrCode._count.scans}</p>
                                 </div>
-                                <div className="p-4 bg-blue-50 rounded-lg">
-                                    <p className="text-sm text-blue-600 font-medium">Created</p>
-                                    <p className="text-lg font-bold text-blue-900 mt-1">
+                                <div className="p-4 bg-orange-50 rounded-xl border border-orange-100">
+                                    <div className="flex items-center gap-3 mb-2">
+                                        <div className="p-2 bg-orange-100 rounded-lg text-orange-600">
+                                            <Download className="w-5 h-5" /> {/* Placeholder icon for Created/Time */}
+                                        </div>
+                                        <p className="text-sm font-medium text-slate-600">Created On</p>
+                                    </div>
+                                    <p className="text-lg font-bold text-slate-900">
                                         {new Date(qrCode.createdAt).toLocaleDateString()}
                                     </p>
                                 </div>
                                 {qrCode.updatedAt && qrCode.updatedAt !== qrCode.createdAt && (
-                                    <div className="p-4 bg-emerald-50 rounded-lg col-span-2">
-                                        <p className="text-sm text-emerald-600 font-medium">Last updated on</p>
-                                        <p className="text-lg font-bold text-emerald-900 mt-1">
+                                    <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-100 sm:col-span-2">
+                                        <div className="flex items-center gap-3 mb-2">
+                                            <div className="p-2 bg-emerald-100 rounded-lg text-emerald-600">
+                                                <Edit className="w-5 h-5" />
+                                            </div>
+                                            <p className="text-sm font-medium text-slate-600">Last Updated</p>
+                                        </div>
+                                        <p className="text-lg font-bold text-slate-900">
                                             {new Date(qrCode.updatedAt).toLocaleDateString()} at {new Date(qrCode.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                         </p>
                                     </div>
@@ -444,7 +459,7 @@ export function QrPageClient({ id }: QrPageClientProps) {
                             </div>
                             <Link
                                 href={`/analytics?id=${qrCode.id}`}
-                                className="mt-4 flex items-center justify-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg font-medium hover:bg-slate-200 transition-colors"
+                                className="mt-4 flex items-center justify-center gap-2 px-4 py-2 bg-slate-50 text-slate-700 rounded-lg font-medium hover:bg-slate-100 transition-colors w-full sm:w-auto"
                             >
                                 <BarChart3 className="w-4 h-4" />
                                 View Detailed Analytics
@@ -452,33 +467,33 @@ export function QrPageClient({ id }: QrPageClientProps) {
                         </div>
 
                         {/* Details */}
-                        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
                             <h2 className="text-lg font-semibold text-slate-900 mb-4">Details</h2>
-                            <dl className="space-y-3">
+                            <dl className="space-y-4">
                                 <div>
-                                    <dt className="text-sm font-medium text-slate-600">Type</dt>
-                                    <dd className="mt-1">
-                                        <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${getTypeColor(qrCode.type)}`}>
+                                    <dt className="text-sm font-medium text-slate-500 mb-1">Type</dt>
+                                    <dd>
+                                        <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${getTypeColor(qrCode.type)}`}>
                                             {qrCode.type.toUpperCase()}
                                         </span>
                                     </dd>
                                 </div>
                                 <div>
-                                    <dt className="text-sm font-medium text-slate-600">Shortcode</dt>
-                                    <dd className="mt-1 text-sm text-slate-900 font-mono">{qrCode.shortcode}</dd>
+                                    <dt className="text-sm font-medium text-slate-500 mb-1">Shortcode</dt>
+                                    <dd className="text-sm text-slate-900 font-mono bg-slate-50 px-3 py-2 rounded-md border border-slate-200 inline-block">{qrCode.shortcode}</dd>
                                 </div>
                                 <div>
-                                    <dt className="text-sm font-medium text-slate-600">Public URL</dt>
-                                    <dd className="mt-1">
+                                    <dt className="text-sm font-medium text-slate-500 mb-1">Public URL</dt>
+                                    <dd>
                                         <div className="flex items-center gap-2 max-w-full">
-                                            <div className="flex-1 min-w-0 flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-md px-3 py-2">
+                                            <div className="flex-1 min-w-0 flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
                                                 <div className="text-sm text-slate-600 truncate font-mono select-all">
                                                     {fullQrUrl}
                                                 </div>
                                             </div>
                                             <button
                                                 onClick={() => handleCopy(fullQrUrl)}
-                                                className="p-2 border border-slate-200 rounded-md hover:bg-slate-50 text-slate-600 transition-colors"
+                                                className="p-2 border border-slate-200 rounded-lg hover:bg-slate-50 text-slate-600 transition-colors bg-white shadow-sm"
                                                 title="Copy URL"
                                             >
                                                 <Copy className="w-4 h-4" />
@@ -487,7 +502,7 @@ export function QrPageClient({ id }: QrPageClientProps) {
                                                 href={fullQrUrl}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="p-2 border border-slate-200 rounded-md hover:bg-slate-50 text-slate-600 transition-colors"
+                                                className="p-2 border border-slate-200 rounded-lg hover:bg-slate-50 text-slate-600 transition-colors bg-white shadow-sm"
                                                 title="Open in new tab"
                                             >
                                                 <ExternalLink className="w-4 h-4" />
