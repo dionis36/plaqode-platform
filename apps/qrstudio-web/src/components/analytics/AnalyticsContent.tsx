@@ -150,31 +150,73 @@ export function AnalyticsContent({ id }: { id: string }) {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 mb-8">
+                {/* Stats Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
                     {/* Total Scans */}
-                    <div className="lg:col-span-1 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl shadow-lg p-6 sm:p-8 text-white h-full flex flex-col justify-center">
-                        <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 rounded-lg flex items-center justify-center shrink-0">
-                                <TrendingUp className="w-6 h-6 sm:w-8 sm:h-8" />
-                            </div>
-                            <div>
-                                <p className="text-blue-100 text-sm font-medium">Total Scans</p>
-                                <p className="text-4xl sm:text-5xl font-bold">{analytics.totalScans.toLocaleString()}</p>
-                            </div>
+                    <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col items-center justify-center text-center">
+                        <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-3 text-blue-600">
+                            <TrendingUp className="w-6 h-6" />
                         </div>
+                        <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Total Scans</p>
+                        <p className="text-3xl font-bold text-slate-900 mt-1">{analytics.totalScans.toLocaleString()}</p>
                     </div>
 
-                    {/* Scans Over Time */}
-                    <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-                        <h2 className="text-lg font-semibold text-slate-900 mb-4">Scans Over Time</h2>
-                        {scansOverTimeData.length > 0 ? (
-                            <div className="h-[300px] w-full">
-                                <ScansChart data={scansOverTimeData} />
-                            </div>
-                        ) : (
-                            <p className="text-center text-slate-500 py-8">No scan data available for this period</p>
-                        )}
+                    {/* Top Device */}
+                    <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col items-center justify-center text-center">
+                        <div className="w-12 h-12 bg-purple-50 rounded-full flex items-center justify-center mb-3 text-purple-600">
+                            <Smartphone className="w-6 h-6" />
+                        </div>
+                        <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Top Device</p>
+                        <p className="text-lg font-bold text-slate-900 mt-1 truncate w-full px-2">
+                            {analytics.deviceBreakdown[0]?.device || 'N/A'}
+                        </p>
+                        <p className="text-xs text-slate-400 mt-1">
+                            {analytics.deviceBreakdown[0] ? `${((analytics.deviceBreakdown[0].count / analytics.totalScans) * 100).toFixed(0)}% of scans` : '-'}
+                        </p>
                     </div>
+
+                    {/* Top Browser */}
+                    <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col items-center justify-center text-center">
+                        <div className="w-12 h-12 bg-orange-50 rounded-full flex items-center justify-center mb-3 text-orange-600">
+                            <Monitor className="w-6 h-6" />
+                        </div>
+                        <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Top Browser</p>
+                        <p className="text-lg font-bold text-slate-900 mt-1 truncate w-full px-2">
+                            {analytics.browserBreakdown[0]?.browser || 'N/A'}
+                        </p>
+                        <p className="text-xs text-slate-400 mt-1">
+                            {analytics.browserBreakdown[0] ? `${((analytics.browserBreakdown[0].count / analytics.totalScans) * 100).toFixed(0)}% of scans` : '-'}
+                        </p>
+                    </div>
+
+                    {/* Top Location */}
+                    <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col items-center justify-center text-center">
+                        <div className="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center mb-3 text-green-600">
+                            <Globe className="w-6 h-6" />
+                        </div>
+                        <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Top Location</p>
+                        <p className="text-lg font-bold text-slate-900 mt-1 truncate w-full px-2">
+                            {analytics.countryBreakdown[0]?.country || 'N/A'}
+                        </p>
+                        <p className="text-xs text-slate-400 mt-1">
+                            {analytics.countryBreakdown[0] ? `${((analytics.countryBreakdown[0].count / analytics.totalScans) * 100).toFixed(0)}% of scans` : '-'}
+                        </p>
+                    </div>
+                </div>
+
+                {/* Main Chart Section */}
+                <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-8">
+                    <div className="flex items-center justify-between mb-6">
+                        <h2 className="text-lg font-semibold text-slate-900">Scan Activity</h2>
+                        {/* Optional: Add chart filters or legends here if needed */}
+                    </div>
+                    {scansOverTimeData.length > 0 ? (
+                        <div className="h-[400px] w-full">
+                            <ScansChart data={scansOverTimeData} />
+                        </div>
+                    ) : (
+                        <p className="text-center text-slate-500 py-12">No scan data available for this period</p>
+                    )}
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">

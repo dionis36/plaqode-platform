@@ -68,7 +68,7 @@ export function RecentQrWidget({ qrCodes, loading, onDelete, onPreview }: Recent
                                 <div
                                     key={qr.id}
                                     className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 hover:shadow-md transition-shadow cursor-pointer"
-                                    onClick={() => onPreview?.(qr.id)}
+                                    onClick={() => window.location.href = `${qrStudioUrl}/details?id=${qr.id}`}
                                 >
                                     <div className="flex items-start justify-between mb-3">
                                         <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -86,7 +86,7 @@ export function RecentQrWidget({ qrCodes, loading, onDelete, onPreview }: Recent
                                         <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${getTypeColor(qr.type)}`}>
                                             {qr.type.toUpperCase()}
                                         </span>
-                                        <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${qr.status ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'}`}>
+                                        <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${qr.status ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-700'}`}>
                                             {qr.status ? 'Active' : 'Inactive'}
                                         </span>
                                     </div>
@@ -133,7 +133,7 @@ export function RecentQrWidget({ qrCodes, loading, onDelete, onPreview }: Recent
                         {/* Desktop Table Layout */}
                         <div className="hidden lg:block overflow-x-auto">
                             <table className="w-full text-left text-sm min-w-[600px]">
-                                <thead className="bg-slate-50 text-slate-500 font-medium border-b border-slate-100">
+                                <thead className="bg-slate-50 text-slate-700 font-semibold border-b border-slate-100">
                                     <tr>
                                         <th className="px-6 py-4">Name</th>
                                         <th className="px-6 py-4">Type</th>
@@ -145,11 +145,15 @@ export function RecentQrWidget({ qrCodes, loading, onDelete, onPreview }: Recent
                                 </thead>
                                 <tbody className="divide-y divide-slate-100">
                                     {qrCodes.map((qr) => (
-                                        <tr key={qr.id} className="hover:bg-slate-50/50 transition-colors group">
+                                        <tr
+                                            key={qr.id}
+                                            className="hover:bg-slate-50 transition-colors cursor-pointer"
+                                            onClick={() => window.location.href = `${qrStudioUrl}/details?id=${qr.id}`}
+                                        >
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center gap-3">
                                                     <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center shrink-0">
-                                                        <QrCode className="w-5 h-5 text-slate-500" />
+                                                        <QrCode className="w-5 h-5 text-slate-600" />
                                                     </div>
                                                     <div>
                                                         <div className="font-medium text-slate-900 truncate max-w-[150px]">{qr.name}</div>
@@ -162,19 +166,19 @@ export function RecentQrWidget({ qrCodes, loading, onDelete, onPreview }: Recent
                                                     {qr.type.toUpperCase()}
                                                 </span>
                                             </td>
-                                            <td className="px-6 py-4 font-mono text-slate-600">
+                                            <td className="px-6 py-4 text-slate-900 font-medium">
                                                 {qr.scans}
                                             </td>
                                             <td className="px-6 py-4">
-                                                <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${qr.status ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'}`}>
+                                                <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${qr.status ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-700'}`}>
                                                     {qr.status ? 'Active' : 'Inactive'}
                                                 </span>
                                             </td>
-                                            <td className="px-6 py-4 text-slate-500">
+                                            <td className="px-6 py-4 text-slate-600">
                                                 {new Date(qr.createdAt).toLocaleDateString()}
                                             </td>
-                                            <td className="px-6 py-4 text-right">
-                                                <div className="flex items-center justify-end gap-2 opacity-50 group-hover:opacity-100 transition-opacity">
+                                            <td className="px-6 py-4 text-right" onClick={(e) => e.stopPropagation()}>
+                                                <div className="flex items-center justify-end gap-2">
                                                     <button
                                                         onClick={() => onPreview?.(qr.id)}
                                                         className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
