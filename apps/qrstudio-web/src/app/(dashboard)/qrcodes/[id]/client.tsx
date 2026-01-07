@@ -80,7 +80,7 @@ export function QrPageClient({ id }: QrPageClientProps) {
                 data: qrUrl,
                 margin: data.design.margin ?? 1,
                 qrOptions: {
-                    errorCorrectionLevel: 'M'
+                    errorCorrectionLevel: 'Q'
                 },
                 dotsOptions: {
                     color: data.design.dots?.color ?? '#000000',
@@ -112,7 +112,7 @@ export function QrPageClient({ id }: QrPageClientProps) {
         }
     }
 
-    async function handleDownload(format: 'svg' | 'png') {
+    async function handleDownload(format: 'svg' | 'png' | 'pdf') {
         if (!qrCodeInstance || !qrCode) return;
 
         try {
@@ -126,14 +126,46 @@ export function QrPageClient({ id }: QrPageClientProps) {
                     a.click();
                     URL.revokeObjectURL(url);
                 }
-            } else {
+            } else if (format === 'png') {
+                // Force high resolution for PNG
+                const originalOptions = qrCodeInstance._options;
+                qrCodeInstance.update({ width: 2048, height: 2048 });
                 const blob = await qrCodeInstance.getRawData('png');
+
+                // Restore original dimensions
+                qrCodeInstance.update({ width: originalOptions.width, height: originalOptions.height });
+
                 if (blob && blob instanceof Blob) {
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a');
                     a.href = url;
-                    a.download = `${qrCode.name}.png`;
+                    a.download = `${qrCode.name}-high-res.png`;
                     a.click();
+                    URL.revokeObjectURL(url);
+                }
+            } else if (format === 'pdf') {
+                // PDF Export
+                const { jsPDF } = await import('jspdf');
+                const doc = new jsPDF();
+
+                const blob = await qrCodeInstance.getRawData('png'); // Use PNG for PDF compatibility
+                if (blob && blob instanceof Blob) {
+                    const url = URL.createObjectURL(blob);
+
+                    // Add image to PDF (centered)
+                    const imgProps = doc.getImageProperties(url);
+                    const pdfWidth = doc.internal.pageSize.getWidth();
+                    const pdfHeight = doc.internal.pageSize.getHeight();
+                    const imgWidth = 100; // 100mm width
+                    const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+                    const x = (pdfWidth - imgWidth) / 2;
+                    const y = (pdfHeight - imgHeight) / 2;
+
+                    doc.addImage(url, 'PNG', x, y, imgWidth, imgHeight);
+                    doc.setFontSize(16);
+                    doc.text(qrCode.name, pdfWidth / 2, y - 10, { align: 'center' });
+
+                    doc.save(`${qrCode.name}.pdf`);
                     URL.revokeObjectURL(url);
                 }
             }
@@ -359,20 +391,27 @@ export function QrPageClient({ id }: QrPageClientProps) {
                                     qrCodeInstance.append(el);
                                 }
                             }}></div>
-                            <div className="space-y-2">
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                                 <button
                                     onClick={() => handleDownload('png')}
-                                    className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                                    className="flex items-center justify-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm"
                                 >
                                     <Download className="w-4 h-4" />
-                                    Download PNG
+                                    PNG
                                 </button>
                                 <button
                                     onClick={() => handleDownload('svg')}
-                                    className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-slate-600 text-white rounded-lg font-medium hover:bg-slate-700 transition-colors"
+                                    className="flex items-center justify-center gap-2 px-3 py-2 bg-slate-700 text-white rounded-lg font-medium hover:bg-slate-800 transition-colors text-sm"
                                 >
                                     <Download className="w-4 h-4" />
-                                    Download SVG
+                                    SVG
+                                </button>
+                                <button
+                                    onClick={() => handleDownload('pdf')}
+                                    className="flex items-center justify-center gap-2 px-3 py-2 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors text-sm"
+                                >
+                                    <Download className="w-4 h-4" />
+                                    PDF
                                 </button>
                             </div>
                         </div>
