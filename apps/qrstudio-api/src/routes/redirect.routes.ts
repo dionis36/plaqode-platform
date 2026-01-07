@@ -3,6 +3,8 @@ import { qrService } from '../services/qr.service';
 import { analyticsService } from '../services/analytics.service';
 import { config } from '../config';
 import { getClientIp } from '../utils/ip.utils';
+import { getClientDevice } from '../utils/device.utils';
+import { getGeoFromIp } from '../utils/geo.utils';
 
 export async function redirectRoutes(fastify: FastifyInstance) {
     // Main redirect route - handles shortcode resolution
@@ -28,15 +30,23 @@ export async function redirectRoutes(fastify: FastifyInstance) {
                 const referrerHeader = request.headers.referer || request.headers.referrer;
                 const referrerString = Array.isArray(referrerHeader) ? referrerHeader[0] : referrerHeader;
 
+                const deviceInfo = getClientDevice(request);
+                const geoInfo = getGeoFromIp(getClientIp(request));
+
                 const scanData = {
                     qrcodeId: qrCode.id,
                     shortcode: shortcode,
                     ip: getClientIp(request),
                     userAgent: request.headers['user-agent'] || '',
                     referrer: referrerString || '',
+                    device: deviceInfo.deviceType,
+                    os: deviceInfo.os,
+                    browser: deviceInfo.browser,
+                    country: geoInfo.country,
+                    city: geoInfo.city,
                 };
 
-                // Log scan asynchronously (don't wait for it)
+                // Log scan asynchronously
                 analyticsService.logScan(scanData).catch(err => {
                     fastify.log.error('Failed to log scan:', err);
                 });

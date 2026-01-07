@@ -1,8 +1,10 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { z } from 'zod';
-import { analyticsService } from '../services/analytics.service';
+import { analyticsService, ScanMetadata } from '../services/analytics.service';
 import { authMiddleware, optionalAuthMiddleware } from '../middleware/auth';
 import { getClientIp } from '../utils/ip.utils';
+import { getClientDevice } from '../utils/device.utils';
+import { getGeoFromIp } from '../utils/geo.utils';
 
 // Validation schemas
 const analyticsQuerySchema = z.object({
@@ -83,12 +85,26 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
 
 
                 // Get IP from request (safe extraction)
-                const ipAddress = getClientIp(request);
+                const deviceInfo = getClientDevice(request);
+                const geoInfo = getGeoFromIp(getClientIp(request));
 
-                const scan = await analyticsService.recordScan(shortcode, {
-                    ...metadata,
-                    ipAddress,
-                });
+                const scanData: ScanMetadata = {
+                    ipAddress: getClientIp(request),
+                    device: deviceInfo.deviceType,
+                    os: deviceInfo.os,
+                    browser: deviceInfo.browser,
+                    country: geoInfo.country,
+                    city: geoInfo.city,
+                };
+
+                // Override with manual metadata if provided (e.g. from client-side JS)
+                if (metadata.device) scanData.device = metadata.device;
+                if (metadata.os) scanData.os = metadata.os;
+                if (metadata.browser) scanData.browser = metadata.browser;
+                if (metadata.country) scanData.country = metadata.country;
+                if (metadata.city) scanData.city = metadata.city;
+
+                const scan = await analyticsService.recordScan(shortcode, scanData);
 
                 return reply.code(201).send({
                     success: true,

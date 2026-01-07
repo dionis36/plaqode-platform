@@ -1,12 +1,11 @@
 import { prisma } from '../lib/prisma';
 import crypto from 'crypto';
 
-import geoip from 'geoip-lite';
-import { UAParser } from 'ua-parser-js';
+
 
 export interface ScanMetadata {
-    country?: string;
-    city?: string;
+    country?: string | null;
+    city?: string | null;
     device?: string;
     os?: string;
     browser?: string;
@@ -54,20 +53,24 @@ export class AnalyticsService {
      * Log scan event (optimized for redirect flow)
      * Parses user agent and logs asynchronously
      */
+    /**
+     * Log scan event (optimized for redirect flow)
+     * Logs asynchronously
+     */
     async logScan(data: {
         qrcodeId: string;
         shortcode: string;
         ip: string;
-        userAgent: string;
+        userAgent?: string;
         referrer?: string;
+        device: string;
+        os: string;
+        browser: string;
+        country?: string | null;
+        city?: string | null;
     }) {
         try {
-            // Parse user agent for device detection
-            const deviceInfo = this.parseUserAgent(data.userAgent);
-
-            // Resolve location from IP
-            // geoip-lite lookup returns null for private/local IPs
-            const geo = geoip.lookup(data.ip);
+            console.log('[Analytics] Logging scan:', JSON.stringify(data));
 
             // Create scan record
             await prisma.scan.create({
@@ -75,53 +78,18 @@ export class AnalyticsService {
                     qrCodeId: data.qrcodeId,
                     shortcode: data.shortcode,
                     ipHash: this.hashIp(data.ip),
-                    device: deviceInfo.device,
-                    os: deviceInfo.os,
-                    browser: deviceInfo.browser,
+                    device: data.device,
+                    os: data.os,
+                    browser: data.browser,
                     referrer: data.referrer,
-                    // Add location data if valid
-                    country: geo?.country,
-                    city: geo?.city,
+                    country: data.country || undefined, // Prisma prefers undefined over null for optional fields
+                    city: data.city || undefined,
                 },
             });
         } catch (error) {
             console.error('Failed to log scan:', error);
             // Don't throw - we don't want to block redirects
         }
-    }
-
-    /**
-     * Parse user agent string for device detection using ua-parser-js
-     */
-    private parseUserAgent(userAgent: string): {
-        device: string;
-        os: string;
-        browser: string;
-    } {
-        const parser = new UAParser(userAgent);
-        const result = parser.getResult();
-
-        // Map device type
-        let device = 'desktop';
-        if (result.device.type === 'mobile') {
-            device = 'mobile';
-        } else if (result.device.type === 'tablet') {
-            device = 'tablet';
-        } else if (result.device.type === 'smarttv') {
-            device = 'smarttv';
-        } else if (result.device.type === 'wearable') {
-            device = 'wearable';
-        } else if (result.device.type === 'embedded') {
-            device = 'embedded';
-        }
-
-        // Map OS
-        const os = result.os.name || 'Unknown';
-
-        // Map Browser
-        const browser = result.browser.name || 'Unknown';
-
-        return { device, os, browser };
     }
 
     /**
