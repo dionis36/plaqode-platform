@@ -105,7 +105,7 @@ export function AnalyticsContent({ id }: { id: string }) {
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 {/* Header */}
-                <div className="mb-8">
+                <div className="mb-6 sm:mb-8">
                     <button
                         onClick={() => router.back()}
                         className="flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-4 transition-colors"
@@ -113,33 +113,33 @@ export function AnalyticsContent({ id }: { id: string }) {
                         <ArrowLeft className="w-4 h-4" />
                         <span className="text-sm font-medium">Back</span>
                     </button>
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                         <div>
-                            <h1 className="text-3xl font-bold text-slate-900">Analytics</h1>
-                            <p className="text-slate-600 mt-2">{qrName}</p>
+                            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">Analytics</h1>
+                            <p className="text-slate-600 mt-1">{qrName}</p>
                         </div>
-                        <div className="flex gap-2">
+                        <div className="grid grid-cols-3 w-full sm:w-auto gap-2">
                             <button
                                 onClick={() => setDateRange('7d')}
-                                className={`px-4 py-2 rounded-lg font-medium transition-colors ${dateRange === '7d'
+                                className={`px-2 sm:px-4 py-2 rounded-lg text-sm sm:text-base font-medium transition-colors text-center whitespace-nowrap ${dateRange === '7d'
                                     ? 'bg-blue-600 text-white'
                                     : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'
                                     }`}
                             >
-                                Last 7 Days
+                                7 Days
                             </button>
                             <button
                                 onClick={() => setDateRange('30d')}
-                                className={`px-4 py-2 rounded-lg font-medium transition-colors ${dateRange === '30d'
+                                className={`px-2 sm:px-4 py-2 rounded-lg text-sm sm:text-base font-medium transition-colors text-center whitespace-nowrap ${dateRange === '30d'
                                     ? 'bg-blue-600 text-white'
                                     : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'
                                     }`}
                             >
-                                Last 30 Days
+                                30 Days
                             </button>
                             <button
                                 onClick={() => setDateRange('all')}
-                                className={`px-4 py-2 rounded-lg font-medium transition-colors ${dateRange === 'all'
+                                className={`px-2 sm:px-4 py-2 rounded-lg text-sm sm:text-base font-medium transition-colors text-center whitespace-nowrap ${dateRange === 'all'
                                     ? 'bg-blue-600 text-white'
                                     : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'
                                     }`}
@@ -150,27 +150,31 @@ export function AnalyticsContent({ id }: { id: string }) {
                     </div>
                 </div>
 
-                {/* Total Scans */}
-                <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-lg p-8 text-white mb-8">
-                    <div className="flex items-center gap-4">
-                        <div className="w-16 h-16 bg-white/20 rounded-lg flex items-center justify-center">
-                            <TrendingUp className="w-8 h-8" />
-                        </div>
-                        <div>
-                            <p className="text-blue-100 text-sm font-medium">Total Scans</p>
-                            <p className="text-5xl font-bold">{analytics.totalScans.toLocaleString()}</p>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 mb-8">
+                    {/* Total Scans */}
+                    <div className="lg:col-span-1 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl shadow-lg p-6 sm:p-8 text-white h-full flex flex-col justify-center">
+                        <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 rounded-lg flex items-center justify-center shrink-0">
+                                <TrendingUp className="w-6 h-6 sm:w-8 sm:h-8" />
+                            </div>
+                            <div>
+                                <p className="text-blue-100 text-sm font-medium">Total Scans</p>
+                                <p className="text-4xl sm:text-5xl font-bold">{analytics.totalScans.toLocaleString()}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                {/* Scans Over Time */}
-                <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-8">
-                    <h2 className="text-lg font-semibold text-slate-900 mb-4">Scans Over Time</h2>
-                    {scansOverTimeData.length > 0 ? (
-                        <ScansChart data={scansOverTimeData} />
-                    ) : (
-                        <p className="text-center text-slate-500 py-8">No scan data available for this period</p>
-                    )}
+                    {/* Scans Over Time */}
+                    <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                        <h2 className="text-lg font-semibold text-slate-900 mb-4">Scans Over Time</h2>
+                        {scansOverTimeData.length > 0 ? (
+                            <div className="h-[300px] w-full">
+                                <ScansChart data={scansOverTimeData} />
+                            </div>
+                        ) : (
+                            <p className="text-center text-slate-500 py-8">No scan data available for this period</p>
+                        )}
+                    </div>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">

@@ -46,16 +46,16 @@ export default function TemplateFilters({ filters, onFilterChange }: TemplateFil
 
     return (
         <div className="w-full">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                {/* Search Bar - Always Visible */}
-                <div className="relative flex-1 w-full sm:max-w-md">
+            <div className="flex items-center gap-2 sm:gap-4">
+                {/* Search Bar - Always Visible & Flexible */}
+                <div className="relative flex-1 min-w-0 sm:max-w-md">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <Search size={18} className="text-gray-400" />
                     </div>
                     <input
                         type="text"
-                        placeholder="Search templates..."
-                        className="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg leading-5 bg-gray-50 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out"
+                        placeholder="Search..."
+                        className="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg leading-5 bg-gray-50 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-sm transition duration-150 ease-in-out"
                         value={filters.search || ''}
                         onChange={handleSearchChange}
                     />
@@ -69,37 +69,35 @@ export default function TemplateFilters({ filters, onFilterChange }: TemplateFil
                     )}
                 </div>
 
-                <div className="flex items-center gap-2 w-full sm:w-auto">
-                    {/* Reset Button */}
-                    {hasActiveFilters && (
-                        <button
-                            onClick={clearFilters}
-                            className="flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 transition-colors"
-                            title="Reset all filters"
-                        >
-                            <RotateCcw size={16} />
-                            <span className="hidden sm:inline">Reset</span>
-                        </button>
-                    )}
-
-                    {/* Filter Toggle Button */}
+                {/* Reset Button */}
+                {hasActiveFilters && (
                     <button
-                        onClick={() => setIsOpen(!isOpen)}
-                        className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${isOpen || activeFiltersCount > 0
-                            ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                            : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 active:bg-gray-100'
-                            }`}
+                        onClick={clearFilters}
+                        className="flex-none flex items-center justify-center gap-2 px-2.5 sm:px-3 py-2 rounded-lg text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 transition-colors"
+                        title="Reset all filters"
                     >
-                        <Filter size={18} />
-                        <span className="hidden sm:inline">Filters</span>
-                        {activeFiltersCount > 0 && (
-                            <span className="bg-blue-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                                {activeFiltersCount}
-                            </span>
-                        )}
-                        {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                        <RotateCcw size={18} />
+                        <span className="hidden sm:inline">Reset</span>
                     </button>
-                </div>
+                )}
+
+                {/* Filter Toggle Button */}
+                <button
+                    onClick={() => setIsOpen(!isOpen)}
+                    className={`flex-none flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${isOpen || activeFiltersCount > 0
+                        ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                        : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 active:bg-gray-100'
+                        }`}
+                >
+                    <Filter size={18} />
+                    <span className="hidden sm:inline">Filters</span>
+                    {activeFiltersCount > 0 && (
+                        <span className="bg-blue-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                            {activeFiltersCount}
+                        </span>
+                    )}
+                    {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                </button>
             </div>
 
             {/* Collapsible Filter Panel */}

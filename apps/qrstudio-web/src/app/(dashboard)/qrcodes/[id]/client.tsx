@@ -275,44 +275,81 @@ export function QrPageClient({ id }: QrPageClientProps) {
                             </button>
                         </div>
 
-                        {/* Icon-Only Action Buttons */}
-                        <div className="flex gap-2">
+                        {/* Desktop Action Buttons (Labeled) */}
+                        <div className="hidden lg:flex gap-3">
                             <button
                                 onClick={() => setPreviewModalOpen(true)}
-                                className="flex items-center justify-center p-2.5 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100 transition-colors"
-                                title="Preview Content"
+                                className="flex items-center gap-2 px-3 py-2 bg-purple-50 text-purple-700 rounded-lg hover:bg-purple-100 transition-colors text-sm font-medium"
                             >
                                 <Smartphone className="w-4 h-4" />
+                                Preview
                             </button>
 
                             <Link
                                 href={`/analytics?id=${qrCode.id}`}
-                                className="flex items-center justify-center p-2.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors"
-                                title="Analytics"
+                                className="flex items-center gap-2 px-3 py-2 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium"
                             >
                                 <BarChart3 className="w-4 h-4" />
+                                Analytics
                             </Link >
 
                             <Link
                                 href={`/create/${qrCode.type}?edit=${qrCode.id}`}
-                                className="flex items-center justify-center p-2.5 bg-slate-50 text-slate-700 rounded-lg hover:bg-slate-100 transition-colors"
-                                title="Edit"
+                                className="flex items-center gap-2 px-3 py-2 bg-slate-50 text-slate-700 rounded-lg hover:bg-slate-100 transition-colors text-sm font-medium"
                             >
                                 <Edit className="w-4 h-4" />
+                                Edit Design
                             </Link>
 
                             <button
                                 onClick={handleDeleteClick}
-                                className="flex items-center justify-center p-2.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
-                                title="Delete"
+                                className="flex items-center gap-2 px-3 py-2 bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition-colors text-sm font-medium"
                             >
                                 <Trash2 className="w-4 h-4" />
+                                Delete
                             </button>
                         </div >
                     </div >
                 </div >
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {/* Quick Actions (Mobile Only) */}
+                    <div className="lg:hidden bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+                        <h2 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-3">Quick Actions</h2>
+                        <div className="grid grid-cols-2 gap-3">
+                            <button
+                                onClick={() => setPreviewModalOpen(true)}
+                                className="flex flex-col items-center justify-center gap-2 p-3 bg-purple-50 text-purple-700 rounded-lg hover:bg-purple-100 transition-colors"
+                            >
+                                <Smartphone className="w-5 h-5" />
+                                <span className="text-sm font-medium">Preview</span>
+                            </button>
+
+                            <Link
+                                href={`/analytics?id=${qrCode.id}`}
+                                className="flex flex-col items-center justify-center gap-2 p-3 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors"
+                            >
+                                <BarChart3 className="w-5 h-5" />
+                                <span className="text-sm font-medium">Analytics</span>
+                            </Link>
+
+                            <Link
+                                href={`/create/${qrCode.type}?edit=${qrCode.id}`}
+                                className="flex flex-col items-center justify-center gap-2 p-3 bg-slate-50 text-slate-700 rounded-lg hover:bg-slate-100 transition-colors"
+                            >
+                                <Edit className="w-5 h-5" />
+                                <span className="text-sm font-medium">Edit</span>
+                            </Link>
+
+                            <button
+                                onClick={handleDeleteClick}
+                                className="flex flex-col items-center justify-center gap-2 p-3 bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition-colors"
+                            >
+                                <Trash2 className="w-5 h-5" />
+                                <span className="text-sm font-medium">Delete</span>
+                            </button>
+                        </div>
+                    </div>
                     {/* QR Code Preview */}
                     <div className="lg:col-span-1">
                         <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
@@ -395,8 +432,7 @@ export function QrPageClient({ id }: QrPageClientProps) {
                                     <dt className="text-sm font-medium text-slate-600">Public URL</dt>
                                     <dd className="mt-1">
                                         <div className="flex items-center gap-2 max-w-full">
-                                            <div className="flex-1 flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-md px-3 py-2">
-                                                <Globe className="w-4 h-4 text-slate-400 shrink-0" />
+                                            <div className="flex-1 min-w-0 flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-md px-3 py-2">
                                                 <div className="text-sm text-slate-600 truncate font-mono select-all">
                                                     {fullQrUrl}
                                                 </div>
