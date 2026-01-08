@@ -35,10 +35,6 @@ export function ProfileWidget() {
             </div>
 
             <div className="pt-4 border-t border-gray-100 mb-2">
-                <div>
-                    <p className="text-xs text-gray-500 uppercase font-semibold mb-1">User ID</p>
-                    <p className="text-sm font-mono text-gray-700 truncate" title={user.id}>{user.id}</p>
-                </div>
             </div>
 
             <Link href="/app/profile" className="block mt-6">

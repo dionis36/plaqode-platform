@@ -232,7 +232,7 @@ export default function AdminPage() {
     }
 
     return (
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mb-8">
                 <h1 className="text-2xl lg:text-3xl font-merriweather font-bold text-dark mb-2">
                     {isSuperAdmin ? 'Superadmin Panel' : 'Admin Panel'}
@@ -291,9 +291,25 @@ export default function AdminPage() {
                             {filteredUsers.map((u) => (
                                 <div key={u.id} className="p-4 space-y-4">
                                     <div className="flex justify-between items-start">
-                                        <div>
-                                            <div className="text-sm font-semibold text-gray-900">{u.name || 'Unnamed User'}</div>
-                                            <div className="text-xs text-gray-500">{u.email}</div>
+                                        <div className="min-w-0 flex-1 mr-2">
+                                            <div className="text-sm font-semibold text-gray-900 truncate">{u.name || 'Unnamed User'}</div>
+                                            <div className="text-xs text-gray-500 truncate">{u.email}</div>
+                                            <div className="text-xs text-gray-400 font-mono mt-0.5 flex items-center gap-1 group">
+                                                <span title={u.id}>{u.id.substring(0, 10)}...</span>
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        navigator.clipboard.writeText(u.id);
+                                                        toast.success('User ID copied');
+                                                    }}
+                                                    className="opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity p-0.5 hover:bg-gray-100 rounded text-gray-500"
+                                                    title="Copy User ID"
+                                                >
+                                                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
                                             <div className="text-xs text-slate-400 mt-1">{new Date(u.createdAt).toLocaleDateString()}</div>
                                         </div>
                                         <button
@@ -406,6 +422,22 @@ export default function AdminPage() {
                                             <td className="px-6 py-4">
                                                 <div className="text-sm font-medium text-gray-900">{u.name || u.email}</div>
                                                 <div className="text-sm text-gray-500">{u.email}</div>
+                                                <div className="text-xs text-gray-400 font-mono mt-0.5 flex items-center gap-2 group">
+                                                    <span title={u.id}>{u.id.substring(0, 8)}...</span>
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            navigator.clipboard.writeText(u.id);
+                                                            toast.success('User ID copied');
+                                                        }}
+                                                        className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-gray-100 rounded text-gray-500"
+                                                        title="Copy User ID"
+                                                    >
+                                                        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
                                             </td>
                                             <td className="px-6 py-4">
                                                 <div className="flex gap-2 flex-wrap">

@@ -125,11 +125,6 @@ export default function ProfilePage() {
 
                     <div className="space-y-4">
                         <div>
-                            <label className="block text-sm font-medium text-gray-500 mb-1">User ID</label>
-                            <p className="text-gray-900 font-mono text-sm">{user.id}</p>
-                        </div>
-
-                        <div>
                             <label className="block text-sm font-medium text-gray-500 mb-1">Roles</label>
                             <div className="flex gap-2">
                                 {user.roles.map((role) => (

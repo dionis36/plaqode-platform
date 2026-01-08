@@ -51,8 +51,8 @@ export default function SavedCard({ design, onDelete }: SavedCardProps) {
                         </div>
                     )}
 
-                    {/* Delete Button - Top Right, Visible on Group Hover */}
-                    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 z-10">
+                    {/* Delete Button - Top Right, Visible on Mobile, Group Hover on Desktop */}
+                    <div className="absolute top-2 right-2 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-all duration-200 transform lg:translate-y-2 group-hover:translate-y-0 z-10">
                         <button
                             onClick={(e) => {
                                 e.stopPropagation();
