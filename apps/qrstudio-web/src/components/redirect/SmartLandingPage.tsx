@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { ExternalLink, ArrowRight, Loader2 } from 'lucide-react';
+import { ExternalLink, ArrowRight } from 'lucide-react';
+import { UniversalLoader } from '@plaqode-platform/ui';
 
 interface SmartLandingPageProps {
     qrCode: {
@@ -125,7 +126,9 @@ export function SmartLandingPage({ qrCode }: SmartLandingPageProps) {
                     {/* Loading Indicator */}
                     <div className="flex items-center justify-center gap-3">
                         {redirecting ? (
-                            <Loader2 className="w-6 h-6 animate-spin" style={{ color: styles?.primary_color || '#2563EB' }} />
+                            <div style={{ color: styles?.primary_color || '#2563EB' }}>
+                                <UniversalLoader size="md" />
+                            </div>
                         ) : (
                             <div
                                 className="w-6 h-6 rounded-full border-4 border-t-transparent animate-spin"

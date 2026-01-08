@@ -10,6 +10,7 @@ import { TemplateFilterOptions } from "@/lib/templateRegistry";
 import { Pagination } from "@/components/ui/Pagination";
 import StaticNavbar from "@/components/layout/StaticNavbar";
 import SmartNavbar from "@/components/layout/SmartNavbar";
+import { UniversalLoader } from "@plaqode-platform/ui";
 
 const TemplatesContent = () => {
   const router = useRouter();
@@ -186,10 +187,7 @@ const TemplatesContent = () => {
   if (!isLoaded) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-pulse flex flex-col items-center">
-          <div className="h-12 w-12 bg-gray-200 rounded-full mb-4"></div>
-          <div className="h-4 w-32 bg-gray-200 rounded"></div>
-        </div>
+        <UniversalLoader size="lg" text="Loading templates..." />
       </div>
     );
   }
@@ -227,7 +225,7 @@ const TemplatesContent = () => {
 
         {isLoading ? (
           <div className="flex items-center justify-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <UniversalLoader size="md" text="Updating..." />
           </div>
         ) : (
           <>
@@ -253,10 +251,7 @@ const TemplatesPage = () => {
   return (
     <Suspense fallback={
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-pulse flex flex-col items-center">
-          <div className="h-12 w-12 bg-gray-200 rounded-full mb-4"></div>
-          <div className="h-4 w-32 bg-gray-200 rounded"></div>
-        </div>
+        <UniversalLoader size="lg" />
       </div>
     }>
       <TemplatesContent />

@@ -11,6 +11,7 @@ import { VCardPreview } from './preview/VCardPreview';
 import { Smartphone } from 'lucide-react';
 import { useWizardStore } from './store';
 import { createQrCode, downloadQrCode, ApiError } from '@/lib/api';
+import { UniversalLoader } from '@plaqode-platform/ui';
 
 interface TemplateWizardProps {
     templateType: string;
@@ -144,7 +145,7 @@ export function TemplateWizard({ templateType }: TemplateWizardProps) {
                                     disabled={isGenerating}
                                     className="px-10 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl font-bold text-lg shadow-xl shadow-blue-500/20 hover:shadow-blue-500/40 hover:-translate-y-1 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
                                 >
-                                    {isGenerating ? 'Generating...' : 'Download QR Code'}
+                                    {isGenerating ? <div className="flex items-center gap-2"><UniversalLoader size="sm" variant="button" /> Generating...</div> : 'Download QR Code'}
                                 </button>
                             </div>
                         </div>

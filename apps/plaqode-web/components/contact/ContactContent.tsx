@@ -1,7 +1,7 @@
 "use client";
 
-import { GradientButton, toast } from "@plaqode-platform/ui";
-import { Facebook, Twitter, Linkedin, Instagram, Phone, Mail, MessageCircle, Loader2 } from "lucide-react";
+import { GradientButton, toast, UniversalLoader } from "@plaqode-platform/ui";
+import { Facebook, Twitter, Linkedin, Instagram, Phone, Mail, MessageCircle } from "lucide-react";
 import { useFormState } from "react-dom";
 import { useEffect, useRef } from "react";
 import { sendContactEmail, ContactState } from "@/actions/contact";
@@ -33,7 +33,7 @@ function SubmitButton() {
                 size="lg"
                 bold
                 disabled={pending}
-                icon={pending ? <Loader2 className="animate-spin" size={20} /> : undefined}
+                icon={pending ? <UniversalLoader size="sm" variant="button" /> : undefined}
                 className="w-full md:w-auto"
             />
         </div>

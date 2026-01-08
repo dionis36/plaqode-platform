@@ -5,7 +5,7 @@ import { Upload, Download, Trash2, Star, Eye, EyeOff, RefreshCw, Search, Filter,
 import Link from 'next/link';
 import AdminTemplateCard from '@/components/templates/AdminTemplateCard';
 import { CardTemplate } from '@/types/template';
-import { ConfirmationModal, toast } from "@plaqode-platform/ui";
+import { ConfirmationModal, toast, UniversalLoader } from "@plaqode-platform/ui";
 
 export default function TemplateManagementPage() {
     // Note: Using CardTemplate type which might need adaptation depending on API response
@@ -265,9 +265,8 @@ export default function TemplateManagementPage() {
             {/* Content Section */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 {loading ? (
-                    <div className="text-center py-20">
-                        <RefreshCw size={40} className="animate-spin mx-auto text-blue-500 mb-4" />
-                        <p className="text-gray-500 font-medium">Loading templates...</p>
+                    <div className="py-20">
+                        <UniversalLoader size="lg" center text="Loading templates..." />
                     </div>
                 ) : filteredTemplates.length === 0 ? (
                     <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-gray-300">

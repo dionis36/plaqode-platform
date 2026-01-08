@@ -4,12 +4,12 @@ import React, { useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { Logo, toast } from "@plaqode-platform/ui";
+import { Logo, toast, UniversalLoader } from "@plaqode-platform/ui";
 import { Eye, EyeOff } from 'lucide-react';
 
 export default function SignupPage() {
     return (
-        <React.Suspense fallback={<div>Loading...</div>}>
+        <React.Suspense fallback={<div className="h-screen w-full flex items-center justify-center"><UniversalLoader size="lg" /></div>}>
             <SignupForm />
         </React.Suspense>
     );
@@ -175,9 +175,9 @@ function SignupForm() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full py-4 bg-black text-white rounded-2xl font-bold font-sans hover:opacity-80 transition-all duration-300 disabled:opacity-50 shadow-lg shadow-black/10 mt-4"
+                            className="w-full py-4 bg-black text-white rounded-2xl font-bold font-sans hover:opacity-80 transition-all duration-300 disabled:opacity-50 shadow-lg shadow-black/10 mt-4 flex items-center justify-center gap-2"
                         >
-                            {loading ? 'Creating Account...' : 'Create Account'}
+                            {loading ? <UniversalLoader size="sm" variant="button" /> : 'Create Account'}
                         </button>
 
                     </form>

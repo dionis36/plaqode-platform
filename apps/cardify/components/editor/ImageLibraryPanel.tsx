@@ -10,8 +10,9 @@ import {
     getRecentImages,
     clearRecentImages,
 } from '@/lib/imageHelpers';
-import { Upload, Search, Clock, Loader2, AlertCircle, X, Image as ImageIcon } from 'lucide-react';
+import { Upload, Search, Clock, AlertCircle, X, Image as ImageIcon } from 'lucide-react';
 import Image from 'next/image';
+import { UniversalLoader } from '@plaqode-platform/ui';
 
 interface ImageLibraryPanelProps {
     onAddNode: (node: KonvaNodeDefinition) => void;
@@ -404,8 +405,7 @@ const ImageLibraryPanel: React.FC<ImageLibraryPanelProps> = ({ onAddNode }) => {
                                 disabled={loadingMore}
                                 className="w-full py-2.5 px-4 bg-white border-2 border-gray-300 hover:border-blue-400 hover:bg-blue-50 text-gray-700 text-sm font-medium rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                             >
-                                {loadingMore && <Loader2 className="w-4 h-4 animate-spin" />}
-                                {loadingMore ? 'Loading...' : 'Load More Images'}
+                                {loadingMore ? <UniversalLoader size="sm" variant="button" /> : 'Load More Images'}
                             </button>
                         )}
 
@@ -527,7 +527,7 @@ const ImageLibraryPanel: React.FC<ImageLibraryPanelProps> = ({ onAddNode }) => {
 
                 {loading && (
                     <div className="flex items-center justify-center py-12">
-                        <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+                        <UniversalLoader size="md" className="text-blue-500" />
                     </div>
                 )}
 

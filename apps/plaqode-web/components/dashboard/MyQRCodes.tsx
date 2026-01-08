@@ -16,6 +16,7 @@ import {
     File
 } from 'lucide-react';
 import { format } from 'date-fns';
+import { UniversalLoader } from '@plaqode-platform/ui';
 
 interface QrItem {
     id: string;
@@ -64,10 +65,10 @@ export function MyQRCodes() {
 
     if (loading) {
         return (
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
+            <div className="bg-white rounded-xl border border-gray-200 p-6 min-h-[300px] flex flex-col">
                 <h2 className="text-xl font-bold text-gray-900 mb-4">My QR Codes</h2>
-                <div className="text-center py-8">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mx-auto"></div>
+                <div className="flex-1 flex items-center justify-center">
+                    <UniversalLoader size="lg" />
                 </div>
             </div>
         );
