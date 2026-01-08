@@ -5,7 +5,7 @@ import { Upload, Download, Trash2, Star, Eye, EyeOff, RefreshCw, Search, Filter,
 import Link from 'next/link';
 import AdminTemplateCard from '@/components/templates/AdminTemplateCard';
 import { CardTemplate } from '@/types/template';
-import { ConfirmationModal, toast, UniversalLoader } from "@plaqode-platform/ui";
+import { ConfirmationModal, toast, UniversalLoader, LoadingBoundary } from "@plaqode-platform/ui";
 
 export default function TemplateManagementPage() {
     // Note: Using CardTemplate type which might need adaptation depending on API response
@@ -263,35 +263,33 @@ export default function TemplateManagementPage() {
             </div>
 
             {/* Content Section */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                {loading ? (
-                    <div className="py-20">
-                        <UniversalLoader size="lg" center text="Loading templates..." />
-                    </div>
-                ) : filteredTemplates.length === 0 ? (
-                    <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-gray-300">
-                        <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <Search size={24} className="text-gray-400" />
+            <LoadingBoundary isLoading={loading} size="lg" center text="Loading templates..." className="py-20">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                    {filteredTemplates.length === 0 ? (
+                        <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-gray-300">
+                            <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <Search size={24} className="text-gray-400" />
+                            </div>
+                            <h3 className="text-lg font-bold text-gray-900">No templates found</h3>
+                            <p className="text-gray-500 max-w-sm mx-auto mt-2">
+                                Try adjusting your search or filters.
+                            </p>
                         </div>
-                        <h3 className="text-lg font-bold text-gray-900">No templates found</h3>
-                        <p className="text-gray-500 max-w-sm mx-auto mt-2">
-                            Try adjusting your search or filters.
-                        </p>
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        {filteredTemplates.map(template => (
-                            <AdminTemplateCard
-                                key={template.id}
-                                template={template}
-                                onDelete={handleDelete}
-                                onToggleFeatured={handleToggleFeatured}
-                                onExport={handleExport}
-                            />
-                        ))}
-                    </div>
-                )}
-            </div>
+                    ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                            {filteredTemplates.map(template => (
+                                <AdminTemplateCard
+                                    key={template.id}
+                                    template={template}
+                                    onDelete={handleDelete}
+                                    onToggleFeatured={handleToggleFeatured}
+                                    onExport={handleExport}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </div>
+            </LoadingBoundary>
 
             {/* Confirmation Modal */}
             <ConfirmationModal

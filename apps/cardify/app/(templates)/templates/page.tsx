@@ -10,7 +10,7 @@ import { TemplateFilterOptions } from "@/lib/templateRegistry";
 import { Pagination } from "@/components/ui/Pagination";
 import StaticNavbar from "@/components/layout/StaticNavbar";
 import SmartNavbar from "@/components/layout/SmartNavbar";
-import { UniversalLoader } from "@plaqode-platform/ui";
+import { UniversalLoader, LoadingBoundary } from "@plaqode-platform/ui";
 
 const TemplatesContent = () => {
   const router = useRouter();
@@ -184,66 +184,56 @@ const TemplatesContent = () => {
     router.push(`?${params.toString()}`, { scroll: false });
   };
 
-  if (!isLoaded) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <UniversalLoader size="lg" text="Loading templates..." />
-      </div>
-    );
-  }
-
   return (
-    <main className="min-h-screen bg-bg relative">
-      <SmartNavbar />
+    <LoadingBoundary isLoading={!isLoaded} size="lg" text="Loading templates..." className="min-h-screen flex items-center justify-center bg-gray-50">
+      <main className="min-h-screen bg-bg relative">
+        <SmartNavbar />
 
-      {/* Hero Section with Internal Static Nav */}
-      <div className="relative bg-dark text-center py-24 sm:py-32 px-4 overflow-hidden">
-        <StaticNavbar />
+        {/* Hero Section with Internal Static Nav */}
+        <div className="relative bg-dark text-center py-24 sm:py-32 px-4 overflow-hidden">
+          <StaticNavbar />
 
-        {/* Background Pattern/Gradient */}
-        <div className="absolute inset-0 bg-[url('/img/hero-bg.jpg')] bg-cover bg-center opacity-20 pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-dark/90 pointer-events-none" />
+          {/* Background Pattern/Gradient */}
+          <div className="absolute inset-0 bg-[url('/img/hero-bg.jpg')] bg-cover bg-center opacity-20 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-dark/90 pointer-events-none" />
 
-        <div className="relative z-10 max-w-4xl mx-auto pt-10">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-merriweather font-bold bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent mb-6">
-            Business Card Designs
-          </h1>
-          <p className="text-lg sm:text-xl text-white/70 max-w-2xl mx-auto font-sans">
-            Select a premium layout to begin your professional identity.
-            Each design is fully customizable to align with your corporate branding.
-          </p>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            {filters.category && filters.category !== 'All' ? `${filters.category} Templates` : 'All Templates'}
-          </h1>
-          <TemplateFilters filters={filters} onFilterChange={handleFilterChange} />
-        </div>
-
-        {isLoading ? (
-          <div className="flex items-center justify-center h-64">
-            <UniversalLoader size="md" text="Updating..." />
+          <div className="relative z-10 max-w-4xl mx-auto pt-10">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-merriweather font-bold bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent mb-6">
+              Business Card Designs
+            </h1>
+            <p className="text-lg sm:text-xl text-white/70 max-w-2xl mx-auto font-sans">
+              Select a premium layout to begin your professional identity.
+              Each design is fully customizable to align with your corporate branding.
+            </p>
           </div>
-        ) : (
-          <>
-            <TemplateGrid templates={visibleTemplates} />
+        </div>
 
-            <div className="border-t border-gray-200 mt-12 pt-8">
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
-                totalItems={totalItems}
-                itemsPerPage={ITEMS_PER_PAGE}
-              />
-            </div>
-          </>
-        )}
-      </div>
-    </main>
+        <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+          <div className="mb-6">
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">
+              {filters.category && filters.category !== 'All' ? `${filters.category} Templates` : 'All Templates'}
+            </h1>
+            <TemplateFilters filters={filters} onFilterChange={handleFilterChange} />
+          </div>
+
+          <LoadingBoundary isLoading={isLoading} size="md" text="Updating..." className="flex items-center justify-center h-64">
+            <>
+              <TemplateGrid templates={visibleTemplates} />
+
+              <div className="border-t border-gray-200 mt-12 pt-8">
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
+                  totalItems={totalItems}
+                  itemsPerPage={ITEMS_PER_PAGE}
+                />
+              </div>
+            </>
+          </LoadingBoundary>
+        </div>
+      </main>
+    </LoadingBoundary>
   );
 };
 

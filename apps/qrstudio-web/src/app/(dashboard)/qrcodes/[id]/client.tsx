@@ -8,8 +8,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { SEO } from '@/components/common/SEO';
 import type QRCodeStyling from 'qr-code-styling';
 import { QrContentPreviewModal } from '@/components/common/QrContentPreviewModal';
-import { toast } from "@plaqode-platform/ui";
-import { ConfirmationModal } from "@plaqode-platform/ui";
+import { toast, ConfirmationModal, LoadingBoundary } from "@plaqode-platform/ui";
 
 interface QrPageClientProps {
     id: string;
@@ -225,15 +224,9 @@ export function QrPageClient({ id }: QrPageClientProps) {
         return colors[type.toLowerCase()] || 'bg-slate-100 text-slate-700 border border-slate-200';
     }
 
-    if (loading) {
-        return (
-            <div className="flex items-center justify-center min-h-screen">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-            </div>
-        );
-    }
+    // Loading state handled by LoadingBoundary wrapping the content
 
-    if (!qrCode) {
+    if (!qrCode && !loading) {
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <div className="text-center">
@@ -248,291 +241,303 @@ export function QrPageClient({ id }: QrPageClientProps) {
     }
 
     return (
-        <div className="min-h-screen">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-                <SEO
-                    title={qrCode.name}
-                    description={`View details and analytics for ${qrCode.name}`}
-                />
+        <LoadingBoundary
+            isLoading={loading}
+            size="lg"
+            text="Loading details..."
+            center={false}
+            className="flex items-center justify-center min-h-screen"
+        >
+            <div className="min-h-screen">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+                    <SEO
+                        title={qrCode?.name || 'QR Code Details'}
+                        description={`View details and analytics for ${qrCode?.name}`}
+                    />
 
-                {/* Header */}
-                <div className="mb-6 sm:mb-8">
-                    <button
-                        onClick={() => isJustCreated ? router.push('/dashboard') : router.back()}
-                        className="flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-4 transition-colors"
-                    >
-                        <ArrowLeft className="w-4 h-4" />
-                        <span className="text-sm font-medium">{isJustCreated ? 'Dashboard' : 'Back'}</span>
-                    </button>
+                    {/* Header */}
+                    <div className="mb-6 sm:mb-8">
+                        <button
+                            onClick={() => isJustCreated ? router.push('/dashboard') : router.back()}
+                            className="flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-4 transition-colors"
+                        >
+                            <ArrowLeft className="w-4 h-4" />
+                            <span className="text-sm font-medium">{isJustCreated ? 'Dashboard' : 'Back'}</span>
+                        </button>
 
-                    {/* Title Row with Status Badge */}
-                    <div className="flex items-center justify-between mb-2">
-                        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">{qrCode.name}</h1>
-                        <div className="flex items-center gap-3">
-                            <span className={`text-sm font-medium ${qrCode.isActive ? 'text-green-600' : 'text-slate-500'}`}>
-                                {qrCode.isActive ? 'Active' : 'Inactive'}
-                            </span>
-                            <button
-                                onClick={handleToggleStatus}
-                                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${qrCode.isActive ? 'bg-green-500' : 'bg-slate-200'
-                                    }`}
-                                title={qrCode.isActive ? 'Deactivate' : 'Activate'}
-                            >
-                                <span
-                                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${qrCode.isActive ? 'translate-x-6' : 'translate-x-1'
-                                        }`}
-                                />
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* URL Row with Action Buttons */}
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2 text-slate-600">
-                            <a
-                                href={fullQrUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-sm sm:text-base hover:text-blue-600 hover:underline flex items-center gap-1.5"
-                            >
-                                {fullQrUrl.replace(/^https?:\/\//, '')}
-                                <ExternalLink className="w-3.5 h-3.5 opacity-50" />
-                            </a>
-                            <button
-                                onClick={() => handleCopy(fullQrUrl)}
-                                className="p-1 text-slate-400 hover:text-blue-600 transition-colors"
-                                title="Copy URL"
-                            >
-                                <Copy className="w-3.5 h-3.5" />
-                            </button>
-                        </div>
-
-                        {/* Desktop Action Buttons (Labeled) */}
-                        <div className="hidden lg:flex gap-3">
-                            <button
-                                onClick={() => setPreviewModalOpen(true)}
-                                className="flex items-center gap-2 px-3 py-2 bg-purple-50 text-purple-700 rounded-lg hover:bg-purple-100 transition-colors text-sm font-medium"
-                            >
-                                <Smartphone className="w-4 h-4" />
-                                Preview
-                            </button>
-
-                            <Link
-                                href={`/analytics?id=${qrCode.id}`}
-                                className="flex items-center gap-2 px-3 py-2 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium"
-                            >
-                                <BarChart3 className="w-4 h-4" />
-                                Analytics
-                            </Link >
-
-                            <Link
-                                href={`/create/${qrCode.type}?edit=${qrCode.id}`}
-                                className="flex items-center gap-2 px-3 py-2 bg-slate-50 text-slate-700 rounded-lg hover:bg-slate-100 transition-colors text-sm font-medium"
-                            >
-                                <Edit className="w-4 h-4" />
-                                Edit Design
-                            </Link>
-
-                            <button
-                                onClick={handleDeleteClick}
-                                className="flex items-center gap-2 px-3 py-2 bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition-colors text-sm font-medium"
-                            >
-                                <Trash2 className="w-4 h-4" />
-                                Delete
-                            </button>
-                        </div >
-                    </div >
-                </div >
-
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {/* Quick Actions (Mobile Only) */}
-                    <div className="lg:hidden bg-white rounded-xl border border-gray-200 shadow-sm p-4">
-                        <h2 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-3">Quick Actions</h2>
-                        <div className="grid grid-cols-2 gap-3">
-                            <button
-                                onClick={() => setPreviewModalOpen(true)}
-                                className="flex flex-col items-center justify-center gap-2 p-3 bg-purple-50 text-purple-700 rounded-lg hover:bg-purple-100 transition-colors"
-                            >
-                                <Smartphone className="w-5 h-5" />
-                                <span className="text-sm font-medium">Preview</span>
-                            </button>
-
-                            <Link
-                                href={`/analytics?id=${qrCode.id}`}
-                                className="flex flex-col items-center justify-center gap-2 p-3 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors"
-                            >
-                                <BarChart3 className="w-5 h-5" />
-                                <span className="text-sm font-medium">Analytics</span>
-                            </Link>
-
-                            <Link
-                                href={`/create/${qrCode.type}?edit=${qrCode.id}`}
-                                className="flex flex-col items-center justify-center gap-2 p-3 bg-slate-50 text-slate-700 rounded-lg hover:bg-slate-100 transition-colors"
-                            >
-                                <Edit className="w-5 h-5" />
-                                <span className="text-sm font-medium">Edit</span>
-                            </Link>
-
-                            <button
-                                onClick={handleDeleteClick}
-                                className="flex flex-col items-center justify-center gap-2 p-3 bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition-colors"
-                            >
-                                <Trash2 className="w-5 h-5" />
-                                <span className="text-sm font-medium">Delete</span>
-                            </button>
-                        </div>
-                    </div>
-                    {/* QR Code Preview */}
-                    <div className="lg:col-span-1">
-                        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-                            <h2 className="text-lg font-semibold text-slate-900 mb-4">QR Code</h2>
-                            <div id="qr-code-container" className="flex justify-center mb-4" ref={(el) => {
-                                if (el && qrCodeInstance && !el.hasChildNodes()) {
-                                    qrCodeInstance.append(el);
-                                }
-                            }}></div>
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                                <button
-                                    onClick={() => handleDownload('png')}
-                                    className="flex items-center justify-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm"
-                                >
-                                    <Download className="w-4 h-4" />
-                                    PNG
-                                </button>
-                                <button
-                                    onClick={() => handleDownload('svg')}
-                                    className="flex items-center justify-center gap-2 px-3 py-2 bg-slate-700 text-white rounded-lg font-medium hover:bg-slate-800 transition-colors text-sm"
-                                >
-                                    <Download className="w-4 h-4" />
-                                    SVG
-                                </button>
-                                <button
-                                    onClick={() => handleDownload('pdf')}
-                                    className="flex items-center justify-center gap-2 px-3 py-2 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors text-sm"
-                                >
-                                    <Download className="w-4 h-4" />
-                                    PDF
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Details & Analytics */}
-                    <div className="lg:col-span-2 space-y-6">
-                        {/* Stats */}
-                        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-                            <h2 className="text-lg font-semibold text-slate-900 mb-4">Statistics</h2>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div className="p-4 bg-purple-50 rounded-xl border border-purple-100">
-                                    <div className="flex items-center gap-3 mb-2">
-                                        <div className="p-2 bg-purple-100 rounded-lg text-purple-600">
-                                            <BarChart3 className="w-5 h-5" />
-                                        </div>
-                                        <p className="text-sm font-medium text-slate-600">Total Scans</p>
-                                    </div>
-                                    <p className="text-2xl font-bold text-slate-900">{qrCode._count.scans}</p>
-                                </div>
-                                <div className="p-4 bg-orange-50 rounded-xl border border-orange-100">
-                                    <div className="flex items-center gap-3 mb-2">
-                                        <div className="p-2 bg-orange-100 rounded-lg text-orange-600">
-                                            <Download className="w-5 h-5" /> {/* Placeholder icon for Created/Time */}
-                                        </div>
-                                        <p className="text-sm font-medium text-slate-600">Created On</p>
-                                    </div>
-                                    <p className="text-lg font-bold text-slate-900">
-                                        {new Date(qrCode.createdAt).toLocaleDateString()}
-                                    </p>
-                                </div>
-                                {qrCode.updatedAt && qrCode.updatedAt !== qrCode.createdAt && (
-                                    <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-100 sm:col-span-2">
-                                        <div className="flex items-center gap-3 mb-2">
-                                            <div className="p-2 bg-emerald-100 rounded-lg text-emerald-600">
-                                                <Edit className="w-5 h-5" />
-                                            </div>
-                                            <p className="text-sm font-medium text-slate-600">Last Updated</p>
-                                        </div>
-                                        <p className="text-lg font-bold text-slate-900">
-                                            {new Date(qrCode.updatedAt).toLocaleDateString()} at {new Date(qrCode.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                        </p>
-                                    </div>
-                                )}
-                            </div>
-                            <Link
-                                href={`/analytics?id=${qrCode.id}`}
-                                className="mt-4 flex items-center justify-center gap-2 px-4 py-2 bg-slate-50 text-slate-700 rounded-lg font-medium hover:bg-slate-100 transition-colors w-full sm:w-auto"
-                            >
-                                <BarChart3 className="w-4 h-4" />
-                                View Detailed Analytics
-                            </Link>
-                        </div>
-
-                        {/* Details */}
-                        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-                            <h2 className="text-lg font-semibold text-slate-900 mb-4">Details</h2>
-                            <dl className="space-y-4">
-                                <div>
-                                    <dt className="text-sm font-medium text-slate-500 mb-1">Type</dt>
-                                    <dd>
-                                        <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${getTypeColor(qrCode.type)}`}>
-                                            {qrCode.type.toUpperCase()}
+                        {qrCode && (
+                            <>
+                                {/* Title Row with Status Badge */}
+                                <div className="flex items-center justify-between mb-2">
+                                    <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">{qrCode.name}</h1>
+                                    <div className="flex items-center gap-3">
+                                        <span className={`text-sm font-medium ${qrCode.isActive ? 'text-green-600' : 'text-slate-500'}`}>
+                                            {qrCode.isActive ? 'Active' : 'Inactive'}
                                         </span>
-                                    </dd>
+                                        <button
+                                            onClick={handleToggleStatus}
+                                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${qrCode.isActive ? 'bg-green-500' : 'bg-slate-200'
+                                                }`}
+                                            title={qrCode.isActive ? 'Deactivate' : 'Activate'}
+                                        >
+                                            <span
+                                                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${qrCode.isActive ? 'translate-x-6' : 'translate-x-1'
+                                                    }`}
+                                            />
+                                        </button>
+                                    </div>
                                 </div>
-                                <div>
-                                    <dt className="text-sm font-medium text-slate-500 mb-1">Shortcode</dt>
-                                    <dd className="text-sm text-slate-900 font-mono bg-slate-50 px-3 py-2 rounded-md border border-slate-200 inline-block">{qrCode.shortcode}</dd>
+
+                                {/* URL Row with Action Buttons */}
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2 text-slate-600">
+                                        <a
+                                            href={fullQrUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-sm sm:text-base hover:text-blue-600 hover:underline flex items-center gap-1.5"
+                                        >
+                                            {fullQrUrl.replace(/^https?:\/\//, '')}
+                                            <ExternalLink className="w-3.5 h-3.5 opacity-50" />
+                                        </a>
+                                        <button
+                                            onClick={() => handleCopy(fullQrUrl)}
+                                            className="p-1 text-slate-400 hover:text-blue-600 transition-colors"
+                                            title="Copy URL"
+                                        >
+                                            <Copy className="w-3.5 h-3.5" />
+                                        </button>
+                                    </div>
+
+                                    {/* Desktop Action Buttons (Labeled) */}
+                                    <div className="hidden lg:flex gap-3">
+                                        <button
+                                            onClick={() => setPreviewModalOpen(true)}
+                                            className="flex items-center gap-2 px-3 py-2 bg-purple-50 text-purple-700 rounded-lg hover:bg-purple-100 transition-colors text-sm font-medium"
+                                        >
+                                            <Smartphone className="w-4 h-4" />
+                                            Preview
+                                        </button>
+
+                                        <Link
+                                            href={`/analytics?id=${qrCode.id}`}
+                                            className="flex items-center gap-2 px-3 py-2 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium"
+                                        >
+                                            <BarChart3 className="w-4 h-4" />
+                                            Analytics
+                                        </Link >
+
+                                        <Link
+                                            href={`/create/${qrCode.type}?edit=${qrCode.id}`}
+                                            className="flex items-center gap-2 px-3 py-2 bg-slate-50 text-slate-700 rounded-lg hover:bg-slate-100 transition-colors text-sm font-medium"
+                                        >
+                                            <Edit className="w-4 h-4" />
+                                            Edit Design
+                                        </Link>
+                                        <button
+                                            onClick={handleDeleteClick}
+                                            className="flex items-center gap-2 px-3 py-2 bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition-colors text-sm font-medium"
+                                        >
+                                            <Trash2 className="w-4 h-4" />
+                                            Delete
+                                        </button>
+                                    </div >
+                                </div >
+                            </>
+                        )}
+                    </div >
+
+                    {qrCode && (
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            {/* Quick Actions (Mobile Only) */}
+                            <div className="lg:hidden bg-white rounded-xl border border-gray-200 shadow-sm p-4">
+                                <h2 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-3">Quick Actions</h2>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <button
+                                        onClick={() => setPreviewModalOpen(true)}
+                                        className="flex flex-col items-center justify-center gap-2 p-3 bg-purple-50 text-purple-700 rounded-lg hover:bg-purple-100 transition-colors"
+                                    >
+                                        <Smartphone className="w-5 h-5" />
+                                        <span className="text-sm font-medium">Preview</span>
+                                    </button>
+
+                                    <Link
+                                        href={`/analytics?id=${qrCode.id}`}
+                                        className="flex flex-col items-center justify-center gap-2 p-3 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors"
+                                    >
+                                        <BarChart3 className="w-5 h-5" />
+                                        <span className="text-sm font-medium">Analytics</span>
+                                    </Link>
+
+                                    <Link
+                                        href={`/create/${qrCode.type}?edit=${qrCode.id}`}
+                                        className="flex flex-col items-center justify-center gap-2 p-3 bg-slate-50 text-slate-700 rounded-lg hover:bg-slate-100 transition-colors"
+                                    >
+                                        <Edit className="w-5 h-5" />
+                                        <span className="text-sm font-medium">Edit</span>
+                                    </Link>
+
+                                    <button
+                                        onClick={handleDeleteClick}
+                                        className="flex flex-col items-center justify-center gap-2 p-3 bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition-colors"
+                                    >
+                                        <Trash2 className="w-5 h-5" />
+                                        <span className="text-sm font-medium">Delete</span>
+                                    </button>
                                 </div>
-                                <div>
-                                    <dt className="text-sm font-medium text-slate-500 mb-1">Public URL</dt>
-                                    <dd>
-                                        <div className="flex items-center gap-2 max-w-full">
-                                            <div className="flex-1 min-w-0 flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
-                                                <div className="text-sm text-slate-600 truncate font-mono select-all">
-                                                    {fullQrUrl}
+                            </div>
+                            {/* QR Code Preview */}
+                            <div className="lg:col-span-1">
+                                <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+                                    <h2 className="text-lg font-semibold text-slate-900 mb-4">QR Code</h2>
+                                    <div id="qr-code-container" className="flex justify-center mb-4" ref={(el) => {
+                                        if (el && qrCodeInstance && !el.hasChildNodes()) {
+                                            qrCodeInstance.append(el);
+                                        }
+                                    }}></div>
+                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                                        <button
+                                            onClick={() => handleDownload('png')}
+                                            className="flex items-center justify-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm"
+                                        >
+                                            <Download className="w-4 h-4" />
+                                            PNG
+                                        </button>
+                                        <button
+                                            onClick={() => handleDownload('svg')}
+                                            className="flex items-center justify-center gap-2 px-3 py-2 bg-slate-700 text-white rounded-lg font-medium hover:bg-slate-800 transition-colors text-sm"
+                                        >
+                                            <Download className="w-4 h-4" />
+                                            SVG
+                                        </button>
+                                        <button
+                                            onClick={() => handleDownload('pdf')}
+                                            className="flex items-center justify-center gap-2 px-3 py-2 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors text-sm"
+                                        >
+                                            <Download className="w-4 h-4" />
+                                            PDF
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Details & Analytics */}
+                            <div className="lg:col-span-2 space-y-6">
+                                {/* Stats */}
+                                <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+                                    <h2 className="text-lg font-semibold text-slate-900 mb-4">Statistics</h2>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div className="p-4 bg-purple-50 rounded-xl border border-purple-100">
+                                            <div className="flex items-center gap-3 mb-2">
+                                                <div className="p-2 bg-purple-100 rounded-lg text-purple-600">
+                                                    <BarChart3 className="w-5 h-5" />
                                                 </div>
+                                                <p className="text-sm font-medium text-slate-600">Total Scans</p>
                                             </div>
-                                            <button
-                                                onClick={() => handleCopy(fullQrUrl)}
-                                                className="p-2 border border-slate-200 rounded-lg hover:bg-slate-50 text-slate-600 transition-colors bg-white shadow-sm"
-                                                title="Copy URL"
-                                            >
-                                                <Copy className="w-4 h-4" />
-                                            </button>
-                                            <a
-                                                href={fullQrUrl}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="p-2 border border-slate-200 rounded-lg hover:bg-slate-50 text-slate-600 transition-colors bg-white shadow-sm"
-                                                title="Open in new tab"
-                                            >
-                                                <ExternalLink className="w-4 h-4" />
-                                            </a>
+                                            <p className="text-2xl font-bold text-slate-900">{qrCode._count.scans}</p>
                                         </div>
-                                    </dd>
+                                        <div className="p-4 bg-orange-50 rounded-xl border border-orange-100">
+                                            <div className="flex items-center gap-3 mb-2">
+                                                <div className="p-2 bg-orange-100 rounded-lg text-orange-600">
+                                                    <Download className="w-5 h-5" /> {/* Placeholder icon for Created/Time */}
+                                                </div>
+                                                <p className="text-sm font-medium text-slate-600">Created On</p>
+                                            </div>
+                                            <p className="text-lg font-bold text-slate-900">
+                                                {new Date(qrCode.createdAt).toLocaleDateString()}
+                                            </p>
+                                        </div>
+                                        {qrCode.updatedAt && qrCode.updatedAt !== qrCode.createdAt && (
+                                            <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-100 sm:col-span-2">
+                                                <div className="flex items-center gap-3 mb-2">
+                                                    <div className="p-2 bg-emerald-100 rounded-lg text-emerald-600">
+                                                        <Edit className="w-5 h-5" />
+                                                    </div>
+                                                    <p className="text-sm font-medium text-slate-600">Last Updated</p>
+                                                </div>
+                                                <p className="text-lg font-bold text-slate-900">
+                                                    {new Date(qrCode.updatedAt).toLocaleDateString()} at {new Date(qrCode.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                </p>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <Link
+                                        href={`/analytics?id=${qrCode.id}`}
+                                        className="mt-4 flex items-center justify-center gap-2 px-4 py-2 bg-slate-50 text-slate-700 rounded-lg font-medium hover:bg-slate-100 transition-colors w-full sm:w-auto"
+                                    >
+                                        <BarChart3 className="w-4 h-4" />
+                                        View Detailed Analytics
+                                    </Link>
                                 </div>
-                            </dl>
+
+                                {/* Details */}
+                                <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+                                    <h2 className="text-lg font-semibold text-slate-900 mb-4">Details</h2>
+                                    <dl className="space-y-4">
+                                        <div>
+                                            <dt className="text-sm font-medium text-slate-500 mb-1">Type</dt>
+                                            <dd>
+                                                <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${getTypeColor(qrCode.type)}`}>
+                                                    {qrCode.type.toUpperCase()}
+                                                </span>
+                                            </dd>
+                                        </div>
+                                        <div>
+                                            <dt className="text-sm font-medium text-slate-500 mb-1">Shortcode</dt>
+                                            <dd className="text-sm text-slate-900 font-mono bg-slate-50 px-3 py-2 rounded-md border border-slate-200 inline-block">{qrCode.shortcode}</dd>
+                                        </div>
+                                        <div>
+                                            <dt className="text-sm font-medium text-slate-500 mb-1">Public URL</dt>
+                                            <dd>
+                                                <div className="flex items-center gap-2 max-w-full">
+                                                    <div className="flex-1 min-w-0 flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
+                                                        <div className="text-sm text-slate-600 truncate font-mono select-all">
+                                                            {fullQrUrl}
+                                                        </div>
+                                                    </div>
+                                                    <button
+                                                        onClick={() => handleCopy(fullQrUrl)}
+                                                        className="p-2 border border-slate-200 rounded-lg hover:bg-slate-50 text-slate-600 transition-colors bg-white shadow-sm"
+                                                        title="Copy URL"
+                                                    >
+                                                        <Copy className="w-4 h-4" />
+                                                    </button>
+                                                    <a
+                                                        href={fullQrUrl}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="p-2 border border-slate-200 rounded-lg hover:bg-slate-50 text-slate-600 transition-colors bg-white shadow-sm"
+                                                        title="Open in new tab"
+                                                    >
+                                                        <ExternalLink className="w-4 h-4" />
+                                                    </a>
+                                                </div>
+                                            </dd>
+                                        </div>
+                                    </dl>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    )}
+                    <ConfirmationModal
+                        isOpen={isDeleteModalOpen}
+                        onClose={() => setIsDeleteModalOpen(false)}
+                        onConfirm={confirmDelete}
+                        title="Delete QR Code"
+                        message="Are you sure you want to delete this QR code? This action cannot be undone and the QR code will stop working immediately."
+                        confirmText="Delete"
+                        variant="danger"
+                        isLoading={isDeleting}
+                    />
+
+                    {/* Preview Modal */}
+                    <QrContentPreviewModal
+                        isOpen={previewModalOpen}
+                        onClose={() => setPreviewModalOpen(false)}
+                        qrCode={qrCode ?? undefined}
+                    />
                 </div>
-
-                <ConfirmationModal
-                    isOpen={isDeleteModalOpen}
-                    onClose={() => setIsDeleteModalOpen(false)}
-                    onConfirm={confirmDelete}
-                    title="Delete QR Code"
-                    message="Are you sure you want to delete this QR code? This action cannot be undone and the QR code will stop working immediately."
-                    confirmText="Delete"
-                    variant="danger"
-                    isLoading={isDeleting}
-                />
-
-                {/* Preview Modal */}
-                <QrContentPreviewModal
-                    isOpen={previewModalOpen}
-                    onClose={() => setPreviewModalOpen(false)}
-                    qrCode={qrCode}
-                />
-            </div >
-        </div >
+            </div>
+        </LoadingBoundary>
     );
 }

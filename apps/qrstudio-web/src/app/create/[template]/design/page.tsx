@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import { UniversalLoader } from '@plaqode-platform/ui';
 import DesignClient from './DesignClient';
 
 // Define the static params for build time generation
@@ -22,7 +23,7 @@ export default function DesignPage({ params }: { params: { template: string } })
     return (
         <Suspense fallback={
             <div className="w-full h-screen flex items-center justify-center">
-                <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+                <UniversalLoader size="lg" text="Loading design..." />
             </div>
         }>
             <DesignClient params={params} />

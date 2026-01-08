@@ -24,7 +24,7 @@ import QRCodeDesigner from "@/components/editor/QRCodeDesigner";
 import ShortcutsReference from "@/components/editor/ShortcutsReference";
 import ZoomControls from "@/components/editor/ZoomControls";
 
-import { ConfirmationModal, toast } from "@plaqode-platform/ui";
+import { ConfirmationModal, toast, UniversalLoader, LoadingBoundary } from "@plaqode-platform/ui";
 import ExportModal from "@/components/editor/ExportModal";
 import { ExportAuthModal } from "@/components/auth/ExportAuthModal";
 
@@ -303,11 +303,17 @@ export default function Editor() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     // SMART SAVE STATE
+    // SMART SAVE STATE
     const [lastSavedPages, setLastSavedPages] = useState<CardTemplate[] | null>(null);
+
+    const [isLoadingDesign, setIsLoadingDesign] = useState(!!loadId);
 
     // Load saved design effect
     useEffect(() => {
-        if (!loadId || !isAuthenticated) return;
+        if (!loadId || !isAuthenticated) {
+            setIsLoadingDesign(false);
+            return;
+        }
 
         const fetchSavedDesign = async () => {
             try {
@@ -335,7 +341,9 @@ export default function Editor() {
             }
         };
 
-        fetchSavedDesign();
+
+
+        fetchSavedDesign().finally(() => setIsLoadingDesign(false));
     }, [loadId, isAuthenticated]);
 
     // Save State
@@ -1130,7 +1138,12 @@ export default function Editor() {
 
     // --- RENDER ---
     return (
-        <div className="flex h-screen w-screen bg-gray-900 overflow-hidden">
+        <LoadingBoundary
+            isLoading={isLoadingDesign}
+            size="lg"
+            text="Loading design..."
+            className="flex h-screen w-screen bg-gray-900 overflow-hidden"
+        >
             {/* Mobile Top Bar (only visible on mobile) */}
             <MobileEditorTopbar
                 templateName={currentPage.name}
@@ -1513,7 +1526,7 @@ export default function Editor() {
 
             {/* Mobile Menu Overlay */}
             <MobileMenu isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
-        </div>
+        </LoadingBoundary>
     );
 }
 

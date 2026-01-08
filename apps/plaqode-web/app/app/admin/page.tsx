@@ -49,7 +49,11 @@ export default function AdminPage() {
     }, []);
 
     useEffect(() => {
-        const handleClickOutside = () => setOpenActionMenu(null);
+        const handleClickOutside = (event: MouseEvent) => {
+            const target = event.target as Element;
+            if (target.closest('.action-menu-trigger')) return;
+            setOpenActionMenu(null);
+        };
         document.addEventListener('click', handleClickOutside);
         return () => document.removeEventListener('click', handleClickOutside);
     }, []);
@@ -258,7 +262,7 @@ export default function AdminPage() {
                                     : 'border-transparent text-gray-600 hover:text-gray-900'
                                     }`}
                             >
-                                All Users ({users.length})
+                                All ({users.length})
                             </button>
                             <button
                                 onClick={() => setFilter('admins')}
@@ -276,7 +280,7 @@ export default function AdminPage() {
                                     : 'border-transparent text-gray-600 hover:text-gray-900'
                                     }`}
                             >
-                                Regular Users ({users.filter(u => !u.roles.includes('admin') && !u.roles.includes('superadmin')).length})
+                                Users ({users.filter(u => !u.roles.includes('admin') && !u.roles.includes('superadmin')).length})
                             </button>
                         </div>
                     )}
@@ -297,7 +301,7 @@ export default function AdminPage() {
                                                 e.stopPropagation();
                                                 setOpenActionMenu(openActionMenu === u.id ? null : u.id);
                                             }}
-                                            className="p-1 text-gray-400 hover:text-gray-600"
+                                            className="action-menu-trigger p-1 text-gray-400 hover:text-gray-600"
                                         >
                                             <div className="relative">
                                                 <div className="p-2 bg-gray-100 rounded-lg">
@@ -464,7 +468,7 @@ export default function AdminPage() {
                                                             e.stopPropagation();
                                                             setOpenActionMenu(openActionMenu === u.id ? null : u.id);
                                                         }}
-                                                        className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition flex items-center gap-2"
+                                                        className="action-menu-trigger px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition flex items-center gap-2"
                                                     >
                                                         <span className="text-sm font-medium text-gray-900">Actions</span>
                                                         <svg className="w-4 h-4 text-gray-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">

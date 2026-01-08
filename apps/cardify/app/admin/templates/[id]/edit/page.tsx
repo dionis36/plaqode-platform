@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Save, X, AlertCircle, CheckCircle, ArrowLeft, Shield } from 'lucide-react';
 import Link from 'next/link';
 import { validateTemplate, ValidationError } from '@/lib/schemaValidator';
+import { UniversalLoader } from '@plaqode-platform/ui';
 
 interface Template {
     id: string;
@@ -192,10 +193,7 @@ export default function TemplateEditPage({ params }: { params: { id: string } })
     if (loading) {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-                    <p className="text-gray-600 mt-4">Loading template...</p>
-                </div>
+                <UniversalLoader size="lg" center text="Loading template..." />
             </div>
         );
     }

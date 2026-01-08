@@ -12,6 +12,7 @@ import { SEO } from '@/components/common/SEO';
 import { BackButton } from '@/components/common/BackButton';
 import { EnhancedPreviewModal } from '@/components/common/EnhancedPreviewModal';
 import { useTemplateValidation } from '@/hooks/useTemplateValidation';
+import { LoadingBoundary, UniversalLoader } from '@plaqode-platform/ui';
 
 function PdfQrPageContent() {
     const { payload, setEditMode, loadQrData } = useWizardStore();
@@ -54,70 +55,66 @@ function PdfQrPageContent() {
         }
     }
 
-    if (loading) {
-        return (
-            <div className="w-full px-4 pb-20 flex items-center justify-center min-h-[400px]">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                    <p className="text-slate-600">Loading QR code data...</p>
-                </div>
-            </div>
-        );
-    }
-
     return (
-        <div className="w-full px-3 sm:px-6 pb-20">
-            <SEO
-                title="Create File/PDF QR Code"
-                description="Create a QR code to share PDF files and documents"
-            />
+        <LoadingBoundary
+            isLoading={loading}
+            size="lg"
+            text="Loading QR code data..."
+            className="w-full px-4 pb-20 flex items-center justify-center min-h-[400px]"
+        >
+            <div className="w-full px-3 sm:px-6 pb-20">
+                <SEO
+                    title="Create File/PDF QR Code"
+                    description="Create a QR code to share PDF files and documents"
+                />
 
-            <BackButton />
+                <BackButton />
 
-            <div className="flex flex-col lg:flex-row gap-8">
-                {/* LEFT PANEL: 75% - Content Form */}
-                <div className="w-full lg:w-3/4 flex flex-col">
-                    <PDFForm />
+                <div className="flex flex-col lg:flex-row gap-8">
+                    {/* LEFT PANEL: 75% - Content Form */}
+                    <div className="w-full lg:w-3/4 flex flex-col">
+                        <PDFForm />
 
-                    {/* Next Button */}
-                    <div className="mt-8 pt-6 border-t border-slate-100 flex justify-end">
-                        <button
-                            onClick={() => router.push(`/create/file/design${editId ? `?edit=${editId}` : ''}`)}
-                            disabled={!isValid}
-                            className={`px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-bold text-base shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 hover:-translate-y-0.5 transition-all flex items-center gap-2 ${!isValid ? 'opacity-50 cursor-not-allowed hover:translate-y-0 shadow-none' : ''}`}
-                        >
-                            {editId ? 'Next: Update Design' : 'Next: Customize QR Design'}
-                            <ArrowRight className="w-5 h-5" />
-                        </button>
+                        {/* Next Button */}
+                        <div className="mt-8 pt-6 border-t border-slate-100 flex justify-end">
+                            <button
+                                onClick={() => router.push(`/create/file/design${editId ? `?edit=${editId}` : ''}`)}
+                                disabled={!isValid}
+                                className={`px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-bold text-base shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 hover:-translate-y-0.5 transition-all flex items-center gap-2 ${!isValid ? 'opacity-50 cursor-not-allowed hover:translate-y-0 shadow-none' : ''}`}
+                            >
+                                {editId ? 'Next: Update Design' : 'Next: Customize QR Design'}
+                                <ArrowRight className="w-5 h-5" />
+                            </button>
+                        </div>
                     </div>
-                </div>
 
-                {/* RIGHT PANEL: 25% - Sticky Preview */}
-                <div className="hidden lg:flex w-full lg:w-1/4 relative">
-                    <div className="sticky top-6 w-full flex flex-col items-center h-fit">
-                        <div className="transform transition-all duration-500 origin-top scale-[0.85] xl:scale-[0.9]">
-                            <PhoneMockup className="shadow-2xl shadow-slate-300/50">
-                                <PDFPreview data={payload} />
-                            </PhoneMockup>
+                    {/* RIGHT PANEL: 25% - Sticky Preview */}
+                    <div className="hidden lg:flex w-full lg:w-1/4 relative">
+                        <div className="sticky top-6 w-full flex flex-col items-center h-fit">
+                            <div className="transform transition-all duration-500 origin-top scale-[0.85] xl:scale-[0.9]">
+                                <PhoneMockup className="shadow-2xl shadow-slate-300/50">
+                                    <PDFPreview data={payload} />
+                                </PhoneMockup>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                {/* Mobile Preview Button */}
+                <button
+                    onClick={() => setShowPreview(true)}
+                    className="lg:hidden fixed bottom-6 right-6 z-40 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all flex items-center gap-2 font-medium"
+                >
+                    <Eye className="w-5 h-5" />
+                    View Preview
+                </button>
+
+                {/* Mobile Preview Modal */}
+                <EnhancedPreviewModal isOpen={showPreview} onClose={() => setShowPreview(false)}>
+                    <PDFPreview data={payload} />
+                </EnhancedPreviewModal>
             </div>
-
-            {/* Mobile Preview Button */}
-            <button
-                onClick={() => setShowPreview(true)}
-                className="lg:hidden fixed bottom-6 right-6 z-40 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all flex items-center gap-2 font-medium"
-            >
-                <Eye className="w-5 h-5" />
-                View Preview
-            </button>
-
-            {/* Mobile Preview Modal */}
-            <EnhancedPreviewModal isOpen={showPreview} onClose={() => setShowPreview(false)}>
-                <PDFPreview data={payload} />
-            </EnhancedPreviewModal>
-        </div>
+        </LoadingBoundary>
     );
 }
 
@@ -125,10 +122,7 @@ export default function PdfQrPage() {
     return (
         <Suspense fallback={
             <div className="w-full px-4 pb-20 flex items-center justify-center min-h-[400px]">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                    <p className="text-slate-600">Loading...</p>
-                </div>
+                <UniversalLoader size="lg" text="Loading..." />
             </div>
         }>
             <PdfQrPageContent />

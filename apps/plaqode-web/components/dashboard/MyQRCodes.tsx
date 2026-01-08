@@ -16,7 +16,7 @@ import {
     File
 } from 'lucide-react';
 import { format } from 'date-fns';
-import { UniversalLoader } from '@plaqode-platform/ui';
+import { UniversalLoader, LoadingBoundary } from '@plaqode-platform/ui';
 
 interface QrItem {
     id: string;
@@ -28,6 +28,7 @@ interface QrItem {
 }
 
 export function MyQRCodes() {
+    const qrStudioUrl = env.NEXT_PUBLIC_QRSTUDIO_URL;
     const [qrcodes, setQrcodes] = useState<QrItem[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -63,21 +64,8 @@ export function MyQRCodes() {
         }
     };
 
-    if (loading) {
-        return (
-            <div className="bg-white rounded-xl border border-gray-200 p-6 min-h-[300px] flex flex-col">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">My QR Codes</h2>
-                <div className="flex-1 flex items-center justify-center">
-                    <UniversalLoader size="lg" />
-                </div>
-            </div>
-        );
-    }
-
-    const qrStudioUrl = env.NEXT_PUBLIC_QRSTUDIO_URL;
-
     return (
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <div className="bg-white rounded-xl border border-gray-200 p-6 min-h-[300px] flex flex-col">
             <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
                     <QrCode className="w-5 h-5 text-purple-600" />
@@ -91,39 +79,41 @@ export function MyQRCodes() {
                 </a>
             </div>
 
-            {qrcodes.length === 0 ? (
-                <div className="text-center py-12 bg-gray-50 rounded-lg">
-                    <QrCode className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-                    <p className="text-gray-600 mb-2">No QR codes yet</p>
-                    <p className="text-sm text-gray-500 mb-4">Create your first dynamic QR code</p>
-                    <a
-                        href={`${qrStudioUrl}/create`}
-                        className="inline-block px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:opacity-90 transition"
-                    >
-                        Create QR Code
-                    </a>
-                </div>
-            ) : (
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {qrcodes.map((qr) => (
+            <LoadingBoundary isLoading={loading} size="lg" className="flex-1 relative min-h-[200px]">
+                {qrcodes.length === 0 ? (
+                    <div className="text-center py-12 bg-gray-50 rounded-lg">
+                        <QrCode className="w-16 h-16 mx-auto text-gray-400 mb-4" />
+                        <p className="text-gray-600 mb-2">No QR codes yet</p>
+                        <p className="text-sm text-gray-500 mb-4">Create your first dynamic QR code</p>
                         <a
-                            key={qr.id}
-                            href={`${qrStudioUrl}/qrcodes/${qr.id}`}
-                            className="group relative bg-gray-50 rounded-lg border border-gray-200 p-4 hover:border-purple-400 hover:shadow-md transition flex flex-col items-center text-center"
+                            href={`${qrStudioUrl}/create`}
+                            className="inline-block px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:opacity-90 transition"
                         >
-                            <div className="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center mb-3 group-hover:scale-110 transition">
-                                {getTypeIcon(qr.type)}
-                            </div>
-                            <h3 className="text-sm font-semibold text-gray-900 truncate w-full group-hover:text-purple-600 transition">
-                                {qr.name}
-                            </h3>
-                            <p className="text-xs text-gray-500 mt-1 capitalize">
-                                {qr.type} • {format(new Date(qr.createdAt), 'MMM d')}
-                            </p>
+                            Create QR Code
                         </a>
-                    ))}
-                </div>
-            )}
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        {qrcodes.map((qr) => (
+                            <a
+                                key={qr.id}
+                                href={`${qrStudioUrl}/qrcodes/${qr.id}`}
+                                className="group relative bg-gray-50 rounded-lg border border-gray-200 p-4 hover:border-purple-400 hover:shadow-md transition flex flex-col items-center text-center"
+                            >
+                                <div className="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center mb-3 group-hover:scale-110 transition">
+                                    {getTypeIcon(qr.type)}
+                                </div>
+                                <h3 className="text-sm font-semibold text-gray-900 truncate w-full group-hover:text-purple-600 transition">
+                                    {qr.name}
+                                </h3>
+                                <p className="text-xs text-gray-500 mt-1 capitalize">
+                                    {qr.type} • {format(new Date(qr.createdAt), 'MMM d')}
+                                </p>
+                            </a>
+                        ))}
+                    </div>
+                )}
+            </LoadingBoundary>
         </div>
     );
 }
