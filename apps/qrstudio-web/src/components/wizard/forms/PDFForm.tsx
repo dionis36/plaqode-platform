@@ -226,6 +226,11 @@ export function PDFForm() {
         // Extract filename without extension for title
         const fileNameWithoutExt = file.name.replace(/\.[^/.]+$/, '');
 
+        // Capture current state to decide whether to update title
+        const currentTitle = watch('document_info.title');
+        const oldFileName = watch('pdf_file.file_name');
+        const oldFileNameWithoutExt = oldFileName ? oldFileName.replace(/\.[^/.]+$/, '') : '';
+
         // Convert to base64
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -239,8 +244,8 @@ export function PDFForm() {
             setValue('pdf_file.file_extension', fileInfo.ext);
             setValue('pdf_file.file_category', fileInfo.category);
 
-            // Auto-fill title if it's empty
-            if (!watch('document_info.title')) {
+            // Auto-fill title if it's empty OR if it matches the old filename (meaning it was auto-filled previously)
+            if (!currentTitle || currentTitle === oldFileNameWithoutExt) {
                 setValue('document_info.title', fileNameWithoutExt);
             }
         };

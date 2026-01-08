@@ -43,8 +43,8 @@ export async function sendContactEmail(prevState: ContactState, formData: FormDa
 
     try {
         await resend.emails.send({
-            from: "Plaqode Website <onboarding@resend.dev>", // Or configured domain
-            to: ["nasuwadio36@gmail.com"],
+            from: env.EMAIL_FROM || "onboarding@resend.dev", // Fallback only if env var totally failed, though env.ts handles it
+            to: [env.CONTACT_EMAIL_TO || "nasuwadio36@gmail.com"],
             replyTo: email, // Valid property name
             // Checking docs memory: Resend Node SDK uses camelCase usually? No, it often accepts snake_case object for API params but let's stick to standard `react-email` style or check.
             // Actually, Resend SDK `send` usually takes `from`, `to`, `subject`, `text`, `html`, `reply_to`.

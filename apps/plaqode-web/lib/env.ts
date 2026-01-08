@@ -27,4 +27,6 @@ export const env = {
 
     // Server-Side Secrets (Only validate on server)
     RESEND_API_KEY: isServer ? process.env.RESEND_API_KEY : undefined,
+    EMAIL_FROM: isServer ? (process.env.EMAIL_FROM || 'Plaqode <noreply@plaqode.com>') : undefined,
+    CONTACT_EMAIL_TO: isServer ? (process.env.CONTACT_EMAIL_TO || 'nasuwadio36@gmail.com') : undefined,
 };

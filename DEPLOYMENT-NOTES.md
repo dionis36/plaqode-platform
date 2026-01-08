@@ -23,6 +23,8 @@ This guide details the specific environment variables required for **Development
 | `COOKIE_DOMAIN` | `localhost` | `.plaqode.com` | **Critical**: Must start with dot. |
 | `RESEND_API_KEY` | `re_...` | `re_...` (Your Real Key) | Contact Form Email. |
 | `NEXT_PUBLIC_GA_ID` | `""` | `""` | Google Analytics (Optional). |
+| `EMAIL_FROM` | `Plaqode <noreply@plaqode.com>` | `Plaqode <noreply@plaqode.com>` | **Verified** Sender identity. |
+| `CONTACT_EMAIL_TO` | `nasuwadio36@gmail.com` | `nasuwadio36@gmail.com` | Admin inbox for contact form. |
 
 ### B. Creator App (`apps/qrstudio-web`)
 **Port**: `3001`
@@ -61,6 +63,8 @@ This guide details the specific environment variables required for **Development
 | `COOKIE_DOMAIN` | `localhost` | `.plaqode.com` | Session Cookie Domain. |
 | `JWT_PRIVATE_KEY_PATH` | `./keys/private.pem` | `/etc/secrets/private.pem` | Auth Key. |
 | `JWT_PUBLIC_KEY_PATH` | `./keys/public.pem` | `/etc/secrets/public.pem` | Auth Key. |
+| `RESEND_API_KEY` | `re_...` | `re_...` (Set via Secrets) | Email Service Key. |
+| `EMAIL_FROM` | `Plaqode <noreply@plaqode.com>` | `Plaqode <noreply@plaqode.com>` | **Verified** Sender identity. |
 
 ### B. QR Studio API (`apps/qrstudio-api`)
 **Service**: `plaqode-api-v1`
@@ -71,4 +75,18 @@ This guide details the specific environment variables required for **Development
 | `FRONTEND_URL` | `http://localhost:3001` | `https://app.plaqode.com` | For redirects. |
 | `ALLOWED_ORIGINS` | `http://localhost:3000` | `https://plaqode.com,https://app.plaqode.com,https://www.plaqode.com` | CORS. |
 | `JWT_PUBLIC_KEY` | *(Optional)* | `-----BEGIN PUBLIC KEY...` | Injected Key. |
+
+## 3. Deployment Commands
+
+### Update Fly.io Secrets (Auth Service)
+Run this command to update the email configuration for the backend:
+```powershell
+fly secrets set RESEND_API_KEY="re_..." EMAIL_FROM="Plaqode <noreply@plaqode.com>" -a plaqode-auth-v1
+```
+
+### Update Vercel Environment Variables
+Go to **Project Settings** > **Environment Variables** for `plaqode-web` and add:
+- `EMAIL_FROM`: `Plaqode <noreply@plaqode.com>`
+- `CONTACT_EMAIL_TO`: `nasuwadio36@gmail.com`
+- `RESEND_API_KEY`: `re_...` (If not already set)
 

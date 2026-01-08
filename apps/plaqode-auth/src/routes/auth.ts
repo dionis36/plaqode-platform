@@ -559,7 +559,7 @@ export async function authRoutes(app: FastifyInstance) {
 
             // Notify user of change (optional but recommended)
             await resend.emails.send({
-                from: 'Plaqode Security <security@plaqo.de>',
+                from: env.EMAIL_FROM,
                 to: storedToken.user.email,
                 subject: 'Your password has been changed',
                 html: `<p>Your password was successfully changed. If this wasn't you, contact support immediately.</p>`,
