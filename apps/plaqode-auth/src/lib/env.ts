@@ -35,5 +35,5 @@ export const env = {
     // Services
     RESEND_API_KEY: requireEnv('RESEND_API_KEY', process.env.RESEND_API_KEY),
     WEB_URL: requireEnv('WEB_URL', process.env.WEB_URL),
-    EMAIL_FROM: process.env.EMAIL_FROM || 'Plaqode <noreply@plaqode.com>',
+    EMAIL_FROM: process.env.EMAIL_FROM || 'Plaqode <support@plaqode.com>',
 };
