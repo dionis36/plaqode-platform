@@ -49,6 +49,12 @@ export default function AdminPage() {
     }, []);
 
     useEffect(() => {
+        const handleClickOutside = () => setOpenActionMenu(null);
+        document.addEventListener('click', handleClickOutside);
+        return () => document.removeEventListener('click', handleClickOutside);
+    }, []);
+
+    useEffect(() => {
         // Wait for auth to load before checking admin status
         if (loading) return;
 
@@ -62,7 +68,7 @@ export default function AdminPage() {
 
     const assignRole = async (userId: string, role: string) => {
         setActionLoading(true);
-        setActionLoading(true);
+        // Remove duplicate setActionLoading(true)
         try {
             const response = await fetch(
                 `${env.NEXT_PUBLIC_AUTH_SERVICE_URL}/auth/users/${userId}/roles`,
@@ -224,7 +230,7 @@ export default function AdminPage() {
     return (
         <div className="max-w-7xl mx-auto">
             <div className="mb-8">
-                <h1 className="text-3xl font-merriweather font-bold text-dark mb-2">
+                <h1 className="text-2xl lg:text-3xl font-merriweather font-bold text-dark mb-2">
                     {isSuperAdmin ? 'Superadmin Panel' : 'Admin Panel'}
                 </h1>
                 <p className="text-text/70 font-sans">
@@ -244,10 +250,10 @@ export default function AdminPage() {
                 <>
                     {/* Filter Tabs - Superadmin Only */}
                     {isSuperAdmin && (
-                        <div className="mb-6 flex gap-2 border-b border-gray-200">
+                        <div className="mb-6 flex gap-2 border-b border-gray-200 overflow-x-auto pb-1 scrollbar-hide">
                             <button
                                 onClick={() => setFilter('all')}
-                                className={`px-6 py-3 font-medium transition border-b-2 ${filter === 'all'
+                                className={`px-6 py-3 font-medium transition border-b-2 whitespace-nowrap flex-shrink-0 ${filter === 'all'
                                     ? 'border-blue-600 text-blue-600'
                                     : 'border-transparent text-gray-600 hover:text-gray-900'
                                     }`}
@@ -256,7 +262,7 @@ export default function AdminPage() {
                             </button>
                             <button
                                 onClick={() => setFilter('admins')}
-                                className={`px-6 py-3 font-medium transition border-b-2 ${filter === 'admins'
+                                className={`px-6 py-3 font-medium transition border-b-2 whitespace-nowrap flex-shrink-0 ${filter === 'admins'
                                     ? 'border-blue-600 text-blue-600'
                                     : 'border-transparent text-gray-600 hover:text-gray-900'
                                     }`}
@@ -265,7 +271,7 @@ export default function AdminPage() {
                             </button>
                             <button
                                 onClick={() => setFilter('users')}
-                                className={`px-6 py-3 font-medium transition border-b-2 ${filter === 'users'
+                                className={`px-6 py-3 font-medium transition border-b-2 whitespace-nowrap flex-shrink-0 ${filter === 'users'
                                     ? 'border-blue-600 text-blue-600'
                                     : 'border-transparent text-gray-600 hover:text-gray-900'
                                     }`}
