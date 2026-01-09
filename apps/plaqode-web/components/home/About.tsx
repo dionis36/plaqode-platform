@@ -14,7 +14,7 @@ export default function AboutSection() {
 
                 <ScrollReveal variant="fade-up" className="space-y-6 text-lg md:text-xl font-sans text-text leading-relaxed mb-10">
                     <p>
-                        We&apos;re a creative tech company in <span className="font-bold text-text">Tanzania</span>, passionate about helping people and organizations simplify how they share information. Our team blends design, strategy, and innovation to create QR codes that are not only functionalΓÇöbut memorable.
+                        We&apos;re a creative tech company in <span className="font-bold text-text">Tanzania</span>, passionate about helping people and organizations simplify how they share information. Our team blends design, strategy, and innovation to create QR codes that are not only functional but memorable.
                     </p>
 
                     <p>

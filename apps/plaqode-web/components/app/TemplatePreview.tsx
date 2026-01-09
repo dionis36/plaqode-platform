@@ -40,6 +40,14 @@ export default function TemplatePreview({ template, width: initialWidth = 400, h
         };
     }, []);
 
+    // Force re-render when fonts are loaded
+    const [, setFontsLoaded] = useState(false);
+    useEffect(() => {
+        document.fonts.ready.then(() => {
+            setFontsLoaded(true);
+        });
+    }, []);
+
     return (
         <div ref={containerRef} className="w-full h-full flex items-center justify-center bg-gray-50 pointer-events-none">
             <KonvaPreviewStage
