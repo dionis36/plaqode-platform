@@ -122,7 +122,7 @@ function ReviewPageContent() {
                     className="lg:hidden fixed bottom-6 right-6 z-40 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all flex items-center gap-2 font-medium"
                 >
                     <Eye className="w-5 h-5" />
-                    View Preview
+                    Preview
                 </button>
 
                 {/* Mobile Preview Modal */}

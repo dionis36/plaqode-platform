@@ -6,7 +6,8 @@ import DesignClient from './DesignClient';
 export async function generateStaticParams() {
     const templates = [
         'url', 'vcard', 'text', 'email', 'wifi',
-        'event', 'file', 'appstore', 'socialmedia', 'menu', 'message'
+        'event', 'file', 'appstore', 'socialmedia', 'menu', 'message',
+        'review', 'feedback', 'coupon', 'business', 'audio', 'video'
     ];
 
     return templates.map((template) => ({
