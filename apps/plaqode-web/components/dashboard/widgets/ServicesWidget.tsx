@@ -58,7 +58,7 @@ export function ServicesWidget() {
                 {services.map((service) => (
                     <div key={service.id} className="flex items-start justify-between p-4 rounded-lg border border-gray-100 bg-gray-50/50 hover:bg-gray-50 transition-colors">
                         <div className="flex gap-4">
-                            <div className="bg-white p-2.5 rounded-lg shadow-sm border border-gray-100 shrink-0">
+                            <div className="bg-white w-12 h-16 rounded-lg shadow-sm border border-gray-100 shrink-0 flex items-center justify-center">
                                 {service.icon}
                             </div>
                             <div>

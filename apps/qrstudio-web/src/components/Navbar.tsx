@@ -4,10 +4,13 @@ import Link from 'next/link';
 import { QrCode, Sparkles, Menu, X } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import { useAuth } from '@/lib/auth-context';
+import { GradientAvatar } from '@plaqode-platform/ui';
 
 export function Navbar() {
     const pathname = usePathname();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const { user, logout } = useAuth();
 
     // Close mobile menu when route changes
     useEffect(() => {
@@ -75,17 +78,35 @@ export function Navbar() {
                         </div>
 
                         {/* Mobile Menu Button */}
-                        <button
-                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                            className="lg:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors"
-                            aria-label="Toggle menu"
-                        >
-                            {mobileMenuOpen ? (
-                                <X className="w-6 h-6" />
-                            ) : (
-                                <Menu className="w-6 h-6" />
-                            )}
-                        </button>
+                        {user ? (
+                            <button
+                                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                                className="lg:hidden relative z-50 flex items-center gap-1 group"
+                            >
+                                <GradientAvatar
+                                    user={user}
+                                    logout={logout}
+                                    textColor="text-dark"
+                                    disableDropdown={true}
+                                    className="transform group-active:scale-95 transition-transform"
+                                />
+                                <div className="w-5 h-5 bg-slate-100 rounded-full flex items-center justify-center">
+                                    <Menu size={12} className="text-slate-600" />
+                                </div>
+                            </button>
+                        ) : (
+                            <button
+                                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                                className="lg:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors"
+                                aria-label="Toggle menu"
+                            >
+                                {mobileMenuOpen ? (
+                                    <X className="w-6 h-6" />
+                                ) : (
+                                    <Menu className="w-6 h-6" />
+                                )}
+                            </button>
+                        )}
                     </div>
                 </div>
             </nav>

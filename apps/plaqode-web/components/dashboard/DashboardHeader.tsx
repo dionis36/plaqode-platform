@@ -59,19 +59,40 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
                 </a>
 
                 {/* Gradient Avatar */}
-                {user && (
-                    <div className="hidden lg:block relative z-50">
-                        <GradientAvatar user={user} logout={logout} textColor="text-dark" />
-                    </div>
-                )}
+                {user ? (
+                    <>
+                        {/* Desktop: Standard Dropdown */}
+                        <div className="hidden lg:block relative z-50">
+                            <GradientAvatar user={user} logout={logout} textColor="text-dark" />
+                        </div>
 
-                {/* Mobile Menu Button - Right Aligned */}
-                <button
-                    onClick={onMenuClick}
-                    className="p-2 text-dark hover:bg-black/5 rounded-lg lg:hidden transition-colors"
-                >
-                    <Menu size={24} />
-                </button>
+                        {/* Mobile: Sidebar Trigger */}
+                        <button
+                            onClick={onMenuClick}
+                            className="lg:hidden relative z-50 flex items-center gap-1 group"
+                        >
+                            <GradientAvatar
+                                user={user}
+                                logout={logout}
+                                textColor="text-dark"
+                                disableDropdown={true}
+                                className="transform group-active:scale-95 transition-transform"
+                            />
+                            {/* Visual Hint for Dropdown/Menu */}
+                            <div className="w-5 h-5 bg-dark/5 rounded-full flex items-center justify-center">
+                                <Menu size={12} className="text-dark" />
+                            </div>
+                        </button>
+                    </>
+                ) : (
+                    /* Fallback for non-auth state (shouldn't happen in protected dash) */
+                    <button
+                        onClick={onMenuClick}
+                        className="p-2 text-dark hover:bg-black/5 rounded-lg lg:hidden transition-colors"
+                    >
+                        <Menu size={24} />
+                    </button>
+                )}
             </div>
         </header>
     );
