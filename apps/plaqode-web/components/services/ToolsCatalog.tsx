@@ -1,6 +1,6 @@
 "use client";
 
-import { Link, AlignLeft, AtSign, Mail, MapPin, Wifi, Calendar, Share2, Smartphone, FileText, Image, MessageSquare, Utensils } from "lucide-react";
+import { Link, AlignLeft, AtSign, Mail, MapPin, Wifi, Calendar, Share2, Smartphone, FileText, Image, MessageSquare, Utensils, Star, MessageCircleHeart, Ticket, Store, Music, Video } from "lucide-react";
 import { GradientButton } from "@plaqode-platform/ui";
 
 // Comprehensive list of tools
@@ -10,18 +10,24 @@ const QR_STUDIO_URL = env.NEXT_PUBLIC_QRSTUDIO_URL;
 
 // Comprehensive list of tools
 const tools = [
-    { icon: Utensils, name: "Menu", desc: "Digital restaurant menu", href: `${QR_STUDIO_URL}/create/menu` },
     { icon: Link, name: "URL", desc: "Link to any website or page", href: `${QR_STUDIO_URL}/create/url` },
-    { icon: AlignLeft, name: "Text", desc: "Display plain text messages", href: `${QR_STUDIO_URL}/create/text` },
+    { icon: Store, name: "Business Page", desc: "Mini-website for local businesses", href: `${QR_STUDIO_URL}/create/business` },
+    { icon: Star, name: "Reviews Collector", desc: "Get more 5-star Google reviews", href: `${QR_STUDIO_URL}/create/review` },
     { icon: AtSign, name: "VCard", desc: "Share contact details instantly", href: `${QR_STUDIO_URL}/create/vcard` },
-    { icon: Mail, name: "Email", desc: "Send pre-filled emails", href: `${QR_STUDIO_URL}/create/email` },
-    { icon: MessageSquare, name: "Message", desc: "SMS, WhatsApp & Telegram", href: `${QR_STUDIO_URL}/create/message` },
+    { icon: Share2, name: "Social Media", desc: "Link to all your social profiles", href: `${QR_STUDIO_URL}/create/socialmedia` },
+    { icon: Video, name: "Video", desc: "Share YouTube, Vimeo & videos", href: `${QR_STUDIO_URL}/create/video` },
+    { icon: Ticket, name: "Coupon / Offer", desc: "Share discounts & special deals", href: `${QR_STUDIO_URL}/create/coupon` },
+    { icon: Utensils, name: "Menu", desc: "Digital restaurant menu", href: `${QR_STUDIO_URL}/create/menu` },
     { icon: Wifi, name: "WiFi", desc: "Connect to WiFi automatically", href: `${QR_STUDIO_URL}/create/wifi` },
-    { icon: Calendar, name: "Event", desc: "Save events to calendar", href: `${QR_STUDIO_URL}/create/event` },
+    { icon: MessageCircleHeart, name: "Feedback", desc: "Collect private customer feedback", href: `${QR_STUDIO_URL}/create/feedback` },
+    { icon: Music, name: "Audio", desc: "Share music, audio & podcasts", href: `${QR_STUDIO_URL}/create/audio` },
+    { icon: FileText, name: "PDF / File", desc: "Share PDFs & documents", href: `${QR_STUDIO_URL}/create/file` },
     { icon: Smartphone, name: "App Store", desc: "Download apps directly", href: `${QR_STUDIO_URL}/create/appstore` },
-    { icon: FileText, name: "File", desc: "Share PDF & documents", href: `${QR_STUDIO_URL}/create/file` },
-    { icon: Image, name: "Image Gallery", desc: "Showcase photos", href: `${QR_STUDIO_URL}/create/file` },
-    { icon: Share2, name: "Social Media", desc: "Link to all your profiles", href: `${QR_STUDIO_URL}/create/socialmedia` },
+    { icon: MessageSquare, name: "Message", desc: "SMS, WhatsApp & Telegram", href: `${QR_STUDIO_URL}/create/message` },
+    { icon: Image, name: "Image Gallery", desc: "Showcase photo collections", href: `${QR_STUDIO_URL}/create/file` },
+    { icon: Calendar, name: "Event", desc: "Save events to calendar", href: `${QR_STUDIO_URL}/create/event` },
+    { icon: Mail, name: "Email", desc: "Send pre-filled emails", href: `${QR_STUDIO_URL}/create/email` },
+    { icon: AlignLeft, name: "Text", desc: "Display plain text messages", href: `${QR_STUDIO_URL}/create/text` },
 ];
 
 export default function ToolsCatalog() {

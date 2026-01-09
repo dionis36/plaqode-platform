@@ -13,7 +13,13 @@ import {
     MessageSquare,
     Calendar,
     Share2,
-    File
+    File,
+    Star,
+    Music,
+    Video,
+    Store,
+    MessageCircleHeart,
+    Ticket
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { UniversalLoader, LoadingBoundary } from '@plaqode-platform/ui';
@@ -60,6 +66,12 @@ export function MyQRCodes() {
             case 'event': return <Calendar className="w-8 h-8 text-pink-500" />;
             case 'socialmedia': return <Share2 className="w-8 h-8 text-indigo-500" />;
             case 'file': return <File className="w-8 h-8 text-yellow-500" />;
+            case 'review': return <Star className="w-8 h-8 text-yellow-500" />;
+            case 'audio': return <Music className="w-8 h-8 text-pink-500" />;
+            case 'video': return <Video className="w-8 h-8 text-red-600" />;
+            case 'business': return <Store className="w-8 h-8 text-blue-600" />;
+            case 'feedback': return <MessageCircleHeart className="w-8 h-8 text-indigo-500" />;
+            case 'coupon': return <Ticket className="w-8 h-8 text-green-600" />;
             default: return <QrCode className="w-8 h-8 text-slate-900" />;
         }
     };

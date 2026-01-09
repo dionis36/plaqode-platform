@@ -43,7 +43,47 @@ export const useWizardStore = create<WizardState>()(persist((set) => ({
         contact_details: { phone: '', email: '', website: '' },
         company_details: { company_name: '', job_title: '' },
         address: { street: '', city: '', country: '' },
-        social_networks: []
+        social_networks: [],
+
+        // New Tools Defaults
+        review: {
+            google: '',
+            yelp: '',
+            tripadvisor: '',
+            facebook: '',
+            custom_label: 'Rate us on Google',
+            title: 'We value your feedback',
+            description: 'Please select a platform below to leave your review.'
+        },
+        audio: { title: '', description: '', audio_url: '', cover_image: '' },
+        video: { title: '', description: '', video_url: '' },
+        business: {
+            name: '',
+            description: '',
+            logo: '',
+            banner: '',
+            address: '',
+            phone: '',
+            email: '',
+            website: '',
+            hours: {
+                mon: '9:00 AM - 5:00 PM',
+                tue: '9:00 AM - 5:00 PM',
+                wed: '9:00 AM - 5:00 PM',
+                thu: '9:00 AM - 5:00 PM',
+                fri: '9:00 AM - 5:00 PM',
+                sat: 'Closed',
+                sun: 'Closed'
+            },
+            social_links: []
+        },
+        feedback: {
+            question: 'How was your experience?',
+            email: '',
+            logo: '',
+            success_message: 'Thank you for your feedback!'
+        },
+        coupon: { title: '', description: '', code: '', valid_until: '' }
     },
     design: {
         dots: { color: '#000000', style: 'square' },
@@ -98,7 +138,46 @@ export const useWizardStore = create<WizardState>()(persist((set) => ({
             contact_details: { phone: '', email: '', website: '' },
             company_details: { company_name: '', job_title: '' },
             address: { street: '', city: '', country: '' },
-            social_networks: []
+            social_networks: [],
+            // New Tools Defaults
+            review: {
+                google: '',
+                yelp: '',
+                tripadvisor: '',
+                facebook: '',
+                custom_label: 'Rate us on Google',
+                title: 'We value your feedback',
+                description: 'Please select a platform below to leave your review.'
+            },
+            audio: { title: '', description: '', audio_url: '', cover_image: '' },
+            video: { title: '', description: '', video_url: '' },
+            business: {
+                name: '',
+                description: '',
+                logo: '',
+                banner: '',
+                address: '',
+                phone: '',
+                email: '',
+                website: '',
+                hours: {
+                    mon: '9:00 AM - 5:00 PM',
+                    tue: '9:00 AM - 5:00 PM',
+                    wed: '9:00 AM - 5:00 PM',
+                    thu: '9:00 AM - 5:00 PM',
+                    fri: '9:00 AM - 5:00 PM',
+                    sat: 'Closed',
+                    sun: 'Closed'
+                },
+                social_links: []
+            },
+            feedback: {
+                question: 'How was your experience?',
+                email: '',
+                logo: '',
+                success_message: 'Thank you for your feedback!'
+            },
+            coupon: { title: '', description: '', code: '', valid_until: '' }
         },
         design: {
             dots: { color: '#000000', style: 'square' },
