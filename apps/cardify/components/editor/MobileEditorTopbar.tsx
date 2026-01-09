@@ -6,6 +6,8 @@ import Link from "next/link";
 import { Undo, Redo, MoreVertical, RotateCcw, Menu, Save, Download } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { env } from '@/lib/env';
+import { useAuth } from "@/lib/auth-context";
+import { GradientAvatar } from "@plaqode-platform/ui";
 
 interface MobileEditorTopbarProps {
     templateName: string;
@@ -32,6 +34,7 @@ export default function MobileEditorTopbar({
     onSave,
     saving = false,
 }: MobileEditorTopbarProps) {
+    const { user, logout } = useAuth();
     const router = useRouter();
 
     const handleBack = () => {
@@ -114,13 +117,32 @@ export default function MobileEditorTopbar({
                 </button>
 
                 {/* Menu Toggle */}
-                <button
-                    onClick={onShowMenu}
-                    className="p-2 text-gray-700 hover:bg-gray-100 active:bg-gray-200 rounded-lg transition-colors touch-target"
-                    aria-label="Menu"
-                >
-                    <Menu size={20} />
-                </button>
+                {user ? (
+                    <button
+                        onClick={onShowMenu}
+                        className="relative z-50 flex items-center gap-1 group pl-2"
+                        aria-label="Menu"
+                    >
+                        <GradientAvatar
+                            user={user}
+                            logout={logout}
+                            textColor="text-dark"
+                            disableDropdown={true}
+                            className="transform group-active:scale-95 transition-transform"
+                        />
+                        <div className="w-5 h-5 bg-slate-100 rounded-full flex items-center justify-center border border-slate-200">
+                            <MoreVertical size={12} className="text-slate-600" />
+                        </div>
+                    </button>
+                ) : (
+                    <button
+                        onClick={onShowMenu}
+                        className="p-2 text-gray-700 hover:bg-gray-100 active:bg-gray-200 rounded-lg transition-colors touch-target"
+                        aria-label="Menu"
+                    >
+                        <Menu size={20} />
+                    </button>
+                )}
             </div>
         </div>
     );

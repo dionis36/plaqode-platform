@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { QrCode, Sparkles, Menu, X } from 'lucide-react';
+import { QrCode, Sparkles, Menu, X, MoreVertical } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/lib/auth-context';
@@ -91,7 +91,7 @@ export function Navbar() {
                                     className="transform group-active:scale-95 transition-transform"
                                 />
                                 <div className="w-5 h-5 bg-slate-100 rounded-full flex items-center justify-center">
-                                    <Menu size={12} className="text-slate-600" />
+                                    <MoreVertical size={12} className="text-slate-600" />
                                 </div>
                             </button>
                         ) : (

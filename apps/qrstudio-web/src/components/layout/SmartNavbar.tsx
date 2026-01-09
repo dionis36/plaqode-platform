@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
-import { Menu } from "lucide-react";
+import { Menu, MoreVertical } from "lucide-react";
 import MobileMenu from "@/components/layout/MobileMenu";
 import { Logo } from "@plaqode-platform/ui";
 import { GradientButton } from "@plaqode-platform/ui";
@@ -84,7 +84,7 @@ export default function SmartNavbar() {
                                     className="transform group-active:scale-95 transition-transform"
                                 />
                                 <div className="w-5 h-5 bg-white/10 rounded-full flex items-center justify-center">
-                                    <Menu size={12} className="text-slate-200" />
+                                    <MoreVertical size={12} className="text-slate-200" />
                                 </div>
                             </button>
                         ) : (

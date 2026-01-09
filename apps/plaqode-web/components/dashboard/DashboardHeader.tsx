@@ -1,6 +1,6 @@
 'use client';
 
-import { Menu, Search, Home } from 'lucide-react';
+import { Menu, Search, Home, MoreVertical } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
 import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
@@ -80,7 +80,7 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
                             />
                             {/* Visual Hint for Dropdown/Menu */}
                             <div className="w-5 h-5 bg-dark/5 rounded-full flex items-center justify-center">
-                                <Menu size={12} className="text-dark" />
+                                <MoreVertical size={12} className="text-dark" />
                             </div>
                         </button>
                     </>

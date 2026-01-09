@@ -5,7 +5,7 @@ import { GradientButton } from "@plaqode-platform/ui";
 import { GradientAvatar } from "@plaqode-platform/ui";
 import { Logo } from "@plaqode-platform/ui";
 import { useAuth } from "@/lib/auth-context";
-import { Menu } from "lucide-react";
+import { Menu, MoreVertical } from "lucide-react";
 import { useState, useEffect } from "react";
 import MobileMenu from "./MobileMenu";
 
@@ -57,7 +57,7 @@ export default function StaticNavbar() {
                                     className="transform group-active:scale-95 transition-transform"
                                 />
                                 <div className="w-5 h-5 bg-white/10 rounded-full flex items-center justify-center">
-                                    <Menu size={12} className="text-light" />
+                                    <MoreVertical size={12} className="text-light" />
                                 </div>
                             </button>
                         ) : (
