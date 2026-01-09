@@ -71,12 +71,30 @@ export default function SmartNavbar() {
                         </div>
 
                         {/* Mobile Toggle */}
-                        <button
-                            className="md:hidden text-white text-2xl"
-                            onClick={() => setIsMobileMenuOpen(true)}
-                        >
-                            <Menu />
-                        </button>
+                        {user ? (
+                            <button
+                                className="md:hidden relative z-50 flex items-center gap-1 group"
+                                onClick={() => setIsMobileMenuOpen(true)}
+                            >
+                                <GradientAvatar
+                                    user={user}
+                                    logout={logout}
+                                    textColor="text-white"
+                                    disableDropdown={true}
+                                    className="transform group-active:scale-95 transition-transform"
+                                />
+                                <div className="w-5 h-5 bg-white/10 rounded-full flex items-center justify-center">
+                                    <Menu size={12} className="text-slate-200" />
+                                </div>
+                            </button>
+                        ) : (
+                            <button
+                                className="md:hidden text-white text-2xl"
+                                onClick={() => setIsMobileMenuOpen(true)}
+                            >
+                                <Menu />
+                            </button>
+                        )}
                     </div>
                 </div>
             </header>
