@@ -26,7 +26,7 @@ This document outlines the optimal workflow to take `plaqode-platform` from its 
 **Goal**: PROVE that the system works under pressure.
 
 ### 1. End-to-End (E2E) Testing
-*   **Tool**: **Playwright** (Highly recommended over Cypress for Next.js).
+*   **Tool**: **Playwright** (Highly recommended over Cypress for Next.js) - https://youtu.be/wGr5rz8WGCE.
 *   **Scope**:
     *   User Signup -> Email Verification (Mocked) -> Login.
     *   Create QR Code -> Scan QR Code -> Verify Stats Increment.
