@@ -21,9 +21,9 @@ This guide details the specific environment variables required for **Development
 | `AUTH_SERVICE_INTERNAL_URL` | `http://localhost:3001` | `https://auth.plaqode.com` | Server-to-Server Auth URL. |
 | `NEXT_PUBLIC_ALLOWED_REDIRECT_HOSTS` | `localhost:3000,localhost:3001,localhost:3002` | `plaqode.com, app.plaqode.com, card.plaqode.com` | Security Allowlist. |
 | `COOKIE_DOMAIN` | `localhost` | `.plaqode.com` | **Critical**: Must start with dot. |
-| `RESEND_API_KEY` | `re_...` | `re_...` (Your Real Key) | Contact Form Email. |
+| `RESEND_API_KEY` | `re_...` | `re_...` (Your Real Key) | Contact Form & Feedback QR Emails. |
 | `NEXT_PUBLIC_GA_ID` | `""` | `""` | Google Analytics (Optional). |
-| `EMAIL_FROM` | `Plaqode <support@plaqode.com>` | `Plaqode <support@plaqode.com>` | **Verified** Sender identity. |
+| `EMAIL_FROM` | `Plaqode <support@plaqode.com>` | `Plaqode <support@plaqode.com>` | **Verified** Sender identity. Format: `Name <email@domain>` |
 | `CONTACT_EMAIL_TO` | `nasuwadio36@gmail.com` | `nasuwadio36@gmail.com` | Admin inbox for contact form. |
 
 ### B. Creator App (`apps/qrstudio-web`)

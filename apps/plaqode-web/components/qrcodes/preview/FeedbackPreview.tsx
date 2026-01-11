@@ -21,26 +21,39 @@ export function FeedbackPreview({ data }: FeedbackPreviewProps) {
 
     const [rating, setRating] = useState(0);
     const [comment, setComment] = useState('');
-    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [contactName, setContactName] = useState('');
+    const [contactInfo, setContactInfo] = useState('');
 
-    const handleSubmit = () => {
+    const [isPending, startTransition] = useTransition();
+    const [state, setState] = useState<{ success: boolean; message: string }>({ success: false, message: '' });
+
+    const handleSendFeedback = () => {
         if (!feedbackData.email) {
-            // If no email set, just show success (Demo mode)
-            setIsSubmitted(true);
+            // Demo mode
+            setState({ success: true, message: feedbackData.success_message });
             return;
         }
 
-        const subject = encodeURIComponent(`New Feedback: ${feedbackData.question}`);
-        const body = encodeURIComponent(
-            `Rating: ${rating} / 5 stars\n\nComment:\n${comment}\n\n--\nSent via Plaqode Feedback QR`
-        );
+        startTransition(async () => {
+            const formData = new FormData();
+            formData.append('rating', rating.toString());
+            formData.append('comment', comment);
+            formData.append('contactName', contactName);
+            formData.append('contactInfo', contactInfo);
+            formData.append('destinationEmail', feedbackData.email);
+            formData.append('businessName', feedbackData.business_name || '');
+            formData.append('question', feedbackData.question);
 
-        // Open mail client
-        window.location.href = `mailto:${feedbackData.email}?subject=${subject}&body=${body}`;
+            const result = await sendFeedbackEmail(
+                { success: false, message: '' },
+                formData
+            );
 
-        // Show success UI
-        setIsSubmitted(true);
+            setState(result);
+        });
     };
+
+    const isSubmitted = state.success;
 
     return (
         <div className="min-h-[100dvh] w-full flex flex-col relative overflow-y-auto no-scrollbar font-sans bg-slate-50">
@@ -135,8 +148,28 @@ export function FeedbackPreview({ data }: FeedbackPreviewProps) {
                                 </div>
 
                                 {/* Comment Box & Submit */}
-                                <div className={`w-full transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] space-y-5 overflow-hidden ${rating > 0 ? 'opacity-100 max-h-[500px] translate-y-0' : 'opacity-0 max-h-0 translate-y-4 pointer-events-none'}`}>
-                                    <div className="relative group">
+                                <div className={`w-full transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] space-y-5 overflow-hidden ${rating > 0 ? 'opacity-100 max-h-[600px] translate-y-0' : 'opacity-0 max-h-0 translate-y-4 pointer-events-none'}`}>
+                                    <div className="relative group space-y-3">
+                                        {feedbackData.collect_contact && (
+                                            <>
+                                                <input
+                                                    type="text"
+                                                    value={contactName}
+                                                    onChange={(e) => setContactName(e.target.value)}
+                                                    className="w-full p-4 rounded-2xl border border-slate-200 bg-white/70 focus:bg-white focus:border-transparent focus:ring-4 focus:ring-purple-100 transition-all duration-300 text-slate-700 placeholder:text-slate-400 text-base shadow-sm"
+                                                    placeholder="Your Name (Optional)"
+                                                    style={{ ['--tw-ring-color' as any]: `${primaryColor}30` }}
+                                                />
+                                                <input
+                                                    type="text"
+                                                    value={contactInfo}
+                                                    onChange={(e) => setContactInfo(e.target.value)}
+                                                    className="w-full p-4 rounded-2xl border border-slate-200 bg-white/70 focus:bg-white focus:border-transparent focus:ring-4 focus:ring-purple-100 transition-all duration-300 text-slate-700 placeholder:text-slate-400 text-base shadow-sm"
+                                                    placeholder="Your Email/Phone (Optional)"
+                                                    style={{ ['--tw-ring-color' as any]: `${primaryColor}30` }}
+                                                />
+                                            </>
+                                        )}
                                         <textarea
                                             value={comment}
                                             onChange={(e) => setComment(e.target.value)}
@@ -153,13 +186,29 @@ export function FeedbackPreview({ data }: FeedbackPreviewProps) {
                                         />
                                     </div>
 
+                                    {!state.success && state.message && (
+                                        <p className="text-center text-red-500 text-sm bg-red-50 p-2 rounded-lg">
+                                            {state.message}
+                                        </p>
+                                    )}
+
                                     <button
-                                        onClick={handleSubmit}
-                                        className="w-full py-4 rounded-xl font-bold text-white shadow-[0_10px_20px_-5px_rgba(100,50,200,0.3)] hover:shadow-[0_15px_25px_-5px_rgba(100,50,200,0.4)] hover:-translate-y-0.5 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                                        onClick={handleSendFeedback}
+                                        disabled={isPending}
+                                        className="w-full py-4 rounded-xl font-bold text-white shadow-[0_10px_20px_-5px_rgba(100,50,200,0.3)] hover:shadow-[0_15px_25px_-5px_rgba(100,50,200,0.4)] hover:-translate-y-0.5 transition-all active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
                                         style={{ background: `linear-gradient(135deg, ${primaryColor}, ${primaryColor}dd)` }}
                                     >
-                                        <span>Submit Feedback</span>
-                                        <Send className="w-4 h-4 ml-1 opacity-90" />
+                                        {isPending ? (
+                                            <>
+                                                <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></span>
+                                                <span>Sending...</span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <span>Submit Feedback</span>
+                                                <Send className="w-4 h-4 ml-1 opacity-90" />
+                                            </>
+                                        )}
                                     </button>
 
                                     {!feedbackData.email && (
@@ -184,7 +233,13 @@ export function FeedbackPreview({ data }: FeedbackPreviewProps) {
                                     We appreciate your feedback.
                                 </p>
                                 <button
-                                    onClick={() => { setRating(0); setComment(''); setIsSubmitted(false); }}
+                                    onClick={() => {
+                                        setRating(0);
+                                        setComment('');
+                                        setContactName('');
+                                        setContactInfo('');
+                                        setState({ success: false, message: '' });
+                                    }}
                                     className="mt-10 text-sm font-semibold hover:underline opacity-60 hover:opacity-100 transition-opacity"
                                     style={{ color: primaryColor }}
                                 >
