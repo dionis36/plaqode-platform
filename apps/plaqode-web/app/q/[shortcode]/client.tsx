@@ -38,6 +38,7 @@ const MenuPreview = dynamic(() => import('@/components/preview/MenuPreview').the
 const MessagePreview = dynamic(() => import('@/components/preview/MessagePreview').then(mod => mod.MessagePreview), { loading: () => <LoadingPreview /> });
 const PDFPreview = dynamic(() => import('@/components/preview/PDFPreview').then(mod => mod.PDFPreview), { loading: () => <LoadingPreview /> });
 const SocialMediaPagePreview = dynamic(() => import('@/components/preview/SocialMediaPagePreview').then(mod => mod.SocialMediaPagePreview), { loading: () => <LoadingPreview /> });
+const BusinessPagePreview = dynamic(() => import('@/components/qrcodes/preview/BusinessPagePreview').then(mod => mod.BusinessPagePreview), { loading: () => <LoadingPreview /> });
 
 interface ViewerClientProps {
     data: any;
@@ -99,6 +100,8 @@ export function ViewerClient({ data }: ViewerClientProps) {
                 return <PDFPreview data={contentData} />;
             case 'socialmedia':
                 return <SocialMediaPagePreview data={contentData} />;
+            case 'business':
+                return <BusinessPagePreview data={contentData} />;
             default:
                 // Fallback for unhandled types
                 return (
