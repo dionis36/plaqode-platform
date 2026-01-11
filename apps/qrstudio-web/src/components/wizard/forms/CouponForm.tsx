@@ -3,6 +3,7 @@ import { useWizardStore } from '../store';
 import { useEffect, useState, useRef } from 'react';
 import { ChevronDown, Ticket, Palette, Type, Calendar, Image as ImageIcon } from 'lucide-react';
 import { format } from 'date-fns';
+import { ImageUpload } from '@/components/common/ImageUpload';
 
 // Form Value Types
 type FormValues = {
@@ -308,14 +309,11 @@ export function CouponForm() {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                Offer Image URL
-                            </label>
-                            <input
-                                {...register('offer_image')}
-                                type="text"
-                                className="w-full px-3 sm:px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none text-base min-h-[44px]"
-                                placeholder="https://..."
+                            <ImageUpload
+                                label="Offer Image"
+                                value={watch('offer_image')}
+                                onChange={(base64) => setValue('offer_image', base64 || '')}
+                                maxSizeMB={2}
                             />
                         </div>
                     </div>

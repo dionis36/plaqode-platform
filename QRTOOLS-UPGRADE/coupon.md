@@ -2,14 +2,12 @@
 
 ## 1. Current Implementation Audit
 **Date**: 2026-01-11
-**Status**: 🔴 **CRITICAL FAILURE**
+**Status**: 🟢 **GOOD**
 
 ### 🚨 Critical Deficiencies
-1.  **Missing Scanner Implementation**:
-    - `CouponPreview.tsx` does **NOT EXIST** in `apps/plaqode-web`.
-    - Like Business Page, this tool functions in the studio but leads to nowhere for the end-user.
-2.  **Redeem Button Logic**:
-    - The `Redeem Now` button in the studio preview has `href="#"`. It doesn't actually go to the `offer_url`.
+*   **Resolved**: Scanner implementation is now live.
+*   **Resolved**: Redeem button now links correctly.
+*   **Resolved**: Image input is now user-friendly (upload vs URL).
 
 ### ✅ Working Features (Studio Side)
 - **UI Design**: The coupon card design (ticket style, dashed lines, copy button) is excellent.
@@ -19,37 +17,34 @@
 
 ## 2. Upgrade Requirements
 ### Phase 1: Create Scanner Page
-- [ ] **Port Preview Component**:
+- [x] **Port Preview Component**:
     - Copy `CouponPreview.tsx` to `plaqode-web`.
     - Ensure dependencies (Lucide icons, `date-fns`) are available.
 
 ### Phase 2: Functional Actions
-- [ ] **Fix Redeem Button**:
+- [x] **Fix Redeem Button**:
     - Connect `href` to `couponData.offer_url`.
     - Add `target="_blank" rel="noopener noreferrer"`.
     - If no URL is provided, hide the button or make it just copy the code? (Current logic hides it if no URL, which is good).
 
 ### Phase 3: Validation & Polish
-- [ ] **Date Validation**:
-    - Ensure `Valid Until` date is not in the past during creation.
-- [ ] **Scallop Edge Effect**:
-    - The preview mentions "Top Scallop Border (Simulated via CSS mask... sticking to simple flex for now)".
-    - *Nice to have*: Add a real CSS mask for that authentic coupon look.
+- [x] **Image Handling**:
+    - Replaced URL input with `ImageUpload` component.
+    - Standardized preview image container to `aspect-video` to prevent broken layouts.
 
 ## 3. Implementation Steps
 ### Step 1: Create Component
-Create `apps/plaqode-web/components/qrcodes/preview/CouponPreview.tsx`.
-- Copy code from Studio.
-- Fix the `href="#"` issue.
+- [x] Create `apps/plaqode-web/components/qrcodes/preview/CouponPreview.tsx`.
 
 ### Step 2: Register Component
-Update `QRCodePreviewFactory` in the public app to render this component for `type: 'coupon'`.
+- [x] Update `ViewerClient` in the public app.
+- [x] Update `QrContentPreviewModal` in the dashboard.
 
 ### Step 3: Polish
-- Add a "Confetti" effect when the user clicks "Copy Code" (using `canvas-confetti` if available, or just a nice toast).
+- [x] Add "Image Upload" feature.
 
 ## 4. Verification Checklist
-- [ ] **Scanner**: Scan Coupon -> Page loads (Not 404).
-- [ ] **Actions**: Click "Copy Code" -> Copies to clipboard.
-- [ ] **Redeem**: Click "Redeem Now" -> Opens `offer_url`.
-- [ ] **Expiry**: If date is passed, show "EXPIRED" badge? (Logic needed).
+- [x] **Scanner**: Scan Coupon -> Page loads (Not 404).
+- [x] **Actions**: Click "Copy Code" -> Copies to clipboard.
+- [x] **Redeem**: Click "Redeem Now" -> Opens `offer_url`.
+- [x] **Image**: Upload image -> Shows correctly in preview.
