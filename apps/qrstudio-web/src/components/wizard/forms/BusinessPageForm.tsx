@@ -2,6 +2,7 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { useWizardStore } from '../store';
 import { useEffect, useState, useRef } from 'react';
 import { ChevronDown, Store, Palette, Clock, MapPin, Globe, Share2, Plus, Trash2 } from 'lucide-react';
+import { ImageUpload } from '@/components/common/ImageUpload';
 
 // Form Value Types
 type FormValues = {
@@ -114,6 +115,7 @@ const SOCIAL_PLATFORMS = [
 export function BusinessPageForm() {
     const { payload, updatePayload, editMode } = useWizardStore();
     const [isMounted, setIsMounted] = useState(false);
+    const hasSetRandomColors = useRef(false);
 
     useEffect(() => {
         setIsMounted(true);
@@ -171,6 +173,31 @@ export function BusinessPageForm() {
         name: "social_links"
     });
 
+    // Set random color pair on page load for new QR codes - same as Menu
+    useEffect(() => {
+        if (!editMode && !hasSetRandomColors.current) {
+            const colorPalettes = [
+                { primary: '#2563EB', secondary: '#EFF6FF' },
+                { primary: '#1F2937', secondary: '#F3F4F6' },
+                { primary: '#059669', secondary: '#ECFDF5' },
+                { primary: '#DC2626', secondary: '#FEF2F2' },
+                { primary: '#7C3AED', secondary: '#FAF5FF' },
+                { primary: '#EA580C', secondary: '#FFF7ED' },
+                { primary: '#0891B2', secondary: '#F0FDFA' },
+                { primary: '#BE123C', secondary: '#FFF1F2' },
+                { primary: '#EC4899', secondary: '#FCE7F3' },
+            ];
+            const randomPalette = colorPalettes[Math.floor(Math.random() * colorPalettes.length)];
+            // Only set if not already set in payload (avoid overwriting if user went back)
+            if (!payload.styles?.primary_color) {
+                setValue('styles.primary_color', randomPalette.primary);
+                setValue('styles.secondary_color', randomPalette.secondary);
+            }
+            hasSetRandomColors.current = true;
+        }
+    }, [editMode, setValue, payload.styles]);
+
+
     // Reset form ONCE when entering edit mode with loaded data
     useEffect(() => {
         if (editMode && !hasLoadedEditData.current && payload.business) {
@@ -227,12 +254,12 @@ export function BusinessPageForm() {
             </div>
 
             <div className="space-y-4">
-                {/* 1. Design and Customize Section */}
+                {/* 1. Design and Customize Section (Replicated from MenuForm) */}
                 <AccordionSection
                     title="Design and customize"
                     subtitle="Choose your color scheme"
                     icon={Palette}
-                    color="bg-blue-100 text-blue-600"
+                    color="bg-purple-100 text-purple-600"
                     isOpen={openSections.design}
                     onToggle={() => toggleSection('design')}
                 >
@@ -247,6 +274,10 @@ export function BusinessPageForm() {
                                     { primary: '#DC2626', secondary: '#FEF2F2', name: 'Bold Red' },
                                     { primary: '#059669', secondary: '#ECFDF5', name: 'Professional Green' },
                                     { primary: '#7C3AED', secondary: '#F5F3FF', name: 'Creative Purple' },
+                                    { primary: '#EA580C', secondary: '#FFF7ED', name: 'Warm Orange' },
+                                    { primary: '#0891B2', secondary: '#F0FDFA', name: 'Ocean Teal' },
+                                    { primary: '#BE123C', secondary: '#FFF1F2', name: 'Wine Red' },
+                                    { primary: '#EC4899', secondary: '#FCE7F3', name: 'Hot Pink' },
                                 ].map((palette, idx) => (
                                     <button
                                         key={idx}
@@ -269,14 +300,15 @@ export function BusinessPageForm() {
                                 <label className="block text-sm font-semibold text-slate-700 mb-2">Primary color</label>
                                 <div className="flex items-center gap-2 sm:gap-3">
                                     <input
-                                        {...register('styles.primary_color')}
                                         type="color"
+                                        value={watch('styles.primary_color') || '#2563EB'}
+                                        onChange={(e) => setValue('styles.primary_color', e.target.value)}
                                         className="w-12 h-12 rounded-lg border-2 border-slate-200 cursor-pointer flex-shrink-0"
                                     />
                                     <input
+                                        type="text"
                                         value={watch('styles.primary_color') || '#2563EB'}
                                         onChange={(e) => setValue('styles.primary_color', e.target.value)}
-                                        type="text"
                                         className="flex-1 px-3 sm:px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none font-mono text-sm uppercase min-h-[44px]"
                                         placeholder="#2563EB"
                                     />
@@ -286,19 +318,59 @@ export function BusinessPageForm() {
                                 <label className="block text-sm font-semibold text-slate-700 mb-2">Secondary color</label>
                                 <div className="flex items-center gap-2 sm:gap-3">
                                     <input
-                                        {...register('styles.secondary_color')}
                                         type="color"
+                                        value={watch('styles.secondary_color') || '#EFF6FF'}
+                                        onChange={(e) => setValue('styles.secondary_color', e.target.value)}
                                         className="w-12 h-12 rounded-lg border-2 border-slate-200 cursor-pointer flex-shrink-0"
                                     />
                                     <input
+                                        type="text"
                                         value={watch('styles.secondary_color') || '#EFF6FF'}
                                         onChange={(e) => setValue('styles.secondary_color', e.target.value)}
-                                        type="text"
                                         className="flex-1 px-3 sm:px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none font-mono text-sm uppercase min-h-[44px]"
                                         placeholder="#EFF6FF"
                                     />
                                 </div>
                             </div>
+                        </div>
+
+                        {/* Gradient Controls */}
+                        <div className="space-y-4 pt-4 border-t border-slate-200">
+                            <div>
+                                <label className="block text-sm font-semibold text-slate-700 mb-2">Background Style</label>
+                                <select
+                                    {...register('styles.gradient_type')}
+                                    className="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none"
+                                >
+                                    <option value="none">Solid Color</option>
+                                    <option value="linear">Linear Gradient</option>
+                                    <option value="radial">Radial Gradient</option>
+                                </select>
+                            </div>
+
+                            {watch('styles.gradient_type') === 'linear' && (
+                                <div>
+                                    <label className="block text-sm font-semibold text-slate-700 mb-2">
+                                        Gradient Angle: {watch('styles.gradient_angle') || 135}°
+                                    </label>
+                                    <input
+                                        {...register('styles.gradient_angle')}
+                                        type="range"
+                                        min="0"
+                                        max="360"
+                                        step="45"
+                                        defaultValue="135"
+                                        className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                                    />
+                                    <div className="flex justify-between text-xs text-slate-500 mt-1">
+                                        <span>0°</span>
+                                        <span>90°</span>
+                                        <span>180°</span>
+                                        <span>270°</span>
+                                        <span>360°</span>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </AccordionSection>
@@ -338,29 +410,20 @@ export function BusinessPageForm() {
                             />
                         </div>
 
+                        {/* Replaces URL input with ImageUpload */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                    Logo URL
-                                </label>
-                                <input
-                                    {...register('logo')}
-                                    type="text"
-                                    className="w-full px-3 sm:px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none text-base min-h-[44px]"
-                                    placeholder="https://..."
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                    Banner Image URL
-                                </label>
-                                <input
-                                    {...register('banner')}
-                                    type="text"
-                                    className="w-full px-3 sm:px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none text-base min-h-[44px]"
-                                    placeholder="https://..."
-                                />
-                            </div>
+                            <ImageUpload
+                                label="Business Logo"
+                                value={watch('logo')}
+                                onChange={(base64) => setValue('logo', base64 || '')}
+                                maxSizeMB={2}
+                            />
+                            <ImageUpload
+                                label="Banner Image"
+                                value={watch('banner')}
+                                onChange={(base64) => setValue('banner', base64 || '')}
+                                maxSizeMB={3}
+                            />
                         </div>
                     </div>
                 </AccordionSection>

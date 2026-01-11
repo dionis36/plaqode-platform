@@ -1,6 +1,6 @@
 'use client';
 
-import { MapPin, Phone, Mail, Globe, Clock, Twitter, Share2, Store } from 'lucide-react';
+import { MapPin, Phone, Mail, Globe, Clock, Twitter, CheckCircle2, Navigation } from 'lucide-react';
 import { SiFacebook, SiInstagram, SiLinkedin, SiTiktok, SiYoutube } from 'react-icons/si';
 
 interface BusinessPagePreviewProps {
@@ -10,8 +10,9 @@ interface BusinessPagePreviewProps {
 export function BusinessPagePreview({ data }: BusinessPagePreviewProps) {
     const styles = data.styles || {};
     const primaryColor = styles.primary_color || '#2563EB';
-    // Secondary color not heavily used in this design, but available
-    // const secondaryColor = styles.secondary_color || '#EFF6FF';
+    const secondaryColor = styles.secondary_color || '#EFF6FF';
+    // const gradientType = styles.gradient_type || 'none'; 
+    // const gradientAngle = styles.gradient_angle || 135;
 
     const bizData = data.business || {
         name: 'My Business',
@@ -38,7 +39,7 @@ export function BusinessPagePreview({ data }: BusinessPagePreviewProps) {
         switch (platform) {
             case 'facebook': return <SiFacebook />;
             case 'instagram': return <SiInstagram />;
-            case 'twitter': return <Twitter size={14} fill="currentColor" strokeWidth={0} />;
+            case 'twitter': return <Twitter size={16} fill="currentColor" strokeWidth={0} />;
             case 'linkedin': return <SiLinkedin />;
             case 'tiktok': return <SiTiktok />;
             case 'youtube': return <SiYoutube />;
@@ -57,170 +58,249 @@ export function BusinessPagePreview({ data }: BusinessPagePreviewProps) {
         return `https://${url}`;
     };
 
+    const isOpenNow = (hours: any) => {
+        const today = new Date().toLocaleDateString('en-US', { weekday: 'short' }).toLowerCase();
+        const timeRange = hours?.[today];
+        if (!timeRange || timeRange.toLowerCase() === 'closed') return false;
+        return true;
+    };
+
     return (
-        <div className="absolute inset-0 w-full h-full bg-slate-50 flex flex-col overflow-y-auto font-sans scrollbar-hide">
-            <style jsx>{`
-                .scrollbar-hide::-webkit-scrollbar {
+        <div className="absolute inset-0 w-full h-full bg-slate-50 flex flex-col font-sans overflow-hidden">
+            <style jsx global>{`
+                .no-scrollbar::-webkit-scrollbar {
                     display: none;
                 }
-                .scrollbar-hide {
+                .no-scrollbar {
                     -ms-overflow-style: none;
                     scrollbar-width: none;
                 }
             `}</style>
 
-            {/* Banner Area */}
-            <div className="w-full h-40 relative flex-shrink-0 bg-slate-200">
-                {bizData.banner ? (
-                    <img src={bizData.banner} alt="Banner" className="w-full h-full object-cover" />
-                ) : (
-                    <div className="w-full h-full" style={{ backgroundColor: primaryColor, opacity: 0.9 }}>
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                    </div>
-                )}
-                {/* Curve Divider */}
-                <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
-                    <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="relative block w-[calc(110%+1.3px)] h-[30px] fill-slate-50">
-                        <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z"></path>
-                    </svg>
-                </div>
-            </div>
+            {/* Dynamic Hover Styles */}
+            <style jsx>{`
+                .theme-text { color: ${primaryColor}; }
+                .theme-bg { backgroundColor: ${primaryColor}; }
+                .theme-bg-light { backgroundColor: ${secondaryColor}; }
+                .theme-border-hover:hover { border-color: ${primaryColor}40; } /* 40 is hex opacity ~25% */
+                .theme-group:hover .theme-icon-scale { transform: scale(1.1); }
+            `}</style>
 
-            {/* Profile Section */}
-            <div className="px-6 -mt-12 relative z-10 flex flex-col items-center text-center">
-                <div className="w-24 h-24 rounded-full border-4 border-white bg-white shadow-md overflow-hidden mb-3 md:w-28 md:h-28">
-                    {bizData.logo ? (
-                        <img src={bizData.logo} alt="Logo" className="w-full h-full object-cover" />
+            <div className="flex-1 overflow-y-auto no-scrollbar pb-8">
+                {/* Hero Section */}
+                <div className="relative w-full h-56 bg-slate-900">
+                    {bizData.banner ? (
+                        <>
+                            <img src={bizData.banner} alt="Banner" className="w-full h-full object-cover opacity-90" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent" />
+                        </>
                     ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-slate-100 text-slate-300">
-                            <Store size={32} />
+                        <div className="w-full h-full" style={{ backgroundColor: primaryColor }}>
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                         </div>
                     )}
-                </div>
 
-                <h1 className="text-xl font-bold text-slate-900 leading-tight mb-2 px-2">
-                    {bizData.name || 'Business Name'}
-                </h1>
-                <p className="text-sm text-slate-500 leading-snug max-w-[280px]">
-                    {bizData.description || 'Description'}
-                </p>
-            </div>
-
-            {/* Content Container */}
-            <div className="flex-1 px-4 py-6 space-y-4 max-w-md mx-auto w-full">
-
-                {/* Contact Actions Row */}
-                <div className="flex gap-3 justify-center">
-                    {bizData.phone && (
-                        <a
-                            href={`tel:${bizData.phone}`}
-                            className="flex-1 py-3 bg-white border border-slate-200 rounded-xl shadow-sm flex items-center justify-center gap-2 text-slate-700 text-sm font-semibold active:bg-slate-50 hover:shadow-md transition-all hover:border-green-200"
-                        >
-                            <Phone size={16} className="text-green-600" />
-                            Call
-                        </a>
-                    )}
-                    {bizData.email && (
-                        <a
-                            href={`mailto:${bizData.email}`}
-                            className="flex-1 py-3 bg-white border border-slate-200 rounded-xl shadow-sm flex items-center justify-center gap-2 text-slate-700 text-sm font-semibold active:bg-slate-50 hover:shadow-md transition-all hover:border-blue-200"
-                        >
-                            <Mail size={16} className="text-blue-600" />
-                            Email
-                        </a>
-                    )}
-                </div>
-
-                {/* Location Card */}
-                {bizData.address && (
-                    <a
-                        href={getMapLink(bizData.address)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="bg-white rounded-xl p-4 shadow-sm border border-slate-100 flex items-start gap-4 hover:bg-slate-50 transition-colors group"
-                    >
-                        <div className="p-2.5 bg-slate-50 rounded-lg text-slate-500 group-hover:bg-slate-100 group-hover:text-red-500 transition-colors">
-                            <MapPin size={20} />
-                        </div>
-                        <div>
-                            <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                                Visit Us
-                                <span className="text-[10px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded-full font-medium">Map</span>
-                            </h3>
-                            <p className="text-xs text-slate-500 mt-1 leading-relaxed">{bizData.address}</p>
-                        </div>
-                    </a>
-                )}
-
-                {/* Website Card */}
-                {bizData.website && (
-                    <a
-                        href={getWebsiteLink(bizData.website)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="bg-white rounded-xl p-4 shadow-sm border border-slate-100 flex items-start gap-4 hover:bg-slate-50 transition-colors group"
-                    >
-                        <div className="p-2.5 bg-slate-50 rounded-lg text-slate-500 group-hover:bg-slate-100 group-hover:text-blue-500 transition-colors">
-                            <Globe size={20} />
-                        </div>
-                        <div>
-                            <h3 className="text-sm font-bold text-slate-900">Website</h3>
-                            <p className="text-xs text-blue-600 mt-1 truncate max-w-[200px] hover:underline">
-                                {bizData.website.replace(/^https?:\/\//, '')}
-                            </p>
-                        </div>
-                    </a>
-                )}
-
-                {/* Hours Card */}
-                <div className="bg-white rounded-xl p-5 shadow-sm border border-slate-100">
-                    <div className="flex items-center gap-2.5 mb-4 pb-3 border-b border-slate-50">
-                        <Clock size={16} className="text-slate-400" />
-                        <h3 className="text-sm font-bold text-slate-900">Opening Hours</h3>
-                    </div>
-                    <div className="space-y-2.5">
-                        {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => {
-                            const key = day.toLowerCase();
-                            const time = bizData.hours?.[key];
-                            const isToday = new Date().toLocaleDateString('en-US', { weekday: 'short' }) === day;
-
-                            return (
-                                <div key={day} className={`flex justify-between text-xs items-center ${isToday ? 'bg-blue-50 -mx-2 px-2 py-1 rounded-md' : ''}`}>
-                                    <span className={`w-12 ${isToday ? 'font-bold text-blue-700' : 'text-slate-500 font-medium'}`}>{day}</span>
-                                    <span className={`${isToday ? 'text-blue-900 font-semibold' : 'text-slate-700'}`}>{time || 'Closed'}</span>
-                                    {isToday && <span className="w-2 h-2 rounded-full bg-blue-500 ml-2" title="Today"></span>}
+                    {/* Floating Profile Info */}
+                    <div className="absolute -bottom-10 left-6 right-6 flex items-end justify-between">
+                        <div className="w-24 h-24 rounded-2xl bg-white shadow-xl p-1 rotate-3 hover:rotate-0 transition-transform duration-300">
+                            {bizData.logo ? (
+                                <img src={bizData.logo} alt="Logo" className="w-full h-full object-cover rounded-xl" />
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center bg-slate-100 rounded-xl text-slate-300">
+                                    <Globe size={32} />
                                 </div>
-                            );
-                        })}
+                            )}
+                        </div>
+                        <div className="flex gap-2 mb-12">
+                            {/* Floating Quick Actions - Styled with Primary Color */}
+                            {bizData.phone && (
+                                <a
+                                    href={`tel:${bizData.phone}`}
+                                    className="w-12 h-12 rounded-full text-white flex items-center justify-center shadow-lg hover:scale-110 transition-transform active:scale-95"
+                                    style={{ backgroundColor: primaryColor }}
+                                >
+                                    <Phone size={20} />
+                                </a>
+                            )}
+                            {bizData.address && (
+                                <a
+                                    href={getMapLink(bizData.address)}
+                                    target="_blank"
+                                    className="w-12 h-12 rounded-full bg-white text-slate-700 flex items-center justify-center shadow-lg hover:scale-110 transition-transform active:scale-95 border-2"
+                                    style={{ borderColor: primaryColor, color: primaryColor }}
+                                >
+                                    <Navigation size={20} />
+                                </a>
+                            )}
+                        </div>
                     </div>
                 </div>
 
-                {/* Social Links */}
-                {bizData.social_links?.length > 0 && (
-                    <div className="flex justify-center gap-3 py-4 flex-wrap">
-                        {bizData.social_links.map((link: any, i: number) => {
-                            if (!link.url) return null;
-                            const safeUrl = link.url.startsWith('http') ? link.url : `https://${link.url}`; // Basic fix
+                {/* Content Body */}
+                <div className="px-6 pt-14 space-y-8">
 
-                            return (
-                                <a
-                                    key={i}
-                                    href={safeUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="w-11 h-11 rounded-full bg-white shadow-sm border border-slate-200 flex items-center justify-center text-slate-600 hover:text-white hover:bg-slate-800 hover:border-transparent transition-all hover:scale-110 active:scale-95"
-                                >
-                                    <SocialIcon platform={link.platform} />
-                                </a>
-                            );
-                        })}
+                    {/* Header */}
+                    <div>
+                        <div className="flex items-center gap-2 mb-1">
+                            <h1 className="text-2xl font-bold text-slate-900 leading-tight">
+                                {bizData.name || 'Business Name'}
+                            </h1>
+                            <CheckCircle2 size={20} className="flex-shrink-0" fill="currentColor" color="white" style={{ color: primaryColor }} />
+                        </div>
+
+                        <p className="text-slate-500 leading-relaxed text-sm">
+                            {bizData.description || 'Description goes here.'}
+                        </p>
+
+                        {/* Status Badge */}
+                        <div className="mt-3 flex gap-2">
+                            {isOpenNow(bizData.hours) ? (
+                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border" style={{ backgroundColor: secondaryColor, color: primaryColor, borderColor: `${primaryColor}30` }}>
+                                    Open Now
+                                </span>
+                            ) : (
+                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">
+                                    Closed
+                                </span>
+                            )}
+                        </div>
                     </div>
-                )}
-            </div>
 
-            {/* Footer Branding */}
-            <div className="mt-auto py-6 text-xs text-slate-400 font-medium text-center bg-slate-50">
-                Powered by Plaqode
+                    {/* Action Grid */}
+                    <div className="grid grid-cols-2 gap-3">
+                        {bizData.website && (
+                            <a
+                                href={getWebsiteLink(bizData.website)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="col-span-2 bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between theme-border-hover transition-colors group theme-group"
+                            >
+                                <div className="flex items-center gap-3">
+                                    <div
+                                        className="w-10 h-10 rounded-full flex items-center justify-center transition-transform theme-icon-scale"
+                                        style={{ backgroundColor: secondaryColor, color: primaryColor }}
+                                    >
+                                        <Globe size={20} />
+                                    </div>
+                                    <div className="text-left">
+                                        <div className="text-xs text-slate-500 font-medium">Website</div>
+                                        <div className="text-sm font-semibold text-slate-900">Visit Online</div>
+                                    </div>
+                                </div>
+                                <div className="text-slate-300 group-hover:translate-x-1 transition-transform">
+                                    →
+                                </div>
+                            </a>
+                        )}
+
+                        {bizData.email && (
+                            <a
+                                href={`mailto:${bizData.email}`}
+                                className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex flex-col gap-3 theme-border-hover transition-colors group theme-group"
+                            >
+                                <div
+                                    className="w-10 h-10 rounded-full flex items-center justify-center transition-transform theme-icon-scale"
+                                    style={{ backgroundColor: secondaryColor, color: primaryColor }}
+                                >
+                                    <Mail size={20} />
+                                </div>
+                                <div>
+                                    <div className="text-xs text-slate-500 font-medium">Email</div>
+                                    <div className="text-sm font-semibold text-slate-900">Contact Us</div>
+                                </div>
+                            </a>
+                        )}
+
+                        {bizData.address && (
+                            <a
+                                href={getMapLink(bizData.address)}
+                                target="_blank"
+                                className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex flex-col gap-3 theme-border-hover transition-colors group theme-group"
+                            >
+                                <div
+                                    className="w-10 h-10 rounded-full flex items-center justify-center transition-transform theme-icon-scale"
+                                    style={{ backgroundColor: secondaryColor, color: primaryColor }}
+                                >
+                                    <MapPin size={20} />
+                                </div>
+                                <div>
+                                    <div className="text-xs text-slate-500 font-medium">Location</div>
+                                    <div className="text-sm font-semibold text-slate-900">Get Directions</div>
+                                </div>
+                            </a>
+                        )}
+                    </div>
+
+                    {/* Hours Card */}
+                    <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
+                        <div className="flex items-center gap-3 mb-6">
+                            <div className="p-2 rounded-xl" style={{ backgroundColor: secondaryColor, color: primaryColor }}>
+                                <Clock size={20} />
+                            </div>
+                            <h3 className="text-base font-bold text-slate-900">Business Hours</h3>
+                        </div>
+                        <div className="space-y-3">
+                            {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => {
+                                const key = day.toLowerCase();
+                                const time = bizData.hours?.[key];
+                                const isToday = new Date().toLocaleDateString('en-US', { weekday: 'short' }) === day;
+
+                                return (
+                                    <div key={day} className={`flex justify-between items-center text-sm py-1 ${isToday ? 'font-medium' : ''}`}>
+                                        <span
+                                            className={`w-12 ${isToday ? '' : 'text-slate-400'}`}
+                                            style={isToday ? { color: primaryColor } : {}}
+                                        >
+                                            {day}
+                                        </span>
+                                        <div className={`flex-1 mx-4 h-px border-b border-dotted ${isToday ? '' : 'border-slate-200'}`} style={isToday ? { borderColor: `${primaryColor}50` } : {}} />
+                                        <span className={`${isToday ? 'text-slate-900' : 'text-slate-600'}`}>{time || 'Closed'}</span>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    {/* Social Links */}
+                    {bizData.social_links?.length > 0 && (
+                        <div className="pb-6">
+                            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 text-center">Follow Us</h3>
+                            <div className="flex justify-center gap-4 flex-wrap">
+                                {bizData.social_links.map((link: any, i: number) => {
+                                    if (!link.url) return null;
+                                    const safeUrl = link.url.startsWith('http') ? link.url : `https://${link.url}`;
+
+                                    return (
+                                        <a
+                                            key={i}
+                                            href={safeUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="w-12 h-12 rounded-2xl bg-white shadow-sm border border-slate-200 flex items-center justify-center text-slate-600 transition-all hover:-translate-y-1 hover:text-white"
+                                            style={{
+                                                // We can't easily hover-style inline with pure React styles properly for pseudo classes without a wrapper or CSS-in-JS.
+                                                // But we can use style tag for a group class or simple inline logic.
+                                                // For now, let's keep the hover black default or try to use primary on hover?
+                                                // Using `hover:bg-slate-900` keeps it neutral premium.
+                                                // But user wants theme reflected. Let's stick to neutral for socials as brands have their own colors usually, 
+                                                // but a subtle border could work.
+                                            }}
+                                        >
+                                            <SocialIcon platform={link.platform} />
+                                        </a>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                {/* Footer Branding */}
+                <div className="py-8 text-center bg-slate-50 border-t border-slate-100">
+                    <div className="flex items-center justify-center gap-2 mb-1 grayscale opacity-50">
+                        <span className="font-bold text-slate-900 tracking-tight">PLA<span className="text-slate-400">QODE</span></span>
+                    </div>
+                </div>
             </div>
         </div>
     );

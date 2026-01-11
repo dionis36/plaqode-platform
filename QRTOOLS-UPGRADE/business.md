@@ -20,13 +20,13 @@
 
 ## 2. Upgrade Requirements
 ### Phase 1: Create Scanner Page (End User)
-- [x] **Port Preview Component**:
+- [ ] **Port Preview Component**:
     - Copy `BusinessPagePreview.tsx` from `qrstudio-web` to `plaqode-web`.
     - Adapt imports (e.g., `react-icons` vs `lucide-react`) if necessary.
     - Ensure it is registered in the main `QRCodeViewer` or `page.tsx` logic for the `/view/[id]` route.
 
 ### Phase 2: Functional Actions
-- [x] **Action Buttons**:
+- [ ] **Action Buttons**:
     - **Call**: Ensure `tel:` links work.
     - **Email**: Ensure `mailto:` links work.
     - **Directions**: The address card should be clickable -> Open Google Maps (`https://www.google.com/maps/search/?api=1&query={encoded_address}`).

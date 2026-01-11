@@ -1,4 +1,4 @@
-import { MapPin, Phone, Mail, Globe, Clock, Twitter } from 'lucide-react';
+import { MapPin, Phone, Mail, Globe, Clock, Twitter, CheckCircle2, Navigation } from 'lucide-react';
 import { SiFacebook, SiInstagram, SiLinkedin, SiTiktok, SiYoutube } from 'react-icons/si';
 
 interface BusinessPagePreviewProps {
@@ -6,7 +6,9 @@ interface BusinessPagePreviewProps {
 }
 
 export function BusinessPagePreview({ data }: BusinessPagePreviewProps) {
-    const primaryColor = data.styles?.primary_color || '#2563EB';
+    const styles = data.styles || {};
+    const primaryColor = styles.primary_color || '#2563EB';
+    const secondaryColor = styles.secondary_color || '#EFF6FF';
 
     const bizData = data.business || {
         name: 'My Business',
@@ -33,7 +35,7 @@ export function BusinessPagePreview({ data }: BusinessPagePreviewProps) {
         switch (platform) {
             case 'facebook': return <SiFacebook />;
             case 'instagram': return <SiInstagram />;
-            case 'twitter': return <Twitter size={14} fill="currentColor" />;
+            case 'twitter': return <Twitter size={16} fill="currentColor" strokeWidth={0} />;
             case 'linkedin': return <SiLinkedin />;
             case 'tiktok': return <SiTiktok />;
             case 'youtube': return <SiYoutube />;
@@ -41,132 +43,215 @@ export function BusinessPagePreview({ data }: BusinessPagePreviewProps) {
         }
     };
 
+    const isOpenNow = (hours: any) => {
+        const today = new Date().toLocaleDateString('en-US', { weekday: 'short' }).toLowerCase();
+        const timeRange = hours?.[today];
+        if (!timeRange || timeRange.toLowerCase() === 'closed') return false;
+        return true;
+    };
+
     return (
-        <div className="h-full w-full bg-slate-50 flex flex-col relative overflow-hidden font-sans scrollbar-hide overflow-y-auto">
+        <div className="h-full w-full bg-slate-50 flex flex-col relative overflow-hidden font-sans">
+            <style jsx>{`
+                .no-scrollbar::-webkit-scrollbar {
+                    display: none;
+                }
+                .no-scrollbar {
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+                }
+                .theme-text { color: ${primaryColor}; }
+                .theme-bg { backgroundColor: ${primaryColor}; }
+                .theme-bg-light { backgroundColor: ${secondaryColor}; }
+                .theme-border-hover:hover { border-color: ${primaryColor}40; }
+                .theme-group:hover .theme-icon-scale { transform: scale(1.1); }
+            `}</style>
 
-            {/* Banner Area */}
-            <div className="w-full h-40 bg-slate-200 relative flex-shrink-0">
-                {bizData.banner ? (
-                    <img src={bizData.banner} alt="Banner" className="w-full h-full object-cover" />
-                ) : (
-                    <div className="w-full h-full" style={{ backgroundColor: primaryColor, opacity: 0.8 }} />
-                )}
-                {/* Curve Divider */}
-                <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
-                    <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="relative block w-[calc(110%+1.3px)] h-[30px] fill-slate-50">
-                        <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z"></path>
-                    </svg>
-                </div>
-            </div>
-
-            {/* Profile Section */}
-            <div className="px-6 -mt-12 relative z-10 flex flex-col items-center text-center">
-                <div className="w-24 h-24 rounded-full border-4 border-white bg-white shadow-md overflow-hidden mb-3">
-                    {bizData.logo ? (
-                        <img src={bizData.logo} alt="Logo" className="w-full h-full object-cover" />
+            <div className="flex-1 overflow-y-auto no-scrollbar pb-8">
+                {/* Hero Section */}
+                <div className="relative w-full h-56 bg-slate-900 flex-shrink-0">
+                    {bizData.banner ? (
+                        <>
+                            <img src={bizData.banner} alt="Banner" className="w-full h-full object-cover opacity-90" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent" />
+                        </>
                     ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-slate-100 text-slate-300">
-                            <StoreIcon size={32} />
+                        <div className="w-full h-full" style={{ backgroundColor: primaryColor }}>
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                        </div>
+                    )}
+
+                    {/* Floating Profile Info */}
+                    <div className="absolute -bottom-10 left-6 right-6 flex items-end justify-between">
+                        <div className="w-24 h-24 rounded-2xl bg-white shadow-xl p-1 rotate-3 hover:rotate-0 transition-transform duration-300 transform origin-bottom-left">
+                            {bizData.logo ? (
+                                <img src={bizData.logo} alt="Logo" className="w-full h-full object-cover rounded-xl" />
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center bg-slate-100 rounded-xl text-slate-300">
+                                    <Globe size={32} />
+                                </div>
+                            )}
+                        </div>
+                        <div className="flex gap-2 mb-12">
+                            {/* Floating Quick Actions */}
+                            {bizData.phone && (
+                                <button
+                                    className="w-12 h-12 rounded-full text-white flex items-center justify-center shadow-lg hover:scale-110 transition-transform active:scale-95"
+                                    style={{ backgroundColor: primaryColor }}
+                                >
+                                    <Phone size={20} />
+                                </button>
+                            )}
+                            {bizData.address && (
+                                <button
+                                    className="w-12 h-12 rounded-full bg-white text-slate-700 flex items-center justify-center shadow-lg hover:scale-110 transition-transform active:scale-95 border-2"
+                                    style={{ borderColor: primaryColor, color: primaryColor }}
+                                >
+                                    <Navigation size={20} />
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Content Body */}
+                <div className="px-6 pt-14 space-y-8">
+
+                    {/* Header */}
+                    <div>
+                        <div className="flex items-center gap-2 mb-1">
+                            <h1 className="text-2xl font-bold text-slate-900 leading-tight">
+                                {bizData.name || 'Business Name'}
+                            </h1>
+                            <CheckCircle2 size={20} className="flex-shrink-0" fill="currentColor" color="white" style={{ color: primaryColor }} />
+                        </div>
+
+                        <p className="text-slate-500 leading-relaxed text-sm">
+                            {bizData.description || 'Description goes here.'}
+                        </p>
+
+                        {/* Status Badge */}
+                        <div className="mt-3 flex gap-2">
+                            {isOpenNow(bizData.hours) ? (
+                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border" style={{ backgroundColor: secondaryColor, color: primaryColor, borderColor: `${primaryColor}30` }}>
+                                    Open Now
+                                </span>
+                            ) : (
+                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">
+                                    Closed
+                                </span>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Action Grid */}
+                    <div className="grid grid-cols-2 gap-3">
+                        {bizData.website && (
+                            <div className="col-span-2 bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between theme-border-hover transition-colors group theme-group cursor-pointer">
+                                <div className="flex items-center gap-3">
+                                    <div
+                                        className="w-10 h-10 rounded-full flex items-center justify-center transition-transform theme-icon-scale"
+                                        style={{ backgroundColor: secondaryColor, color: primaryColor }}
+                                    >
+                                        <Globe size={20} />
+                                    </div>
+                                    <div className="text-left">
+                                        <div className="text-xs text-slate-500 font-medium">Website</div>
+                                        <div className="text-sm font-semibold text-slate-900">Visit Online</div>
+                                    </div>
+                                </div>
+                                <div className="text-slate-300 group-hover:translate-x-1 transition-transform">
+                                    →
+                                </div>
+                            </div>
+                        )}
+
+                        {bizData.email && (
+                            <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex flex-col gap-3 theme-border-hover transition-colors group theme-group cursor-pointer">
+                                <div
+                                    className="w-10 h-10 rounded-full flex items-center justify-center transition-transform theme-icon-scale"
+                                    style={{ backgroundColor: secondaryColor, color: primaryColor }}
+                                >
+                                    <Mail size={20} />
+                                </div>
+                                <div>
+                                    <div className="text-xs text-slate-500 font-medium">Email</div>
+                                    <div className="text-sm font-semibold text-slate-900">Contact Us</div>
+                                </div>
+                            </div>
+                        )}
+
+                        {bizData.address && (
+                            <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex flex-col gap-3 theme-border-hover transition-colors group theme-group cursor-pointer">
+                                <div
+                                    className="w-10 h-10 rounded-full flex items-center justify-center transition-transform theme-icon-scale"
+                                    style={{ backgroundColor: secondaryColor, color: primaryColor }}
+                                >
+                                    <MapPin size={20} />
+                                </div>
+                                <div>
+                                    <div className="text-xs text-slate-500 font-medium">Location</div>
+                                    <div className="text-sm font-semibold text-slate-900">Get Directions</div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Hours Card */}
+                    <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
+                        <div className="flex items-center gap-3 mb-6">
+                            <div className="p-2 rounded-xl" style={{ backgroundColor: secondaryColor, color: primaryColor }}>
+                                <Clock size={20} />
+                            </div>
+                            <h3 className="text-base font-bold text-slate-900">Business Hours</h3>
+                        </div>
+                        <div className="space-y-3">
+                            {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => {
+                                const key = day.toLowerCase();
+                                const time = bizData.hours?.[key];
+                                const isToday = new Date().toLocaleDateString('en-US', { weekday: 'short' }) === day;
+
+                                return (
+                                    <div key={day} className={`flex justify-between items-center text-sm py-1 ${isToday ? 'font-medium' : ''}`}>
+                                        <span
+                                            className={`w-12 ${isToday ? '' : 'text-slate-400'}`}
+                                            style={isToday ? { color: primaryColor } : {}}
+                                        >
+                                            {day}
+                                        </span>
+                                        <div className={`flex-1 mx-4 h-px border-b border-dotted ${isToday ? '' : 'border-slate-200'}`} style={isToday ? { borderColor: `${primaryColor}50` } : {}} />
+                                        <span className={`${isToday ? 'text-slate-900' : 'text-slate-600'}`}>{time || 'Closed'}</span>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    {/* Social Links */}
+                    {bizData.social_links?.length > 0 && (
+                        <div className="pb-6">
+                            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 text-center">Follow Us</h3>
+                            <div className="flex justify-center gap-4 flex-wrap">
+                                {bizData.social_links.map((link: any, i: number) => (
+                                    <button
+                                        key={i}
+                                        className="w-12 h-12 rounded-2xl bg-white shadow-sm border border-slate-200 flex items-center justify-center text-slate-600 hover:text-white hover:bg-slate-900 hover:border-transparent transition-all hover:-translate-y-1"
+                                    >
+                                        <SocialIcon platform={link.platform} />
+                                    </button>
+                                ))}
+                            </div>
                         </div>
                     )}
                 </div>
 
-                <h1 className="text-xl font-bold text-slate-900 leading-tight mb-1">
-                    {bizData.name || 'Business Name'}
-                </h1>
-                <p className="text-sm text-slate-500 leading-snug max-w-[250px]">
-                    {bizData.description || 'Description'}
-                </p>
-            </div>
-
-            {/* Contact Actions */}
-            <div className="px-6 py-6 flex gap-3 justify-center">
-                {bizData.phone && (
-                    <a href={`tel:${bizData.phone}`} className="flex-1 py-2.5 bg-white border border-slate-200 rounded-xl shadow-sm flex items-center justify-center gap-2 text-slate-700 text-sm font-semibold active:bg-slate-50">
-                        <Phone size={16} className="text-green-600" />
-                        Call
-                    </a>
-                )}
-                {bizData.email && (
-                    <a href={`mailto:${bizData.email}`} className="flex-1 py-2.5 bg-white border border-slate-200 rounded-xl shadow-sm flex items-center justify-center gap-2 text-slate-700 text-sm font-semibold active:bg-slate-50">
-                        <Mail size={16} className="text-blue-600" />
-                        Email
-                    </a>
-                )}
-            </div>
-
-            {/* Info Cards */}
-            <div className="px-6 pb-6 space-y-4">
-
-                {/* Location */}
-                {bizData.address && (
-                    <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-100 flex items-start gap-4">
-                        <div className="p-2 bg-slate-50 rounded-lg text-slate-500">
-                            <MapPin size={20} />
-                        </div>
-                        <div>
-                            <h3 className="text-sm font-bold text-slate-900">Visit Us</h3>
-                            <p className="text-xs text-slate-500 mt-0.5">{bizData.address}</p>
-                        </div>
-                    </div>
-                )}
-
-                {/* Website */}
-                {bizData.website && (
-                    <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-100 flex items-start gap-4">
-                        <div className="p-2 bg-slate-50 rounded-lg text-slate-500">
-                            <Globe size={20} />
-                        </div>
-                        <div>
-                            <h3 className="text-sm font-bold text-slate-900">Website</h3>
-                            <a href={bizData.website} className="text-xs text-blue-600 mt-0.5 block truncate max-w-[200px]">{bizData.website}</a>
-                        </div>
-                    </div>
-                )}
-
-                {/* Hours */}
-                <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-100">
-                    <div className="flex items-center gap-2 mb-3">
-                        <Clock size={16} className="text-slate-400" />
-                        <h3 className="text-sm font-bold text-slate-900">Opening Hours</h3>
-                    </div>
-                    <div className="space-y-2">
-                        {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => {
-                            const key = day.toLowerCase();
-                            const time = bizData.hours?.[key];
-                            const isToday = new Date().toLocaleDateString('en-US', { weekday: 'short' }) === day;
-
-                            return (
-                                <div key={day} className={`flex justify-between text-xs ${isToday ? 'font-bold text-slate-900' : 'text-slate-500'}`}>
-                                    <span className="w-10">{day}</span>
-                                    <span>{time || 'Closed'}</span>
-                                </div>
-                            );
-                        })}
+                {/* Footer Branding */}
+                <div className="py-8 text-center bg-slate-50 border-t border-slate-100">
+                    <div className="flex items-center justify-center gap-2 mb-1 grayscale opacity-50">
+                        <span className="font-bold text-slate-900 tracking-tight">PLA<span className="text-slate-400">QODE</span></span>
                     </div>
                 </div>
-
-                {/* Social Links */}
-                {bizData.social_links?.length > 0 && (
-                    <div className="flex justify-center gap-4 py-4">
-                        {bizData.social_links.map((link: any, i: number) => (
-                            <a key={i} href={link.url} className="w-10 h-10 rounded-full bg-white shadow-sm border border-slate-100 flex items-center justify-center text-slate-600 hover:text-blue-600 transition-colors">
-                                <SocialIcon platform={link.platform} />
-                            </a>
-                        ))}
-                    </div>
-                )}
-            </div>
-
-            <div className="mt-auto py-6 text-xs text-slate-400 font-medium text-center">
-                Powered by Plaqode
             </div>
         </div>
     );
-}
-
-function StoreIcon({ size }: { size: number }) {
-    return (
-        <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7" /><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" /><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4" /><path d="M2 7h20" /><path d="M22 7v3a2 2 0 0 1-2 2v0a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12v0a2 2 0 0 1-2-2V7" /></svg>
-    )
 }
