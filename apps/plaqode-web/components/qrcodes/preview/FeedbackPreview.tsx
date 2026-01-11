@@ -56,41 +56,44 @@ export function FeedbackPreview({ data }: FeedbackPreviewProps) {
     const isSubmitted = state.success;
 
     return (
-        <div className="min-h-[100dvh] w-full flex flex-col relative overflow-y-auto no-scrollbar font-sans bg-slate-50">
+        <div
+            className="absolute inset-0 w-full h-full font-sans overflow-hidden bg-white"
+            style={{
+                background: `linear-gradient(135deg, ${primaryColor}15 0%, #ffffff 100%)`
+            }}
+        >
             <style jsx global>{`
                 .no-scrollbar::-webkit-scrollbar { display: none; }
                 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
             `}</style>
 
-            {/* --- Ambient Background Layer --- */}
-            {/* Base Gradient */}
-            <div
-                className="absolute inset-0 z-0 h-full min-h-full"
-                style={{
-                    background: `linear-gradient(135deg, ${primaryColor}15 0%, #ffffff 100%)`
-                }}
-            />
+            {/* --- Fixed Background Elements (Do not scroll) --- */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                {/* Top Left Orb */}
+                <div
+                    className="absolute top-[-20%] left-[-20%] w-[120%] h-[60%] rounded-[100%] blur-3xl opacity-40 animate-pulse"
+                    style={{ background: primaryColor }}
+                />
+                {/* Bottom Right Orb */}
+                <div
+                    className="absolute bottom-[-20%] right-[-20%] w-[100%] h-[50%] rounded-[100%] blur-3xl opacity-30"
+                    style={{ background: data.styles?.secondary_color || '#3b82f6' }}
+                />
+            </div>
 
-            {/* Floating Orbs for Depth */}
-            <div
-                className="absolute top-[-20%] left-[-20%] w-[120%] h-[60%] rounded-[100%] blur-3xl opacity-40 animate-pulse"
-                style={{ background: primaryColor }}
-            />
-            <div
-                className="absolute bottom-[-20%] right-[-20%] w-[100%] h-[50%] rounded-[100%] blur-3xl opacity-30"
-                style={{ background: data.styles?.secondary_color || '#3b82f6' }}
-            />
+            {/* --- Scrollable Content Container --- */}
+            <div className="relative w-full h-full overflow-y-auto no-scrollbar flex flex-col z-10">
 
-            <div className="w-full min-h-full flex flex-col relative z-10">
+                {/* Flexible Spacer Top */}
+                <div className="w-full flex-none pt-24" />
 
-                {/* 1. Floating Circular Avatar (Premium) */}
-                <div className="flex-none pt-12 pb-4 flex flex-col justify-center items-center relative z-20 mt-8">
+                {/* 1. Brand / Avatar Section */}
+                <div className="flex-none flex flex-col justify-center items-center pb-4">
                     {feedbackData.logo ? (
                         <div className="relative group">
-                            {/* Glow Behind */}
+                            {/* Glow */}
                             <div className="absolute inset-0 bg-white rounded-full blur-2xl opacity-40 group-hover:opacity-60 transition-opacity duration-500 scale-125" />
-
-                            {/* Avatar Container */}
+                            {/* Avatar */}
                             <div className="relative h-28 w-28 bg-white rounded-full shadow-2xl flex items-center justify-center p-1 ring-4 ring-white/30 backdrop-blur-sm animate-in zoom-in-50 duration-700 ease-out">
                                 <img
                                     src={feedbackData.logo}
@@ -116,7 +119,7 @@ export function FeedbackPreview({ data }: FeedbackPreviewProps) {
                 </div>
 
                 {/* 2. Main Glass Card */}
-                <div className="flex-1 px-4 flex items-start justify-center pt-8 pb-12">
+                <div className="flex-shrink-0 px-4 flex justify-center pb-8">
                     <div className="w-full max-w-sm bg-white/60 backdrop-blur-3xl rounded-[2rem] shadow-[0_30px_60px_-10px_rgba(0,0,0,0.1)] border border-white/80 px-6 py-8 flex flex-col items-center animate-in slide-in-from-bottom-8 duration-700 ring-1 ring-white/40">
                         {!isSubmitted ? (
                             <>
@@ -128,7 +131,7 @@ export function FeedbackPreview({ data }: FeedbackPreviewProps) {
                                     Tap a star to rate
                                 </p>
 
-                                {/* Star Rating - Interactive Gummy Feel */}
+                                {/* Star Rating */}
                                 <div className="flex gap-3 mb-10">
                                     {[1, 2, 3, 4, 5].map((star) => (
                                         <button
@@ -250,7 +253,11 @@ export function FeedbackPreview({ data }: FeedbackPreviewProps) {
                     </div>
                 </div>
 
-                <div className="flex-none pb-8 text-[10px] uppercase tracking-widest text-slate-400 font-semibold text-center opacity-60">
+                {/* Spacer to push footer to bottom */}
+                <div className="flex-1 min-h-0" />
+
+                {/* Footer pinned to bottom */}
+                <div className="flex-none pt-4 pb-4 text-[10px] uppercase tracking-widest text-slate-400 font-semibold text-center opacity-60">
                     Powered by Plaqode
                 </div>
             </div>

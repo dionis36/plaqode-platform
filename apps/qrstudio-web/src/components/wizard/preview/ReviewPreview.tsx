@@ -17,37 +17,42 @@ export function ReviewPreview({ data }: ReviewPreviewProps) {
     };
 
     return (
-        <div className="absolute inset-0 h-full w-full flex flex-col overflow-y-auto no-scrollbar font-sans bg-slate-50">
+        <div
+            className="absolute inset-0 w-full h-full font-sans overflow-hidden bg-white"
+            style={{
+                background: `linear-gradient(135deg, ${primaryColor}15 0%, #ffffff 100%)`
+            }}
+        >
             <style jsx global>{`
                 .no-scrollbar::-webkit-scrollbar { display: none; }
                 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
             `}</style>
 
-            {/* --- Ambient Background Layer --- */}
-            <div
-                className="absolute inset-0 z-0 h-full min-h-full"
-                style={{
-                    background: `linear-gradient(135deg, ${primaryColor}15 0%, #ffffff 100%)`
-                }}
-            />
-            {/* Floating Orbs */}
-            <div
-                className="absolute top-[-20%] left-[-20%] w-[120%] h-[60%] rounded-[100%] blur-3xl opacity-40 animate-pulse"
-                style={{ background: primaryColor }}
-            />
-            <div
-                className="absolute bottom-[-20%] right-[-20%] w-[100%] h-[50%] rounded-[100%] blur-3xl opacity-30"
-                style={{ background: secondaryColor }}
-            />
+            {/* --- Fixed Background Elements (Do not scroll) --- */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                {/* Top Left Orb */}
+                <div
+                    className="absolute top-[-20%] left-[-20%] w-[120%] h-[60%] rounded-[100%] blur-3xl opacity-40 animate-pulse"
+                    style={{ background: primaryColor }}
+                />
+                {/* Bottom Right Orb */}
+                <div
+                    className="absolute bottom-[-20%] right-[-20%] w-[100%] h-[50%] rounded-[100%] blur-3xl opacity-30"
+                    style={{ background: secondaryColor }}
+                />
+            </div>
 
-            {/* Content Layer */}
-            <div className="w-full min-h-full flex flex-col relative z-10">
+            {/* --- Scrollable Content Container --- */}
+            <div className="relative w-full h-full overflow-y-auto no-scrollbar flex flex-col z-10">
 
-                {/* 1. Floating Circular Avatar */}
-                <div className="flex-none pt-24 pb-4 flex flex-col justify-center items-center relative z-20">
+                {/* Flexible Spacer Top */}
+                <div className="w-full flex-none pt-24" />
+
+                {/* 1. Brand / Avatar Section */}
+                <div className="flex-none flex flex-col justify-center items-center pb-4">
                     {reviewData.logo ? (
                         <div className="relative group">
-                            {/* Glow Behind */}
+                            {/* Glow */}
                             <div className="absolute inset-0 bg-white rounded-full blur-2xl opacity-40 group-hover:opacity-60 transition-opacity duration-500 scale-125" />
                             {/* Avatar */}
                             <div className="relative h-28 w-28 bg-white rounded-full shadow-2xl flex items-center justify-center p-1 ring-4 ring-white/30 backdrop-blur-sm animate-in zoom-in-50 duration-700 ease-out">
@@ -74,8 +79,8 @@ export function ReviewPreview({ data }: ReviewPreviewProps) {
                     )}
                 </div>
 
-                {/* 2. Main Glass Card */}
-                <div className="flex-1 px-4 flex items-start justify-center pt-8 pb-12">
+                {/* 2. Main Action Card */}
+                <div className="flex-shrink-0 px-4 flex justify-center pb-8">
                     <div className="w-full bg-white/60 backdrop-blur-3xl rounded-[2rem] shadow-[0_30px_60px_-10px_rgba(0,0,0,0.1)] border border-white/80 px-6 py-8 flex flex-col items-center animate-in slide-in-from-bottom-8 duration-700 ring-1 ring-white/40">
 
                         <h1 className="text-2xl font-bold text-slate-800 text-center mb-3 leading-snug tracking-tight">
@@ -89,7 +94,7 @@ export function ReviewPreview({ data }: ReviewPreviewProps) {
                             {reviewData.google && (
                                 <a
                                     href="#"
-                                    className="flex items-center justify-between w-full p-4 pl-5 rounded-xl bg-white border border-slate-100 shadow-sm hover:shadow-md hover:scale-[1.02] transition-all group active:scale-[0.98] relative overflow-hidden"
+                                    className="flex items-center justify-between w-full p-4 pl-5 rounded-xl bg-white border border-slate-100 shadow-sm active:scale-[0.98] relative overflow-hidden"
                                     style={{ borderLeft: `4px solid ${primaryColor}` }}
                                 >
                                     <div className="absolute left-0 top-0 bottom-0 w-1.5 transition-all group-hover:w-2" style={{ background: primaryColor }} />
@@ -100,7 +105,7 @@ export function ReviewPreview({ data }: ReviewPreviewProps) {
                             {reviewData.yelp && (
                                 <a
                                     href="#"
-                                    className="flex items-center justify-between w-full p-4 pl-5 rounded-xl bg-white border border-slate-100 shadow-sm hover:shadow-md hover:scale-[1.02] transition-all group active:scale-[0.98] relative overflow-hidden"
+                                    className="flex items-center justify-between w-full p-4 pl-5 rounded-xl bg-white border border-slate-100 shadow-sm active:scale-[0.98] relative overflow-hidden"
                                     style={{ borderLeft: `4px solid ${primaryColor}` }}
                                 >
                                     <div className="absolute left-0 top-0 bottom-0 w-1.5 transition-all group-hover:w-2" style={{ background: primaryColor }} />
@@ -111,7 +116,7 @@ export function ReviewPreview({ data }: ReviewPreviewProps) {
                             {reviewData.tripadvisor && (
                                 <a
                                     href="#"
-                                    className="flex items-center justify-between w-full p-4 pl-5 rounded-xl bg-white border border-slate-100 shadow-sm hover:shadow-md hover:scale-[1.02] transition-all group active:scale-[0.98] relative overflow-hidden"
+                                    className="flex items-center justify-between w-full p-4 pl-5 rounded-xl bg-white border border-slate-100 shadow-sm active:scale-[0.98] relative overflow-hidden"
                                     style={{ borderLeft: `4px solid ${primaryColor}` }}
                                 >
                                     <div className="absolute left-0 top-0 bottom-0 w-1.5 transition-all group-hover:w-2" style={{ background: primaryColor }} />
@@ -134,7 +139,11 @@ export function ReviewPreview({ data }: ReviewPreviewProps) {
                     </div>
                 </div>
 
-                <div className="flex-none py-2 text-[10px] uppercase tracking-widest text-slate-400 font-semibold text-center opacity-60">
+                {/* Spacer to push footer to bottom */}
+                <div className="flex-1 min-h-0" />
+
+                {/* Footer pinned to bottom */}
+                <div className="flex-none pt-4 pb-4 text-[10px] uppercase tracking-widest text-slate-400 font-semibold text-center opacity-60">
                     Powered by Plaqode
                 </div>
             </div>
