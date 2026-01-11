@@ -447,12 +447,13 @@ export function VCardForm() {
                                 </div>
                                 <div className="space-y-4">
                                     <div>
-                                        <label className="block text-sm font-semibold text-slate-700 mb-1">First Name</label>
+                                        <label className="block text-sm font-semibold text-slate-700 mb-1">First Name *</label>
                                         <input
-                                            {...register('personal_info.first_name')}
-                                            className="w-full px-3 sm:px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none text-base min-h-[44px]"
+                                            {...register('personal_info.first_name', { required: 'First name is required' })}
+                                            className={`w-full px-3 sm:px-4 py-3 rounded-lg border ${errors.personal_info?.first_name ? 'border-red-300' : 'border-slate-300'} focus:ring-2 focus:ring-blue-500 outline-none text-base min-h-[44px]`}
                                             placeholder="John"
                                         />
+                                        {errors.personal_info?.first_name && <span className="text-xs text-red-500 mt-1">{errors.personal_info.first_name.message}</span>}
                                     </div>
                                     <div>
                                         <label className="block text-sm font-semibold text-slate-700 mb-1">Last Name</label>
@@ -493,19 +494,37 @@ export function VCardForm() {
                                 <div>
                                     <label className="block text-sm font-semibold text-slate-700 mb-1">Email</label>
                                     <input
-                                        {...register('contact_details.email')}
+                                        {...register('contact_details.email', {
+                                            pattern: {
+                                                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                                message: "Invalid email address"
+                                            }
+                                        })}
                                         type="email"
-                                        className="w-full px-3 sm:px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none text-base min-h-[44px]"
+                                        className={`w-full px-3 sm:px-4 py-3 rounded-lg border ${errors.contact_details?.email ? 'border-red-300' : 'border-slate-300'} focus:ring-2 focus:ring-blue-500 outline-none text-base min-h-[44px]`}
                                         placeholder="john@example.com"
                                     />
+                                    {errors.contact_details?.email && <span className="text-xs text-red-500 mt-1">{errors.contact_details.email.message}</span>}
                                 </div>
                                 <div>
                                     <label className="block text-sm font-semibold text-slate-700 mb-1">Website</label>
                                     <input
-                                        {...register('contact_details.website')}
-                                        className="w-full px-3 sm:px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none text-base min-h-[44px]"
+                                        {...register('contact_details.website', {
+                                            pattern: {
+                                                value: /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/i,
+                                                message: "Invalid URL"
+                                            },
+                                            onBlur: (e) => {
+                                                let val = e.target.value;
+                                                if (val && !/^https?:\/\//i.test(val)) {
+                                                    setValue('contact_details.website', 'https://' + val);
+                                                }
+                                            }
+                                        })}
+                                        className={`w-full px-3 sm:px-4 py-3 rounded-lg border ${errors.contact_details?.website ? 'border-red-300' : 'border-slate-300'} focus:ring-2 focus:ring-blue-500 outline-none text-base min-h-[44px]`}
                                         placeholder="www.example.com"
                                     />
+                                    {errors.contact_details?.website && <span className="text-xs text-red-500 mt-1">{errors.contact_details.website.message}</span>}
                                 </div>
                             </div>
                         </SubAccordion>
@@ -518,12 +537,13 @@ export function VCardForm() {
                         >
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-semibold text-slate-700 mb-1">Company Name</label>
+                                    <label className="block text-sm font-semibold text-slate-700 mb-1">Company Name *</label>
                                     <input
-                                        {...register('company_details.company_name')}
-                                        className="w-full px-3 sm:px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none text-base min-h-[44px]"
+                                        {...register('company_details.company_name', { required: 'Company name is required' })}
+                                        className={`w-full px-3 sm:px-4 py-3 rounded-lg border ${errors.company_details?.company_name ? 'border-red-300' : 'border-slate-300'} focus:ring-2 focus:ring-blue-500 outline-none text-base min-h-[44px]`}
                                         placeholder="Acme Corp"
                                     />
+                                    {errors.company_details?.company_name && <span className="text-xs text-red-500 mt-1">{errors.company_details.company_name.message}</span>}
                                 </div>
                                 <div>
                                     <label className="block text-sm font-semibold text-slate-700 mb-1">Job Title</label>
@@ -644,35 +664,57 @@ export function VCardForm() {
                                 const Icon = networkConfig?.icon || FaGlobe;
                                 const brandColor = networkConfig?.color || '#64748b';
 
+                                // Type assertion for social network errors
+                                const error = (errors.social_networks?.[index] as any)?.url;
+
                                 return (
-                                    <div key={field.id} className="flex gap-3 items-center animate-in slide-in-from-left-2 duration-300">
-                                        <div
-                                            className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 text-white shadow-sm"
-                                            style={{ backgroundColor: brandColor }}
-                                        >
-                                            <Icon className="w-5 h-5" />
-                                        </div>
-                                        <div className="flex-1">
-                                            <div className="relative">
-                                                <span className="absolute left-3 top-2.5 text-slate-400 text-sm capitalize font-medium">
-                                                    {networkConfig?.name || networkId}:
-                                                </span>
-                                                <input
-                                                    {...register(`social_networks.${index}.url` as const)}
-                                                    className="w-full pl-[100px] pr-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none text-sm transition-shadow"
-                                                    placeholder="https://..."
-                                                    style={{ paddingLeft: `${(networkConfig?.name?.length || 8) * 9 + 20}px` }}
-                                                />
+                                    <div key={field.id} className="animate-in slide-in-from-left-2 duration-300">
+                                        <div className="flex gap-3 items-center">
+                                            <div
+                                                className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 text-white shadow-sm"
+                                                style={{ backgroundColor: brandColor }}
+                                            >
+                                                <Icon className="w-5 h-5" />
                                             </div>
+                                            <div className="flex-1">
+                                                <div className="relative">
+                                                    <span className="absolute left-3 top-2.5 text-slate-400 text-sm capitalize font-medium">
+                                                        {networkConfig?.name || networkId}:
+                                                    </span>
+                                                    <input
+                                                        {...register(`social_networks.${index}.url` as const, {
+                                                            required: "URL is required",
+                                                            pattern: {
+                                                                value: /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/i,
+                                                                message: "Invalid URL"
+                                                            },
+                                                            onBlur: (e) => {
+                                                                let val = e.target.value;
+                                                                if (val && !/^https?:\/\//i.test(val)) {
+                                                                    setValue(`social_networks.${index}.url`, 'https://' + val);
+                                                                }
+                                                            }
+                                                        })}
+                                                        className={`w-full pl-[100px] pr-4 py-2.5 rounded-lg border ${error ? 'border-red-300' : 'border-slate-300'} focus:ring-2 focus:ring-blue-500 outline-none text-sm transition-shadow`}
+                                                        placeholder="https://..."
+                                                        style={{ paddingLeft: `${(networkConfig?.name?.length || 8) * 9 + 20}px` }}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <button
+                                                type="button"
+                                                onClick={() => removeSocial(index)}
+                                                className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                                                title="Remove"
+                                            >
+                                                <Trash2 className="w-5 h-5" />
+                                            </button>
                                         </div>
-                                        <button
-                                            type="button"
-                                            onClick={() => removeSocial(index)}
-                                            className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                                            title="Remove"
-                                        >
-                                            <Trash2 className="w-5 h-5" />
-                                        </button>
+                                        {error && (
+                                            <p className="text-xs text-red-500 mt-1 ml-[52px]">
+                                                {error.message}
+                                            </p>
+                                        )}
                                     </div>
                                 );
                             })}

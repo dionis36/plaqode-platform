@@ -1,45 +1,38 @@
-import { Phone, Mail, Globe, MapPin, Building2, AlignLeft } from 'lucide-react';
+import { Phone, Mail, Globe, MapPin, Building2, User, Share2, Briefcase } from 'lucide-react';
 import {
     FaLinkedin, FaFacebook, FaXTwitter, FaInstagram, FaYoutube, FaTiktok, FaPinterest, FaMastodon,
     FaGithub, FaBehance, FaDribbble, FaMedium, FaTwitch, FaFlickr,
-    FaGlobe, FaTelegram, FaWhatsapp, FaReddit, FaSpotify, FaSkype
+    FaTelegram, FaWhatsapp, FaReddit, FaSpotify, FaSkype
 } from 'react-icons/fa6';
 import { MOCKUP_PREVIEW_DATA } from '../steps/mockupPreviewData';
+import { downloadVCard } from '../../../utils/vcard';
 
-// Social network configuration with brand colors
-const SOCIAL_NETWORK_CONFIG: Record<string, { icon: any; color: string }> = {
-    linkedin: { icon: FaLinkedin, color: '#0A66C2' },
-    facebook: { icon: FaFacebook, color: '#1877F2' },
-    twitter: { icon: FaXTwitter, color: '#000000' },
-    instagram: { icon: FaInstagram, color: '#E4405F' },
-    youtube: { icon: FaYoutube, color: '#FF0000' },
-    tiktok: { icon: FaTiktok, color: '#000000' },
-    pinterest: { icon: FaPinterest, color: '#BD081C' },
-    mastodon: { icon: FaMastodon, color: '#6364FF' },
-    github: { icon: FaGithub, color: '#181717' },
-    behance: { icon: FaBehance, color: '#1769FF' },
-    dribbble: { icon: FaDribbble, color: '#EA4C89' },
-    medium: { icon: FaMedium, color: '#000000' },
-    twitch: { icon: FaTwitch, color: '#9146FF' },
-    flickr: { icon: FaFlickr, color: '#0063DC' },
-    website: { icon: FaGlobe, color: '#2563EB' },
-    telegram: { icon: FaTelegram, color: '#26A5E4' },
-    whatsapp: { icon: FaWhatsapp, color: '#25D366' },
-    reddit: { icon: FaReddit, color: '#FF4500' },
-    spotify: { icon: FaSpotify, color: '#1DB954' },
-    skype: { icon: FaSkype, color: '#00AFF0' },
+// Social network configuration
+const SOCIAL_NETWORK_CONFIG: Record<string, { icon: any; color: string; label: string }> = {
+    linkedin: { icon: FaLinkedin, color: '#0A66C2', label: 'LinkedIn' },
+    facebook: { icon: FaFacebook, color: '#1877F2', label: 'Facebook' },
+    twitter: { icon: FaXTwitter, color: '#000000', label: 'X (Twitter)' },
+    instagram: { icon: FaInstagram, color: '#E4405F', label: 'Instagram' },
+    youtube: { icon: FaYoutube, color: '#FF0000', label: 'YouTube' },
+    tiktok: { icon: FaTiktok, color: '#000000', label: 'TikTok' },
+    pinterest: { icon: FaPinterest, color: '#BD081C', label: 'Pinterest' },
+    mastodon: { icon: FaMastodon, color: '#6364FF', label: 'Mastodon' },
+    github: { icon: FaGithub, color: '#181717', label: 'GitHub' },
+    behance: { icon: FaBehance, color: '#1769FF', label: 'Behance' },
+    dribbble: { icon: FaDribbble, color: '#EA4C89', label: 'Dribbble' },
+    medium: { icon: FaMedium, color: '#000000', label: 'Medium' },
+    twitch: { icon: FaTwitch, color: '#9146FF', label: 'Twitch' },
+    flickr: { icon: FaFlickr, color: '#0063DC', label: 'Flickr' },
+    website: { icon: Globe, color: '#2563EB', label: 'Website' },
+    telegram: { icon: FaTelegram, color: '#26A5E4', label: 'Telegram' },
+    whatsapp: { icon: FaWhatsapp, color: '#25D366', label: 'WhatsApp' },
+    reddit: { icon: FaReddit, color: '#FF4500', label: 'Reddit' },
+    spotify: { icon: FaSpotify, color: '#1DB954', label: 'Spotify' },
+    skype: { icon: FaSkype, color: '#00AFF0', label: 'Skype' },
 };
 
 export function VCardPreview({ data }: { data: any }) {
-    // Destructure with defaults to prevent crashes
-    // Destructure with defaults to prevent crashes
-    const styles = data?.styles || { primary_color: '#2563EB', secondary_color: '#EFF6FF' };
-
-    // Use hover data as fallback for empty fields to provide a rich preview experience
     const fallback = MOCKUP_PREVIEW_DATA.vcard;
-
-    // We check if the data object exists, but we also want to fall back if the specific fields are empty strings
-    // This allows the preview to start "full" and update as the user types
 
     // Check if user has started entering ANY content
     const hasUserInput =
@@ -57,301 +50,238 @@ export function VCardPreview({ data }: { data: any }) {
         (data?.address?.country || '') !== '' ||
         (data?.social_networks && data.social_networks.length > 0);
 
-    // If user has input, show purely their data (plus safe defaults for styles). 
-    // If no input, show the full rich fallback.
-    const activeData = hasUserInput ? data : mergeWithFallback(data, fallback);
+    // Merge logic: If user has input, show their data. If not, show fallback.
+    // For styles, always use user's styles if present, else fallback.
+    const activeData = hasUserInput ? data : { ...fallback, styles: data?.styles || fallback.styles };
 
-    const personal = {
-        first_name: activeData?.personal_info?.first_name,
-        last_name: activeData?.personal_info?.last_name,
-        avatar_image: activeData?.personal_info?.avatar_image
-    };
+    const styles = data?.styles || fallback.styles;
+    const personal = activeData?.personal_info || {};
+    const contact = activeData?.contact_details || {};
+    const company = activeData?.company_details || {};
+    const address = activeData?.address || {};
+    const summary = activeData?.summary || '';
 
-    const contact = {
-        phone: activeData?.contact_details?.phone,
-        alternative_phone: activeData?.contact_details?.alternative_phone,
-        email: activeData?.contact_details?.email,
-        website: activeData?.contact_details?.website,
-    };
-
-    const company = {
-        company_name: activeData?.company_details?.company_name,
-        job_title: activeData?.company_details?.job_title,
-    };
-
-    const address = {
-        street: activeData?.address?.street,
-        city: activeData?.address?.city,
-        state: activeData?.address?.state,
-        country: activeData?.address?.country,
-    };
-
-    const socialNetworks = (activeData?.social_networks && activeData.social_networks.length > 0)
-        ? activeData.social_networks
+    // Social networks: If user has input, use it. If not, use fallback (unless user manually cleared it, which is complex to track, so simplistic check here).
+    // Actually, for Studio preview, if hasUserInput is true but social_networks is empty, it means user hasn't added any yet.
+    // so we shouldn't show fallback socials if user has typed a name.
+    const socialNetworks = (data?.social_networks && data.social_networks.length > 0)
+        ? data.social_networks
         : (hasUserInput ? [] : fallback.social_networks);
-
-    const summary = activeData?.summary;
 
     const firstName = personal.first_name || '';
     const lastName = personal.last_name || '';
-    const fullName = [firstName, lastName].filter(Boolean).join(' ');
+    const fullName = [firstName, lastName].filter(Boolean).join(' ') || (hasUserInput ? 'Your Name' : 'John Doe');
+    const jobTitle = company.job_title || (hasUserInput ? '' : 'Product Designer');
+    const companyName = company.company_name || (hasUserInput ? '' : 'Creative Studio Inc.');
 
-    // Only fallback for styles, never 'content' when user is typing
-    function mergeWithFallback(actual: any, fallbackData: any) {
-        return { ...fallbackData, styles: actual?.styles || fallbackData.styles };
-    }
+    const primaryColor = styles.primary_color || '#2563EB';
+    const secondaryColor = styles.secondary_color || '#EFF6FF';
 
-    const jobTitle = company.job_title;
-    const companyName = company.company_name;
-
-    // Helper to lighten a color
-    const lightenColor = (hex: string, percent: number = 90) => {
-        const num = parseInt(hex.replace('#', ''), 16);
-        const r = (num >> 16) + Math.round((255 - (num >> 16)) * (percent / 100));
-        const g = ((num >> 8) & 0x00FF) + Math.round((255 - ((num >> 8) & 0x00FF)) * (percent / 100));
-        const b = (num & 0x0000FF) + Math.round((255 - (num & 0x0000FF)) * (percent / 100));
-        return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`;
+    const handleSaveContact = () => {
+        // Flatten data structure for the generator
+        const vcardData = {
+            first_name: personal.first_name,
+            last_name: personal.last_name,
+            company: company.company_name,
+            job_title: company.job_title,
+            photo: personal.avatar_image,
+            mobile: contact.phone,
+            phone: contact.alternative_phone,
+            fax: contact.fax,
+            email: contact.email,
+            website: contact.website,
+            address: address.street,
+            city: address.city,
+            state: address.state,
+            zip: address.zip,
+            country: address.country,
+            summary: summary,
+            social_links: socialNetworks.map((net: any) => ({
+                platform: net.network,
+                url: net.url
+            }))
+        };
+        downloadVCard(vcardData);
     };
-
-    // Helper to darken a color
-    const darkenColor = (hex: string, percent: number = 20) => {
-        const num = parseInt(hex.replace('#', ''), 16);
-        const r = Math.max(0, (num >> 16) - Math.round((num >> 16) * (percent / 100)));
-        const g = Math.max(0, ((num >> 8) & 0x00FF) - Math.round(((num >> 8) & 0x00FF) * (percent / 100)));
-        const b = Math.max(0, (num & 0x0000FF) - Math.round((num & 0x0000FF) * (percent / 100)));
-        return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`;
-    };
-
-    const lightPrimary = lightenColor(styles.primary_color, 95);
-    const darkPrimary = darkenColor(styles.primary_color, 15);
 
     return (
         <div
-            className="absolute inset-0 w-full h-full flex flex-col overflow-y-auto"
+            className="absolute inset-0 w-full h-full font-sans overflow-hidden bg-white"
             style={{
-                backgroundColor: styles.secondary_color || '#F1F5F9',
-                scrollbarWidth: 'none',
-                msOverflowStyle: 'none'
+                background: `linear-gradient(135deg, ${primaryColor}15 0%, #ffffff 100%)`
             }}
         >
-
-            {/* Header Section - ONLY Avatar, Name, Button */}
-            <div
-                className="px-7 pt-24 pb-10 flex flex-col items-center text-center"
-                style={{
-                    background: `linear-gradient(180deg, ${styles.primary_color} 0%, ${lightenColor(styles.primary_color, 30)} 100%)`
-                }}
-            >
-                {/* Avatar */}
-                <div
-                    className="rounded-full border-[5px] shadow-2xl overflow-hidden relative mb-5"
-                    style={{
-                        borderColor: lightenColor(styles.primary_color, 80),
-                        width: '7rem',
-                        height: '7rem'
-                    }}
-                >
-                    {personal.avatar_image ? (
-                        <img src={personal.avatar_image} alt="Profile" className="w-full h-full object-cover" />
-                    ) : (
-                        <div
-                            className="w-full h-full flex items-center justify-center font-bold"
-                            style={{
-                                backgroundColor: lightenColor(styles.primary_color, 80),
-                                color: styles.primary_color,
-                                fontSize: '2rem'
-                            }}
-                        >
-                            {fullName ? fullName.split(' ').map((n: string) => n[0]).join('').toUpperCase() : '?'}
-                        </div>
-                    )}
-                </div>
-
-                {/* Name - Reduced size */}
-                <h2 className="font-bold text-white mb-1.5" style={{ fontSize: '1.375rem', lineHeight: '1.75rem' }}>{fullName}</h2>
-                {/* Job Title - Increased size */}
-                <p className="font-semibold text-white/90" style={{ fontSize: '0.9375rem' }}>{jobTitle}</p>
-
-                {/* Save Contact Button - Better balanced */}
-                <button
-                    className="mt-7 w-full py-3.5 rounded-2xl font-bold shadow-xl transition-all hover:scale-105"
-                    style={{
-                        backgroundColor: styles.secondary_color || lightenColor(styles.primary_color, 85),
-                        color: styles.primary_color,
-                        fontSize: '0.9375rem'
-                    }}
-                >
-                    Save Contact
-                </button>
-            </div>
-
-            {/* Content Section with Rounded Top */}
-            <div
-                className="flex-1 px-4 pt-6 pb-4 space-y-3.5 rounded-t-3xl -mt-8"
-                style={{ backgroundColor: styles.secondary_color || '#F1F5F9' }}
-            >
-
-                {/* Contact Details - Phone */}
-                {contact.phone && (
-                    <div className="bg-white rounded-2xl p-5 shadow-md">
-                        <h3
-                            className="font-bold uppercase tracking-wide mb-3 flex items-center gap-2"
-                            style={{ color: styles.primary_color, fontSize: '0.75rem', letterSpacing: '0.05em' }}
-                        >
-                            <Phone style={{ width: '1rem', height: '1rem' }} /> MOBILE
-                        </h3>
-                        <a href={`tel:${contact.phone}`} className="text-gray-900 font-medium hover:opacity-80" style={{ fontSize: '0.9375rem', wordBreak: 'break-word' }}>
-                            {contact.phone}
-                        </a>
-                    </div>
-                )}
-
-                {/* Alternative Phone */}
-                {contact.alternative_phone && (
-                    <div className="bg-white rounded-2xl p-5 shadow-md">
-                        <h3
-                            className="font-bold uppercase tracking-wide mb-3 flex items-center gap-2"
-                            style={{ color: styles.primary_color, fontSize: '0.75rem', letterSpacing: '0.05em' }}
-                        >
-                            <Phone style={{ width: '1rem', height: '1rem' }} /> ALTERNATIVE
-                        </h3>
-                        <a href={`tel:${contact.alternative_phone}`} className="text-gray-900 font-medium hover:opacity-80" style={{ fontSize: '0.9375rem', wordBreak: 'break-word' }}>
-                            {contact.alternative_phone}
-                        </a>
-                    </div>
-                )}
-
-                {/* Email */}
-                {contact.email && (
-                    <div className="bg-white rounded-2xl p-5 shadow-md">
-                        <h3
-                            className="font-bold uppercase tracking-wide mb-3 flex items-center gap-2"
-                            style={{ color: styles.primary_color, fontSize: '0.75rem', letterSpacing: '0.05em' }}
-                        >
-                            <Mail style={{ width: '1rem', height: '1rem' }} /> EMAIL
-                        </h3>
-                        <a href={`mailto:${contact.email}`} className="text-gray-900 font-medium hover:opacity-80" style={{ fontSize: '0.9375rem', wordBreak: 'break-all' }}>
-                            {contact.email}
-                        </a>
-                    </div>
-                )}
-
-                {/* Website */}
-                {contact.website && (
-                    <div className="bg-white rounded-2xl p-5 shadow-md">
-                        <h3
-                            className="font-bold uppercase tracking-wide mb-3 flex items-center gap-2"
-                            style={{ color: styles.primary_color, fontSize: '0.75rem', letterSpacing: '0.05em' }}
-                        >
-                            <Globe style={{ width: '1rem', height: '1rem' }} /> WEBSITE
-                        </h3>
-                        <a href={contact.website} target="_blank" rel="noopener noreferrer" className="text-gray-900 font-medium hover:opacity-80" style={{ fontSize: '0.9375rem', wordBreak: 'break-all' }}>
-                            {contact.website}
-                        </a>
-                    </div>
-                )}
-
-                {/* Company Information Card */}
-                {(company.company_name || company.job_title) && (
-                    <div className="bg-white rounded-2xl p-5 shadow-md">
-                        <h3
-                            className="font-bold uppercase tracking-wide mb-3 flex items-center gap-2"
-                            style={{ color: styles.primary_color, fontSize: '0.75rem', letterSpacing: '0.05em' }}
-                        >
-                            <Building2 style={{ width: '1rem', height: '1rem' }} /> COMPANY
-                        </h3>
-                        {company.company_name && (
-                            <p className="text-gray-900 font-medium mb-1.5" style={{ fontSize: '0.9375rem' }}>{company.company_name}</p>
-                        )}
-                        {company.job_title && (
-                            <p className="text-gray-600 font-normal" style={{ fontSize: '0.875rem' }}>{company.job_title}</p>
-                        )}
-                    </div>
-                )}
-
-                {/* Summary Card */}
-                {summary && (
-                    <div className="bg-white rounded-2xl p-5 shadow-sm">
-                        <h3
-                            className="font-bold uppercase tracking-wide mb-3 flex items-center gap-2"
-                            style={{ color: styles.primary_color, fontSize: '0.75rem', letterSpacing: '0.05em' }}
-                        >
-                            <AlignLeft style={{ width: '1rem', height: '1rem' }} /> ABOUT
-                        </h3>
-                        <p className="text-gray-700 leading-relaxed" style={{ fontSize: '0.875rem', lineHeight: '1.5' }}>
-                            {summary}
-                        </p>
-                    </div>
-                )}
-
-                {/* Address Card */}
-                {(address.street || address.city || address.state || address.country) && (
-                    <div className="bg-white rounded-2xl p-5 shadow-sm">
-                        <h3
-                            className="font-bold uppercase tracking-wide mb-3 flex items-center gap-2"
-                            style={{ color: styles.primary_color, fontSize: '0.75rem', letterSpacing: '0.05em' }}
-                        >
-                            <MapPin style={{ width: '1rem', height: '1rem' }} /> ADDRESS
-                        </h3>
-                        <a
-                            href={`http://maps.google.com/?q=${[address.street, address.city, address.state, address.country].filter(Boolean).join(', ')}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-gray-900 hover:text-blue-600 transition-colors font-medium"
-                            style={{ fontSize: '0.875rem', lineHeight: '1.5' }}
-                        >
-                            {[address.street, address.city, address.state, address.country].filter(Boolean).join(', ')}
-                        </a>
-                    </div>
-                )}
-
-                {/* Social Networks Card */}
-                {socialNetworks.length > 0 && (
-                    <div className="bg-white rounded-2xl p-5 shadow-sm">
-                        <h3
-                            className="font-bold uppercase tracking-wide mb-4 flex items-center gap-2"
-                            style={{ color: styles.primary_color, fontSize: '0.75rem', letterSpacing: '0.05em' }}
-                        >
-                            SOCIAL MEDIA
-                        </h3>
-                        <div className="grid grid-cols-4 gap-3">
-                            {socialNetworks.map((net: any, idx: number) => {
-                                const config = SOCIAL_NETWORK_CONFIG[net.network] || { icon: FaGlobe, color: '#64748b' };
-                                const Icon = config.icon;
-
-                                return (
-                                    <a
-                                        key={idx}
-                                        href={net.url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="aspect-square rounded-xl flex items-center justify-center text-white hover:opacity-90 transition-all shadow-sm"
-                                        style={{ backgroundColor: config.color }}
-                                    >
-                                        <Icon style={{ width: '1.375rem', height: '1.375rem' }} />
-                                    </a>
-                                );
-                            })}
-                        </div>
-                    </div>
-                )}
-            </div>
-
-            {/* Hide scrollbar */}
-            <style jsx>{`
-                div::-webkit-scrollbar {
-                    display: none;
-                }
+            <style jsx global>{`
+                .no-scrollbar::-webkit-scrollbar { display: none; }
+                .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
             `}</style>
 
-            {/* Footer Branding */}
-            <div
-                className="pb-6 text-center"
-                style={{ backgroundColor: styles.secondary_color || '#F1F5F9' }}
-            >
-                <p className="text-xs text-slate-600">
-                    Powered by <span className="font-semibold">QR Studio</span>
-                </p>
+            {/* --- Fixed Background Elements --- */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div
+                    className="absolute top-[-20%] left-[-20%] w-[120%] h-[60%] rounded-[100%] blur-3xl opacity-40 animate-pulse"
+                    style={{ background: primaryColor }}
+                />
+                <div
+                    className="absolute bottom-[-20%] right-[-20%] w-[100%] h-[50%] rounded-[100%] blur-3xl opacity-30"
+                    style={{ background: secondaryColor }}
+                />
+            </div>
+
+            {/* --- Scrollable Content --- */}
+            <div className="relative w-full h-full overflow-y-auto no-scrollbar flex flex-col z-10">
+
+                {/* Spacer */}
+                <div className="w-full flex-none pt-20" />
+
+                {/* 1. Header (Floating) */}
+                <div className="flex-none flex flex-col justify-center items-center pb-8 px-4 text-center">
+                    {/* Floating Avatar */}
+                    <div className="relative group mb-5">
+                        <div className="absolute inset-0 bg-white rounded-full blur-2xl opacity-40 transition-opacity duration-500 scale-125" />
+                        <div className="relative h-32 w-32 bg-white rounded-full shadow-2xl flex items-center justify-center p-1 ring-4 ring-white/30 backdrop-blur-sm animate-in zoom-in-50 duration-700 ease-out">
+                            {personal.avatar_image ? (
+                                <div className="relative w-full h-full rounded-full overflow-hidden">
+                                    <img src={personal.avatar_image} alt="Profile" className="w-full h-full object-cover" />
+                                </div>
+                            ) : (
+                                <div className="w-full h-full rounded-full bg-slate-100 flex items-center justify-center text-4xl font-bold" style={{ color: primaryColor }}>
+                                    {fullName.charAt(0)}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Name & Title */}
+                    <h1 className="text-3xl font-bold text-slate-900 tracking-tight drop-shadow-sm mb-2">
+                        {fullName}
+                    </h1>
+                    <div className="flex flex-col items-center gap-1 text-slate-600 font-medium">
+                        <span className="text-lg">{jobTitle}</span>
+                        {companyName && (
+                            <span className="text-sm opacity-80 flex items-center gap-1.5">
+                                <Building2 className="w-3.5 h-3.5" /> {companyName}
+                            </span>
+                        )}
+                    </div>
+                </div>
+
+                {/* 2. Main Glass Card */}
+                <div className="flex-shrink-0 px-4 flex justify-center pb-8">
+                    <div className="w-full max-w-sm bg-white/60 backdrop-blur-3xl rounded-[2.5rem] shadow-[0_30px_60px_-10px_rgba(0,0,0,0.1)] border border-white/80 px-6 py-8 flex flex-col items-stretch animate-in slide-in-from-bottom-8 duration-700 ring-1 ring-white/40">
+
+                        {/* Save Contact Button */}
+                        <button
+                            onClick={handleSaveContact}
+                            className="w-full py-4 rounded-xl font-bold shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 mb-8 text-white relative overflow-hidden"
+                            style={{ backgroundColor: primaryColor }}
+                        >
+                            <User className="w-5 h-5" />
+                            <span>Save Contact</span>
+                        </button>
+
+                        <div className="space-y-6">
+                            {/* Summary */}
+                            {summary && (
+                                <div className="text-center">
+                                    <p className="text-slate-600 text-sm leading-relaxed">
+                                        {summary}
+                                    </p>
+                                </div>
+                            )}
+
+                            {/* Contact Actions */}
+                            <div className="space-y-3">
+                                {contact.phone && (
+                                    <div
+                                        className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm transition-all cursor-pointer"
+                                    >
+                                        <div className="w-10 h-10 rounded-full flex items-center justify-center bg-slate-50 text-slate-600 transition-colors">
+                                            <Phone className="w-5 h-5" />
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-0.5">Mobile</p>
+                                            <p className="text-slate-800 font-medium truncate">{contact.phone}</p>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {contact.email && (
+                                    <div
+                                        className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm transition-all cursor-pointer"
+                                    >
+                                        <div className="w-10 h-10 rounded-full flex items-center justify-center bg-slate-50 text-slate-600 transition-colors">
+                                            <Mail className="w-5 h-5" />
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-0.5">Email</p>
+                                            <p className="text-slate-800 font-medium truncate">{contact.email}</p>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {contact.website && (
+                                    <div
+                                        className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm transition-all cursor-pointer"
+                                    >
+                                        <div className="w-10 h-10 rounded-full flex items-center justify-center bg-slate-50 text-slate-600 transition-colors">
+                                            <Globe className="w-5 h-5" />
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-0.5">Website</p>
+                                            <p className="text-slate-800 font-medium truncate">{contact.website.replace(/^https?:\/\//, '')}</p>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {(address.street || address.city) && (
+                                    <div
+                                        className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm transition-all cursor-pointer"
+                                    >
+                                        <div className="w-10 h-10 rounded-full flex items-center justify-center bg-slate-50 text-slate-600 transition-colors">
+                                            <MapPin className="w-5 h-5" />
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-0.5">Location</p>
+                                            <p className="text-slate-800 font-medium truncate">
+                                                {[address.city, address.country].filter(Boolean).join(', ') || address.street}
+                                            </p>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Social Grid */}
+                            {socialNetworks.length > 0 && (
+                                <div className="pt-2">
+                                    <p className="text-center text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Connect with me</p>
+                                    <div className="flex flex-wrap justify-center gap-3">
+                                        {socialNetworks.map((net: any, idx: number) => {
+                                            const config = SOCIAL_NETWORK_CONFIG[net.network] || { icon: Share2, color: '#64748b', label: 'Social' };
+                                            const Icon = config.icon;
+                                            return (
+                                                <div
+                                                    key={idx}
+                                                    className="w-12 h-12 rounded-xl flex items-center justify-center text-white shadow-sm active:scale-95 transition-all cursor-pointer"
+                                                    style={{ backgroundColor: config.color }}
+                                                    title={config.label}
+                                                >
+                                                    <Icon className="w-5 h-5" />
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                <div className="flex-1 min-h-0" />
+
+                <div className="flex-none pt-4 pb-4 text-[10px] uppercase tracking-widest text-slate-400 font-semibold text-center opacity-60">
+                    Powered by Plaqode
+                </div>
             </div>
         </div>
     );
