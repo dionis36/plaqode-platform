@@ -148,7 +148,7 @@ export function CouponPreview({ data }: CouponPreviewProps) {
                                 className="w-full py-4 rounded-xl font-bold text-white shadow-lg flex items-center justify-center gap-2 hover:opacity-90 transition-all active:scale-[0.98]"
                                 style={{ backgroundColor: primaryColor, boxShadow: `0 10px 15px -3px ${primaryColor}70` }}
                             >
-                                <span>{couponData.button_label || 'Redeem Now'}</span>
+                                <span>Redeem Now</span>
                                 <ExternalLink size={18} />
                             </a>
                         ) : (

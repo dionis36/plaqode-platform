@@ -127,7 +127,7 @@ export function CouponPreview({ data }: CouponPreviewProps) {
                                 style={{ backgroundColor: primaryColor, boxShadow: `0 10px 15px -3px ${primaryColor}70` }}
                                 title="Links to external offer in public view"
                             >
-                                <span>{couponData.button_label || 'Redeem Now'}</span>
+                                <span>Redeem Now</span>
                                 <ExternalLink size={18} />
                             </button>
                         ) : (

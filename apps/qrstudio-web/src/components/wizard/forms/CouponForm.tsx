@@ -368,29 +368,17 @@ export function CouponForm() {
                         </div>
 
                         <div className="pt-4 border-t border-slate-100">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                        Button Label
-                                    </label>
-                                    <input
-                                        {...register('button_label')}
-                                        type="text"
-                                        className="w-full px-3 sm:px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none text-base min-h-[44px]"
-                                        placeholder="Redeem Now"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                        Redeem URL (Optional)
-                                    </label>
-                                    <input
-                                        {...register('offer_url')}
-                                        type="text"
-                                        className="w-full px-3 sm:px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none text-base min-h-[44px]"
-                                        placeholder="https://myshop.com/redeem"
-                                    />
-                                </div>
+                            <div className="sm:col-span-2">
+                                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                                    Redeem URL (Optional)
+                                </label>
+                                <input
+                                    {...register('offer_url')}
+                                    type="text"
+                                    className="w-full px-3 sm:px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none text-base min-h-[44px]"
+                                    placeholder="https://myshop.com/redeem"
+                                />
+                                <p className="text-xs text-slate-500 mt-1">If provided, a "Redeem Now" button will appear.</p>
                             </div>
                         </div>
                     </div>
