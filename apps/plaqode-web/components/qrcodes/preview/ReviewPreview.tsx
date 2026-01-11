@@ -140,7 +140,7 @@ export function ReviewPreview({ data }: ReviewPreviewProps) {
                     </div>
                 </div>
 
-                <div className="flex-none pb-8 text-[10px] uppercase tracking-widest text-slate-400 font-semibold text-center opacity-60">
+                <div className="flex-none py-2 text-[10px] uppercase tracking-widest text-slate-400 font-semibold text-center opacity-60">
                     Powered by Plaqode
                 </div>
             </div>
