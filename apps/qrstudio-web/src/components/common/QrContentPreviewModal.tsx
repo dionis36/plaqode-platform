@@ -15,6 +15,8 @@ import { AppStorePreview } from '../wizard/preview/AppStorePreview';
 import { SocialMediaPagePreview } from '../wizard/preview/SocialMediaPagePreview';
 import { BusinessPagePreview } from '../wizard/preview/BusinessPagePreview';
 import { CouponPreview } from '../wizard/preview/CouponPreview';
+import { FeedbackPreview } from '../wizard/preview/FeedbackPreview';
+import { ReviewPreview } from '../wizard/preview/ReviewPreview';
 
 interface QrContentPreviewModalProps {
     isOpen: boolean;
@@ -60,6 +62,10 @@ export function QrContentPreviewModal({ isOpen, onClose, qrCode }: QrContentPrev
                 return <BusinessPagePreview data={payload} />;
             case 'coupon':
                 return <CouponPreview data={payload} />;
+            case 'feedback':
+                return <FeedbackPreview data={payload} />;
+            case 'review':
+                return <ReviewPreview data={payload} />;
             default:
                 return (
                     <div className="flex items-center justify-center h-full p-8 text-center">

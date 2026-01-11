@@ -11,115 +11,100 @@ export function ReviewPreview({ data }: ReviewPreviewProps) {
 
     const reviewData = data.review || {
         title: 'We value your feedback',
-        description: 'Please select a platform below to leave your review.'
+        description: 'Please select a platform below to leave your review.',
+        business_name: '',
+        logo: ''
     };
-
-    const hasAnyLink = reviewData.google || reviewData.yelp || reviewData.tripadvisor || reviewData.facebook;
 
     return (
         <div className="h-full w-full bg-white flex flex-col relative overflow-hidden font-sans">
-            {/* Background Header */}
-            <div
-                className="w-full h-48 absolute top-0 left-0 z-0 transition-colors duration-300"
-                style={{ backgroundColor: primaryColor }}
-            >
-                <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white to-transparent" />
-            </div>
+            <style jsx global>{`
+                .no-scrollbar::-webkit-scrollbar { display: none; }
+                .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+            `}</style>
 
             {/* Content Container */}
-            <div className="flex-1 z-10 flex flex-col items-center pt-24 px-6 overflow-y-auto">
+            <div className="relative z-10 flex-1 flex flex-col items-center pt-8 px-6 pb-12 overflow-y-auto no-scrollbar">
 
-                {/* Main Card */}
-                <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-8 text-center mb-6">
-                    {/* Icon Bubble */}
+                {/* Hero / Branding Section */}
+                <div className="w-full flex flex-col items-center text-center mb-8 animate-in slide-in-from-top-8 duration-700">
                     <div
-                        className="w-20 h-20 rounded-full mx-auto -mt-16 mb-6 flex items-center justify-center shadow-lg border-4 border-white"
+                        className="w-20 h-20 rounded-2xl mb-4 shadow-xl flex items-center justify-center relative overflow-hidden ring-4 ring-white"
                         style={{ backgroundColor: secondaryColor }}
                     >
-                        <Star className="w-10 h-10" style={{ color: primaryColor, fill: primaryColor }} />
+                        {reviewData.logo ? (
+                            <img
+                                src={reviewData.logo}
+                                alt="Logo"
+                                className="w-full h-full object-cover"
+                            />
+                        ) : (
+                            <Star className="w-8 h-8" style={{ color: primaryColor, fill: primaryColor }} />
+                        )}
                     </div>
 
-                    <h1 className="text-2xl font-bold text-slate-800 mb-3 leading-tight">
+                    {reviewData.business_name && (
+                        <h2 className="text-xs font-bold tracking-widest uppercase text-slate-400 mb-2">
+                            {reviewData.business_name}
+                        </h2>
+                    )}
+
+                    <h1 className="text-2xl font-extrabold text-slate-900 mb-2 leading-tight max-w-[90%]">
                         {reviewData.title || 'We value your feedback'}
                     </h1>
 
-                    <p className="text-slate-500 text-sm leading-relaxed mb-8">
+                    <p className="text-slate-500 text-sm leading-relaxed max-w-xs font-medium">
                         {reviewData.description || 'Please select a platform below to leave your review.'}
                     </p>
-
-                    {/* Buttons Stack */}
-                    <div className="space-y-4">
-                        {reviewData.google && (
-                            <a
-                                href="#" // Preview prevents navigation
-                                className="flex items-center gap-4 w-full p-4 rounded-xl border border-slate-100 hover:bg-slate-50 transition-colors group shadow-sm"
-                            >
-                                <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                                    <SiGoogle className="w-5 h-5 text-blue-600" />
-                                </div>
-                                <div className="text-left">
-                                    <div className="font-bold text-slate-800 text-sm">Review on Google</div>
-                                    <div className="text-xs text-slate-400">Share your experience</div>
-                                </div>
-                            </a>
-                        )}
-
-                        {reviewData.yelp && (
-                            <a
-                                href="#"
-                                className="flex items-center gap-4 w-full p-4 rounded-xl border border-slate-100 hover:bg-slate-50 transition-colors group shadow-sm"
-                            >
-                                <div className="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                                    <SiYelp className="w-5 h-5 text-red-600" />
-                                </div>
-                                <div className="text-left">
-                                    <div className="font-bold text-slate-800 text-sm">Review on Yelp</div>
-                                    <div className="text-xs text-slate-400">Share your experience</div>
-                                </div>
-                            </a>
-                        )}
-
-                        {reviewData.tripadvisor && (
-                            <a
-                                href="#"
-                                className="flex items-center gap-4 w-full p-4 rounded-xl border border-slate-100 hover:bg-slate-50 transition-colors group shadow-sm"
-                            >
-                                <div className="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                                    <SiTripadvisor className="w-5 h-5 text-green-600" />
-                                </div>
-                                <div className="text-left">
-                                    <div className="font-bold text-slate-800 text-sm">Review on TripAdvisor</div>
-                                    <div className="text-xs text-slate-400">Share your experience</div>
-                                </div>
-                            </a>
-                        )}
-
-                        {reviewData.facebook && (
-                            <a
-                                href="#"
-                                className="flex items-center gap-4 w-full p-4 rounded-xl border border-slate-100 hover:bg-slate-50 transition-colors group shadow-sm"
-                            >
-                                <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                                    <SiFacebook className="w-5 h-5 text-blue-800" />
-                                </div>
-                                <div className="text-left">
-                                    <div className="font-bold text-slate-800 text-sm">Review on Facebook</div>
-                                    <div className="text-xs text-slate-400">Share your experience</div>
-                                </div>
-                            </a>
-                        )}
-
-                        {!hasAnyLink && (
-                            <div className="text-xs text-slate-400 italic py-4">
-                                Add review links in the editor to see buttons appear here.
-                            </div>
-                        )}
-                    </div>
                 </div>
 
-                {/* Branding Footnote */}
-                <div className="mt-auto mb-6 text-xs text-slate-400 font-medium">
-                    Powered by Plaqode
+                {/* Modern Button Grid/Stack */}
+                <div className="w-full max-w-xs space-y-3 animate-in slide-in-from-bottom-8 duration-700 delay-150">
+                    {reviewData.google && (
+                        <a
+                            href="#"
+                            className="flex items-center justify-between w-full p-4 rounded-xl bg-slate-50 border-2 border-transparent hover:border-slate-200 hover:bg-white hover:shadow-md transition-all group active:scale-[0.98]"
+                        >
+                            <span className="font-bold text-slate-800 text-sm group-hover:text-blue-600 transition-colors">Google</span>
+                            <SiGoogle className="w-5 h-5 text-slate-300 group-hover:text-blue-600 transition-colors" />
+                        </a>
+                    )}
+
+                    {reviewData.yelp && (
+                        <a
+                            href="#"
+                            className="flex items-center justify-between w-full p-4 rounded-xl bg-slate-50 border-2 border-transparent hover:border-slate-200 hover:bg-white hover:shadow-md transition-all group active:scale-[0.98]"
+                        >
+                            <span className="font-bold text-slate-800 text-sm group-hover:text-red-600 transition-colors">Yelp</span>
+                            <SiYelp className="w-5 h-5 text-slate-300 group-hover:text-red-600 transition-colors" />
+                        </a>
+                    )}
+
+                    {reviewData.tripadvisor && (
+                        <a
+                            href="#"
+                            className="flex items-center justify-between w-full p-4 rounded-xl bg-slate-50 border-2 border-transparent hover:border-slate-200 hover:bg-white hover:shadow-md transition-all group active:scale-[0.98]"
+                        >
+                            <span className="font-bold text-slate-800 text-sm group-hover:text-green-600 transition-colors">TripAdvisor</span>
+                            <SiTripadvisor className="w-5 h-5 text-slate-300 group-hover:text-green-600 transition-colors" />
+                        </a>
+                    )}
+
+                    {reviewData.facebook && (
+                        <a
+                            href="#"
+                            className="flex items-center justify-between w-full p-4 rounded-xl bg-slate-50 border-2 border-transparent hover:border-slate-200 hover:bg-white hover:shadow-md transition-all group active:scale-[0.98]"
+                        >
+                            <span className="font-bold text-slate-800 text-sm group-hover:text-indigo-600 transition-colors">Facebook</span>
+                            <SiFacebook className="w-5 h-5 text-slate-300 group-hover:text-indigo-600 transition-colors" />
+                        </a>
+                    )}
+                </div>
+
+                <div className="mt-auto pt-8 pb-4 w-full text-center">
+                    <div className="text-[9px] uppercase tracking-widest text-slate-300 font-bold">
+                        Powered by Plaqode
+                    </div>
                 </div>
             </div>
         </div>

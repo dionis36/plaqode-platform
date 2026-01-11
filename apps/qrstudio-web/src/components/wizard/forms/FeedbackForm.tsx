@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form';
 import { useWizardStore } from '../store';
 import { useEffect, useState, useRef } from 'react';
 import { ChevronDown, MessageCircleHeart, Palette, Mail, Image as ImageIcon, CheckCircle } from 'lucide-react';
+import { ImageUpload } from '../../common/ImageUpload';
 
 // Form Value Types
 type FormValues = {
@@ -19,6 +20,8 @@ type FormValues = {
     // Content
     question: string;
     email: string;
+    collect_contact?: boolean;
+    business_name?: string;
     logo?: string;
     success_message?: string;
 };
@@ -115,6 +118,8 @@ export function FeedbackForm() {
 
             question: payload.feedback?.question || 'How was your experience?',
             email: payload.feedback?.email || '',
+            collect_contact: payload.feedback?.collect_contact || false,
+            business_name: payload.feedback?.business_name || '',
             logo: payload.feedback?.logo || '',
             success_message: payload.feedback?.success_message || 'Thank you for your feedback!'
         },
@@ -130,6 +135,8 @@ export function FeedbackForm() {
                 platform: 'feedback',
                 question: payload.feedback.question || 'How was your experience?',
                 email: payload.feedback.email || '',
+                collect_contact: payload.feedback.collect_contact || false,
+                business_name: payload.feedback.business_name || '',
                 logo: payload.feedback.logo || '',
                 success_message: payload.feedback.success_message || 'Thank you for your feedback!'
             });
@@ -145,6 +152,8 @@ export function FeedbackForm() {
             const feedbackPayload = {
                 question: value.question,
                 email: value.email,
+                collect_contact: value.collect_contact,
+                business_name: value.business_name,
                 logo: value.logo,
                 success_message: value.success_message
             };
@@ -302,25 +311,31 @@ export function FeedbackForm() {
                     isOpen={openSections.branding}
                     onToggle={() => toggleSection('branding')}
                 >
-                    <div className="space-y-5 mt-4">
+                    <div className="space-y-6 mt-4">
                         <div>
                             <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                Logo URL
+                                Business Name (Optional)
                             </label>
                             <input
-                                {...register('logo', {
-                                    pattern: {
-                                        value: /^https?:\/\/.+/,
-                                        message: 'Please enter a valid URL'
-                                    }
-                                })}
+                                {...register('business_name')}
                                 type="text"
-                                className="w-full px-3 sm:px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none text-base min-h-[44px]"
-                                placeholder="https://..."
+                                className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none transition-all placeholder:text-slate-400"
+                                placeholder="e.g. Acme Corp"
                             />
-                            <p className="text-xs text-slate-500 mt-1">
-                                Enter a direct link to your logo image.
-                            </p>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-semibold text-slate-700 mb-2">
+                                Logo
+                            </label>
+                            <div className="mb-2">
+                                <ImageUpload
+                                    label="Upload Logo"
+                                    value={watch('logo') || ''}
+                                    onChange={(url) => setValue('logo', url)}
+                                    className="h-auto min-h-[160px] w-full"
+                                />
+                            </div>
                         </div>
                     </div>
                 </AccordionSection>
@@ -355,6 +370,27 @@ export function FeedbackForm() {
                                 We'll send customer feedback directly to this email address.
                             </p>
                             {errors.email && <span className="text-xs text-red-500 mt-1">{errors.email.message}</span>}
+                        </div>
+
+                        {/* Contact Info Toggle */}
+                        <div className="flex items-center justify-between pt-2">
+                            <div>
+                                <label className="block text-sm font-semibold text-slate-700">
+                                    Collect Contact Info
+                                </label>
+                                <p className="text-xs text-slate-500 mt-1">
+                                    Ask customers for their name and phone/email.
+                                </p>
+                            </div>
+                            <label className="relative inline-flex items-center cursor-pointer">
+                                <input
+                                    type="checkbox"
+                                    className="sr-only peer"
+                                    checked={watch('collect_contact')}
+                                    onChange={(e) => setValue('collect_contact', e.target.checked)}
+                                />
+                                <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                            </label>
                         </div>
                     </div>
                 </AccordionSection>

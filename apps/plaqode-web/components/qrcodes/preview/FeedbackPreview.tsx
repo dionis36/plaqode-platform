@@ -1,12 +1,15 @@
-import { Star, MessageCircleHeart } from 'lucide-react';
-import { useState } from 'react';
+'use client';
+
+import { Star, MessageCircleHeart, Send } from 'lucide-react';
+import { useState, useTransition } from 'react';
+import { sendFeedbackEmail } from '../../../actions/feedback';
 
 interface FeedbackPreviewProps {
     data: any;
 }
 
 export function FeedbackPreview({ data }: FeedbackPreviewProps) {
-    const primaryColor = data.styles?.primary_color || '#A855F7';
+    const primaryColor = data.styles?.primary_color || '#0000FF';
     // const secondaryColor = data.styles?.secondary_color || '#F3E8FF';
 
     const feedbackData = data.feedback || {
@@ -16,12 +19,31 @@ export function FeedbackPreview({ data }: FeedbackPreviewProps) {
         success_message: 'Thank you for your feedback!'
     };
 
-    // Controlled state purely for preview interactivity (not saved)
     const [rating, setRating] = useState(0);
+    const [comment, setComment] = useState('');
     const [isSubmitted, setIsSubmitted] = useState(false);
 
+    const handleSubmit = () => {
+        if (!feedbackData.email) {
+            // If no email set, just show success (Demo mode)
+            setIsSubmitted(true);
+            return;
+        }
+
+        const subject = encodeURIComponent(`New Feedback: ${feedbackData.question}`);
+        const body = encodeURIComponent(
+            `Rating: ${rating} / 5 stars\n\nComment:\n${comment}\n\n--\nSent via Plaqode Feedback QR`
+        );
+
+        // Open mail client
+        window.location.href = `mailto:${feedbackData.email}?subject=${subject}&body=${body}`;
+
+        // Show success UI
+        setIsSubmitted(true);
+    };
+
     return (
-        <div className="absolute inset-0 h-full w-full flex flex-col overflow-y-auto no-scrollbar font-sans bg-slate-50">
+        <div className="min-h-[100dvh] w-full flex flex-col relative overflow-y-auto no-scrollbar font-sans bg-slate-50">
             <style jsx global>{`
                 .no-scrollbar::-webkit-scrollbar { display: none; }
                 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -46,11 +68,10 @@ export function FeedbackPreview({ data }: FeedbackPreviewProps) {
                 style={{ background: data.styles?.secondary_color || '#3b82f6' }}
             />
 
-            {/* --- Content Layer --- */}
             <div className="w-full min-h-full flex flex-col relative z-10">
 
                 {/* 1. Floating Circular Avatar (Premium) */}
-                <div className="flex-none pt-12 pb-4 flex flex-col justify-center items-center relative z-20">
+                <div className="flex-none pt-12 pb-4 flex flex-col justify-center items-center relative z-20 mt-8">
                     {feedbackData.logo ? (
                         <div className="relative group">
                             {/* Glow Behind */}
@@ -75,7 +96,7 @@ export function FeedbackPreview({ data }: FeedbackPreviewProps) {
                     )}
 
                     {feedbackData.business_name && (
-                        <h2 className="text-slate-800 font-bold text-xl mt-8 tracking-tight drop-shadow-sm text-center px-6">
+                        <h2 className="text-slate-800 font-bold text-2xl mt-8 tracking-tight drop-shadow-sm text-center px-6">
                             {feedbackData.business_name}
                         </h2>
                     )}
@@ -83,7 +104,7 @@ export function FeedbackPreview({ data }: FeedbackPreviewProps) {
 
                 {/* 2. Main Glass Card */}
                 <div className="flex-1 px-4 flex items-start justify-center pt-8 pb-12">
-                    <div className="w-full bg-white/60 backdrop-blur-3xl rounded-[2rem] shadow-[0_30px_60px_-10px_rgba(0,0,0,0.1)] border border-white/80 px-6 py-8 flex flex-col items-center animate-in slide-in-from-bottom-8 duration-700 ring-1 ring-white/40">
+                    <div className="w-full max-w-sm bg-white/60 backdrop-blur-3xl rounded-[2rem] shadow-[0_30px_60px_-10px_rgba(0,0,0,0.1)] border border-white/80 px-6 py-8 flex flex-col items-center animate-in slide-in-from-bottom-8 duration-700 ring-1 ring-white/40">
                         {!isSubmitted ? (
                             <>
                                 {/* Question */}
@@ -114,27 +135,11 @@ export function FeedbackPreview({ data }: FeedbackPreviewProps) {
                                 </div>
 
                                 {/* Comment Box & Submit */}
-                                <div className={`w-full transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] space-y-5 overflow-hidden ${rating > 0 ? 'opacity-100 max-h-[500px] translate-y-0' : 'opacity-0 max-h-0 translate-y-4'}`}>
-                                    <div className="relative group space-y-3">
-                                        {data.feedback?.collect_contact && (
-                                            <>
-                                                <input
-                                                    type="text"
-                                                    className="w-full p-4 rounded-2xl border border-slate-200 bg-white/70 focus:bg-white focus:border-transparent focus:ring-4 focus:ring-purple-100 transition-all duration-300 text-slate-700 placeholder:text-slate-400 text-base shadow-sm"
-                                                    placeholder="Your Name (Optional)"
-                                                    style={{ ['--tw-ring-color' as any]: `${primaryColor}30` }}
-                                                    disabled
-                                                />
-                                                <input
-                                                    type="text"
-                                                    className="w-full p-4 rounded-2xl border border-slate-200 bg-white/70 focus:bg-white focus:border-transparent focus:ring-4 focus:ring-purple-100 transition-all duration-300 text-slate-700 placeholder:text-slate-400 text-base shadow-sm"
-                                                    placeholder="Your Email/Phone (Optional)"
-                                                    style={{ ['--tw-ring-color' as any]: `${primaryColor}30` }}
-                                                    disabled
-                                                />
-                                            </>
-                                        )}
+                                <div className={`w-full transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] space-y-5 overflow-hidden ${rating > 0 ? 'opacity-100 max-h-[500px] translate-y-0' : 'opacity-0 max-h-0 translate-y-4 pointer-events-none'}`}>
+                                    <div className="relative group">
                                         <textarea
+                                            value={comment}
+                                            onChange={(e) => setComment(e.target.value)}
                                             className="w-full p-4 rounded-2xl border border-slate-200 bg-white/70 focus:bg-white focus:border-transparent focus:ring-4 focus:ring-purple-100 transition-all duration-300 resize-none text-slate-700 placeholder:text-slate-400 text-base shadow-sm"
                                             rows={3}
                                             placeholder={
@@ -145,17 +150,23 @@ export function FeedbackPreview({ data }: FeedbackPreviewProps) {
                                                                 "What did you love?"
                                             }
                                             style={{ ['--tw-ring-color' as any]: `${primaryColor}30` }}
-                                            disabled
                                         />
                                     </div>
 
                                     <button
-                                        onClick={() => setIsSubmitted(true)}
+                                        onClick={handleSubmit}
                                         className="w-full py-4 rounded-xl font-bold text-white shadow-[0_10px_20px_-5px_rgba(100,50,200,0.3)] hover:shadow-[0_15px_25px_-5px_rgba(100,50,200,0.4)] hover:-translate-y-0.5 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
                                         style={{ background: `linear-gradient(135deg, ${primaryColor}, ${primaryColor}dd)` }}
                                     >
-                                        Submit Feedback
+                                        <span>Submit Feedback</span>
+                                        <Send className="w-4 h-4 ml-1 opacity-90" />
                                     </button>
+
+                                    {!feedbackData.email && (
+                                        <p className="text-[10px] text-center text-slate-400 font-medium">
+                                            Preview Mode: No email configured
+                                        </p>
+                                    )}
                                 </div>
                             </>
                         ) : (
@@ -173,18 +184,18 @@ export function FeedbackPreview({ data }: FeedbackPreviewProps) {
                                     We appreciate your feedback.
                                 </p>
                                 <button
-                                    onClick={() => { setRating(0); setIsSubmitted(false); }}
+                                    onClick={() => { setRating(0); setComment(''); setIsSubmitted(false); }}
                                     className="mt-10 text-sm font-semibold hover:underline opacity-60 hover:opacity-100 transition-opacity"
                                     style={{ color: primaryColor }}
                                 >
-                                    Start Over
+                                    Send another response
                                 </button>
                             </div>
                         )}
                     </div>
                 </div>
 
-                <div className="flex-none pb-6 pt-4 text-[10px] uppercase tracking-widest text-slate-400 font-semibold text-center opacity-60">
+                <div className="flex-none pb-8 text-[10px] uppercase tracking-widest text-slate-400 font-semibold text-center opacity-60">
                     Powered by Plaqode
                 </div>
             </div>

@@ -28,7 +28,7 @@
     *   Contact Links: Phone should be `tel:`, Email `mailto:`, Website `https://`.
 
 #### 2. Coupon
-*   **Status**: 🔴 **MISSING PREVIEW**
+*   **Status**: ✅ **GOOD**
 *   **Must Consider**:
     *   "Redeem" Logic: Should it just show the code? Or copy to clipboard? (Copy to clipboard is best for simple coupons).
     *   Expiry: Visual indicator if the coupon date has passed.

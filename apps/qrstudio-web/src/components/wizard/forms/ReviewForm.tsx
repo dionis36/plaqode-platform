@@ -1,7 +1,8 @@
 import { useForm } from 'react-hook-form';
 import { useWizardStore } from '../store';
 import { useEffect, useState, useRef } from 'react';
-import { ChevronDown, Star, Link as LinkIcon, Palette } from 'lucide-react';
+import { ChevronDown, Star, Link as LinkIcon, Palette, Image as ImageIcon } from 'lucide-react';
+import { ImageUpload } from '../../common/ImageUpload';
 
 // Form Value Types
 type FormValues = {
@@ -19,6 +20,8 @@ type FormValues = {
     // Content
     title: string;
     description: string;
+    business_name?: string;
+    logo?: string;
 
     // Links
     google?: string;
@@ -100,6 +103,7 @@ export function ReviewForm() {
     const [openSections, setOpenSections] = useState({
         design: true,
         content: false,
+        branding: false,
         links: false
     });
 
@@ -118,6 +122,8 @@ export function ReviewForm() {
 
             title: payload.review?.title || 'We value your feedback',
             description: payload.review?.description || 'Please select a platform below to leave your review.',
+            business_name: payload.review?.business_name || '',
+            logo: payload.review?.logo || '',
 
             google: payload.review?.google || '',
             yelp: payload.review?.yelp || '',
@@ -136,6 +142,8 @@ export function ReviewForm() {
                 platform: 'review',
                 title: payload.review.title,
                 description: payload.review.description,
+                business_name: payload.review.business_name || '',
+                logo: payload.review.logo || '',
                 google: payload.review.google,
                 yelp: payload.review.yelp,
                 tripadvisor: payload.review.tripadvisor,
@@ -154,6 +162,8 @@ export function ReviewForm() {
             const reviewPayload = {
                 title: value.title,
                 description: value.description,
+                business_name: value.business_name,
+                logo: value.logo,
                 google: value.google,
                 yelp: value.yelp,
                 tripadvisor: value.tripadvisor,
@@ -299,6 +309,44 @@ export function ReviewForm() {
                                 className="w-full px-3 sm:px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none resize-none text-base"
                                 placeholder="Please select a platform below to leave your review."
                             />
+                        </div>
+                    </div>
+                </AccordionSection>
+
+                {/* 3. Branding (NEW) */}
+                <AccordionSection
+                    title="Branding"
+                    subtitle="Add logo and business name"
+                    icon={ImageIcon}
+                    color="bg-orange-100 text-orange-600"
+                    isOpen={openSections.branding}
+                    onToggle={() => toggleSection('branding')}
+                >
+                    <div className="space-y-6 mt-4">
+                        <div>
+                            <label className="block text-sm font-semibold text-slate-700 mb-2">
+                                Business Name (Optional)
+                            </label>
+                            <input
+                                {...register('business_name')}
+                                type="text"
+                                className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none transition-all placeholder:text-slate-400"
+                                placeholder="e.g. Acme Corp"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-semibold text-slate-700 mb-2">
+                                Logo
+                            </label>
+                            <div className="mb-2">
+                                <ImageUpload
+                                    label="Upload Logo"
+                                    value={watch('logo') || ''}
+                                    onChange={(url) => setValue('logo', url)}
+                                    className="h-auto min-h-[160px] w-full"
+                                />
+                            </div>
                         </div>
                     </div>
                 </AccordionSection>

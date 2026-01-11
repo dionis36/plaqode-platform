@@ -40,6 +40,8 @@ const PDFPreview = dynamic(() => import('@/components/preview/PDFPreview').then(
 const SocialMediaPagePreview = dynamic(() => import('@/components/preview/SocialMediaPagePreview').then(mod => mod.SocialMediaPagePreview), { loading: () => <LoadingPreview /> });
 const BusinessPagePreview = dynamic(() => import('@/components/qrcodes/preview/BusinessPagePreview').then(mod => mod.BusinessPagePreview), { loading: () => <LoadingPreview /> });
 const CouponPreview = dynamic(() => import('@/components/qrcodes/preview/CouponPreview').then(mod => mod.CouponPreview), { loading: () => <LoadingPreview /> });
+const FeedbackPreview = dynamic(() => import('@/components/qrcodes/preview/FeedbackPreview').then(mod => mod.FeedbackPreview), { loading: () => <LoadingPreview /> });
+const ReviewPreview = dynamic(() => import('@/components/qrcodes/preview/ReviewPreview').then(mod => mod.ReviewPreview), { loading: () => <LoadingPreview /> });
 
 interface ViewerClientProps {
     data: any;
@@ -105,6 +107,10 @@ export function ViewerClient({ data }: ViewerClientProps) {
                 return <BusinessPagePreview data={contentData} />;
             case 'coupon':
                 return <CouponPreview data={contentData} />;
+            case 'feedback':
+                return <FeedbackPreview data={contentData} />;
+            case 'review':
+                return <ReviewPreview data={contentData} />;
             default:
                 // Fallback for unhandled types
                 return (
