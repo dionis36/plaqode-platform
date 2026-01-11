@@ -23,34 +23,6 @@ export function SocialMediaPagePreview({ data }: { data: any }) {
     // Get user's colors
     const primaryColor = styles.primary_color || '#A855F7';
     const secondaryColor = styles.secondary_color || '#FDF4FF';
-    const gradientType = styles.gradient_type || 'none';
-    const gradientAngle = styles.gradient_angle || 135;
-
-    // Helper to lighten a color
-    const lightenColor = (hex: string, percent: number = 30) => {
-        const num = parseInt(hex.replace('#', ''), 16);
-        const r = Math.min(255, (num >> 16) + Math.round(((255 - (num >> 16)) * percent) / 100));
-        const g = Math.min(255, ((num >> 8) & 0x00FF) + Math.round(((255 - ((num >> 8) & 0x00FF)) * percent) / 100));
-        const b = Math.min(255, (num & 0x0000FF) + Math.round(((255 - (num & 0x0000FF)) * percent) / 100));
-        return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`;
-    };
-
-    // Generate background style for gradient section
-    const getBackgroundStyle = () => {
-        if (gradientType === 'linear') {
-            return {
-                background: `linear-gradient(${gradientAngle}deg, ${primaryColor}, ${secondaryColor})`
-            };
-        } else if (gradientType === 'radial') {
-            return {
-                background: `radial-gradient(circle at top, ${primaryColor}, ${secondaryColor})`
-            };
-        }
-        // Default: solid color with lighter bottom
-        return {
-            background: `linear-gradient(180deg, ${primaryColor} 0%, ${lightenColor(primaryColor, 30)} 100%)`
-        };
-    };
 
     // Social Platform configurations
     const SOCIAL_PLATFORMS = {
@@ -78,160 +50,171 @@ export function SocialMediaPagePreview({ data }: { data: any }) {
 
     return (
         <div
-            className="absolute inset-0 w-full h-full flex flex-col overflow-y-auto"
+            className="absolute inset-0 w-full h-full font-sans overflow-hidden bg-white"
             style={{
-                backgroundColor: secondaryColor || '#F1F5F9',
-                scrollbarWidth: 'none',
-                msOverflowStyle: 'none'
+                background: `linear-gradient(135deg, ${primaryColor}15 0%, #ffffff 100%)`
             }}
         >
-            <style jsx>{`
-                div::-webkit-scrollbar {
-                    display: none;
-                }
+            <style jsx global>{`
+                .no-scrollbar::-webkit-scrollbar { display: none; }
+                .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
             `}</style>
 
-            {/* Gradient Background Section */}
-            <div
-                className="relative pb-32"
-                style={getBackgroundStyle()}
-            >
-                {/* Profile Section */}
-                <div className="flex flex-col items-center pt-24 px-6">
-                    {/* Profile Photo - Larger, cleaner */}
-                    {profilePhoto ? (
-                        <div className="w-24 h-24 rounded-full overflow-hidden shadow-lg mb-4 ring-4 ring-white relative">
-                            <Image src={profilePhoto} alt={displayName} fill className="object-cover" />
+            {/* --- Fixed Background Elements (Do not scroll) --- */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                {/* Top Left Orb */}
+                <div
+                    className="absolute top-[-20%] left-[-20%] w-[120%] h-[60%] rounded-[100%] blur-3xl opacity-40 animate-pulse"
+                    style={{ background: primaryColor }}
+                />
+                {/* Bottom Right Orb */}
+                <div
+                    className="absolute bottom-[-20%] right-[-20%] w-[100%] h-[50%] rounded-[100%] blur-3xl opacity-30"
+                    style={{ background: secondaryColor }}
+                />
+            </div>
+
+            {/* --- Scrollable Content Container --- */}
+            <div className="relative w-full h-full overflow-y-auto no-scrollbar flex flex-col z-10">
+
+                {/* Flexible Spacer Top */}
+                <div className="w-full flex-none pt-24" />
+
+                {/* 1. Header Section (Floating) */}
+                <div className="flex-none flex flex-col justify-center items-center pb-8 px-6 text-center">
+                    {/* Floating Avatar */}
+                    <div className="relative group mb-6">
+                        {/* Glow */}
+                        <div className="absolute inset-0 bg-white rounded-full blur-2xl opacity-40 transition-opacity duration-500 scale-125" />
+                        {/* Avatar Image */}
+                        <div className="relative h-28 w-28 bg-white rounded-full shadow-2xl flex items-center justify-center p-1 ring-4 ring-white/30 backdrop-blur-sm animate-in zoom-in-50 duration-700 ease-out">
+                            {profilePhoto ? (
+                                <div className="relative w-full h-full rounded-full overflow-hidden">
+                                    <Image
+                                        src={profilePhoto}
+                                        alt="Profile"
+                                        fill
+                                        className="object-cover"
+                                    />
+                                </div>
+                            ) : (
+                                <div className="w-full h-full rounded-full bg-slate-100 flex items-center justify-center">
+                                    <User className="w-10 h-10 text-slate-300" />
+                                </div>
+                            )}
                         </div>
-                    ) : (
-                        <div
-                            className="w-24 h-24 rounded-full flex items-center justify-center shadow-lg mb-4 ring-4 ring-white bg-white/20 backdrop-blur-sm"
-                        >
-                            <User className="w-10 h-10 text-white" />
-                        </div>
-                    )}
+                    </div>
 
                     {/* Display Name */}
-                    <h1 className="text-2xl font-bold text-white mb-1">
-                        {displayName}
-                    </h1>
+                    {displayName && (
+                        <h1 className="text-2xl font-bold text-slate-800 tracking-tight drop-shadow-sm">
+                            {displayName}
+                        </h1>
+                    )}
 
                     {/* Bio */}
                     {bio && (
-                        <p className="text-sm text-white/90 text-center max-w-xs leading-relaxed mb-6">
+                        <p className="text-sm text-slate-500 font-medium mt-2 max-w-[280px] leading-relaxed opacity-90">
                             {bio}
                         </p>
                     )}
                 </div>
 
-                {/* Image Carousel - Only show if images exist */}
-                {galleryImages.length > 0 && (
-                    <div className="px-6 mt-4">
-                        <div className="flex gap-3 overflow-x-auto pb-2"
-                            style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.3) transparent' }}>
-                            {galleryImages.map((image: string, index: number) => (
-                                <div
-                                    key={index}
-                                    className="flex-shrink-0 w-32 h-40 rounded-2xl overflow-hidden shadow-lg border-4 border-white/30 backdrop-blur-sm relative"
-                                >
-                                    <Image
-                                        src={image}
-                                        alt={`Gallery ${index + 1}`}
-                                        fill
-                                        className="object-cover"
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
-            </div>
+                {/* 2. Main Glass Card Container */}
+                <div className="flex-shrink-0 px-4 flex justify-center pb-8">
+                    <div className="w-full max-w-sm bg-white/60 backdrop-blur-3xl rounded-[2rem] shadow-[0_30px_60px_-10px_rgba(0,0,0,0.1)] border border-white/80 px-6 py-8 flex flex-col items-stretch animate-in slide-in-from-bottom-8 duration-700 ring-1 ring-white/40">
 
-            {/* Content Area with Rounded Top */}
-            <div
-                className="flex-1 -mt-24 rounded-t-3xl relative z-10"
-                style={{ backgroundColor: secondaryColor || '#F1F5F9' }}
-            >
-                {/* Title & Tagline Section */}
-                {(title || tagline) && (
-                    <div className="px-6 pt-8 pb-6 text-center">
-                        {title && (
-                            <h2 className="text-2xl font-bold text-slate-900 mb-3">
-                                {title}
-                            </h2>
-                        )}
-                        {tagline && (
-                            <p className="text-sm text-slate-600 leading-relaxed max-w-xs mx-auto">
-                                {tagline}
-                            </p>
-                        )}
-                    </div>
-                )}
-
-                {/* Social Links - Enhanced Cards */}
-                <div className="space-y-3 px-6 pb-8">
-                    {socialLinks.length > 0 ? (
-                        socialLinks.map((link: any, index: number) => {
-                            const platform = SOCIAL_PLATFORMS[link.platform as keyof typeof SOCIAL_PLATFORMS];
-                            if (!platform) return null;
-
-                            const Icon = platform.icon;
-                            const displayText = link.platform === 'website' && link.custom_label
-                                ? link.custom_label
-                                : platform.name;
-
-                            return (
-                                <div
-                                    key={index}
-                                    className="bg-slate-50 rounded-2xl px-5 py-4 flex items-center gap-4 border border-slate-100 hover:bg-white hover:shadow-md hover:scale-[1.02] transition-all cursor-pointer"
-                                >
-                                    {/* Large Icon Circle with Brand Color */}
-                                    <div
-                                        className="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm"
-                                        style={{ backgroundColor: platform.color }}
-                                    >
-                                        <Icon className="w-7 h-7 text-white" />
-                                    </div>
-
-                                    {/* Platform Info */}
-                                    <div className="flex-1">
-                                        <div className="font-bold text-slate-900 text-base">
-                                            {displayText}
-                                        </div>
-                                        <div className="text-xs text-slate-500">
-                                            Social Account
-                                        </div>
-                                    </div>
-
-                                    {/* Arrow */}
-                                    <ChevronRight className="w-5 h-5 text-slate-400" />
-                                </div>
-                            );
-                        })
-                    ) : (
-                        /* Empty State */
-                        <div className="text-center py-12">
-                            <div
-                                className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center"
-                                style={{ backgroundColor: `${primaryColor}10` }}
-                            >
-                                <Share2 className="w-8 h-8" style={{ color: primaryColor }} />
+                        {/* Title & Tagline (if different from profile) */}
+                        {(title || tagline) && (
+                            <div className="text-center mb-6">
+                                {title && (
+                                    <h2 className="text-xl font-bold text-slate-800 mb-1 leading-snug">
+                                        {title}
+                                    </h2>
+                                )}
+                                {tagline && (
+                                    <p className="text-slate-500 text-xs uppercase tracking-wider font-semibold opacity-70">
+                                        {tagline}
+                                    </p>
+                                )}
                             </div>
-                            <p className="text-slate-400 text-sm">
-                                Add social media links to see them here
-                            </p>
+                        )}
+
+                        {/* Gallery Preview (Stories Style) */}
+                        {galleryImages.length > 0 && (
+                            <div className="mb-8">
+                                <div className="flex gap-3 overflow-x-auto pb-4 pt-1 snap-x no-scrollbar" style={{ scrollbarWidth: 'none' }}>
+                                    {galleryImages.map((image: string, index: number) => (
+                                        <div
+                                            key={index}
+                                            className="flex-shrink-0 w-24 h-32 rounded-xl overflow-hidden shadow-md border-2 border-white/50 relative snap-start"
+                                        >
+                                            <Image
+                                                src={image}
+                                                alt={`Gallery ${index + 1}`}
+                                                fill
+                                                className="object-cover"
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Social Links List */}
+                        <div className="space-y-3 w-full">
+                            {socialLinks.length > 0 ? (
+                                socialLinks.map((link: any, index: number) => {
+                                    const platform = SOCIAL_PLATFORMS[link.platform as keyof typeof SOCIAL_PLATFORMS];
+                                    if (!platform) return null;
+
+                                    const Icon = platform.icon;
+                                    const customLabel = link.platform === 'website' && link.custom_label
+                                        ? link.custom_label
+                                        : platform.name;
+
+                                    return (
+                                        <a
+                                            key={index}
+                                            href={link.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex items-center justify-between w-full p-3 pl-4 rounded-xl bg-white border border-slate-100 shadow-sm active:scale-[0.98] transition-all relative overflow-hidden group cursor-pointer hover:bg-slate-50/80"
+                                            style={{ borderLeft: `4px solid ${platform.color}` }}
+                                        >
+                                            <div className="flex items-center gap-3">
+                                                <div
+                                                    className="w-8 h-8 rounded-lg flex items-center justify-center text-white shadow-sm"
+                                                    style={{ backgroundColor: platform.color }}
+                                                >
+                                                    <Icon className="w-4 h-4" />
+                                                </div>
+                                                <span className="font-bold text-slate-700 text-sm">
+                                                    {customLabel}
+                                                </span>
+                                            </div>
+                                            <ChevronRight className="w-4 h-4 text-slate-300" />
+                                        </a>
+                                    );
+                                })
+                            ) : (
+                                <div className="text-center py-8 opacity-50">
+                                    <div className="w-12 h-12 rounded-full bg-slate-100 mx-auto flex items-center justify-center mb-2">
+                                        <Share2 className="w-5 h-5 text-slate-400" />
+                                    </div>
+                                    <p className="text-sm text-slate-400 font-medium">Add your links</p>
+                                </div>
+                            )}
                         </div>
-                    )}
+                    </div>
                 </div>
 
-                {/* Footer Branding */}
-                <div
-                    className="pb-6 text-center"
-                    style={{ backgroundColor: secondaryColor || '#F1F5F9' }}
-                >
-                    <p className="text-xs text-slate-600">
-                        Powered by <span className="font-semibold">QR Studio</span>
-                    </p>
+                {/* Spacer to push footer to bottom */}
+                <div className="flex-1 min-h-0" />
+
+                {/* Footer pinned to bottom */}
+                <div className="flex-none pt-4 pb-4 text-[10px] uppercase tracking-widest text-slate-400 font-semibold text-center opacity-60">
+                    Powered by Plaqode
                 </div>
             </div>
         </div>

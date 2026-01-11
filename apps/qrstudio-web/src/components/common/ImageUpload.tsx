@@ -10,6 +10,8 @@ interface ImageUploadProps {
     maxSizeMB?: number;
     aspectRatio?: string; // e.g., "16/9", "1/1"
     className?: string;
+    multiple?: boolean;
+    onUpload?: (files: string[]) => void;
 }
 
 export function ImageUpload({
@@ -18,14 +20,56 @@ export function ImageUpload({
     onChange,
     maxSizeMB = 5,
     aspectRatio,
-    className = ''
+    className = '',
+    multiple = false,
+    onUpload
 }: ImageUploadProps) {
     const [isDragging, setIsDragging] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const handleFile = (file: File) => {
+    const handleFiles = (files: File[]) => {
         setError(null);
+
+        if (multiple && onUpload) {
+            const validFiles: File[] = [];
+
+            for (const file of files) {
+                if (!file.type.startsWith('image/')) {
+                    setError('Some files were skipped (not an image)');
+                    continue;
+                }
+                const maxSize = maxSizeMB * 1024 * 1024;
+                if (file.size > maxSize) {
+                    setError(`Some files were skipped (larger than ${maxSizeMB}MB)`);
+                    continue;
+                }
+                validFiles.push(file);
+            }
+
+            if (validFiles.length === 0) return;
+
+            const promises = validFiles.map(file => new Promise<string>((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(e.target?.result as string);
+                reader.onerror = () => reject();
+                reader.readAsDataURL(file);
+            }));
+
+            Promise.all(promises)
+                .then(base64s => {
+                    onUpload(base64s);
+                }) // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                .catch(err => {
+                    setError('Failed to process some files');
+                });
+
+            return;
+        }
+
+        // Single file mode (Legacy)
+        const file = files[0];
+        if (!file) return;
 
         // Validate file type
         if (!file.type.startsWith('image/')) {
@@ -53,9 +97,8 @@ export function ImageUpload({
     };
 
     const handleFileInput = (e: ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            handleFile(file);
+        if (e.target.files && e.target.files.length > 0) {
+            handleFiles(Array.from(e.target.files));
         }
     };
 
@@ -73,9 +116,8 @@ export function ImageUpload({
         e.preventDefault();
         setIsDragging(false);
 
-        const file = e.dataTransfer.files?.[0];
-        if (file) {
-            handleFile(file);
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+            handleFiles(Array.from(e.dataTransfer.files));
         }
     };
 
@@ -131,6 +173,7 @@ export function ImageUpload({
                         ref={fileInputRef}
                         type="file"
                         accept="image/*"
+                        multiple={multiple}
                         onChange={handleFileInput}
                         className="hidden"
                     />

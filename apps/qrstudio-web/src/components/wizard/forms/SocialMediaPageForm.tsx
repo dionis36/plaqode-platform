@@ -442,10 +442,24 @@ export function SocialMediaPageForm() {
                                     label=""
                                     value=""
                                     onChange={(base64) => {
+                                        // Triggered for single file if somehow fallback used
                                         if (base64) {
                                             const currentImages = watch('gallery_images') || [];
                                             if (currentImages.length < 5) {
                                                 setValue('gallery_images', [...currentImages, base64]);
+                                            }
+                                        }
+                                    }}
+                                    multiple={true}
+                                    onUpload={(files) => {
+                                        if (files && files.length > 0) {
+                                            const currentImages = watch('gallery_images') || [];
+                                            const remainingSlots = 5 - currentImages.length;
+                                            // Take only as many as fit
+                                            const newImagesToAdd = files.slice(0, remainingSlots);
+
+                                            if (newImagesToAdd.length > 0) {
+                                                setValue('gallery_images', [...currentImages, ...newImagesToAdd]);
                                             }
                                         }
                                     }}
