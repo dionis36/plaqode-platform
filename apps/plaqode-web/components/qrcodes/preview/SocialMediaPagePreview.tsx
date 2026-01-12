@@ -81,7 +81,7 @@ export function SocialMediaPagePreview({ data }: { data: any }) {
                 <div className="w-full flex-none pt-24" />
 
                 {/* 1. Header Section (Floating) */}
-                <div className="flex-none flex flex-col justify-center items-center pb-8 px-6 text-center">
+                <div className="flex-none flex flex-col justify-center items-center pb-8 px-4 text-center">
                     {/* Floating Avatar */}
                     <div className="relative group mb-6">
                         {/* Glow */}
@@ -179,7 +179,7 @@ export function SocialMediaPagePreview({ data }: { data: any }) {
                                             href={link.url}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="flex items-center justify-between w-full p-3 pl-4 rounded-xl bg-white border border-slate-100 shadow-sm active:scale-[0.98] transition-all relative overflow-hidden group cursor-pointer hover:bg-slate-50/80"
+                                            className="flex items-center justify-between w-full p-3 pl-4 rounded-xl bg-white border border-slate-100 shadow-sm active:scale-[0.98] transition-all relative overflow-hidden group cursor-pointer"
                                             style={{ borderLeft: `4px solid ${platform.color}` }}
                                         >
                                             <div className="flex items-center gap-3">

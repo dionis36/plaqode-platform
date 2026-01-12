@@ -27,17 +27,17 @@ function LoadingPreview() {
 
 // Import preview components dynamically with loading states
 // These components are now ported to strictly handle the 'data' structure
-const WifiPreview = dynamic(() => import('@/components/preview/WiFiPreview').then(mod => mod.WiFiPreview), { loading: () => <LoadingPreview /> });
-const VCardPreview = dynamic(() => import('@/components/preview/VCardPreview').then(mod => mod.VCardPreview), { loading: () => <LoadingPreview /> });
-const UrlPreview = dynamic(() => import('@/components/preview/URLPreview').then(mod => mod.URLPreview), { loading: () => <LoadingPreview /> });
-const TextPreview = dynamic(() => import('@/components/preview/TextPreview').then(mod => mod.TextPreview), { loading: () => <LoadingPreview /> });
-const AppStorePreview = dynamic(() => import('@/components/preview/AppStorePreview').then(mod => mod.AppStorePreview), { loading: () => <LoadingPreview /> });
-const EmailPreview = dynamic(() => import('@/components/preview/EmailPreview').then(mod => mod.EmailPreview), { loading: () => <LoadingPreview /> });
-const EventPreview = dynamic(() => import('@/components/preview/EventPreview').then(mod => mod.EventPreview), { loading: () => <LoadingPreview /> });
-const MenuPreview = dynamic(() => import('@/components/preview/MenuPreview').then(mod => mod.MenuPreview), { loading: () => <LoadingPreview /> });
-const MessagePreview = dynamic(() => import('@/components/preview/MessagePreview').then(mod => mod.MessagePreview), { loading: () => <LoadingPreview /> });
-const PDFPreview = dynamic(() => import('@/components/preview/PDFPreview').then(mod => mod.PDFPreview), { loading: () => <LoadingPreview /> });
-const SocialMediaPagePreview = dynamic(() => import('@/components/preview/SocialMediaPagePreview').then(mod => mod.SocialMediaPagePreview), { loading: () => <LoadingPreview /> });
+const WifiPreview = dynamic(() => import('@/components/qrcodes/preview/WiFiPreview').then(mod => mod.WiFiPreview), { loading: () => <LoadingPreview /> });
+const VCardPreview = dynamic(() => import('@/components/qrcodes/preview/VCardPreview').then(mod => mod.VCardPreview), { loading: () => <LoadingPreview /> });
+const UrlPreview = dynamic(() => import('@/components/qrcodes/preview/URLPreview').then(mod => mod.URLPreview), { loading: () => <LoadingPreview /> });
+const TextPreview = dynamic(() => import('@/components/qrcodes/preview/TextPreview').then(mod => mod.TextPreview), { loading: () => <LoadingPreview /> });
+const AppStorePreview = dynamic(() => import('@/components/qrcodes/preview/AppStorePreview').then(mod => mod.AppStorePreview), { loading: () => <LoadingPreview /> });
+const EmailPreview = dynamic(() => import('@/components/qrcodes/preview/EmailPreview').then(mod => mod.EmailPreview), { loading: () => <LoadingPreview /> });
+const EventPreview = dynamic(() => import('@/components/qrcodes/preview/EventPreview').then(mod => mod.EventPreview), { loading: () => <LoadingPreview /> });
+const MenuPreview = dynamic(() => import('@/components/qrcodes/preview/MenuPreview').then(mod => mod.MenuPreview), { loading: () => <LoadingPreview /> });
+const MessagePreview = dynamic(() => import('@/components/qrcodes/preview/MessagePreview').then(mod => mod.MessagePreview), { loading: () => <LoadingPreview /> });
+const PDFPreview = dynamic(() => import('@/components/qrcodes/preview/PDFPreview').then(mod => mod.PDFPreview), { loading: () => <LoadingPreview /> });
+const SocialMediaPagePreview = dynamic(() => import('@/components/qrcodes/preview/SocialMediaPagePreview').then(mod => mod.SocialMediaPagePreview), { loading: () => <LoadingPreview /> });
 const BusinessPagePreview = dynamic(() => import('@/components/qrcodes/preview/BusinessPagePreview').then(mod => mod.BusinessPagePreview), { loading: () => <LoadingPreview /> });
 const CouponPreview = dynamic(() => import('@/components/qrcodes/preview/CouponPreview').then(mod => mod.CouponPreview), { loading: () => <LoadingPreview /> });
 const FeedbackPreview = dynamic(() => import('@/components/qrcodes/preview/FeedbackPreview').then(mod => mod.FeedbackPreview), { loading: () => <LoadingPreview /> });
@@ -134,8 +134,8 @@ export function ViewerClient({ data }: ViewerClientProps) {
         <div className="min-h-screen w-full bg-slate-100 flex items-center justify-center">
             {/* Desktop: Show as mobile app slice. Mobile: Full screen. */}
             <div className="w-full h-full min-h-screen sm:min-h-[auto] sm:h-auto sm:max-w-[400px] sm:aspect-[9/19.5] sm:max-h-[85vh] sm:rounded-3xl sm:shadow-2xl sm:overflow-hidden bg-white relative flex flex-col">
-                {/* Scrollable content area */}
-                <div className="absolute inset-0 overflow-y-auto no-scrollbar">
+                {/* Content area - Components handle their own scrolling/layout */}
+                <div className="flex-1 w-full h-full relative">
                     {renderContent()}
                 </div>
             </div>

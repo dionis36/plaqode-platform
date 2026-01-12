@@ -61,7 +61,7 @@
     *   Strict URL validation: Ensure user entered `https://instagram.com/user`, not just `@user`.
 
 #### 6. vCard (Contact)
-*   **Status**: ⚠️ **BROKEN "SAVE CONTACT"**
+*   **Status**: ✅ **GOOD**
 *   **Must Consider**:
     *   **VCF Generation**: Must generate a valid `.vcf` file blob strictly client-side.
     *   **iOS Compatibility**: VCard versions (3.0 vs 4.0). Use 3.0 for broadest compatibility.
