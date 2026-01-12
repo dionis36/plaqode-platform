@@ -81,22 +81,31 @@ export function FilePreview({ data }: FilePreviewProps) {
 
     const fileExtension = pdfFile.file_extension || 'FILE';
     const fileCategory = pdfFile.file_category || 'document';
-    const fileType = pdfFile.file_type || '';
+    const fileType = pdfFile.file_type || 'application/octet-stream'; // Default fallback
     const fileSize = pdfFile.file_size || 0;
 
     // Use useMemo to create the object URL to avoid re-creating it on every render
     // and cleanup when component unmounts or file changes
     const fileDataUri = useMemo(() => {
-        if (!pdfFile.file_data) return '#';
+        if (!pdfFile.file_data) return null;
 
         try {
-            // Check if it's already a data URI (starts with data:)
+            // 1. If it's already a Data URI, return as is
             if (pdfFile.file_data.startsWith('data:')) {
                 return pdfFile.file_data;
             }
 
-            // It's a base64 string, convert to Blob
-            const byteCharacters = atob(pdfFile.file_data);
+            // 2. If it is a remote URL (http/https), return as is
+            if (pdfFile.file_data.startsWith('http')) {
+                return pdfFile.file_data;
+            }
+
+            // 3. Assume Base64 - verify and clean
+            // Remove any whitespace which might break atob
+            const base64Clean = pdfFile.file_data.replace(/\s/g, '');
+
+            // Convert Base64 to Blob
+            const byteCharacters = atob(base64Clean);
             const byteNumbers = new Array(byteCharacters.length);
             for (let i = 0; i < byteCharacters.length; i++) {
                 byteNumbers[i] = byteCharacters.charCodeAt(i);
@@ -105,8 +114,8 @@ export function FilePreview({ data }: FilePreviewProps) {
             const blob = new Blob([byteArray], { type: fileType });
             return URL.createObjectURL(blob);
         } catch (e) {
-            console.error("Error creating object URL", e);
-            return '#'; // Fallback
+            console.error("Error creating object URL for file:", e);
+            return null;
         }
     }, [pdfFile.file_data, fileType]);
 
@@ -257,20 +266,22 @@ export function FilePreview({ data }: FilePreviewProps) {
                         {/* Actions */}
                         <div className="space-y-3">
                             {/* View / Download Primary */}
-                            <a
-                                href={fileDataUri}
-                                download={pdfFile.file_name || 'download'} // Primary is download for most, or view if supported
-                                className="w-full py-4 rounded-xl font-bold shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 text-white relative overflow-hidden"
-                                style={{ backgroundColor: primaryColor }}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                <FileText className="w-5 h-5" />
-                                <span>Download File</span>
-                            </a>
+                            {fileDataUri && (
+                                <a
+                                    href={fileDataUri}
+                                    download={pdfFile.file_name || 'download'} // Primary is download for most, or view if supported
+                                    className="w-full py-4 rounded-xl font-bold shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 text-white relative overflow-hidden"
+                                    style={{ backgroundColor: primaryColor }}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <FileText className="w-5 h-5" />
+                                    <span>Download File</span>
+                                </a>
+                            )}
 
                             {/* View (Secondary) if valid for viewing */}
-                            {(fileCategory === 'image' || fileExtension === 'PDF' || fileCategory === 'media') && (
+                            {(fileCategory === 'image' || fileExtension === 'PDF' || fileCategory === 'media') && fileDataUri && (
                                 <a
                                     href={fileDataUri}
                                     target="_blank"
