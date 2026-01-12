@@ -36,7 +36,7 @@ const EmailPreview = dynamic(() => import('@/components/qrcodes/preview/EmailPre
 const EventPreview = dynamic(() => import('@/components/qrcodes/preview/EventPreview').then(mod => mod.EventPreview), { loading: () => <LoadingPreview /> });
 const MenuPreview = dynamic(() => import('@/components/qrcodes/preview/MenuPreview').then(mod => mod.MenuPreview), { loading: () => <LoadingPreview /> });
 const MessagePreview = dynamic(() => import('@/components/qrcodes/preview/MessagePreview').then(mod => mod.MessagePreview), { loading: () => <LoadingPreview /> });
-const PDFPreview = dynamic(() => import('@/components/qrcodes/preview/PDFPreview').then(mod => mod.PDFPreview), { loading: () => <LoadingPreview /> });
+const FilePreview = dynamic(() => import('@/components/qrcodes/preview/FilePreview').then(mod => mod.FilePreview), { loading: () => <LoadingPreview /> });
 const SocialMediaPagePreview = dynamic(() => import('@/components/qrcodes/preview/SocialMediaPagePreview').then(mod => mod.SocialMediaPagePreview), { loading: () => <LoadingPreview /> });
 const BusinessPagePreview = dynamic(() => import('@/components/qrcodes/preview/BusinessPagePreview').then(mod => mod.BusinessPagePreview), { loading: () => <LoadingPreview /> });
 const CouponPreview = dynamic(() => import('@/components/qrcodes/preview/CouponPreview').then(mod => mod.CouponPreview), { loading: () => <LoadingPreview /> });
@@ -100,7 +100,7 @@ export function ViewerClient({ data }: ViewerClientProps) {
             case 'message':
                 return <MessagePreview data={contentData} />;
             case 'file':
-                return <PDFPreview data={contentData} />;
+                return <FilePreview data={contentData} />;
             case 'socialmedia':
                 return <SocialMediaPagePreview data={contentData} />;
             case 'business':

@@ -5,7 +5,7 @@ import { VCardPreview } from '../qrcodes/preview/VCardPreview';
 import { URLPreview } from '../qrcodes/preview/URLPreview';
 import { TextPreview } from '../qrcodes/preview/TextPreview';
 import { WiFiPreview } from '../qrcodes/preview/WiFiPreview';
-import { PDFPreview } from '../qrcodes/preview/PDFPreview';
+import { FilePreview } from '../qrcodes/preview/FilePreview';
 import { EventPreview } from '../qrcodes/preview/EventPreview';
 import { EmailPreview } from '../qrcodes/preview/EmailPreview';
 import { MessagePreview } from '../qrcodes/preview/MessagePreview';
@@ -44,7 +44,7 @@ export function QrContentPreviewModal({ isOpen, onClose, qrCode }: QrContentPrev
             case 'wifi':
                 return <WiFiPreview data={payload} />;
             case 'file':
-                return <PDFPreview data={payload} />;
+                return <FilePreview data={payload} />;
             case 'event':
                 return <EventPreview data={payload} />;
             case 'email':

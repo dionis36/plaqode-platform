@@ -10,7 +10,7 @@ import { VCardPreview } from '@/components/qrcodes/preview/VCardPreview';
 import { URLPreview } from '@/components/qrcodes/preview/URLPreview';
 import { TextPreview } from '@/components/qrcodes/preview/TextPreview';
 import { WiFiPreview } from '@/components/qrcodes/preview/WiFiPreview';
-import { PDFPreview } from '@/components/qrcodes/preview/PDFPreview';
+import { FilePreview } from '@/components/qrcodes/preview/FilePreview';
 import { EventPreview } from '@/components/qrcodes/preview/EventPreview';
 import { EmailPreview } from '@/components/qrcodes/preview/EmailPreview';
 import { MessagePreview } from '@/components/qrcodes/preview/MessagePreview';
@@ -106,7 +106,7 @@ export default async function ViewerPage({ params }: ViewerPageProps) {
             case 'url': return <URLPreview data={payload} />;
             case 'text': return <TextPreview data={payload} />;
             case 'wifi': return <WiFiPreview data={payload} />;
-            case 'file': return <PDFPreview data={payload} />;
+            case 'file': return <FilePreview data={payload} />;
             case 'event': return <EventPreview data={payload} />;
             case 'email': return <EmailPreview data={payload} />;
             case 'message': return <MessagePreview data={payload} />;

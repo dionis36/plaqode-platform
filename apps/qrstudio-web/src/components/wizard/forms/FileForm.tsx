@@ -45,7 +45,7 @@ type FormValues = {
         file_name: string;
         file_size: number;
         file_type: string;      // MIME type
-        file_extension: string; // e.g., 'PDF', 'DOCX'
+        file_extension: string; // e.g., 'File', 'DOCX'
         file_category: string;  // 'document', 'image', 'archive', 'text', 'media'
         fullscreen_mode: boolean;
     };
@@ -123,7 +123,7 @@ function AccordionSection({
     );
 }
 
-export function PDFForm() {
+export function FileForm() {
     const { payload, updatePayload, editMode } = useWizardStore();
     const [isMounted, setIsMounted] = useState(false);
     const [openSections, setOpenSections] = useState({

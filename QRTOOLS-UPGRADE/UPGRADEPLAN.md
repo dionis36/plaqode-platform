@@ -68,7 +68,7 @@
     *   Fields: Ensure Photo (Base64) is handled correctly if possible, or omitted if too large.
 
 #### 7. Event
-*   **Status**: ⚠️ **BROKEN "ADD TO CALENDAR"**
+*   **Status**: ✅ **GOOD**
 *   **Must Consider**:
     *   **ICS Generation**: Generate standard `.ics` file blob.
     *   **Timezones**: Ensure start/end times are formatted correctly (UTC vs Local).

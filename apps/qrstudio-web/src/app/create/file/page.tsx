@@ -1,8 +1,8 @@
 'use client';
 
-import { PDFForm } from '@/components/wizard/forms/PDFForm';
+import { FileForm } from '@/components/wizard/forms/FileForm';
 import { PhoneMockup } from '@/components/common/PhoneMockup';
-import { PDFPreview } from '@/components/wizard/preview/PDFPreview';
+import { FilePreview } from '@/components/wizard/preview/FilePreview';
 import { useWizardStore } from '@/components/wizard/store';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ArrowRight, Eye } from 'lucide-react';
@@ -73,7 +73,7 @@ function PdfQrPageContent() {
                 <div className="flex flex-col lg:flex-row gap-8">
                     {/* LEFT PANEL: 75% - Content Form */}
                     <div className="w-full lg:w-3/4 flex flex-col">
-                        <PDFForm />
+                        <FileForm />
 
                         {/* Next Button */}
                         <div className="mt-8 pt-6 border-t border-slate-100 flex justify-end">
@@ -93,7 +93,7 @@ function PdfQrPageContent() {
                         <div className="sticky top-6 w-full flex flex-col items-center h-fit">
                             <div className="transform transition-all duration-500 origin-top scale-[0.85] xl:scale-[0.9]">
                                 <PhoneMockup className="shadow-2xl shadow-slate-300/50">
-                                    <PDFPreview data={payload} />
+                                    <FilePreview data={payload} />
                                 </PhoneMockup>
                             </div>
                         </div>
@@ -111,7 +111,7 @@ function PdfQrPageContent() {
 
                 {/* Mobile Preview Modal */}
                 <EnhancedPreviewModal isOpen={showPreview} onClose={() => setShowPreview(false)}>
-                    <PDFPreview data={payload} />
+                    <FilePreview data={payload} />
                 </EnhancedPreviewModal>
             </div>
         </LoadingBoundary>
