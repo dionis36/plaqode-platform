@@ -2,7 +2,7 @@ import { Calendar, MapPin, Clock, User, Mail, Globe, Bell, FileText } from 'luci
 import { format, parseISO } from 'date-fns';
 import { useEffect } from 'react';
 import { usePreviewContext } from './PreviewContext';
-
+import { downloadICS } from '../../../utils/ics';
 import { MOCKUP_PREVIEW_DATA } from '../steps/mockupPreviewData';
 
 export function EventPreview({ data }: { data: any }) {
@@ -22,9 +22,9 @@ export function EventPreview({ data }: { data: any }) {
         (data?.event_url || '') !== '';
 
     const activeData = hasUserInput ? data : fallback;
-    const styles = data.styles || fallback.styles; // Styles fallback
+    const styles = data.styles || fallback.styles;
 
-    // Extract event data with fallbacks matching "clean mode"
+    // Extract event data with fallbacks
     const eventDetails = {
         title: activeData.event_details?.title || (hasUserInput ? '' : fallback.event_details.title),
         start_date: activeData.event_details?.start_date || (hasUserInput ? '' : fallback.event_details.start_date),
@@ -33,6 +33,7 @@ export function EventPreview({ data }: { data: any }) {
         end_time: activeData.event_details?.end_time || (hasUserInput ? '' : fallback.event_details.end_time),
         timezone: activeData.event_details?.timezone || (hasUserInput ? '' : fallback.event_details.timezone),
         location: activeData.event_details?.location || (hasUserInput ? '' : fallback.event_details.location),
+        location_url: activeData.event_details?.location_url || (hasUserInput ? '' : fallback.event_details.location_url),
         all_day: activeData.event_details?.all_day ?? (hasUserInput ? false : fallback.event_details.all_day),
     };
 
@@ -46,38 +47,31 @@ export function EventPreview({ data }: { data: any }) {
     const eventUrl = activeData.event_url || (hasUserInput ? '' : fallback.event_url);
     const reminders = activeData.reminders || (hasUserInput ? { enabled: false } : fallback.reminders);
 
-    // Set hero background color for status bar adaptation
+    // Set hero background color
     useEffect(() => {
         setHeroBackgroundColor(styles.primary_color);
     }, [styles.primary_color, setHeroBackgroundColor]);
 
-    // Get GMT offset for timezone
-    const getTimezoneDisplay = (timezone: string) => {
-        if (!timezone) return '';
-
-        const timezoneOffsets: { [key: string]: string } = {
-            'UTC': 'GMT+0',
-            'America/New_York': 'GMT-5',
-            'America/Chicago': 'GMT-6',
-            'America/Denver': 'GMT-7',
-            'America/Los_Angeles': 'GMT-8',
-            'Europe/London': 'GMT+0',
-            'Europe/Paris': 'GMT+1',
-            'Asia/Dubai': 'GMT+4',
-            'Asia/Kolkata': 'GMT+5:30',
-            'Asia/Singapore': 'GMT+8',
-            'Asia/Tokyo': 'GMT+9',
-            'Australia/Sydney': 'GMT+11',
-            'Africa/Nairobi': 'GMT+3',
-        };
-
-        return timezoneOffsets[timezone] || 'GMT';
+    // Handle ICS Download
+    const handleAddToCalendar = () => {
+        downloadICS({
+            title: eventDetails.title || 'Event',
+            start_date: eventDetails.start_date,
+            end_date: eventDetails.end_date || eventDetails.start_date,
+            start_time: eventDetails.start_time,
+            end_time: eventDetails.end_time,
+            all_day: eventDetails.all_day,
+            location: eventDetails.location,
+            description: description,
+            url: eventUrl,
+            organizer: organizer,
+            timezone: eventDetails.timezone
+        });
     };
 
     // Format date and time
     const formatEventDate = () => {
         if (!eventDetails.start_date) return 'Select date';
-
         try {
             const startDate = parseISO(eventDetails.start_date);
             const endDate = eventDetails.end_date ? parseISO(eventDetails.end_date) : startDate;
@@ -86,261 +80,177 @@ export function EventPreview({ data }: { data: any }) {
                 if (eventDetails.start_date === eventDetails.end_date) {
                     return format(startDate, 'EEEE, MMMM d, yyyy');
                 }
-                return `${format(startDate, 'MMM d')} - ${format(endDate, 'MMM d, yyyy')} `;
+                return `${format(startDate, 'MMM d')} - ${format(endDate, 'MMM d, yyyy')}`;
             }
 
             const startTime = eventDetails.start_time || '09:00';
             const endTime = eventDetails.end_time || '10:00';
 
             if (eventDetails.start_date === eventDetails.end_date) {
-                return `${format(startDate, 'EEE, MMM d, yyyy')} • ${startTime} - ${endTime} `;
+                return `${format(startDate, 'EEE, MMM d, yyyy')} • ${startTime} - ${endTime}`;
             }
 
-            return `${format(startDate, 'MMM d')} ${startTime} - ${format(endDate, 'MMM d')} ${endTime} `;
+            return `${format(startDate, 'MMM d')} ${startTime} - ${format(endDate, 'MMM d')} ${endTime}`;
         } catch (error) {
             return 'Invalid date';
         }
     };
 
-    // Helper to lighten a color
-    const lightenColor = (hex: string, percent: number = 90) => {
-        const num = parseInt(hex.replace('#', ''), 16);
-        const r = (num >> 16) + Math.round((255 - (num >> 16)) * (percent / 100));
-        const g = ((num >> 8) & 0x00FF) + Math.round((255 - ((num >> 8) & 0x00FF)) * (percent / 100));
-        const b = (num & 0x0000FF) + Math.round((255 - (num & 0x0000FF)) * (percent / 100));
-        return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')} `;
-    };
-
-    // Helper to darken a color
-    const darkenColor = (hex: string, percent: number = 20) => {
-        const num = parseInt(hex.replace('#', ''), 16);
-        const r = Math.max(0, (num >> 16) - Math.round((num >> 16) * (percent / 100)));
-        const g = Math.max(0, ((num >> 8) & 0x00FF) - Math.round(((num >> 8) & 0x00FF) * (percent / 100)));
-        const b = Math.max(0, (num & 0x0000FF) - Math.round((num & 0x0000FF) * (percent / 100)));
-        return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')} `;
-    };
-
-    // Generate background style
-    const getBackgroundStyle = () => {
-        const { primary_color, secondary_color, gradient_type, gradient_angle } = styles;
-
-        if (gradient_type === 'linear') {
-            return {
-                background: `linear-gradient(${gradient_angle || 135}deg, ${primary_color}, ${secondary_color || primary_color})`
-            };
-        } else if (gradient_type === 'radial') {
-            return {
-                background: `radial-gradient(circle, ${primary_color}, ${secondary_color || primary_color})`
-            };
-        }
-
-        // Default: subtle gradient from primary to lighter shade
-        const lightPrimary = lightenColor(primary_color, 30);
-        return {
-            background: `linear-gradient(180deg, ${primary_color} 0%, ${lightPrimary} 100%)`
-        };
-    };
-
-    const lightPrimary = lightenColor(styles.primary_color, 95);
+    const primaryColor = styles.primary_color || '#7C3AED';
+    const secondaryColor = styles.secondary_color || '#FAF5FF';
 
     return (
         <div
-            className="absolute inset-0 w-full h-full flex flex-col bg-slate-50 overflow-y-auto"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            className="absolute inset-0 w-full h-full font-sans overflow-hidden bg-white"
+            style={{
+                background: `linear-gradient(135deg, ${primaryColor}15 0%, #ffffff 100%)`
+            }}
         >
+            <style jsx global>{`
+                .no-scrollbar::-webkit-scrollbar { display: none; }
+                .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+            `}</style>
 
-            {/* Header Section - Calendar Icon, Title, Button */}
-            <div
-                className="px-7 pt-24 pb-10 flex flex-col items-center text-center"
-                style={getBackgroundStyle()}
-            >
-                {/* Calendar Icon */}
-                <div className="flex justify-center mb-4">
-                    <div className="bg-white/20 backdrop-blur-sm p-3 rounded-2xl">
-                        <Calendar className="w-8 h-8 text-white" />
-                    </div>
-                </div>
-
-                {/* Event Title */}
-                <h1
-                    className="text-xl font-bold text-center mb-3 leading-tight px-4"
-                    style={{ color: styles.secondary_color || '#FFFFFF' }}
-                >
-                    {eventDetails.title || (hasUserInput ? '' : 'Event Title')}
-                </h1>
-
-
-                {/* Date & Time */}
-                <div className="flex flex-col items-center gap-1 mb-2">
-                    <div className="flex items-center justify-center gap-1.5 text-white/95">
-                        <Clock className="w-3.5 h-3.5 flex-shrink-0" />
-                        <p className="text-xs font-medium">
-                            {formatEventDate()}
-                        </p>
-                    </div>
-                    {/* Subtle timezone display */}
-                    {eventDetails.timezone && !eventDetails.all_day && (
-                        <p className="text-[10px] text-white/70 font-normal">
-                            {getTimezoneDisplay(eventDetails.timezone)}
-                        </p>
-                    )}
-                </div>
-
-                {/* Location */}
-                {eventDetails.location && (
-                    <div className="flex items-center justify-center gap-1.5 text-white/95 px-4">
-                        <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
-                        <p className="text-xs font-medium truncate max-w-[220px]">
-                            {eventDetails.location}
-                        </p>
-                    </div>
-                )}
-
-                {/* Add to Calendar Button */}
-                <button
-                    className="mt-7 w-full py-3.5 rounded-2xl font-bold shadow-xl transition-all hover:scale-105"
-                    style={{
-                        backgroundColor: styles.secondary_color || lightenColor(styles.primary_color, 85),
-                        color: styles.primary_color,
-                        fontSize: '0.9375rem'
-                    }}
-                >
-                    Add to Calendar
-                </button>
+            {/* --- Fixed Background Elements --- */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div
+                    className="absolute top-[-20%] left-[-20%] w-[120%] h-[60%] rounded-[100%] blur-3xl opacity-40 animate-pulse"
+                    style={{ background: primaryColor }}
+                />
+                <div
+                    className="absolute bottom-[-20%] right-[-20%] w-[100%] h-[50%] rounded-[100%] blur-3xl opacity-30"
+                    style={{ background: secondaryColor }}
+                />
             </div>
 
-            {/* Content Section with Rounded Top */}
-            <div className="flex-1 px-4 pt-6 pb-4 space-y-3.5 bg-slate-50 rounded-t-3xl -mt-6">
+            {/* --- Scrollable Content --- */}
+            <div className="relative w-full h-full overflow-y-auto no-scrollbar flex flex-col z-10">
 
-                {/* Date & Time Card */}
-                <div className="bg-white rounded-2xl p-5 shadow-sm">
-                    <h3
-                        className="font-bold uppercase tracking-wide mb-3 flex items-center gap-2"
-                        style={{ color: styles.primary_color, fontSize: '0.75rem', letterSpacing: '0.05em' }}
-                    >
-                        <Clock style={{ width: '1rem', height: '1rem' }} /> DATE & TIME
-                    </h3>
-                    <p className="text-gray-900 font-semibold mb-1.5" style={{ fontSize: '0.9375rem' }}>
-                        {formatEventDate()}
-                    </p>
-                    {eventDetails.timezone && !eventDetails.all_day && (
-                        <p className="text-gray-500" style={{ fontSize: '0.875rem' }}>
-                            {getTimezoneDisplay(eventDetails.timezone)}
-                        </p>
-                    )}
-                </div>
+                {/* Spacer */}
+                <div className="w-full flex-none pt-20" />
 
-                {/* Location Card */}
-                {eventDetails.location && (
-                    <div className="bg-white rounded-2xl p-5 shadow-sm">
-                        <h3
-                            className="font-bold uppercase tracking-wide mb-3 flex items-center gap-2"
-                            style={{ color: styles.primary_color, fontSize: '0.75rem', letterSpacing: '0.05em' }}
+                {/* 1. Header (Floating) */}
+                <div className="flex-none flex flex-col justify-center items-center pb-8 px-4 text-center">
+                    {/* Floating Icon */}
+                    <div className="relative group mb-5">
+                        <div className="absolute inset-0 bg-white rounded-full blur-2xl opacity-40 transition-opacity duration-500 scale-125" />
+                        <div
+                            className="relative h-24 w-24 bg-white rounded-3xl shadow-2xl flex items-center justify-center p-1 ring-4 ring-white/30 backdrop-blur-sm animate-in zoom-in-50 duration-700 ease-out rotate-3"
                         >
-                            <MapPin style={{ width: '1rem', height: '1rem' }} /> LOCATION
-                        </h3>
-                        <p className="text-gray-900 font-semibold" style={{ fontSize: '0.9375rem', wordBreak: 'break-word' }}>
-                            {eventDetails.location}
-                        </p>
-                    </div>
-                )}
-
-                {/* Description Card */}
-                {description && (
-                    <div className="bg-white rounded-2xl p-5 shadow-sm">
-                        <h3
-                            className="font-bold uppercase tracking-wide mb-3 flex items-center gap-2"
-                            style={{ color: styles.primary_color, fontSize: '0.75rem', letterSpacing: '0.05em' }}
-                        >
-                            <FileText style={{ width: '1rem', height: '1rem' }} /> ABOUT THIS EVENT
-                        </h3>
-                        <p className="text-gray-700 leading-relaxed" style={{ fontSize: '0.875rem', lineHeight: '1.5' }}>
-                            {description}
-                        </p>
-                    </div>
-                )}
-
-                {/* Organizer Card */}
-                {(organizer.name || organizer.email) && (
-                    <div className="bg-white rounded-2xl p-5 shadow-sm">
-                        <h3
-                            className="font-bold uppercase tracking-wide mb-3 flex items-center gap-2"
-                            style={{ color: styles.primary_color, fontSize: '0.75rem', letterSpacing: '0.05em' }}
-                        >
-                            <User style={{ width: '1rem', height: '1rem' }} /> ORGANIZER
-                        </h3>
-                        {organizer.name && (
-                            <p className="text-gray-900 font-semibold mb-1.5" style={{ fontSize: '0.9375rem' }}>
-                                {organizer.name}
-                            </p>
-                        )}
-                        {organizer.email && (
-                            <div className="flex items-center gap-2 text-gray-600">
-                                <Mail style={{ width: '0.875rem', height: '0.875rem' }} />
-                                <p className="font-medium" style={{ fontSize: '0.875rem', wordBreak: 'break-all' }}>
-                                    {organizer.email}
-                                </p>
-                            </div>
-                        )}
-                    </div>
-                )}
-
-                {/* Event URL Card */}
-                {eventUrl && (
-                    <div className="bg-white rounded-2xl p-5 shadow-sm">
-                        <h3
-                            className="font-bold uppercase tracking-wide mb-3 flex items-center gap-2"
-                            style={{ color: styles.primary_color, fontSize: '0.75rem', letterSpacing: '0.05em' }}
-                        >
-                            <Globe style={{ width: '1rem', height: '1rem' }} /> EVENT WEBSITE
-                        </h3>
-                        <a
-                            href={eventUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-gray-900 font-semibold hover:underline"
-                            style={{ fontSize: '0.9375rem', wordBreak: 'break-all' }}
-                        >
-                            {eventUrl}
-                        </a>
-                    </div>
-                )}
-
-                {/* Reminder Card */}
-                {reminders.enabled && (
-                    <div className="bg-amber-50 rounded-2xl p-4 shadow-sm border border-amber-100">
-                        <div className="flex items-center gap-2">
-                            <Bell style={{ width: '1rem', height: '1rem' }} className="text-amber-600" />
-                            <p className="text-amber-900 font-semibold" style={{ fontSize: '0.875rem' }}>
-                                Reminder set for this event
-                            </p>
+                            <Calendar
+                                className="w-10 h-10"
+                                style={{ color: primaryColor }}
+                            />
                         </div>
                     </div>
-                )}
 
-                {/* Empty State */}
-                {!eventDetails.title && !description && (
-                    <div className="text-center py-12">
-                        <Calendar className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-                        <p className="text-slate-400 font-medium" style={{ fontSize: '0.875rem' }}>
-                            Fill in event details to see preview
-                        </p>
+                    {/* Event Title */}
+                    <h1 className="text-3xl font-bold text-slate-900 tracking-tight drop-shadow-sm mb-2 px-2">
+                        {eventDetails.title || 'Event Title'}
+                    </h1>
+                </div>
+
+                {/* 2. Main Glass Card */}
+                <div className="flex-shrink-0 px-4 flex justify-center pb-8">
+                    <div className="w-full max-w-sm bg-white/60 backdrop-blur-3xl rounded-[2.5rem] shadow-[0_30px_60px_-10px_rgba(0,0,0,0.1)] border border-white/80 px-6 py-8 flex flex-col items-stretch animate-in slide-in-from-bottom-8 duration-700 ring-1 ring-white/40">
+
+                        {/* Date & Time */}
+                        <div className="text-center mb-8">
+                            <p className="text-lg font-semibold text-slate-800">
+                                {formatEventDate()}
+                            </p>
+                            {eventDetails.timezone && !eventDetails.all_day && (
+                                <p className="text-xs text-slate-500 mt-1 uppercase tracking-wide">
+                                    {eventDetails.timezone.replace('_', ' ')}
+                                </p>
+                            )}
+                        </div>
+
+                        {/* Add to Calendar Button */}
+                        <button
+                            onClick={handleAddToCalendar}
+                            className="w-full py-4 rounded-xl font-bold shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 mb-8 text-white relative overflow-hidden"
+                            style={{ backgroundColor: primaryColor }}
+                        >
+                            <Calendar className="w-5 h-5" />
+                            <span>Add to Calendar</span>
+                        </button>
+
+                        <div className="space-y-6">
+                            {/* Description */}
+                            {description && (
+                                <div className="text-center">
+                                    <p className="text-slate-600 text-sm leading-relaxed">
+                                        {description}
+                                    </p>
+                                </div>
+                            )}
+
+                            {/* Details List */}
+                            <div className="space-y-3">
+                                {/* Location */}
+                                {eventDetails.location && (
+                                    <a
+                                        href={eventDetails.location_url || `https://maps.google.com/?q=${eventDetails.location}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex flex-col gap-3 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm transition-all active:scale-[0.99]"
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded-full flex items-center justify-center bg-slate-50 text-slate-600 transition-colors">
+                                                <MapPin className="w-4 h-4" />
+                                            </div>
+                                            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Location</p>
+                                        </div>
+                                        <p className="text-slate-800 font-medium break-words pl-1">
+                                            {eventDetails.location}
+                                        </p>
+                                    </a>
+                                )}
+
+                                {/* Organizer */}
+                                {(organizer.name || organizer.email) && (
+                                    <div className="flex flex-col gap-3 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded-full flex items-center justify-center bg-slate-50 text-slate-600">
+                                                <User className="w-4 h-4" />
+                                            </div>
+                                            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Organizer</p>
+                                        </div>
+                                        <p className="text-slate-800 font-medium break-words pl-1">
+                                            {organizer.name || organizer.email}
+                                        </p>
+                                    </div>
+                                )}
+
+                                {/* Event Link */}
+                                {eventUrl && (
+                                    <a
+                                        href={eventUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex flex-col gap-3 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm transition-all active:scale-[0.99]"
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded-full flex items-center justify-center bg-slate-50 text-slate-600 transition-colors">
+                                                <Globe className="w-4 h-4" />
+                                            </div>
+                                            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Event Link</p>
+                                        </div>
+                                        <p className="text-slate-800 font-medium break-words pl-1">
+                                            {eventUrl.replace(/^https?:\/\//, '')}
+                                        </p>
+                                    </a>
+                                )}
+                            </div>
+                        </div>
                     </div>
-                )}
-            </div>
+                </div>
 
-            {/* Hide scrollbar */}
-            <style jsx>{`
-div:: -webkit - scrollbar {
-    display: none;
-}
-`}</style>
-
-            {/* Footer Branding */}
-            <div className="pb-6 text-center bg-slate-50">
-                <p className="text-xs text-slate-600">
-                    Powered by <span className="font-semibold">QR Studio</span>
-                </p>
+                <div className="flex-1 min-h-0" />
+                <div className="flex-none pt-4 pb-4 text-[10px] uppercase tracking-widest text-slate-400 font-semibold text-center opacity-60">
+                    Powered by Plaqode
+                </div>
             </div>
         </div>
     );

@@ -378,6 +378,12 @@ export function EventForm() {
                                 <label className="block text-sm font-semibold text-slate-700 mb-2">Location URL (Optional)</label>
                                 <input
                                     {...register('event_details.location_url')}
+                                    onBlur={(e) => {
+                                        let val = e.target.value;
+                                        if (val && !/^https?:\/\//i.test(val)) {
+                                            setValue('event_details.location_url', `https://${val}`);
+                                        }
+                                    }}
                                     type="url"
                                     className="w-full px-3 sm:px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none text-base min-h-[44px]"
                                     placeholder="https://maps.google.com/..."
@@ -510,6 +516,12 @@ export function EventForm() {
                             <label className="block text-sm font-semibold text-slate-700 mb-2">Event URL (Optional)</label>
                             <input
                                 {...register('event_url')}
+                                onBlur={(e) => {
+                                    let val = e.target.value;
+                                    if (val && !/^https?:\/\//i.test(val)) {
+                                        setValue('event_url', `https://${val}`);
+                                    }
+                                }}
                                 type="url"
                                 className="w-full px-3 sm:px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none text-base min-h-[44px]"
                                 placeholder="https://example.com/event"

@@ -186,6 +186,7 @@ export const MOCKUP_PREVIEW_DATA = {
             end_time: '21:00',
             timezone: 'Africa/Nairobi',
             location: 'TechHub Tanzania, Masaki Peninsula',
+            location_url: 'https://maps.google.com/?q=TechHub+Tanzania',
             all_day: false,
         },
         description: 'Join us for an evening of networking with local tech entrepreneurs and developers. Learn about the latest innovations in East African tech.',

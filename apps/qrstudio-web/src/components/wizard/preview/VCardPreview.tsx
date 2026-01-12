@@ -194,59 +194,59 @@ export function VCardPreview({ data }: { data: any }) {
                             <div className="space-y-3">
                                 {contact.phone && (
                                     <div
-                                        className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm transition-all cursor-pointer"
+                                        className="flex flex-col gap-3 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm transition-all cursor-pointer"
                                     >
-                                        <div className="w-10 h-10 rounded-full flex items-center justify-center bg-slate-50 text-slate-600 transition-colors">
-                                            <Phone className="w-5 h-5" />
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded-full flex items-center justify-center bg-slate-50 text-slate-600 transition-colors">
+                                                <Phone className="w-4 h-4" />
+                                            </div>
+                                            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Mobile</p>
                                         </div>
-                                        <div className="flex-1 min-w-0">
-                                            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-0.5">Mobile</p>
-                                            <p className="text-slate-800 font-medium truncate">{contact.phone}</p>
-                                        </div>
+                                        <p className="text-slate-800 font-medium break-words pl-1">{contact.phone}</p>
                                     </div>
                                 )}
 
                                 {contact.email && (
                                     <div
-                                        className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm transition-all cursor-pointer"
+                                        className="flex flex-col gap-3 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm transition-all cursor-pointer"
                                     >
-                                        <div className="w-10 h-10 rounded-full flex items-center justify-center bg-slate-50 text-slate-600 transition-colors">
-                                            <Mail className="w-5 h-5" />
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded-full flex items-center justify-center bg-slate-50 text-slate-600 transition-colors">
+                                                <Mail className="w-4 h-4" />
+                                            </div>
+                                            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Email</p>
                                         </div>
-                                        <div className="flex-1 min-w-0">
-                                            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-0.5">Email</p>
-                                            <p className="text-slate-800 font-medium truncate">{contact.email}</p>
-                                        </div>
+                                        <p className="text-slate-800 font-medium break-words pl-1">{contact.email}</p>
                                     </div>
                                 )}
 
                                 {contact.website && (
                                     <div
-                                        className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm transition-all cursor-pointer"
+                                        className="flex flex-col gap-3 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm transition-all cursor-pointer"
                                     >
-                                        <div className="w-10 h-10 rounded-full flex items-center justify-center bg-slate-50 text-slate-600 transition-colors">
-                                            <Globe className="w-5 h-5" />
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded-full flex items-center justify-center bg-slate-50 text-slate-600 transition-colors">
+                                                <Globe className="w-4 h-4" />
+                                            </div>
+                                            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Website</p>
                                         </div>
-                                        <div className="flex-1 min-w-0">
-                                            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-0.5">Website</p>
-                                            <p className="text-slate-800 font-medium truncate">{contact.website.replace(/^https?:\/\//, '')}</p>
-                                        </div>
+                                        <p className="text-slate-800 font-medium break-words pl-1">{contact.website.replace(/^https?:\/\//, '')}</p>
                                     </div>
                                 )}
 
                                 {(address.street || address.city) && (
                                     <div
-                                        className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm transition-all cursor-pointer"
+                                        className="flex flex-col gap-3 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm transition-all cursor-pointer"
                                     >
-                                        <div className="w-10 h-10 rounded-full flex items-center justify-center bg-slate-50 text-slate-600 transition-colors">
-                                            <MapPin className="w-5 h-5" />
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded-full flex items-center justify-center bg-slate-50 text-slate-600 transition-colors">
+                                                <MapPin className="w-4 h-4" />
+                                            </div>
+                                            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Location</p>
                                         </div>
-                                        <div className="flex-1 min-w-0">
-                                            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-0.5">Location</p>
-                                            <p className="text-slate-800 font-medium truncate">
-                                                {[address.city, address.country].filter(Boolean).join(', ') || address.street}
-                                            </p>
-                                        </div>
+                                        <p className="text-slate-800 font-medium break-words pl-1">
+                                            {[address.city, address.country].filter(Boolean).join(', ') || address.street}
+                                        </p>
                                     </div>
                                 )}
                             </div>
