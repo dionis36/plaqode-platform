@@ -1,26 +1,11 @@
 import { MessageSquare, Phone, User, Mail, Smartphone, Send } from 'lucide-react';
-
+import { useEffect } from 'react';
+import { usePreviewContext } from './PreviewContext';
 import { MOCKUP_PREVIEW_DATA } from '../steps/mockupPreviewData';
 
 export function MessagePreview({ data }: { data: any }) {
+    const { setHeroBackgroundColor } = usePreviewContext();
     const fallback = MOCKUP_PREVIEW_DATA.message;
-
-    // Platform might have a default value from form state even if empty, but usually it's 'sms'.
-    // If we want the rich preview 'whatsapp' from fallback, we should check if data.platform is default?
-    // The fallback data uses 'whatsapp'. If the user selects 'sms', they might want to see SMS.
-    // Let's stick to using data.platform if it exists (it usually does as 'sms').
-    // However, for consistency with other "rich" previews, maybe we prioritize user selection for TYPES (platform)
-    // but fill in CONTENT from fallback if matching?
-    // Actually, fallback is specifically for 'whatsapp'. If user is on 'sms' mode, showing whatsapp helper text is wrong.
-    // BUT the data structure in `mockupPreviewData` is specific to one example (whatsapp).
-    // If the user selects "SMS" template, the wizard initializes with type="message".
-    // Does the wizard default the platform to 'sms'? Yes likely.
-
-    // If I force the fallback platform 'whatsapp', it will switch the UI to WhatsApp.
-    // This might be confusing if the user explicitly clicked "SMS" (if that was an option).
-    // In `Step1Templates`, "Message" is one card.
-    // So enforcing the "Rich Preview" which happens to be WhatsApp seems acceptable for the initial "Wow" factor.
-    // As soon as they toggle the platform or type, it should switch.
 
     // Check if user has started entering ANY content
     const hasUserInput =
@@ -29,43 +14,19 @@ export function MessagePreview({ data }: { data: any }) {
 
     const activeData = hasUserInput ? data : fallback;
 
-    const platform = data.platform || fallback.platform; // Platform is always taken from data if available, otherwise fallback
-    const phoneNumber = activeData.phone_number || (hasUserInput ? '' : fallback.phone_number); // Use 'phone_number' from activeData
-    const username = activeData.username || (hasUserInput ? '' : fallback.username); // Use 'username' from activeData
-    const message = activeData.message || (hasUserInput ? '' : fallback.message); // Use 'message' from activeData
-    const messageOnly = activeData.message_only ?? (hasUserInput ? false : fallback.message_only); // Use 'message_only' from activeData
+    const platform = data.platform || fallback.platform;
+    const phoneNumber = activeData.phone_number || (hasUserInput ? '' : fallback.phone_number);
+    const username = activeData.username || (hasUserInput ? '' : fallback.username);
+    const message = activeData.message || (hasUserInput ? '' : fallback.message);
+    const messageOnly = activeData.message_only ?? (hasUserInput ? false : fallback.message_only);
     const styles = data.styles || fallback.styles;
 
-    // Helper to lighten a color
-    const lightenColor = (hex: string, percent: number = 30) => {
-        const num = parseInt(hex.replace('#', ''), 16);
-        const r = Math.min(255, (num >> 16) + Math.round(((255 - (num >> 16)) * percent) / 100));
-        const g = Math.min(255, ((num >> 8) & 0x00FF) + Math.round(((255 - ((num >> 8) & 0x00FF)) * percent) / 100));
-        const b = Math.min(255, (num & 0x0000FF) + Math.round(((255 - (num & 0x0000FF)) * percent) / 100));
-        return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`;
-    };
+    const primaryColor = styles.primary_color || '#10B981';
+    const secondaryColor = styles.secondary_color || '#D1FAE5';
 
-    // Generate background style
-    const getBackgroundStyle = () => {
-        const primary = styles.primary_color || '#10B981';
-        const secondary = styles.secondary_color || '#D1FAE5';
-        const gradientType = styles.gradient_type || 'none';
-        const angle = styles.gradient_angle || 135;
-
-        if (gradientType === 'linear') {
-            return {
-                background: `linear-gradient(${angle}deg, ${primary}, ${secondary})`
-            };
-        } else if (gradientType === 'radial') {
-            return {
-                background: `radial-gradient(circle, ${primary}, ${secondary})`
-            };
-        }
-        // Default: subtle gradient from primary to lighter shade
-        return {
-            background: `linear-gradient(180deg, ${primary} 0%, ${lightenColor(primary, 30)} 100%)`
-        };
-    };
+    useEffect(() => {
+        setHeroBackgroundColor(primaryColor);
+    }, [primaryColor, setHeroBackgroundColor]);
 
     // Platform-specific data
     const platformData = {
@@ -74,157 +35,183 @@ export function MessagePreview({ data }: { data: any }) {
         telegram: { Icon: Send, name: 'Telegram', action: 'Open Telegram' }
     };
 
-    const currentPlatform = platformData[platform];
+    const currentPlatform = platformData[platform] || platformData.sms;
     const PlatformIcon = currentPlatform.Icon;
+
+    const getLink = () => {
+        const encodedMessage = encodeURIComponent(message || '');
+        const cleanPhone = (phoneNumber || '').replace(/\D/g, '');
+
+        switch (platform) {
+            case 'whatsapp':
+                return `https://wa.me/${cleanPhone}?text=${encodedMessage}`;
+            case 'telegram':
+                return `https://t.me/${username || ''}`;
+            case 'sms':
+            default:
+                return `sms:${cleanPhone}?body=${encodedMessage}`;
+        }
+    };
 
     return (
         <div
-            className="absolute inset-0 w-full h-full flex flex-col overflow-y-auto"
+            className="absolute inset-0 w-full h-full font-sans overflow-hidden bg-white"
             style={{
-                backgroundColor: styles.secondary_color || '#F1F5F9',
-                scrollbarWidth: 'none',
-                msOverflowStyle: 'none'
+                background: `linear-gradient(135deg, ${primaryColor}15 0%, #ffffff 100%)`
             }}
         >
-            <style jsx>{`
-                div::-webkit-scrollbar {
-                    display: none;
-                }
+            <style jsx global>{`
+                .no-scrollbar::-webkit-scrollbar { display: none; }
+                .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
             `}</style>
 
-            {/* Gradient Header */}
-            <div
-                className="px-7 pt-28 pb-14 flex flex-col items-center text-center text-white"
-                style={getBackgroundStyle()}
-            >
-                {/* Platform Icon */}
-                <div className="flex justify-center mb-4">
-                    <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl border border-white/30">
-                        <MessageSquare className="w-7 h-7" />
+            {/* --- Fixed Background Elements --- */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div
+                    className="absolute top-[-20%] left-[-20%] w-[120%] h-[60%] rounded-[100%] blur-3xl opacity-40 animate-pulse"
+                    style={{ background: primaryColor }}
+                />
+                <div
+                    className="absolute bottom-[-20%] right-[-20%] w-[100%] h-[50%] rounded-[100%] blur-3xl opacity-30"
+                    style={{ background: secondaryColor }}
+                />
+            </div>
+
+            {/* --- Scrollable Content --- */}
+            <div className="relative w-full h-full overflow-y-auto no-scrollbar flex flex-col z-10">
+
+                {/* Spacer */}
+                <div className="w-full flex-none pt-20" />
+
+                {/* 1. Header (Floating) */}
+                <div className="flex-none flex flex-col justify-center items-center pb-8 px-4 text-center">
+                    {/* Floating Icon */}
+                    <div className="relative group mb-5">
+                        <div className="absolute inset-0 bg-white rounded-full blur-2xl opacity-40 transition-opacity duration-500 scale-125" />
+                        <div
+                            className="relative h-24 w-24 bg-white rounded-3xl shadow-2xl flex items-center justify-center p-1 ring-4 ring-white/30 backdrop-blur-sm animate-in zoom-in-50 duration-700 ease-out rotate-3"
+                        >
+                            <PlatformIcon
+                                className="w-10 h-10"
+                                style={{ color: primaryColor }}
+                            />
+                        </div>
+                    </div>
+
+                    {/* Title */}
+                    <h1 className="text-3xl font-bold text-slate-900 tracking-tight drop-shadow-sm mb-2 px-2">
+                        {currentPlatform.name} Message
+                    </h1>
+                    <p className="text-slate-500 text-sm font-medium">
+                        Send via {currentPlatform.name}
+                    </p>
+                </div>
+
+                {/* 2. Main Glass Card */}
+                <div className="flex-shrink-0 px-4 flex justify-center pb-8">
+                    <div className="w-full max-w-sm bg-white/60 backdrop-blur-3xl rounded-[2.5rem] shadow-[0_30px_60px_-10px_rgba(0,0,0,0.1)] border border-white/80 px-6 py-8 flex flex-col items-stretch animate-in slide-in-from-bottom-8 duration-700 ring-1 ring-white/40">
+
+                        {/* Action Button */}
+                        <a
+                            href={getLink()}
+                            target={platform === 'sms' ? undefined : '_blank'}
+                            rel={platform === 'sms' ? undefined : 'noopener noreferrer'}
+                            className="w-full py-4 rounded-xl font-bold shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 mb-8 text-white relative overflow-hidden"
+                            style={{ backgroundColor: primaryColor }}
+                        >
+                            <PlatformIcon className="w-5 h-5" />
+                            <span>{currentPlatform.action}</span>
+                        </a>
+
+                        <div className="space-y-3">
+                            {/* Platform Badge */}
+                            <div className="flex flex-col gap-3 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm transition-all hover:shadow-md">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-full flex items-center justify-center bg-slate-50 text-slate-600 transition-colors">
+                                        <MessageSquare className="w-4 h-4" />
+                                    </div>
+                                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Platform</p>
+                                </div>
+                                <div className="flex items-center gap-2 pl-1">
+                                    <PlatformIcon className="w-4 h-4 text-slate-600" />
+                                    <p className="text-slate-800 font-medium">
+                                        {currentPlatform.name}
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Phone Number */}
+                            {phoneNumber && !messageOnly && (
+                                <div className="flex flex-col gap-3 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm transition-all hover:shadow-md">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 rounded-full flex items-center justify-center bg-slate-50 text-slate-600 transition-colors">
+                                            <Phone className="w-4 h-4" />
+                                        </div>
+                                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">To</p>
+                                    </div>
+                                    <p className="text-slate-800 font-medium break-all pl-1">
+                                        {phoneNumber}
+                                    </p>
+                                </div>
+                            )}
+
+                            {/* Username (Telegram) */}
+                            {platform === 'telegram' && username && (
+                                <div className="flex flex-col gap-3 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm transition-all hover:shadow-md">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 rounded-full flex items-center justify-center bg-slate-50 text-slate-600 transition-colors">
+                                            <User className="w-4 h-4" />
+                                        </div>
+                                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Username</p>
+                                    </div>
+                                    <p className="text-slate-800 font-medium break-all pl-1">
+                                        @{username}
+                                    </p>
+                                </div>
+                            )}
+
+                            {/* Message Bubble */}
+                            {message && (
+                                <div className="flex flex-col gap-3 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm transition-all hover:shadow-md">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 rounded-full flex items-center justify-center bg-slate-50 text-slate-600 transition-colors">
+                                            <Mail className="w-4 h-4" />
+                                        </div>
+                                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Message</p>
+                                    </div>
+                                    <p className="text-slate-600 text-sm leading-relaxed whitespace-pre-wrap pl-1">
+                                        {message}
+                                    </p>
+                                    {platform === 'sms' && (
+                                        <p className="text-[10px] text-slate-400 text-right mt-1">
+                                            {message.length}/160
+                                        </p>
+                                    )}
+                                </div>
+                            )}
+
+                            {/* Message Only Mode (WhatsApp) */}
+                            {platform === 'whatsapp' && messageOnly && (
+                                <div className="flex flex-col gap-3 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm transition-all hover:shadow-md">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 rounded-full flex items-center justify-center bg-slate-50 text-slate-600 transition-colors">
+                                            <User className="w-4 h-4" />
+                                        </div>
+                                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Recipient</p>
+                                    </div>
+                                    <p className="text-slate-500 text-sm italic pl-1">
+                                        User select from contact list
+                                    </p>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
 
-                {/* Title */}
-                <h1
-                    className="text-xl font-bold text-center mb-2"
-                    style={{ color: styles.secondary_color || '#FFFFFF' }}
-                >
-                    Send Message
-                </h1>
-
-                {/* Subtitle */}
-                <p className="text-center text-white/90 text-sm">
-                    Scan to send via {currentPlatform.name}
-                </p>
-            </div>
-
-            {/* Content Area with Rounded Top */}
-            <div
-                className="flex-1 px-4 pt-6 pb-4 space-y-3 rounded-t-3xl -mt-8"
-                style={{ backgroundColor: styles.secondary_color || '#F1F5F9' }}
-            >
-                {/* Platform Card */}
-                <div className="bg-white rounded-2xl p-5 shadow-md">
-                    <h3
-                        className="font-bold uppercase tracking-wide mb-3 flex items-center gap-2"
-                        style={{ color: styles.primary_color || '#10B981', fontSize: '0.75rem', letterSpacing: '0.05em' }}
-                    >
-                        <MessageSquare style={{ width: '1rem', height: '1rem' }} /> PLATFORM
-                    </h3>
-                    <div className="flex items-center gap-2">
-                        <PlatformIcon className="w-5 h-5 text-slate-600" />
-                        <p className="text-gray-900 font-semibold" style={{ fontSize: '0.9375rem' }}>
-                            {currentPlatform.name}
-                        </p>
-                    </div>
+                <div className="flex-1 min-h-0" />
+                <div className="flex-none pt-4 pb-4 text-[10px] uppercase tracking-widest text-slate-400 font-semibold text-center opacity-60">
+                    Powered by Plaqode
                 </div>
-
-                {/* Phone Number Card (if provided and not message-only) */}
-                {phoneNumber && !messageOnly && (
-                    <div className="bg-white rounded-2xl p-5 shadow-md">
-                        <h3
-                            className="font-bold uppercase tracking-wide mb-3 flex items-center gap-2"
-                            style={{ color: styles.primary_color || '#10B981', fontSize: '0.75rem', letterSpacing: '0.05em' }}
-                        >
-                            <Phone style={{ width: '1rem', height: '1rem' }} /> TO
-                        </h3>
-                        <p className="text-gray-900 font-semibold" style={{ fontSize: '0.9375rem', wordBreak: 'break-all' }}>
-                            {phoneNumber}
-                        </p>
-                    </div>
-                )}
-
-                {/* Username Card (Telegram only) */}
-                {platform === 'telegram' && username && (
-                    <div className="bg-white rounded-2xl p-5 shadow-sm">
-                        <h3
-                            className="font-bold uppercase tracking-wide mb-3 flex items-center gap-2"
-                            style={{ color: styles.primary_color || '#10B981', fontSize: '0.75rem', letterSpacing: '0.05em' }}
-                        >
-                            <User style={{ width: '1rem', height: '1rem' }} /> USERNAME
-                        </h3>
-                        <p className="text-gray-900 font-semibold" style={{ fontSize: '0.9375rem', wordBreak: 'break-all' }}>
-                            @{username}
-                        </p>
-                    </div>
-                )}
-
-                {/* Message Card */}
-                {message && (
-                    <div className="bg-white rounded-2xl p-5 shadow-sm">
-                        <h3
-                            className="font-bold uppercase tracking-wide mb-3 flex items-center gap-2"
-                            style={{ color: styles.primary_color || '#10B981', fontSize: '0.75rem', letterSpacing: '0.05em' }}
-                        >
-                            <Mail style={{ width: '1rem', height: '1rem' }} /> MESSAGE
-                        </h3>
-                        <p className="text-gray-700 leading-relaxed" style={{ fontSize: '0.875rem', lineHeight: '1.5' }}>
-                            {message}
-                        </p>
-                        {platform === 'sms' && message.length > 0 && (
-                            <p className="text-xs text-slate-500 mt-2">
-                                {message.length}/160 characters
-                            </p>
-                        )}
-                    </div>
-                )}
-
-                {/* Message Only Mode (WhatsApp) */}
-                {platform === 'whatsapp' && messageOnly && (
-                    <div className="bg-white rounded-2xl p-5 shadow-sm">
-                        <h3
-                            className="font-bold uppercase tracking-wide mb-3 flex items-center gap-2"
-                            style={{ color: styles.primary_color || '#10B981', fontSize: '0.75rem', letterSpacing: '0.05em' }}
-                        >
-                            <User style={{ width: '1rem', height: '1rem' }} /> RECIPIENT
-                        </h3>
-                        <p className="text-gray-700 text-sm italic">
-                            User will select contact
-                        </p>
-                    </div>
-                )}
-
-                {/* Action Button */}
-                <button
-                    className="w-full py-4 rounded-xl font-semibold text-base shadow-md transition-all flex items-center justify-center gap-2"
-                    style={{
-                        backgroundColor: styles.secondary_color || '#D1FAE5',
-                        color: styles.primary_color || '#10B981'
-                    }}
-                >
-                    <PlatformIcon className="w-5 h-5" />
-                    {currentPlatform.action}
-                </button>
-            </div>
-
-            {/* Footer Branding */}
-            <div
-                className="pb-6 text-center"
-                style={{ backgroundColor: styles.secondary_color || '#F1F5F9' }}
-            >
-                <p className="text-xs text-slate-600">
-                    Powered by <span className="font-semibold">QR Studio</span>
-                </p>
             </div>
         </div>
     );

@@ -82,7 +82,7 @@
     *   **Viewer**: PDF viewer implementation (using `iframe` or `react-pdf`) vs simple "Download" button.
 
 #### 9. App Store
-*   **Status**: ⚠️ **BROKEN BADGES**
+*   **Status**: ✅ **GOOD**
 *   **Must Consider**:
     *   Smart Redirect: (Optional) Detect OS and redirect to relevant store automatically?
     *   Simple Fix: Just ensure the badges link to the URLs provided by the creator.

@@ -326,13 +326,14 @@ export function WiFiForm() {
                 >
                     <div className="space-y-4 mt-4">
                         <div>
-                            <label className="block text-sm font-semibold text-slate-700 mb-2">Network Title (Optional)</label>
+                            <label className="block text-sm font-semibold text-slate-700 mb-2">Network Name (SSID) <span className="text-red-500">*</span></label>
                             <input
-                                {...register('network_info.title')}
-                                className="w-full px-3 sm:px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none text-base min-h-[44px]"
-                                placeholder="e.g. Guest WiFi"
+                                {...register('wifi_details.ssid', { required: 'SSID is required' })}
+                                className={`w-full px-3 sm:px-4 py-3 rounded-lg border ${errors.wifi_details?.ssid ? 'border-red-300' : 'border-slate-300'} focus:ring-2 focus:ring-blue-500 outline-none text-base min-h-[44px]`}
+                                placeholder="e.g. MyWiFiNetwork"
                             />
-                            <p className="text-xs text-slate-500 mt-1">A friendly name for your network</p>
+                            {errors.wifi_details?.ssid && <span className="text-xs text-red-500 mt-1">{errors.wifi_details.ssid.message}</span>}
+                            <p className="text-xs text-slate-500 mt-1">The name of your WiFi network</p>
                         </div>
 
                         <div>

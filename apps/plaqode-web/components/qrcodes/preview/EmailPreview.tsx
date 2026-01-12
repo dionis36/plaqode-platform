@@ -1,6 +1,6 @@
 'use client';
 
-import { Mail, User, FileText, Users, Eye } from 'lucide-react';
+import { Mail, User, FileText, Users, Eye, Send } from 'lucide-react';
 
 export function EmailPreview({ data }: { data: any }) {
 
@@ -8,36 +8,8 @@ export function EmailPreview({ data }: { data: any }) {
     const additionalRecipients = data.additional_recipients || {};
     const styles = data.styles || {};
 
-    // Helper to lighten a color
-    const lightenColor = (hex: string, percent: number = 30) => {
-        const num = parseInt(hex.replace('#', ''), 16);
-        const r = Math.min(255, (num >> 16) + Math.round(((255 - (num >> 16)) * percent) / 100));
-        const g = Math.min(255, ((num >> 8) & 0x00FF) + Math.round(((255 - ((num >> 8) & 0x00FF)) * percent) / 100));
-        const b = Math.min(255, (num & 0x0000FF) + Math.round(((255 - (num & 0x0000FF)) * percent) / 100));
-        return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`;
-    };
-
-    // Generate background style
-    const getBackgroundStyle = () => {
-        const primary = styles.primary_color || '#F59E0B';
-        const secondary = styles.secondary_color || '#FEF3C7';
-        const gradientType = styles.gradient_type || 'none';
-        const angle = styles.gradient_angle || 135;
-
-        if (gradientType === 'linear') {
-            return {
-                background: `linear-gradient(${angle}deg, ${primary}, ${secondary})`
-            };
-        } else if (gradientType === 'radial') {
-            return {
-                background: `radial-gradient(circle, ${primary}, ${secondary})`
-            };
-        }
-        // Default: subtle gradient from primary to lighter shade
-        return {
-            background: `linear-gradient(180deg, ${primary} 0%, ${lightenColor(primary, 30)} 100%)`
-        };
-    };
+    const primaryColor = styles.primary_color || '#F59E0B';
+    const secondaryColor = styles.secondary_color || '#FEF3C7';
 
     // Parse CC/BCC emails
     const ccEmails = additionalRecipients.cc?.split(',').map((e: string) => e.trim()).filter((e: string) => e) || [];
@@ -45,152 +17,157 @@ export function EmailPreview({ data }: { data: any }) {
 
     return (
         <div
-            className="absolute inset-0 w-full h-full flex flex-col overflow-y-auto"
+            className="absolute inset-0 w-full h-full font-sans overflow-hidden bg-white"
             style={{
-                backgroundColor: styles.secondary_color || '#F1F5F9',
-                scrollbarWidth: 'none',
-                msOverflowStyle: 'none'
+                background: `linear-gradient(135deg, ${primaryColor}15 0%, #ffffff 100%)`
             }}
         >
-            <style jsx>{`
-                div::-webkit-scrollbar {
-                    display: none;
-                }
+            <style jsx global>{`
+                .no-scrollbar::-webkit-scrollbar { display: none; }
+                .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
             `}</style>
 
-            {/* Gradient Header */}
-            <div
-                className="px-7 pt-28 pb-14 flex flex-col items-center text-center text-white"
-                style={getBackgroundStyle()}
-            >
-                {/* Email Icon */}
-                <div className="flex justify-center mb-4">
-                    <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl border border-white/30">
-                        <Mail className="w-7 h-7" />
-                    </div>
-                </div>
-
-                {/* Title */}
-                <h1
-                    className="text-xl font-bold text-center mb-2"
-                    style={{ color: styles.secondary_color || '#FFFFFF' }}
-                >
-                    Send Email
-                </h1>
-
-                {/* Subtitle */}
-                <p className="text-center text-white/90 text-sm">
-                    Scan to compose email
-                </p>
+            {/* --- Fixed Background Elements --- */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div
+                    className="absolute top-[-20%] left-[-20%] w-[120%] h-[60%] rounded-[100%] blur-3xl opacity-40 animate-pulse"
+                    style={{ background: primaryColor }}
+                />
+                <div
+                    className="absolute bottom-[-20%] right-[-20%] w-[100%] h-[50%] rounded-[100%] blur-3xl opacity-30"
+                    style={{ background: secondaryColor }}
+                />
             </div>
 
-            {/* Content Area with Rounded Top */}
-            <div
-                className="flex-1 px-4 pt-6 pb-4 space-y-3 rounded-t-3xl -mt-8"
-                style={{ backgroundColor: styles.secondary_color || '#F1F5F9' }}
-            >
-                {/* Recipient Card - Event Style */}
-                <div className="bg-white rounded-2xl p-5 shadow-md">
-                    <h3
-                        className="font-bold uppercase tracking-wide mb-3 flex items-center gap-2"
-                        style={{ color: styles.primary_color || '#F59E0B', fontSize: '0.6875rem', letterSpacing: '0.05em' }}
-                    >
-                        <User style={{ width: '1rem', height: '1rem' }} /> TO
-                    </h3>
-                    <p className="text-gray-900 font-semibold text-sm" style={{ wordBreak: 'break-all' }}>
-                        {emailDetails.recipient || 'recipient@example.com'}
+            {/* --- Scrollable Content --- */}
+            <div className="relative w-full h-full overflow-y-auto no-scrollbar flex flex-col z-10">
+
+                {/* Spacer */}
+                <div className="w-full flex-none pt-20" />
+
+                {/* 1. Header (Floating) */}
+                <div className="flex-none flex flex-col justify-center items-center pb-8 px-4 text-center">
+                    {/* Floating Icon */}
+                    <div className="relative group mb-5">
+                        <div className="absolute inset-0 bg-white rounded-full blur-2xl opacity-40 transition-opacity duration-500 scale-125" />
+                        <div
+                            className="relative h-24 w-24 bg-white rounded-3xl shadow-2xl flex items-center justify-center p-1 ring-4 ring-white/30 backdrop-blur-sm animate-in zoom-in-50 duration-700 ease-out rotate-3"
+                        >
+                            <Mail
+                                className="w-10 h-10"
+                                style={{ color: primaryColor }}
+                            />
+                        </div>
+                    </div>
+
+                    {/* Title */}
+                    <h1 className="text-3xl font-bold text-slate-900 tracking-tight drop-shadow-sm mb-2 px-2">
+                        Send Email
+                    </h1>
+                    <p className="text-slate-500 text-sm font-medium">
+                        Compose and send email
                     </p>
                 </div>
 
-                {/* Subject Card */}
-                {emailDetails.subject && (
-                    <div className="bg-white rounded-2xl p-5 shadow-md">
-                        <h3
-                            className="font-bold uppercase tracking-wide mb-3 flex items-center gap-2"
-                            style={{ color: styles.primary_color || '#F59E0B', fontSize: '0.75rem', letterSpacing: '0.05em' }}
-                        >
-                            <FileText style={{ width: '1rem', height: '1rem' }} /> SUBJECT
-                        </h3>
-                        <p className="text-gray-900 font-semibold" style={{ fontSize: '0.9375rem' }}>
-                            {emailDetails.subject}
-                        </p>
-                    </div>
-                )}
+                {/* 2. Main Glass Card */}
+                <div className="flex-shrink-0 px-4 flex justify-center pb-8">
+                    <div className="w-full max-w-sm bg-white/60 backdrop-blur-3xl rounded-[2.5rem] shadow-[0_30px_60px_-10px_rgba(0,0,0,0.1)] border border-white/80 px-6 py-8 flex flex-col items-stretch animate-in slide-in-from-bottom-8 duration-700 ring-1 ring-white/40">
 
-                {/* Message Body Card */}
-                {emailDetails.body && (
-                    <div className="bg-white rounded-2xl p-5 shadow-md">
-                        <h3
-                            className="font-bold uppercase tracking-wide mb-3 flex items-center gap-2"
-                            style={{ color: styles.primary_color || '#F59E0B', fontSize: '0.75rem', letterSpacing: '0.05em' }}
+                        {/* Open Email App Button */}
+                        <a
+                            href={`mailto:${emailDetails.recipient || ''}?subject=${encodeURIComponent(emailDetails.subject || '')}&body=${encodeURIComponent(emailDetails.body || '')}&cc=${encodeURIComponent(additionalRecipients.cc || '')}&bcc=${encodeURIComponent(additionalRecipients.bcc || '')}`}
+                            className="w-full py-4 rounded-xl font-bold shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 mb-8 text-white relative overflow-hidden"
+                            style={{ backgroundColor: primaryColor }}
                         >
-                            <Mail style={{ width: '1rem', height: '1rem' }} /> MESSAGE
-                        </h3>
-                        <p className="text-gray-700 leading-relaxed" style={{ fontSize: '0.875rem', lineHeight: '1.5' }}>
-                            {emailDetails.body}
-                        </p>
-                    </div>
-                )}
+                            <Send className="w-5 h-5" />
+                            <span>Open Email App</span>
+                        </a>
 
-                {/* CC Recipients Card */}
-                {ccEmails.length > 0 && (
-                    <div className="bg-white rounded-2xl p-5 shadow-md">
-                        <h3
-                            className="font-bold uppercase tracking-wide mb-3 flex items-center gap-2"
-                            style={{ color: styles.primary_color || '#F59E0B', fontSize: '0.75rem', letterSpacing: '0.05em' }}
-                        >
-                            <Users style={{ width: '1rem', height: '1rem' }} /> CC
-                        </h3>
-                        <div className="space-y-1">
-                            {ccEmails.map((email: string, idx: number) => (
-                                <p key={idx} className="text-gray-700" style={{ fontSize: '0.875rem', wordBreak: 'break-all' }}>
-                                    {email}
+                        <div className="space-y-3">
+                            {/* Recipient */}
+                            <div className="flex flex-col gap-3 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm transition-all">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-full flex items-center justify-center bg-slate-50 text-slate-600 transition-colors">
+                                        <User className="w-4 h-4" />
+                                    </div>
+                                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">To</p>
+                                </div>
+                                <p className="text-slate-800 font-medium break-all pl-1">
+                                    {emailDetails.recipient || 'recipient@example.com'}
                                 </p>
-                            ))}
+                            </div>
+
+                            {/* Subject */}
+                            {emailDetails.subject && (
+                                <div className="flex flex-col gap-3 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm transition-all">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 rounded-full flex items-center justify-center bg-slate-50 text-slate-600 transition-colors">
+                                            <FileText className="w-4 h-4" />
+                                        </div>
+                                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Subject</p>
+                                    </div>
+                                    <p className="text-slate-800 font-medium break-words pl-1">
+                                        {emailDetails.subject}
+                                    </p>
+                                </div>
+                            )}
+
+                            {/* Message Body */}
+                            {emailDetails.body && (
+                                <div className="flex flex-col gap-3 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm transition-all">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 rounded-full flex items-center justify-center bg-slate-50 text-slate-600 transition-colors">
+                                            <Mail className="w-4 h-4" />
+                                        </div>
+                                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Message</p>
+                                    </div>
+                                    <p className="text-slate-600 text-sm leading-relaxed whitespace-pre-wrap pl-1">
+                                        {emailDetails.body}
+                                    </p>
+                                </div>
+                            )}
+
+                            {/* CC */}
+                            {ccEmails.length > 0 && (
+                                <div className="flex flex-col gap-3 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm transition-all">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 rounded-full flex items-center justify-center bg-slate-50 text-slate-600 transition-colors">
+                                            <Users className="w-4 h-4" />
+                                        </div>
+                                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">CC</p>
+                                    </div>
+                                    <div className="space-y-1 pl-1">
+                                        {ccEmails.map((email: string, idx: number) => (
+                                            <p key={idx} className="text-slate-800 font-medium break-all">{email}</p>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* BCC */}
+                            {bccEmails.length > 0 && (
+                                <div className="flex flex-col gap-3 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm transition-all">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 rounded-full flex items-center justify-center bg-slate-50 text-slate-600 transition-colors">
+                                            <Eye className="w-4 h-4" />
+                                        </div>
+                                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">BCC</p>
+                                    </div>
+                                    <div className="space-y-1 pl-1">
+                                        {bccEmails.map((email: string, idx: number) => (
+                                            <p key={idx} className="text-slate-800 font-medium break-all">{email}</p>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
-                )}
+                </div>
 
-                {/* BCC Recipients Card */}
-                {bccEmails.length > 0 && (
-                    <div className="bg-white rounded-2xl p-5 shadow-md">
-                        <h3
-                            className="font-bold uppercase tracking-wide mb-3 flex items-center gap-2"
-                            style={{ color: styles.primary_color || '#F59E0B', fontSize: '0.75rem', letterSpacing: '0.05em' }}
-                        >
-                            <Eye style={{ width: '1rem', height: '1rem' }} /> BCC
-                        </h3>
-                        <div className="space-y-1">
-                            {bccEmails.map((email: string, idx: number) => (
-                                <p key={idx} className="text-gray-700" style={{ fontSize: '0.875rem', wordBreak: 'break-all' }}>
-                                    {email}
-                                </p>
-                            ))}
-                        </div>
-                    </div>
-                )}
-
-                {/* Open Email App Button */}
-                <button
-                    className="w-full py-4 rounded-xl font-semibold text-base shadow-md transition-all flex items-center justify-center gap-2"
-                    style={{
-                        backgroundColor: styles.secondary_color || '#FEF3C7',
-                        color: styles.primary_color || '#F59E0B'
-                    }}
-                >
-                    <Mail className="w-5 h-5" />
-                    Open Email App
-                </button>
-            </div>
-
-            {/* Footer Branding */}
-            <div
-                className="pb-6 text-center"
-                style={{ backgroundColor: styles.secondary_color || '#F1F5F9' }}
-            >
-                <p className="text-xs text-slate-600">
-                    Powered by <span className="font-semibold">QR Studio</span>
-                </p>
+                <div className="flex-1 min-h-0" />
+                <div className="flex-none pt-4 pb-4 text-[10px] uppercase tracking-widest text-slate-400 font-semibold text-center opacity-60">
+                    Powered by Plaqode
+                </div>
             </div>
         </div>
     );
