@@ -1,3 +1,6 @@
+import { FileText, Copy, Check } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { usePreviewContext } from './PreviewContext';
 import { MOCKUP_PREVIEW_DATA } from '../steps/mockupPreviewData';
 
 type TextPreviewProps = {
@@ -5,9 +8,11 @@ type TextPreviewProps = {
 };
 
 export function TextPreview({ data }: TextPreviewProps) {
+    const { setHeroBackgroundColor } = usePreviewContext();
+    const [copied, setCopied] = useState(false);
+
     const fallback = MOCKUP_PREVIEW_DATA.text;
 
-    // Check if user has started entering ANY content
     const hasUserInput =
         (data?.text_content?.title || '') !== '' ||
         (data?.text_content?.message || '') !== '';
@@ -19,111 +24,114 @@ export function TextPreview({ data }: TextPreviewProps) {
         message: activeData.text_content?.message || (hasUserInput ? '' : fallback.text_content.message),
     };
 
-    const styles = data.styles || fallback.styles;
+    const styles = data?.styles || {};
+    const primaryColor = styles.primary_color || '#3B82F6';
+    const secondaryColor = styles.secondary_color || '#EFF6FF';
 
-    const primaryColor = styles.primary_color || fallback.styles.primary_color;
-    const secondaryColor = styles.secondary_color || fallback.styles.secondary_color;
-    const gradientType = styles.gradient_type || 'none';
-    const gradientAngle = styles.gradient_angle || 135;
+    useEffect(() => {
+        setHeroBackgroundColor(primaryColor);
+    }, [primaryColor, setHeroBackgroundColor]);
 
-    // Optional title
-    const title = textContent.title;
-    const message = textContent.message;
-
-    // Helper to lighten a color
-    const lightenColor = (hex: string, percent: number = 30) => {
-        const num = parseInt(hex.replace('#', ''), 16);
-        const r = Math.min(255, (num >> 16) + Math.round(((255 - (num >> 16)) * percent) / 100));
-        const g = Math.min(255, ((num >> 8) & 0x00FF) + Math.round(((255 - ((num >> 8) & 0x00FF)) * percent) / 100));
-        const b = Math.min(255, (num & 0x0000FF) + Math.round(((255 - (num & 0x0000FF)) * percent) / 100));
-        return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`;
-    };
-
-    // Lorem ipsum placeholder
-    const placeholderText = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
-Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.`;
-
-    // Generate background style
-    const getBackgroundStyle = () => {
-        if (gradientType === 'linear') {
-            return {
-                background: `linear-gradient(${gradientAngle}deg, ${primaryColor}, ${secondaryColor})`
-            };
-        } else if (gradientType === 'radial') {
-            return {
-                background: `radial-gradient(circle, ${primaryColor}, ${secondaryColor})`
-            };
-        } else {
-            return {
-                backgroundColor: secondaryColor
-            };
+    const handleCopy = () => {
+        const textToCopy = textContent.message || '';
+        if (textToCopy) {
+            navigator.clipboard.writeText(textToCopy);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
         }
     };
 
-    const lightPrimary = lightenColor(primaryColor, 95);
-
     return (
         <div
-            className="absolute inset-0 w-full h-full overflow-y-auto font-sans"
+            className="absolute inset-0 w-full h-full font-sans overflow-hidden bg-white"
             style={{
-                ...getBackgroundStyle(),
-                scrollbarWidth: 'none', // Firefox
-                msOverflowStyle: 'none', // IE/Edge
+                background: `linear-gradient(135deg, ${primaryColor}15 0%, #ffffff 100%)`
             }}
         >
-            {/* Hide scrollbar for Chrome/Safari */}
-            <style jsx>{`
-                div::-webkit-scrollbar {
-                    display: none;
-                }
+            <style jsx global>{`
+                .no-scrollbar::-webkit-scrollbar { display: none; }
+                .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
             `}</style>
 
-            <div className="min-h-full px-6 py-8 flex flex-col">
-                {/* Top margin */}
-                <div className="flex-shrink-0 h-16"></div>
+            {/* --- Fixed Background Elements --- */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div
+                    className="absolute top-[-20%] left-[-20%] w-[120%] h-[60%] rounded-[100%] blur-3xl opacity-40 animate-pulse"
+                    style={{ background: primaryColor }}
+                />
+                <div
+                    className="absolute bottom-[-20%] right-[-20%] w-[100%] h-[50%] rounded-[100%] blur-3xl opacity-30"
+                    style={{ background: secondaryColor }}
+                />
+            </div>
 
-                {/* Optional Title */}
-                {title && (
-                    <h1
-                        className="text-2xl font-bold text-center mb-6 px-4"
-                        style={{ color: primaryColor }}
-                    >
-                        {title}
-                    </h1>
-                )}
+            {/* --- Scrollable Content --- */}
+            <div className="relative w-full h-full overflow-y-auto no-scrollbar flex flex-col z-10">
 
-                {/* Text Content */}
-                {message ? (
-                    <div className="bg-white rounded-2xl p-6 shadow-md w-full relative">
+                {/* Spacer */}
+                <div className="w-full flex-none pt-20" />
 
-
-                        <p className="text-slate-800 text-lg leading-relaxed whitespace-pre-wrap relative z-10 font-medium">
-                            {message}
-                        </p>
-                    </div>
-                ) : (
-                    hasUserInput ? null : (
-                        <div className="text-center py-12 px-4">
-                            {/* Assuming 'Type' is an icon component, it needs to be imported or defined */}
-                            {/* <Type className="w-16 h-16 text-slate-300 mx-auto mb-4" /> */}
-                            <p className="text-slate-400 font-medium">
-                                Enter your text message to see it previewed here
-                            </p>
+                {/* 1. Header (Floating) */}
+                <div className="flex-none flex flex-col justify-center items-center pb-8 px-4 text-center">
+                    {/* Floating Icon */}
+                    <div className="relative group mb-5">
+                        <div className="absolute inset-0 bg-white rounded-full blur-2xl opacity-40 transition-opacity duration-500 scale-125" />
+                        <div
+                            className="relative h-24 w-24 bg-white rounded-3xl shadow-2xl flex items-center justify-center p-1 ring-4 ring-white/30 backdrop-blur-sm animate-in zoom-in-50 duration-700 ease-out rotate-3"
+                        >
+                            <FileText
+                                className="w-10 h-10"
+                                style={{ color: primaryColor }}
+                            />
                         </div>
-                    )
-                )}
+                    </div>
 
-                {/* Bottom spacing for scroll allowance */}
-                <div className="flex-shrink-0 h-8"></div>
-
-                {/* Footer Branding */}
-                <div className="mt-auto pt-6 text-center">
-                    <p className="text-xs text-slate-600">
-                        Powered by <span className="font-semibold">QR Studio</span>
+                    {/* Title */}
+                    <h1 className="text-3xl font-bold text-slate-900 tracking-tight drop-shadow-sm mb-2 px-2 break-words max-w-xs">
+                        {textContent.title || 'Text Message'}
+                    </h1>
+                    <p className="text-slate-500 text-sm font-medium">
+                        Read message
                     </p>
+                </div>
+
+                {/* 2. Main Glass Card */}
+                <div className="flex-shrink-0 px-4 flex justify-center pb-8">
+                    <div className="w-full max-w-sm bg-white/60 backdrop-blur-3xl rounded-[2.5rem] shadow-[0_30px_60px_-10px_rgba(0,0,0,0.1)] border border-white/80 px-6 py-8 flex flex-col items-stretch animate-in slide-in-from-bottom-8 duration-700 ring-1 ring-white/40">
+
+                        <div className="space-y-6">
+                            {/* Text Content Area */}
+                            <div className="relative">
+                                <div className="absolute -inset-1 rounded-2xl bg-gradient-to-b from-white to-slate-50 opacity-50 blur-sm" />
+                                <div className="relative bg-white border border-slate-100 rounded-2xl p-6 shadow-sm min-h-[160px] flex items-start">
+                                    <p className="text-slate-700 text-lg leading-relaxed whitespace-pre-wrap font-medium break-words w-full">
+                                        {textContent.message || <span className="text-slate-400 italic">No text content provided.</span>}
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Copy Button */}
+                            <button
+                                onClick={handleCopy}
+                                disabled={copied || !textContent.message}
+                                className="w-full h-14 rounded-2xl font-bold shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 text-white relative overflow-hidden"
+                                style={{
+                                    backgroundColor: primaryColor,
+                                    opacity: !textContent.message ? 0.7 : 1,
+                                    cursor: !textContent.message ? 'not-allowed' : 'pointer'
+                                }}
+                            >
+                                {copied ? <Check className="w-6 h-6" /> : <Copy className="w-6 h-6" />}
+                                <span className="text-lg">{copied ? 'Copied' : 'Copy Text'}</span>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div className="flex-1 min-h-0" />
+                <div className="flex-none pt-4 pb-4 text-[10px] uppercase tracking-widest text-slate-400 font-semibold text-center opacity-60">
+                    Powered by Plaqode
                 </div>
             </div>
         </div>

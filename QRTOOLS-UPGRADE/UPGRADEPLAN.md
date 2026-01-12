@@ -88,7 +88,7 @@
     *   Simple Fix: Just ensure the badges link to the URLs provided by the creator.
 
 #### 10. Email & SMS
-*   **Status**: ⚠️ **BROKEN ACTIONS**
+*   **Status**: ✅ **GOOD**
 *   **Must Consider**:
     *   **Email**: `mailto:` scheme construction.
     *   **SMS**: `sms:` scheme (iOS relies on `&` vs `?` separator sometimes, stick to standard).
@@ -127,3 +127,9 @@ For each tool upgrade in the roadmap above:
 - [ ] **Public App**: **Copy/Create** `apps/plaqode-web/components/qrcodes/preview/[Tool]Preview.tsx`.
 - [ ] **Verify**: Run `dev` and test local preview and actions.
 - [ ] **Mark Complete**: Update this roadmap.
+
+
+## 4. WHATS LEFT TO DO
+*   **URL**
+*   **MEDIA - AUDIO, VIDEO**
+*   **MENU**
