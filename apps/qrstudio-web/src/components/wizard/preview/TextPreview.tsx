@@ -71,21 +71,9 @@ export function TextPreview({ data }: TextPreviewProps) {
                 {/* Spacer */}
                 <div className="w-full flex-none pt-20" />
 
+
                 {/* 1. Header (Floating) */}
                 <div className="flex-none flex flex-col justify-center items-center pb-8 px-4 text-center">
-                    {/* Floating Icon */}
-                    <div className="relative group mb-5">
-                        <div className="absolute inset-0 bg-white rounded-full blur-2xl opacity-40 transition-opacity duration-500 scale-125" />
-                        <div
-                            className="relative h-24 w-24 bg-white rounded-3xl shadow-2xl flex items-center justify-center p-1 ring-4 ring-white/30 backdrop-blur-sm animate-in zoom-in-50 duration-700 ease-out rotate-3"
-                        >
-                            <FileText
-                                className="w-10 h-10"
-                                style={{ color: primaryColor }}
-                            />
-                        </div>
-                    </div>
-
                     {/* Title */}
                     <h1 className="text-3xl font-bold text-slate-900 tracking-tight drop-shadow-sm mb-2 px-2 break-words max-w-xs">
                         {textContent.title || 'Text Message'}
@@ -96,25 +84,20 @@ export function TextPreview({ data }: TextPreviewProps) {
                 </div>
 
                 {/* 2. Main Glass Card */}
-                <div className="flex-shrink-0 px-4 flex justify-center pb-8">
-                    <div className="w-full max-w-sm bg-white/60 backdrop-blur-3xl rounded-[2.5rem] shadow-[0_30px_60px_-10px_rgba(0,0,0,0.1)] border border-white/80 px-6 py-8 flex flex-col items-stretch animate-in slide-in-from-bottom-8 duration-700 ring-1 ring-white/40">
+                <div className="flex-shrink-0 px-4 flex justify-center pb-8 w-full">
+                    <div className="w-full max-w-md bg-white/90 backdrop-blur-3xl rounded-[2rem] shadow-xl border border-white/50 px-8 py-10 flex flex-col items-stretch animate-in slide-in-from-bottom-8 duration-700">
 
-                        <div className="space-y-6">
-                            {/* Text Content Area */}
-                            <div className="relative">
-                                <div className="absolute -inset-1 rounded-2xl bg-gradient-to-b from-white to-slate-50 opacity-50 blur-sm" />
-                                <div className="relative bg-white border border-slate-100 rounded-2xl p-6 shadow-sm min-h-[160px] flex items-start">
-                                    <p className="text-slate-700 text-lg leading-relaxed whitespace-pre-wrap font-medium break-words w-full">
-                                        {textContent.message || <span className="text-slate-400 italic">No text content provided.</span>}
-                                    </p>
-                                </div>
-                            </div>
+                        <div className="space-y-8">
+                            {/* Text Content */}
+                            <p className="text-slate-900 text-base sm:text-lg leading-relaxed whitespace-pre-wrap font-normal break-words w-full text-left">
+                                {textContent.message || <span className="text-slate-400 italic">No text content provided.</span>}
+                            </p>
 
                             {/* Copy Button */}
                             <button
                                 onClick={handleCopy}
                                 disabled={copied || !textContent.message}
-                                className="w-full h-14 rounded-2xl font-bold shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 text-white relative overflow-hidden"
+                                className="w-full h-14 rounded-2xl font-bold shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 text-white relative overflow-hidden mt-4"
                                 style={{
                                     backgroundColor: primaryColor,
                                     opacity: !textContent.message ? 0.7 : 1,
