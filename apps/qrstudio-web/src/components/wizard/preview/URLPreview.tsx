@@ -150,7 +150,13 @@ export function URLPreview({ data }: URLPreviewProps) {
                                     <div className="flex items-center justify-center gap-2 py-2 px-3 bg-slate-50/80 rounded-xl border border-slate-100 w-full overflow-hidden">
                                         <ExternalLink className="w-3 h-3 text-slate-400 flex-shrink-0" />
                                         <p className="text-xs text-slate-500 truncate max-w-full font-mono">
-                                            {urlDetails.destination_url ? new URL(urlDetails.destination_url).hostname : '...'}
+                                            {(() => {
+                                                try {
+                                                    return urlDetails.destination_url ? new URL(urlDetails.destination_url).hostname : '...';
+                                                } catch {
+                                                    return urlDetails.destination_url || '...';
+                                                }
+                                            })()}
                                         </p>
                                     </div>
                                 </div>

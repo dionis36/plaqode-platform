@@ -198,7 +198,13 @@ export function SmartLandingPage({ qrCode }: SmartLandingPageProps) {
                                 <div className="mt-6 flex items-center justify-center gap-2 py-2 px-4 bg-slate-50/80 rounded-xl border border-slate-100 w-full overflow-hidden">
                                     <ExternalLink className="w-3 h-3 text-slate-400 flex-shrink-0" />
                                     <p className="text-xs text-slate-500 truncate font-mono">
-                                        {destinationUrl ? new URL(destinationUrl).hostname : '...'}
+                                        {(() => {
+                                            try {
+                                                return destinationUrl ? new URL(destinationUrl).hostname : '...';
+                                            } catch {
+                                                return destinationUrl || '...';
+                                            }
+                                        })()}
                                     </p>
                                 </div>
 
