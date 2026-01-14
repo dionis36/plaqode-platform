@@ -45,6 +45,36 @@ async function getQrData(shortcode: string) {
     return null;
 }
 
+async function recordScan(shortcode: string) {
+    try {
+        const { headers } = await import('next/headers');
+        const list = headers();
+        const userAgent = list.get('user-agent') || 'Unknown';
+        const referrer = list.get('referer') || '';
+        const ip = list.get('x-forwarded-for') || list.get('x-real-ip') || 'Unknown';
+
+        // Fire and forget (don't await to avoid delaying redirect too much, 
+        // though Vercel functions might kill it if not awaited. 
+        // Best practice is to await but keep timeout short).
+        await fetch(`${env.NEXT_PUBLIC_QRSTUDIO_API_URL}/analytics/scan/${shortcode}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'User-Agent': userAgent,
+                'X-Forwarded-For': ip
+            },
+            body: JSON.stringify({
+                timezone: 'UTC', // Best guess for server-side
+                url: `https://plaqode.com/q/${shortcode}`, // Approximate
+                referrer: referrer
+            }),
+            signal: AbortSignal.timeout(2000) // 2s max timeout
+        });
+    } catch (err) {
+        console.error('Failed to record server-side scan', err);
+    }
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
     const data = await getQrData(params.shortcode);
 
@@ -76,11 +106,17 @@ export default async function MockupViewerPage({ params }: PageProps) {
         const redirectSettings = data.payload?.redirect_settings;
 
         // server-side instant redirect
+        // server-side instant redirect
         if ((redirectSettings?.show_preview === false || redirectSettings?.delay === 0) && urlDetails?.destination_url) {
+            // Must await to ensure analytics are recorded before the response terminates
+            await recordScan(params.shortcode);
             redirect(urlDetails.destination_url);
         }
 
         // Render the specialized SmartLandingPage (Client Component)
+        // Render the specialized SmartLandingPage (Client Component)
+        // Also record scan for non-instant redirects to ensure consistency
+        await recordScan(params.shortcode);
         return <SmartLandingPage qrCode={data} />;
     }
 

@@ -324,6 +324,13 @@ export function URLForm() {
                                 className="w-full px-3 sm:px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none text-base min-h-[44px]"
                                 placeholder="https://example.com"
                                 type="url"
+                                onBlur={(e) => {
+                                    let val = e.target.value.trim();
+                                    if (val && !/^https?:\/\//i.test(val)) {
+                                        val = 'https://' + val;
+                                        setValue('url_details.destination_url', val);
+                                    }
+                                }}
                             />
                             <p className="text-xs text-slate-500 mt-1">The URL where users will be redirected after scanning</p>
                         </div>
