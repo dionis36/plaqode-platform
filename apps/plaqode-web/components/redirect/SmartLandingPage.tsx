@@ -204,7 +204,7 @@ export function SmartLandingPage({ qrCode }: SmartLandingPageProps) {
                             {/* Custom Message */}
                             {customMessage && (
                                 <p className="mt-8 text-sm text-slate-600 text-center font-medium bg-slate-50/50 px-4 py-3 rounded-xl border border-slate-100 w-full">
-                                    "{customMessage}"
+                                    &quot;{customMessage}&quot;
                                 </p>
                             )}
 

@@ -157,7 +157,7 @@ export function URLPreview({ data }: URLPreviewProps) {
                             {/* Custom Message */}
                             {redirectSettings.custom_message && (
                                 <p className="mt-6 text-sm text-slate-600 text-center font-medium bg-slate-50/50 px-4 py-2 rounded-lg w-full">
-                                    "{redirectSettings.custom_message}"
+                                    &quot;{redirectSettings.custom_message}&quot;
                                 </p>
                             )}
 
