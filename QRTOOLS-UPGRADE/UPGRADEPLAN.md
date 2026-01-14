@@ -130,6 +130,5 @@ For each tool upgrade in the roadmap above:
 
 
 ## 4. WHATS LEFT TO DO
-*   **URL**
 *   **MEDIA - AUDIO, VIDEO**
 *   **MENU**

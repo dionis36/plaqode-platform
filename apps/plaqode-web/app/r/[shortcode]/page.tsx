@@ -86,7 +86,8 @@ export default async function ViewerPage({ params }: ViewerPageProps) {
         const redirectSettings = qrCode.payload?.redirect_settings;
 
         // Fallback for instant redirect if backend didn't catch it for some reason
-        if (redirectSettings?.show_preview === false && urlDetails?.destination_url) {
+        // We handle this on the server for better performance if explicitly requested (no preview) OR zero delay
+        if ((redirectSettings?.show_preview === false || redirectSettings?.delay === 0) && urlDetails?.destination_url) {
             redirect(urlDetails.destination_url);
         }
 
