@@ -1,5 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { redirect } from 'next/navigation';
+import { SmartLandingPage } from '@/components/redirect/SmartLandingPage';
 import { env } from '@/lib/env';
 import { ViewerClient } from './client';
 
@@ -67,6 +69,20 @@ export default async function MockupViewerPage({ params }: PageProps) {
 
     // Server Action to record scan analytics (optional, can be done in client)
     // For now we trust the client component to handle rendering
+
+    // 3. URL Type Handling (Server-Side Logic for Speed & Correctness)
+    if (data.type === 'url') {
+        const urlDetails = data.payload?.url_details;
+        const redirectSettings = data.payload?.redirect_settings;
+
+        // server-side instant redirect
+        if ((redirectSettings?.show_preview === false || redirectSettings?.delay === 0) && urlDetails?.destination_url) {
+            redirect(urlDetails.destination_url);
+        }
+
+        // Render the specialized SmartLandingPage (Client Component)
+        return <SmartLandingPage qrCode={data} />;
+    }
 
     return <ViewerClient data={data} />;
 }
