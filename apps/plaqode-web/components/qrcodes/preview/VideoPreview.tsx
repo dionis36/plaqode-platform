@@ -1,4 +1,5 @@
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { Share2, Video, Play, ExternalLink } from 'lucide-react';
 
@@ -176,10 +177,12 @@ export function VideoPreview({ data }: VideoPreviewProps) {
                                                         className="absolute inset-0 cursor-pointer flex items-center justify-center bg-slate-900 group"
                                                     >
                                                         {displayThumbnail ? (
-                                                            <img
+                                                            <Image
                                                                 src={displayThumbnail}
                                                                 alt={video.title}
-                                                                className="w-full h-full object-cover opacity-90 transition-opacity"
+                                                                fill
+                                                                sizes="(max-width: 768px) 100vw, 400px"
+                                                                className="object-cover opacity-90 transition-opacity"
                                                             />
                                                         ) : (
                                                             <div className="w-full h-full bg-gradient-to-br from-slate-800 to-slate-900" />

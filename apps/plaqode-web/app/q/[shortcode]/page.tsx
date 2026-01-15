@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { redirect } from 'next/navigation';
 import { SmartLandingPage } from '@/components/redirect/SmartLandingPage';
 import { env } from '@/lib/env';
-import { ViewerClient } from './client';
+import ViewerClient from './client';
 
 interface PageProps {
     params: {
