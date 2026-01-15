@@ -55,7 +55,26 @@ export const useWizardStore = create<WizardState>()(persist((set) => ({
             title: 'We value your feedback',
             description: 'Please select a platform below to leave your review.'
         },
-        audio: { title: '', description: '', audio_url: '', cover_image: '' },
+        audio: {
+            title: '',
+            description: '',
+            cover_image: '',
+            // Source
+            source_type: 'file',
+            audio_url: '',
+            file_data: undefined, // Base64 data (not persisted)
+            file_name: '',
+            file_mime: '',
+            // Features
+            allow_download: true,
+            // Distribution
+            streaming: {
+                spotify: '',
+                apple: '',
+                soundcloud: '',
+                youtube_music: ''
+            }
+        },
         video: {
             page_title: 'My Video Playlist',
             page_description: 'Check out these videos!',
@@ -210,7 +229,9 @@ export const useWizardStore = create<WizardState>()(persist((set) => ({
             ...state.payload,
             audio: {
                 ...state.payload.audio,
-                file_data: undefined // Don't persist large file data
+                file_data: undefined, // Don't persist large file data
+                // If url is a data: url, don't persist it
+                audio_url: state.payload.audio?.audio_url?.startsWith('data:') ? undefined : state.payload.audio?.audio_url
             },
             video: {
                 ...state.payload.video,
