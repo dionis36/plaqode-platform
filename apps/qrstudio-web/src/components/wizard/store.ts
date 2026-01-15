@@ -56,7 +56,13 @@ export const useWizardStore = create<WizardState>()(persist((set) => ({
             description: 'Please select a platform below to leave your review.'
         },
         audio: { title: '', description: '', audio_url: '', cover_image: '' },
-        video: { title: '', description: '', video_url: '' },
+        video: {
+            page_title: 'My Video Playlist',
+            page_description: 'Check out these videos!',
+            share_button: true,
+            buttons: [],
+            videos: []
+        },
         business: {
             name: '',
             description: '',
@@ -150,7 +156,13 @@ export const useWizardStore = create<WizardState>()(persist((set) => ({
                 description: 'Please select a platform below to leave your review.'
             },
             audio: { title: '', description: '', audio_url: '', cover_image: '' },
-            video: { title: '', description: '', video_url: '' },
+            video: {
+                page_title: 'My Video Playlist',
+                page_description: 'Check out these videos!',
+                share_button: true,
+                buttons: [],
+                videos: []
+            },
             business: {
                 name: '',
                 description: '',
@@ -192,6 +204,20 @@ export const useWizardStore = create<WizardState>()(persist((set) => ({
 }), {
     name: 'wizard-storage',
     version: 1, // Increment to invalidate old cache with missing keys
+    partialize: (state) => ({
+        ...state,
+        payload: {
+            ...state.payload,
+            audio: {
+                ...state.payload.audio,
+                file_data: undefined // Don't persist large file data
+            },
+            video: {
+                ...state.payload.video,
+                file_data: undefined // Don't persist large file data
+            }
+        }
+    }),
     storage: createJSONStorage(() => {
         if (typeof window !== 'undefined') {
             return localStorage;

@@ -88,7 +88,7 @@ export function VideoPreview({ data }: VideoPreviewProps) {
                             className="relative h-24 w-24 bg-white rounded-3xl shadow-2xl flex items-center justify-center p-1 ring-4 ring-white/30 backdrop-blur-sm animate-in zoom-in-50 duration-700 ease-out rotate-3"
                         >
                             <div className="w-full h-full rounded-2xl flex items-center justify-center text-white font-bold text-3xl" style={{ backgroundColor: primaryColor }}>
-                                <Video className="w-10 h-10 text-white" />
+                                {pageInfo.title.charAt(0)}
                             </div>
                         </div>
                     </div>
@@ -232,7 +232,7 @@ export function VideoPreview({ data }: VideoPreviewProps) {
                 </div>
 
                 <div className="flex-1 min-h-0" />
-                <div className="flex-none pt-4 pb-6 text-[10px] uppercase tracking-widest text-slate-400 font-semibold text-center opacity-60">
+                <div className="flex-none pt-4 pb-4 text-[10px] uppercase tracking-widest text-slate-400 font-semibold text-center opacity-60">
                     Powered by Plaqode
                 </div>
             </div>

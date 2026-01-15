@@ -17,11 +17,24 @@ type FormValues = {
 
     // Content
     title: string;
-    description: string; // Artist or Album
+    description: string;
     audio_url: string;
     cover_image?: string;
 
-    // Auto-play option? (Maybe later, keep simple for now)
+    // New Fields
+    audio: {
+        source_type: 'file' | 'url';
+        file_data?: string;
+        file_name?: string;
+        file_mime?: string;
+        allow_download: boolean;
+        streaming?: {
+            spotify?: string;
+            apple?: string;
+            soundcloud?: string;
+            youtube_music?: string;
+        }
+    };
 };
 
 // Accordion Component
@@ -116,7 +129,17 @@ export function AudioForm() {
             title: payload.audio?.title || 'My Track',
             description: payload.audio?.description || 'Original Mix',
             audio_url: payload.audio?.audio_url || '',
-            cover_image: payload.audio?.cover_image || ''
+            cover_image: payload.audio?.cover_image || '',
+
+            // New Defaults
+            'audio.source_type': payload.audio?.source_type || 'url',
+            'audio.file_data': payload.audio?.file_data || '',
+            'audio.file_name': payload.audio?.file_name || '',
+            'audio.allow_download': payload.audio?.allow_download ?? true,
+            'audio.streaming.spotify': payload.audio?.streaming?.spotify || '',
+            'audio.streaming.apple': payload.audio?.streaming?.apple || '',
+            'audio.streaming.soundcloud': payload.audio?.streaming?.soundcloud || '',
+            'audio.streaming.youtube_music': payload.audio?.streaming?.youtube_music || '',
         },
         mode: 'onChange'
     });
@@ -139,14 +162,21 @@ export function AudioForm() {
         }
     }, [editMode, payload, reset]);
 
-    // Watch for changes and update global store
     useEffect(() => {
         const subscription = watch((value) => {
             const audioPayload = {
-                title: value.title,
-                description: value.description,
-                audio_url: value.audio_url,
-                cover_image: value.cover_image
+                title: value.title || 'My Track',
+                description: value.description || '',
+                audio_url: value.audio_url || '',
+                cover_image: value.cover_image || '',
+
+                // Merge nested audio fields
+                source_type: value.audio?.source_type,
+                file_data: value.audio?.file_data,
+                file_name: value.audio?.file_name,
+                file_mime: value.audio?.file_mime,
+                allow_download: value.audio?.allow_download,
+                streaming: value.audio?.streaming
             };
 
             updatePayload({
@@ -309,40 +339,162 @@ export function AudioForm() {
                 {/* 3. Audio Source */}
                 <AccordionSection
                     title="Audio Source"
-                    subtitle="Link to your audio file"
+                    subtitle="Upload file or external link"
                     icon={LinkIcon}
                     color="bg-cyan-100 text-cyan-600"
                     isOpen={openSections.file}
                     onToggle={() => toggleSection('file')}
                 >
-                    <div className="space-y-4 mt-4">
-                        <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 text-sm text-blue-700 mb-2">
-                            <strong>Note:</strong> Currently we support direct links to MP3, WAV, or OGG files.
+                    <div className="space-y-6 mt-4">
+                        {/* Source Type Toggle */}
+                        <div className="flex p-1 bg-slate-100 rounded-lg">
+                            <button
+                                type="button"
+                                onClick={() => setValue('audio.source_type', 'url')}
+                                className={`flex-1 py-2 text-sm font-medium rounded-md transition-all ${watch('audio.source_type') !== 'file' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-900'}`}
+                            >
+                                External URL
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setValue('audio.source_type', 'file')}
+                                className={`flex-1 py-2 text-sm font-medium rounded-md transition-all ${watch('audio.source_type') === 'file' ? 'bg-white text-cyan-700 shadow-sm' : 'text-slate-500 hover:text-slate-900'}`}
+                            >
+                                Upload File
+                            </button>
                         </div>
 
-                        <div>
-                            <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                Audio URL <span className="text-red-500">*</span>
-                            </label>
-                            <div className="flex gap-2">
-                                <span className="flex-none p-3 bg-slate-100 border border-slate-200 rounded-l-lg text-slate-500">
-                                    <Music size={20} />
-                                </span>
+                        {watch('audio.source_type') === 'file' ? (
+                            /* File Upload Mode */
+                            <div className="space-y-4">
+                                <div className="bg-cyan-50 border border-cyan-100 rounded-lg p-4 text-sm text-cyan-700">
+                                    <strong>Supported formats:</strong> MP3, WAV, OGG, AAC (Max 15MB)
+                                </div>
+
+                                {!watch('audio.file_data') ? (
+                                    <div
+                                        onClick={() => document.getElementById('audio-upload')?.click()}
+                                        className="border-2 border-dashed border-slate-300 hover:border-cyan-400 rounded-xl p-8 text-center cursor-pointer transition-all bg-slate-50 hover:bg-cyan-50"
+                                    >
+                                        <Music className="w-10 h-10 text-slate-400 mx-auto mb-3" />
+                                        <p className="text-sm font-semibold text-slate-700">Click to upload audio file</p>
+                                        <p className="text-xs text-slate-500 mt-1">Up to 15MB</p>
+                                        <input
+                                            id="audio-upload"
+                                            type="file"
+                                            accept="audio/*"
+                                            className="hidden"
+                                            onChange={(e) => {
+                                                const file = e.target.files?.[0];
+                                                if (file) {
+                                                    if (file.size > 15 * 1024 * 1024) {
+                                                        alert('File too large. Max 15MB');
+                                                        return;
+                                                    }
+                                                    const reader = new FileReader();
+                                                    reader.onload = (ev) => {
+                                                        const base64 = ev.target?.result as string;
+                                                        const base64Data = base64.split(',')[1];
+                                                        setValue('audio.file_data', base64Data);
+                                                        setValue('audio.file_name', file.name);
+                                                        setValue('audio.file_mime', file.type);
+                                                        // Auto-fill audio_url for preview if needed, or handle in preview
+                                                        setValue('audio_url', base64);
+                                                    };
+                                                    reader.readAsDataURL(file);
+                                                }
+                                            }}
+                                        />
+                                    </div>
+                                ) : (
+                                    <div className="flex items-center justify-between p-4 bg-white border border-slate-200 rounded-xl shadow-sm">
+                                        <div className="flex items-center gap-3 overflow-hidden">
+                                            <div className="w-10 h-10 rounded-full bg-cyan-100 flex items-center justify-center flex-shrink-0">
+                                                <Music className="w-5 h-5 text-cyan-600" />
+                                            </div>
+                                            <div className="min-w-0">
+                                                <p className="text-sm font-medium text-slate-900 truncate">{watch('audio.file_name')}</p>
+                                                <p className="text-xs text-slate-500">Ready to play</p>
+                                            </div>
+                                        </div>
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setValue('audio.file_data', '');
+                                                setValue('audio.file_name', '');
+                                                setValue('audio_url', '');
+                                            }}
+                                            className="p-2 text-slate-400 hover:text-red-500 transition-colors"
+                                        >
+                                            <ChevronDown className="w-5 h-5 rotate-45" /> {/* X icon replacement */}
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            /* URL Mode */
+                            <div>
+                                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                                    Audio URL <span className="text-red-500">*</span>
+                                </label>
+                                <div className="flex gap-2">
+                                    <span className="flex-none p-3 bg-slate-100 border border-slate-200 rounded-l-lg text-slate-500">
+                                        <LinkIcon size={20} />
+                                    </span>
+                                    <input
+                                        {...register('audio_url', {
+                                            required: watch('audio.source_type') !== 'file' ? 'Audio URL is required' : false
+                                        })}
+                                        type="text"
+                                        className={`flex-1 px-3 rounded-r-lg border border-l-0 ${errors.audio_url ? 'border-red-300' : 'border-slate-300'} focus:ring-2 focus:ring-blue-500 outline-none text-base min-h-[44px]`}
+                                        placeholder="https://example.com/audio.mp3"
+                                    />
+                                </div>
+                                {errors.audio_url && <span className="text-xs text-red-500 mt-1">{errors.audio_url.message}</span>}
+                            </div>
+                        )}
+
+                        <div className="pt-4 border-t border-slate-100">
+                            <label className="flex items-center gap-2 cursor-pointer">
                                 <input
-                                    {...register('audio_url', {
-                                        required: 'Audio URL is required',
-                                        pattern: {
-                                            value: /^https?:\/\/.+/,
-                                            message: 'Please enter a valid URL (https://...)'
-                                        }
-                                    })}
+                                    type="checkbox"
+                                    {...register('audio.allow_download')}
+                                    className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                                />
+                                <span className="text-sm text-slate-700 font-medium">Allow users to download audio file</span>
+                            </label>
+                        </div>
+                    </div>
+                </AccordionSection>
+
+                {/* 4. Streaming Links */}
+                <AccordionSection
+                    title="Streaming Platforms"
+                    subtitle="Links to Spotify, Apple Music, etc."
+                    icon={Music}
+                    color="bg-green-100 text-green-600"
+                    isOpen={true} // Keep open for visibility for now
+                    onToggle={() => { }} // Handle toggle state if added to openSections
+                >
+                    <div className="space-y-4 mt-4">
+                        {[
+                            { id: 'spotify', label: 'Spotify', placeholder: 'https://open.spotify.com/...' },
+                            { id: 'apple', label: 'Apple Music', placeholder: 'https://music.apple.com/...' },
+                            { id: 'soundcloud', label: 'SoundCloud', placeholder: 'https://soundcloud.com/...' },
+                            { id: 'youtube_music', label: 'YouTube Music', placeholder: 'https://music.youtube.com/...' },
+                        ].map((platform) => (
+                            <div key={platform.id}>
+                                <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
+                                    {platform.label}
+                                </label>
+                                <input
+                                    {...register(`audio.streaming.${platform.id}` as any)}
                                     type="text"
-                                    className={`flex-1 px-3 rounded-r-lg border border-l-0 ${errors.audio_url ? 'border-red-300' : 'border-slate-300'} focus:ring-2 focus:ring-blue-500 outline-none text-base min-h-[44px]`}
-                                    placeholder="https://example.com/audio.mp3"
+                                    className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none text-sm"
+                                    placeholder={platform.placeholder}
                                 />
                             </div>
-                            {errors.audio_url && <span className="text-xs text-red-500 mt-1">{errors.audio_url.message}</span>}
-                        </div>
+                        ))}
                     </div>
                 </AccordionSection>
             </div>

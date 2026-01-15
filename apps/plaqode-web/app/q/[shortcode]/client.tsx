@@ -40,6 +40,8 @@ const FilePreview = dynamic(() => import('@/components/qrcodes/preview/FilePrevi
 const SocialMediaPagePreview = dynamic(() => import('@/components/qrcodes/preview/SocialMediaPagePreview').then(mod => mod.SocialMediaPagePreview), { loading: () => <LoadingPreview /> });
 const BusinessPagePreview = dynamic(() => import('@/components/qrcodes/preview/BusinessPagePreview').then(mod => mod.BusinessPagePreview), { loading: () => <LoadingPreview /> });
 const CouponPreview = dynamic(() => import('@/components/qrcodes/preview/CouponPreview').then(mod => mod.CouponPreview), { loading: () => <LoadingPreview /> });
+const AudioPreview = dynamic(() => import('@/components/qrcodes/preview/AudioPreview').then(mod => mod.AudioPreview), { loading: () => <LoadingPreview /> });
+const VideoPreview = dynamic(() => import('@/components/qrcodes/preview/VideoPreview').then(mod => mod.VideoPreview), { loading: () => <LoadingPreview /> });
 const FeedbackPreview = dynamic(() => import('@/components/qrcodes/preview/FeedbackPreview').then(mod => mod.FeedbackPreview), { loading: () => <LoadingPreview /> });
 const ReviewPreview = dynamic(() => import('@/components/qrcodes/preview/ReviewPreview').then(mod => mod.ReviewPreview), { loading: () => <LoadingPreview /> });
 
@@ -47,7 +49,7 @@ interface ViewerClientProps {
     data: any;
 }
 
-export function ViewerClient({ data }: ViewerClientProps) {
+export default function ViewerClient({ data }: ViewerClientProps) {
     useEffect(() => {
         if (data?.shortcode) {
             recordScan(data.shortcode);
@@ -111,6 +113,10 @@ export function ViewerClient({ data }: ViewerClientProps) {
                 return <FeedbackPreview data={contentData} />;
             case 'review':
                 return <ReviewPreview data={contentData} />;
+            case 'audio':
+                return <AudioPreview data={contentData} />;
+            case 'video':
+                return <VideoPreview data={contentData} />;
             default:
                 // Fallback for unhandled types
                 return (

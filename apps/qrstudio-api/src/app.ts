@@ -9,6 +9,7 @@ const HOST = config.host;
 // Create Fastify instance
 const app = Fastify({
     logger: true,
+    bodyLimit: 52428800, // 50MB limit for video uploads
 });
 
 // 1. Immediate Health Check (Zero dependencies)

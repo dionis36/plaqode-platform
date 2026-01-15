@@ -9,14 +9,15 @@ export function AudioPreview({ data }: AudioPreviewProps) {
     const primaryColor = data.styles?.primary_color || '#E11D48';
 
     // Construct audio data with defaults
+    // Note: Public viewer data structure might be slightly different depending on how payload is unwrapped
     const audioData = {
-        title: data.audio?.title || 'Track Title',
-        description: data.audio?.description || 'Artist Name',
-        audio_url: data.audio?.audio_url || '',
-        cover_image: data.audio?.cover_image || '',
-        source_type: data.audio?.source_type || 'url',
-        allow_download: data.audio?.allow_download ?? true,
-        streaming: data.audio?.streaming || {}
+        title: data.audio?.title || data.title || 'Track Title',
+        description: data.audio?.description || data.description || 'Artist Name',
+        audio_url: data.audio?.audio_url || data.audio_url || '',
+        cover_image: data.audio?.cover_image || data.cover_image || '',
+        source_type: data.audio?.source_type || data.source_type || 'url',
+        allow_download: data.audio?.allow_download ?? data.allow_download ?? true,
+        streaming: data.audio?.streaming || data.streaming || {}
     };
 
     const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -87,7 +88,7 @@ export function AudioPreview({ data }: AudioPreviewProps) {
         if (!audioData.audio_url) return;
         const link = document.createElement('a');
         link.href = audioData.audio_url;
-        link.download = `${audioData.title || 'audio'}.mp3`; // Naive extension assumption, but works for base64 mostly
+        link.download = `${audioData.title || 'audio'}.mp3`; // Naive extension assumption
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -171,13 +172,6 @@ export function AudioPreview({ data }: AudioPreviewProps) {
                                 <Music className="w-24 h-24 opacity-50" />
                             </div>
                         )}
-
-                        {/* Center Play Button Overlay (Optional - maybe redundant with bottom controls, but nice for quick access) */}
-                        {/* <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
-                            <button onClick={togglePlay} className="p-4 bg-white/20 backdrop-blur-md rounded-full text-white hover:bg-white/30 transition-all">
-                                {isPlaying ? <Pause fill="currentColor" /> : <Play fill="currentColor" />}
-                            </button>
-                        </div> */}
                     </div>
 
                     {/* Track Info */}
