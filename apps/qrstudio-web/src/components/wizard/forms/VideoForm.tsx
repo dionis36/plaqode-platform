@@ -2,6 +2,7 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { useWizardStore } from '../store';
 import { useEffect, useState, useRef } from 'react';
 import { ChevronDown, Video, Palette, Youtube, Link as LinkIcon, Type, Trash2, GripVertical } from 'lucide-react';
+import { toast } from '@plaqode-platform/ui';
 
 // Form Value Types
 type VideoItem = {
@@ -503,60 +504,24 @@ export function VideoForm() {
                                 </div>
                             </div>
 
-                            {/* Upload Area */}
+                            {/* Upload Area (Disabled) */}
                             <div
-                                onClick={() => document.getElementById('video-upload-main')?.click()}
-                                className="border-2 border-dashed border-blue-200 hover:border-blue-400 bg-blue-50/50 hover:bg-blue-50 rounded-xl p-6 text-center cursor-pointer transition-all group"
+                                onClick={() => toast.info('Video uploads are briefly paused for upgrades. Please use YouTube/Vimeo links.', { duration: 4000 })}
+                                className="border-2 border-dashed border-slate-200 bg-slate-50 rounded-xl p-6 text-center cursor-not-allowed opacity-75 relative overflow-hidden transition-colors hover:bg-slate-100"
                             >
-                                <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                                <div className="w-12 h-12 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-3">
                                     <Video size={24} />
                                 </div>
-                                <h5 className="text-sm font-bold text-slate-700">Upload video from your device</h5>
-                                <p className="text-xs text-slate-500 mt-1">Maximum size: 15 MB (Direct Upload)</p>
-                                <input
-                                    id="video-upload-main"
-                                    type="file"
-                                    accept="video/*"
-                                    className="hidden"
-                                    onChange={async (e) => {
-                                        const file = e.target.files?.[0];
-                                        if (file) {
-                                            // 15MB Limit (Safe for Base64 JSON payloads)
-                                            const MAX_SIZE = 15 * 1024 * 1024;
-                                            if (file.size > MAX_SIZE) {
-                                                alert('File too large. maximum 15MB allowed for direct uploads. Please use YouTube/Vimeo for larger videos.');
-                                                return;
-                                            }
+                                <h5 className="text-sm font-bold text-slate-500">Upload video from your device</h5>
 
-                                            // Convert to Base64 for persistence
-                                            const reader = new FileReader();
-                                            reader.onload = async (event) => {
-                                                const base64Url = event.target?.result as string;
+                                <div className="mt-3 inline-flex items-center gap-1.5 px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-[10px] font-bold uppercase tracking-wide">
+                                    <span>🚧</span> Feature Coming Soon
+                                </div>
 
-                                                // Generate Thumbnail
-                                                let thumbnail = '';
-                                                try {
-                                                    thumbnail = await generateVideoThumbnail(file);
-                                                } catch (err) {
-                                                    console.error("Thumbnail generation failed", err);
-                                                }
-
-                                                appendVideo({
-                                                    id: crypto.randomUUID(),
-                                                    source_type: 'file',
-                                                    url: base64Url, // Store Base64
-                                                    file_name: file.name,
-                                                    title: file.name.split('.')[0],
-                                                    description: '',
-                                                    thumbnail: thumbnail
-                                                });
-                                            };
-                                            reader.readAsDataURL(file);
-
-                                            e.target.value = ''; // Reset
-                                        }
-                                    }}
-                                />
+                                <p className="text-xs text-slate-400 mt-3 leading-relaxed max-w-xs mx-auto">
+                                    We're upgrading our video infrastructure.<br />
+                                    Please use a <strong>YouTube</strong> or <strong>Vimeo</strong> URL above for now.
+                                </p>
                             </div>
                         </div>
 
@@ -592,32 +557,17 @@ export function VideoForm() {
 
                                             {/* Source Input */}
                                             {watch(`video.videos.${index}.source_type`) === 'file' ? (
-                                                <div className="space-y-2">
-                                                    <input
-                                                        type="file"
-                                                        accept="video/*"
-                                                        className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                                                        onChange={async (e) => {
-                                                            const file = e.target.files?.[0];
-                                                            if (file) {
-                                                                if (file.size > 15 * 1024 * 1024) return alert('Max 15MB allowed for direct uploads.');
-
-                                                                const blobUrl = URL.createObjectURL(file);
-                                                                setValue(`video.videos.${index}.url`, blobUrl);
-                                                                setValue(`video.videos.${index}.file_name`, file.name);
-
-                                                                try {
-                                                                    const thumb = await generateVideoThumbnail(file);
-                                                                    setValue(`video.videos.${index}.thumbnail`, thumb);
-                                                                } catch (err) {
-                                                                    console.error("Thumbnail failed", err);
-                                                                }
-                                                            }
-                                                        }}
-                                                    />
-                                                    {watch(`video.videos.${index}.file_name`) && (
-                                                        <p className="text-xs text-green-600">Selected: {watch(`video.videos.${index}.file_name`)}</p>
-                                                    )}
+                                                <div
+                                                    onClick={() => toast.info('We represent stability. Please replace this with a reliable YouTube link.', { duration: 4000 })}
+                                                    className="space-y-2 p-3 bg-slate-50 border border-dashed border-slate-200 rounded-lg cursor-not-allowed hover:bg-slate-100 transition-colors"
+                                                >
+                                                    <div className="flex items-center gap-2 text-xs text-amber-600 font-bold mb-1">
+                                                        <span>🚧</span> Uploads Paused
+                                                    </div>
+                                                    <p className="text-xs text-slate-500">
+                                                        Video file uploads are temporarily disabled.<br />
+                                                        Please delete this item and add a YouTube/Vimeo link instead.
+                                                    </p>
                                                 </div>
                                             ) : (
                                                 <div className="flex gap-2">
