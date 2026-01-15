@@ -19,8 +19,8 @@ function VideoPageContent() {
     // Use 'video' validation key
     const { isValid } = useTemplateValidation('video');
 
-    // Quick validation override for now
-    const localIsValid = !!(payload.video?.title && payload.video?.video_url);
+    // Validation: Require at least one video in the playlist
+    const localIsValid = !!(payload.video?.videos && payload.video.videos.length > 0);
 
     const router = useRouter();
     const searchParams = useSearchParams();
