@@ -214,7 +214,14 @@ export const useWizardStore = create<WizardState>()(persist((set) => ({
             },
             video: {
                 ...state.payload.video,
-                file_data: undefined // Don't persist large file data
+                file_data: undefined,
+                // Sanitize videos array to remove large Base64 data from localStorage
+                videos: state.payload.video?.videos?.map((v: any) => ({
+                    ...v,
+                    // content that is too large for localStorage (Base64)
+                    url: v.url?.startsWith('data:') ? undefined : v.url,
+                    thumbnail: v.thumbnail?.startsWith('data:') ? undefined : v.thumbnail
+                })) || []
             }
         }
     }),
