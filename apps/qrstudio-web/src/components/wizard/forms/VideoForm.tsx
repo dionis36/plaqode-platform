@@ -512,7 +512,7 @@ export function VideoForm() {
                                     <Video size={24} />
                                 </div>
                                 <h5 className="text-sm font-bold text-slate-700">Upload video from your device</h5>
-                                <p className="text-xs text-slate-500 mt-1">Maximum size: 20 MB (Direct Upload)</p>
+                                <p className="text-xs text-slate-500 mt-1">Maximum size: 15 MB (Direct Upload)</p>
                                 <input
                                     id="video-upload-main"
                                     type="file"
@@ -521,10 +521,10 @@ export function VideoForm() {
                                     onChange={async (e) => {
                                         const file = e.target.files?.[0];
                                         if (file) {
-                                            // 20MB Limit (matching FileForm limits) because Base64 increases size by ~33%
-                                            const MAX_SIZE = 20 * 1024 * 1024;
+                                            // 15MB Limit (Safe for Base64 JSON payloads)
+                                            const MAX_SIZE = 15 * 1024 * 1024;
                                             if (file.size > MAX_SIZE) {
-                                                alert('File too large. Max 20MB allow for direct uploads.');
+                                                alert('File too large. maximum 15MB allowed for direct uploads. Please use YouTube/Vimeo for larger videos.');
                                                 return;
                                             }
 
@@ -600,7 +600,7 @@ export function VideoForm() {
                                                         onChange={async (e) => {
                                                             const file = e.target.files?.[0];
                                                             if (file) {
-                                                                if (file.size > 50 * 1024 * 1024) return alert('Max 50MB');
+                                                                if (file.size > 15 * 1024 * 1024) return alert('Max 15MB allowed for direct uploads.');
 
                                                                 const blobUrl = URL.createObjectURL(file);
                                                                 setValue(`video.videos.${index}.url`, blobUrl);
