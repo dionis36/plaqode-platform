@@ -402,90 +402,49 @@ export function AudioForm() {
                     onToggle={() => toggleSection('source')}
                 >
                     <div className="space-y-4 mt-4">
-                        <div className="bg-cyan-50 border border-cyan-100 rounded-xl p-4 text-sm text-cyan-800 flex items-start gap-3">
-                            <div className="p-2 bg-cyan-100 rounded-full text-cyan-600">
-                                <Mic size={16} />
-                            </div>
+                        <div className="space-y-6 mt-4">
+                            {/* 1. Direct URL Input */}
                             <div>
-                                <p className="font-bold">Upload Audio File</p>
-                                <p className="opacity-80">Max size: 10MB. MP3, WAV, AAC.</p>
+                                <div className="flex items-center justify-between mb-2">
+                                    <label className="text-sm font-semibold text-slate-700">Direct Audio URL <span className="text-slate-400 font-normal">(Optional)</span></label>
+                                </div>
+                                <div className="flex relative items-center">
+                                    <div className="absolute left-0 pl-4 text-slate-400">
+                                        <LinkIcon size={18} />
+                                    </div>
+                                    <input
+                                        {...register('audio.audio_url')}
+                                        type="text"
+                                        className="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-cyan-500 outline-none transition-all"
+                                        placeholder="https://website.com/audio.mp3"
+                                    />
+                                </div>
+                                <p className="text-xs text-slate-400 mt-2">Paste a link to a hosted MP3, WAV, or AAC file.</p>
+                            </div>
+
+                            {/* 2. Disabled Upload Area */}
+                            <div>
+                                <label className="block text-sm font-semibold text-slate-700 mb-2">Upload Audio File</label>
+                                <div
+                                    onClick={() => toast.info('Audio uploads are briefly paused for upgrades. Please use a direct link or streaming platforms.', { duration: 4000 })}
+                                    className="border-2 border-dashed border-slate-200 bg-slate-50 rounded-2xl p-6 text-center cursor-not-allowed opacity-75 relative overflow-hidden transition-colors hover:bg-slate-100"
+                                >
+                                    <div className="w-12 h-12 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-3">
+                                        <UploadCloud size={24} />
+                                    </div>
+                                    <h5 className="text-sm font-bold text-slate-500">Upload audio from your device</h5>
+
+                                    <div className="mt-3 inline-flex items-center gap-1.5 px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-[10px] font-bold uppercase tracking-wide">
+                                        <span>🚧</span> Feature Coming Soon
+                                    </div>
+
+                                    <p className="text-xs text-slate-400 mt-3 leading-relaxed max-w-xs mx-auto">
+                                        We're upgrading our storage infrastructure.<br />
+                                        Please use a <strong>Direct URL</strong> or <strong>Streaming Links</strong> below.
+                                    </p>
+                                </div>
                             </div>
                         </div>
-
-                        {!watch('audio.file_data') ? (
-                            <div
-                                onClick={() => document.getElementById('audio-upload')?.click()}
-                                className="border-2 border-dashed border-slate-300 hover:border-cyan-400 bg-slate-50 hover:bg-cyan-50/30 rounded-2xl p-8 text-center cursor-pointer transition-all group"
-                            >
-                                <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm group-hover:scale-110 transition-transform">
-                                    <UploadCloud className="text-cyan-500" size={24} />
-                                </div>
-                                <p className="text-sm font-bold text-slate-700">Click to select audio</p>
-                                <p className="text-xs text-slate-400 mt-1">MP3, WAV, AAC supported</p>
-                                <input
-                                    id="audio-upload"
-                                    type="file"
-                                    accept="audio/*"
-                                    className="hidden"
-                                    onChange={(e) => {
-                                        const file = e.target.files?.[0];
-                                        if (file) {
-                                            const MAX_MB = 10;
-                                            if (file.size > MAX_MB * 1024 * 1024) {
-                                                toast.error(`File too large. Max ${MAX_MB}MB allowed.`);
-                                                return;
-                                            }
-
-                                            // Smart Auto-fill Logic (matches FileForm)
-                                            const nameWithoutExt = file.name.replace(/\.[^/.]+$/, "");
-                                            const currentTitle = watch('audio.title');
-                                            const oldFileName = watch('audio.file_name');
-                                            const oldFileNameWithoutExt = oldFileName ? oldFileName.replace(/\.[^/.]+$/, '') : '';
-
-                                            const reader = new FileReader();
-                                            reader.onload = (ev) => {
-                                                const base64 = ev.target?.result as string;
-                                                setValue('audio.file_data', base64);
-                                                setValue('audio.file_name', file.name);
-                                                setValue('audio.file_mime', file.type);
-                                                setValue('audio.audio_url', base64);
-                                                setValue('audio.source_type', 'file'); // Enforce file type
-
-                                                // Always update Title with filename
-                                                setValue('audio.title', nameWithoutExt, { shouldValidate: true, shouldDirty: true });
-
-                                                toast.success('Audio file uploaded!');
-                                            };
-                                            reader.readAsDataURL(file);
-                                        }
-                                    }}
-                                />
-                            </div>
-                        ) : (
-                            <div className="flex items-center justify-between p-4 bg-white border border-slate-200 rounded-xl shadow-sm">
-                                <div className="flex items-center gap-3 overflow-hidden">
-                                    <div className="w-10 h-10 rounded-full bg-cyan-100 flex items-center justify-center text-cyan-600 flex-shrink-0">
-                                        <Music size={20} />
-                                    </div>
-                                    <div className="min-w-0">
-                                        <p className="text-sm font-bold text-slate-800 truncate">{watch('audio.file_name')}</p>
-                                        <p className="text-xs text-green-600 font-medium">Ready to play</p>
-                                    </div>
-                                </div>
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        setValue('audio.file_data', '');
-                                        setValue('audio.file_name', '');
-                                        setValue('audio.audio_url', '');
-                                        setValue('audio.title', '', { shouldValidate: true });
-                                    }}
-                                    className="p-2 text-slate-400 hover:text-red-500 transition-colors"
-                                >
-                                    <Trash2 size={18} />
-                                </button>
-                            </div>
-                        )}
 
                         <div className="pt-2">
                             <label className="flex items-center gap-3 cursor-pointer group">

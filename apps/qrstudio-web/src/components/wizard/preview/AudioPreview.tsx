@@ -188,7 +188,11 @@ export function AudioPreview({ data }: AudioPreviewProps) {
                         <div className={`absolute inset-0 rounded-[2.5rem] blur-2xl opacity-40 transition-opacity duration-500 scale-105 ${isPlaying ? 'opacity-60' : 'opacity-30'}`} style={{ backgroundColor: primaryColor }} />
 
                         {/* Squircle Image */}
-                        <div className={`relative w-64 h-64 rounded-[2.5rem] shadow-2xl overflow-hidden border-4 border-white/40 ring-4 ring-black/5 bg-slate-800 transition-transform duration-700 ease-out rotate-2 ${isPlaying ? 'scale-105' : 'scale-100'}`}>
+                        {/* Squircle Image */}
+                        <div
+                            className={`relative w-64 h-64 rounded-[2.5rem] shadow-2xl overflow-hidden border-4 border-white/40 ring-4 ring-black/5 transition-transform duration-700 ease-out rotate-2 ${isPlaying ? 'scale-105' : 'scale-100'}`}
+                            style={{ backgroundColor: primaryColor, filter: 'brightness(0.9) saturate(0.9)' }}
+                        >
                             {audioData.cover_image ? (
                                 <img
                                     src={audioData.cover_image}
@@ -196,7 +200,7 @@ export function AudioPreview({ data }: AudioPreviewProps) {
                                     className="w-full h-full object-cover"
                                 />
                             ) : (
-                                <div className="w-full h-full flex items-center justify-center bg-slate-800 text-white/20">
+                                <div className="w-full h-full flex items-center justify-center text-white/30">
                                     <Disc className={`w-32 h-32 ${isPlaying ? 'animate-[spin_3s_linear_infinite]' : ''}`} />
                                 </div>
                             )}
@@ -242,7 +246,6 @@ export function AudioPreview({ data }: AudioPreviewProps) {
 
                             <button
                                 onClick={togglePlay}
-                                disabled={!audioData.audio_url}
                                 className="w-16 h-16 rounded-[1.5rem] flex items-center justify-center text-white active:scale-95 transition-all shadow-xl shadow-blue-900/10"
                                 style={{ backgroundColor: primaryColor }}
                             >
