@@ -24,7 +24,7 @@ import QRCodeDesigner from "@/components/editor/QRCodeDesigner";
 import ShortcutsReference from "@/components/editor/ShortcutsReference";
 import ZoomControls from "@/components/editor/ZoomControls";
 
-import { ConfirmationModal, toast, UniversalLoader, LoadingBoundary } from "@plaqode-platform/ui";
+import { ConfirmationModal, toast, UniversalLoader } from "@plaqode-platform/ui";
 import ExportModal from "@/components/editor/ExportModal";
 import { ExportAuthModal } from "@/components/auth/ExportAuthModal";
 
@@ -1137,13 +1137,16 @@ export default function Editor() {
     }, [currentPage, onNodeChange, onNodeDefinitionChange, onAddNode]);
 
     // --- RENDER ---
+    if (isLoadingDesign) {
+        return (
+            <div className="flex flex-col h-screen w-screen bg-gray-900 overflow-hidden items-center justify-center">
+                <UniversalLoader size="lg" text="Loading design..." center={true} />
+            </div>
+        );
+    }
+
     return (
-        <LoadingBoundary
-            isLoading={isLoadingDesign}
-            size="lg"
-            text="Loading design..."
-            className="flex flex-col h-screen w-screen bg-gray-900 overflow-hidden"
-        >
+        <div className="flex flex-col h-screen w-screen bg-gray-900 overflow-hidden">
             {/* Mobile Top Bar (only visible on mobile) */}
             <MobileEditorTopbar
                 templateName={currentPage.name}
@@ -1257,11 +1260,10 @@ export default function Editor() {
                 {/* C. RIGHT SIDEBAR / MOBILE CONTENT AREA - Dynamic Container */}
                 {/* Desktop: Shows PropertyPanel (fixed width, right side) */}
                 {/* Mobile: Shows PropertyPanel OR mobile panel content (full width below canvas) */}
-                <div className="property-panel relative z-50 flex-1 w-full lg:w-80 lg:flex-none lg:h-full flex flex-col shrink-0 bg-white border-l border-gray-200">
+                <div className="property-panel relative z-50 h-full shrink-0">
                     {/* PropertyPanel - Desktop: always visible | Mobile: only when element selected AND no mobile panel active */}
-                    {/* Desktop: Always show PropertyPanel. Mobile: Show only if NO active mobile panel. */}
-                    <div className={`${activeMobilePanel ? 'hidden lg:block' : 'block'} h-full flex flex-col min-h-0`}>
-                        <div className="h-full overflow-y-auto pb-20 lg:pb-0">
+                    {(!activeMobilePanel || (typeof window !== 'undefined' && window.innerWidth >= 1024)) && (
+                        <div className="h-full overflow-y-auto bg-white pb-80 lg:pb-0">
                             <PropertyPanel
                                 node={selectedNode}
 
@@ -1284,7 +1286,7 @@ export default function Editor() {
                                 onFocusHandled={onTextEditorFocusHandled}
                             />
                         </div>
-                    </div>
+                    )}
 
                     {/* Mobile Content Panels - Only visible on mobile when toolbar button tapped */}
                     {activeMobilePanel && (
@@ -1527,8 +1529,6 @@ export default function Editor() {
 
             {/* Mobile Menu Overlay */}
             <MobileMenu isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
-        </LoadingBoundary>
+        </div >
     );
 }
-
-

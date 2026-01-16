@@ -254,7 +254,7 @@ export default function EditorSidebar({
         <div className="hidden lg:flex h-full bg-gray-50 border-r border-gray-200 overflow-hidden font-sans">
 
             {/* 1. NARROW ICON NAVIGATION PALETTE (Fixed Width: 80px for labels) */}
-            <div className="w-20 bg-[#1e1e2e] flex flex-col justify-between items-center py-4 border-r border-gray-800 flex-shrink-0 z-20 shadow-xl h-full">
+            <div className="w-20 bg-[#1e1e2e] flex flex-col justify-between items-center pt-16 pb-4 border-r border-gray-800 flex-shrink-0 z-20 shadow-xl h-full">
                 <style>{`
                     .no-scrollbar::-webkit-scrollbar {
                         display: none;
@@ -318,10 +318,10 @@ export default function EditorSidebar({
             </div>
 
             {/* 2. COLLAPSIBLE CONTENT PANEL (Fixed Width: 320px, only shows if a tab is selected) */}
-            <div className={`flex-shrink-0 bg-white h-full shadow-lg transition-all duration-300 ease-in-out transform ${activeTab ? 'w-80 translate-x-0 opacity-100' : 'w-0 -translate-x-4 opacity-0 overflow-hidden'}`}>
+            <div className={`flex flex-col pt-14 flex-shrink-0 bg-white h-full shadow-lg transition-all duration-300 ease-in-out transform ${activeTab ? 'w-80 translate-x-0 opacity-100' : 'w-0 -translate-x-4 opacity-0 overflow-hidden'}`}>
                 {/* Only render content if a tab is active */}
                 {activeTab && (
-                    <div className="h-full overflow-y-auto custom-scrollbar relative">
+                    <div className="flex-1 overflow-y-auto custom-scrollbar relative">
                         {renderContent()}
                     </div>
                 )}
