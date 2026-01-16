@@ -42,6 +42,7 @@ const BusinessPagePreview = dynamic(() => import('@/components/qrcodes/preview/B
 const CouponPreview = dynamic(() => import('@/components/qrcodes/preview/CouponPreview').then(mod => mod.CouponPreview), { loading: () => <LoadingPreview /> });
 const AudioPreview = dynamic(() => import('@/components/qrcodes/preview/AudioPreview').then(mod => mod.AudioPreview), { loading: () => <LoadingPreview /> });
 const VideoPreview = dynamic(() => import('@/components/qrcodes/preview/VideoPreview').then(mod => mod.VideoPreview), { loading: () => <LoadingPreview /> });
+const GalleryPreview = dynamic(() => import('@/components/qrcodes/preview/GalleryPreview').then(mod => mod.GalleryPreview), { loading: () => <LoadingPreview /> });
 const FeedbackPreview = dynamic(() => import('@/components/qrcodes/preview/FeedbackPreview').then(mod => mod.FeedbackPreview), { loading: () => <LoadingPreview /> });
 const ReviewPreview = dynamic(() => import('@/components/qrcodes/preview/ReviewPreview').then(mod => mod.ReviewPreview), { loading: () => <LoadingPreview /> });
 
@@ -117,6 +118,8 @@ export default function ViewerClient({ data }: ViewerClientProps) {
                 return <AudioPreview data={contentData} />;
             case 'video':
                 return <VideoPreview data={contentData} />;
+            case 'gallery':
+                return <GalleryPreview data={contentData} />;
             default:
                 // Fallback for unhandled types
                 return (

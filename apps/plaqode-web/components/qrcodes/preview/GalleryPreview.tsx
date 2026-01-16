@@ -1,4 +1,4 @@
-import { WizardState } from '../store';
+
 import { useState } from 'react';
 import { X } from 'lucide-react';
 
@@ -12,7 +12,7 @@ const PLACEHOLDER_IMAGES = [
 ];
 
 interface GalleryPreviewProps {
-    data: WizardState['payload'];
+    data: any;
 }
 
 export function GalleryPreview({ data }: GalleryPreviewProps) {
