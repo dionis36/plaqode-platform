@@ -1142,7 +1142,7 @@ export default function Editor() {
             isLoading={isLoadingDesign}
             size="lg"
             text="Loading design..."
-            className="flex h-screen w-screen bg-gray-900 overflow-hidden"
+            className="flex flex-col h-screen w-screen bg-gray-900 overflow-hidden"
         >
             {/* Mobile Top Bar (only visible on mobile) */}
             <MobileEditorTopbar
@@ -1173,7 +1173,7 @@ export default function Editor() {
 
             />
 
-            <div className="flex flex-col lg:flex-row flex-1 pt-14 overflow-hidden">
+            <div className="flex flex-col lg:flex-row flex-1 pt-14 lg:pt-0 overflow-hidden">
                 {/* A. LEFT SIDEBAR (Fixed Width - Layer/Element/Data/Page Controls) */}
                 <EditorSidebar
                     // Element/Layer Management
@@ -1257,10 +1257,11 @@ export default function Editor() {
                 {/* C. RIGHT SIDEBAR / MOBILE CONTENT AREA - Dynamic Container */}
                 {/* Desktop: Shows PropertyPanel (fixed width, right side) */}
                 {/* Mobile: Shows PropertyPanel OR mobile panel content (full width below canvas) */}
-                <div className="property-panel relative z-50 h-full shrink-0">
+                <div className="property-panel relative z-50 flex-1 w-full lg:w-80 lg:flex-none lg:h-full flex flex-col shrink-0 bg-white border-l border-gray-200">
                     {/* PropertyPanel - Desktop: always visible | Mobile: only when element selected AND no mobile panel active */}
-                    {(!activeMobilePanel || (typeof window !== 'undefined' && window.innerWidth >= 1024)) && (
-                        <div className="h-full overflow-y-auto bg-white pb-80 lg:pb-0">
+                    {/* Desktop: Always show PropertyPanel. Mobile: Show only if NO active mobile panel. */}
+                    <div className={`${activeMobilePanel ? 'hidden lg:block' : 'block'} h-full flex flex-col min-h-0`}>
+                        <div className="h-full overflow-y-auto pb-20 lg:pb-0">
                             <PropertyPanel
                                 node={selectedNode}
 
@@ -1283,7 +1284,7 @@ export default function Editor() {
                                 onFocusHandled={onTextEditorFocusHandled}
                             />
                         </div>
-                    )}
+                    </div>
 
                     {/* Mobile Content Panels - Only visible on mobile when toolbar button tapped */}
                     {activeMobilePanel && (
