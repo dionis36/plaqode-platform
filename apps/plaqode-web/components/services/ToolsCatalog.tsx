@@ -24,7 +24,7 @@ const tools = [
     { icon: FileText, name: "PDF / File", desc: "Share PDFs & documents", href: `${QR_STUDIO_URL}/create/file` },
     { icon: Smartphone, name: "App Store", desc: "Download apps directly", href: `${QR_STUDIO_URL}/create/appstore` },
     { icon: MessageSquare, name: "Message", desc: "SMS, WhatsApp & Telegram", href: `${QR_STUDIO_URL}/create/message` },
-    { icon: Image, name: "Image Gallery", desc: "Showcase photo collections", href: `${QR_STUDIO_URL}/create/file` },
+    { icon: Image, name: "Image Gallery", desc: "Showcase photo collections", href: `${QR_STUDIO_URL}/create/gallery` },
     { icon: Calendar, name: "Event", desc: "Save events to calendar", href: `${QR_STUDIO_URL}/create/event` },
     { icon: Mail, name: "Email", desc: "Send pre-filled emails", href: `${QR_STUDIO_URL}/create/email` },
     { icon: AlignLeft, name: "Text", desc: "Display plain text messages", href: `${QR_STUDIO_URL}/create/text` },

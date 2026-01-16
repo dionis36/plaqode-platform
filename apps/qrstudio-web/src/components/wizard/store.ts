@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
-interface WizardState {
+export interface WizardState {
     step: number;
     type: string | null;
     payload: Record<string, any>;
@@ -108,7 +108,13 @@ export const useWizardStore = create<WizardState>()(persist((set) => ({
             logo: '',
             success_message: 'Thank you for your feedback!'
         },
-        coupon: { title: '', description: '', code: '', valid_until: '' }
+        coupon: { title: '', description: '', code: '', valid_until: '' },
+        gallery: {
+            title: 'My Gallery',
+            description: '',
+            grid_style: 'grid',
+            images: []
+        }
     },
     design: {
         dots: { color: '#000000', style: 'square' },
@@ -208,7 +214,13 @@ export const useWizardStore = create<WizardState>()(persist((set) => ({
                 logo: '',
                 success_message: 'Thank you for your feedback!'
             },
-            coupon: { title: '', description: '', code: '', valid_until: '' }
+            coupon: { title: '', description: '', code: '', valid_until: '' },
+            gallery: {
+                title: 'My Gallery',
+                description: '',
+                grid_style: 'grid', // 'grid' | 'masonry' | 'carousel'
+                images: [] // Array<{ url: string, caption?: string, alt?: string }>
+            }
         },
         design: {
             dots: { color: '#000000', style: 'square' },
@@ -222,7 +234,7 @@ export const useWizardStore = create<WizardState>()(persist((set) => ({
     }),
 }), {
     name: 'wizard-storage',
-    version: 1, // Increment to invalidate old cache with missing keys
+    version: 2, // Increment to invalidate old cache with missing keys
     partialize: (state) => ({
         ...state,
         payload: {
@@ -242,6 +254,14 @@ export const useWizardStore = create<WizardState>()(persist((set) => ({
                     // content that is too large for localStorage (Base64)
                     url: v.url?.startsWith('data:') ? undefined : v.url,
                     thumbnail: v.thumbnail?.startsWith('data:') ? undefined : v.thumbnail
+                })) || []
+            },
+            gallery: {
+                ...state.payload.gallery,
+                // Sanitize images array
+                images: state.payload.gallery?.images?.map((img: any) => ({
+                    ...img,
+                    url: img.url?.startsWith('data:') ? undefined : img.url
                 })) || []
             }
         }
