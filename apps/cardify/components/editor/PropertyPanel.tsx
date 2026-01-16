@@ -107,41 +107,8 @@ const InputGroup = ({
   </div>
 );
 
-const ColorPickerWithSwatch = ({
-  label,
-  color,
-  onChange,
-  disabled = false
-}: {
-  label: string;
-  color: string;
-  onChange: (val: string) => void;
-  disabled?: boolean;
-}) => (
-  <div className="flex flex-col space-y-1">
-    <label className="text-xs font-semibold text-gray-600">{label}</label>
-    <div className={`flex items-center gap-2 border border-gray-300 p-1 rounded-md ${disabled ? 'bg-gray-100' : 'bg-white'}`}>
-      <div className="relative w-6 h-6 rounded border border-gray-200 shadow-sm cursor-pointer" style={{ backgroundColor: color }}>
-        <input
-          type="color"
-          value={color}
-          onChange={(e) => onChange(e.target.value)}
-          disabled={disabled}
-          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-          title="Click to pick color"
-        />
-      </div>
-      <input
-        type="text"
-        value={color}
-        onChange={(e) => onChange(e.target.value)}
-        disabled={disabled}
-        className="flex-1 text-xs font-mono uppercase outline-none bg-transparent"
-        placeholder="#000000"
-      />
-    </div>
-  </div>
-);
+// Replaced by @/components/ui/ColorPicker
+import ColorPicker from "@/components/ui/ColorPicker";
 
 const StyleButton = ({
   icon: Icon,
@@ -377,7 +344,7 @@ export default function PropertyPanel({
         </div>
         <div className="flex flex-col space-y-3 mb-4">
           <InputGroup label="Size" value={fontSize} min={6} onChange={(v) => handlePropChange('fontSize', Number(v))} />
-          <ColorPickerWithSwatch label="Color" color={textColor} onChange={(v) => handlePropChange('fill', v)} />
+          <ColorPicker label="Color" color={textColor} onChange={(v) => handlePropChange('fill', v)} />
         </div>
         <div className="flex flex-col">
           <label className="text-xs font-semibold text-gray-700 mb-1">Font Family</label>
@@ -416,20 +383,20 @@ export default function PropertyPanel({
       <SectionContainer key="icon-styling" title="Icon Appearance" icon={Type}>
         {isLucide ? (
           <>
-            <ColorPickerWithSwatch label="Icon Color" color={iconStroke} onChange={(v) => handlePropChange('stroke', v)} />
+            <ColorPicker label="Icon Color" color={iconStroke} onChange={(v) => handlePropChange('stroke', v)} />
             <div className="border-t border-gray-100 pt-3 mt-3">
               <div className="grid grid-cols-2 gap-3">
-                <ColorPickerWithSwatch label="Background" color={iconFill} onChange={(v) => handlePropChange('fill', v)} />
+                <ColorPicker label="Background" color={iconFill} onChange={(v) => handlePropChange('fill', v)} />
                 <InputGroup label="Stroke Width" type="number" value={iconStrokeWidth} min={0} step={0.5} onChange={(v) => handlePropChange('strokeWidth', Number(v))} />
               </div>
             </div>
           </>
         ) : (
           <>
-            <ColorPickerWithSwatch label="Icon Color" color={iconFill} onChange={(v) => handlePropChange('fill', v)} />
+            <ColorPicker label="Icon Color" color={iconFill} onChange={(v) => handlePropChange('fill', v)} />
             <div className="border-t border-gray-100 pt-3 mt-3">
               <div className="grid grid-cols-2 gap-3">
-                <ColorPickerWithSwatch label="Border Color" color={iconStroke} onChange={(v) => handlePropChange('stroke', v)} />
+                <ColorPicker label="Border Color" color={iconStroke} onChange={(v) => handlePropChange('stroke', v)} />
                 <InputGroup label="Border Width" type="number" value={iconStrokeWidth} min={0} step={0.5} onChange={(v) => handlePropChange('strokeWidth', Number(v))} />
               </div>
             </div>
@@ -561,7 +528,7 @@ export default function PropertyPanel({
 
         {capabilities.hasFill && node.type !== "Icon" && node.type !== "Text" && (
           <div className="mb-3">
-            <ColorPickerWithSwatch label="Fill Color" color={fill} onChange={(v) => handlePropChange('fill', v)} />
+            <ColorPicker label="Fill Color" color={fill} onChange={(v) => handlePropChange('fill', v)} />
           </div>
         )}
 
@@ -575,7 +542,7 @@ export default function PropertyPanel({
 
         {capabilities.hasStroke && node.type !== "Icon" && (
           <div className="border-t border-gray-100 pt-3 space-y-3">
-            <ColorPickerWithSwatch label={node.type === "Image" ? "Border Color" : "Stroke Color"} color={stroke || "#000000"} onChange={(v) => handlePropChange('stroke', v)} />
+            <ColorPicker label={node.type === "Image" ? "Border Color" : "Stroke Color"} color={stroke || "#000000"} onChange={(v) => handlePropChange('stroke', v)} />
             <InputGroup label={node.type === "Image" ? "Border Width" : "Stroke Width"} value={strokeWidth} min={0} onChange={(v) => handlePropChange('strokeWidth', Number(v))} />
           </div>
         )}
@@ -692,7 +659,7 @@ export default function PropertyPanel({
   // 8. Shadow
   panels.push(
     <SectionContainer key="shadow" title="Shadow" icon={RotateCw} defaultOpen={false}>
-      <ColorPickerWithSwatch label="Shadow Color" color={shadowColor || "#000000"} onChange={(v) => handlePropChange('shadowColor', v)} />
+      <ColorPicker label="Shadow Color" color={shadowColor || "#000000"} onChange={(v) => handlePropChange('shadowColor', v)} />
       <InputGroup label="Blur" value={shadowBlur} min={0} step={1} onChange={(v) => handlePropChange('shadowBlur', Number(v))} />
       <div className="grid grid-cols-2 gap-3">
         <InputGroup label="Offset X" value={shadowOffsetX} onChange={(v) => handlePropChange('shadowOffsetX', Number(v))} />

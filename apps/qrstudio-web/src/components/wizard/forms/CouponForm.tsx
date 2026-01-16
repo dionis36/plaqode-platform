@@ -3,6 +3,7 @@ import { useWizardStore } from '../store';
 import { useEffect, useState, useRef } from 'react';
 import { ChevronDown, Ticket, Palette, Type, Calendar, Image as ImageIcon } from 'lucide-react';
 import { format } from 'date-fns';
+import ColorPicker from '@/components/common/ColorPicker';
 import { ImageUpload } from '@/components/common/ImageUpload';
 
 // Form Value Types
@@ -206,12 +207,15 @@ export function CouponForm() {
                             <label className="block text-sm font-semibold text-slate-700 mb-3">Color Presets</label>
                             <div className="flex gap-2 overflow-x-auto pb-2 max-w-full" style={{ scrollbarWidth: 'thin', scrollbarColor: '#cbd5e1 #f1f5f9' }}>
                                 {[
-                                    { primary: '#16A34A', secondary: '#DCFCE7', name: 'Fresh Green' },
-                                    { primary: '#2563EB', secondary: '#EFF6FF', name: 'Sale Blue' },
-                                    { primary: '#DC2626', secondary: '#FEF2F2', name: 'Hot Deal Red' },
-                                    { primary: '#D97706', secondary: '#FEF3C7', name: 'Gold' },
-                                    { primary: '#F472B6', secondary: '#FCE7F3', name: 'Pink' },
-                                    { primary: '#1F2937', secondary: '#F3F4F6', name: 'Premium Black' },
+                                    { primary: '#2563EB', secondary: '#EFF6FF', name: 'Classic Blue' },
+                                    { primary: '#1F2937', secondary: '#F3F4F6', name: 'Elegant Black' },
+                                    { primary: '#059669', secondary: '#ECFDF5', name: 'Fresh Green' },
+                                    { primary: '#DC2626', secondary: '#FEF2F2', name: 'Bold Red' },
+                                    { primary: '#7C3AED', secondary: '#FAF5FF', name: 'Royal Purple' },
+                                    { primary: '#EA580C', secondary: '#FFF7ED', name: 'Warm Orange' },
+                                    { primary: '#0891B2', secondary: '#F0FDFA', name: 'Ocean Teal' },
+                                    { primary: '#BE123C', secondary: '#FFF1F2', name: 'Wine Red' },
+                                    { primary: '#EC4899', secondary: '#FCE7F3', name: 'Hot Pink' },
                                 ].map((palette, idx) => (
                                     <button
                                         key={idx}
@@ -233,34 +237,22 @@ export function CouponForm() {
                             <div>
                                 <label className="block text-sm font-semibold text-slate-700 mb-2">Primary color</label>
                                 <div className="flex items-center gap-2 sm:gap-3">
-                                    <input
-                                        {...register('styles.primary_color')}
-                                        type="color"
-                                        className="w-12 h-12 rounded-lg border-2 border-slate-200 cursor-pointer flex-shrink-0"
-                                    />
-                                    <input
-                                        value={watch('styles.primary_color') || '#16A34A'}
-                                        onChange={(e) => setValue('styles.primary_color', e.target.value)}
-                                        type="text"
-                                        className="flex-1 px-3 sm:px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none font-mono text-sm uppercase min-h-[44px]"
-                                        placeholder="#16A34A"
+                                    <input type="hidden" {...register('styles.primary_color')} />
+                                    <ColorPicker
+                                        // label="Primary color" 
+                                        color={watch('styles.primary_color') || '#16A34A'}
+                                        onChange={(v) => setValue('styles.primary_color', v, { shouldDirty: true, shouldTouch: true })}
                                     />
                                 </div>
                             </div>
                             <div>
                                 <label className="block text-sm font-semibold text-slate-700 mb-2">Secondary color</label>
                                 <div className="flex items-center gap-2 sm:gap-3">
-                                    <input
-                                        {...register('styles.secondary_color')}
-                                        type="color"
-                                        className="w-12 h-12 rounded-lg border-2 border-slate-200 cursor-pointer flex-shrink-0"
-                                    />
-                                    <input
-                                        value={watch('styles.secondary_color') || '#DCFCE7'}
-                                        onChange={(e) => setValue('styles.secondary_color', e.target.value)}
-                                        type="text"
-                                        className="flex-1 px-3 sm:px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none font-mono text-sm uppercase min-h-[44px]"
-                                        placeholder="#DCFCE7"
+                                    <input type="hidden" {...register('styles.secondary_color')} />
+                                    <ColorPicker
+                                        // label="Secondary color" 
+                                        color={watch('styles.secondary_color') || '#DCFCE7'}
+                                        onChange={(v) => setValue('styles.secondary_color', v, { shouldDirty: true, shouldTouch: true })}
                                     />
                                 </div>
                             </div>
@@ -383,7 +375,7 @@ export function CouponForm() {
                         </div>
                     </div>
                 </AccordionSection>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 }

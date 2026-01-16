@@ -2,6 +2,8 @@ import { useForm, useFieldArray, Control, useWatch } from 'react-hook-form';
 import { useWizardStore } from '../store';
 import { useEffect, useState, useRef } from 'react';
 import { Plus, Trash2, GripVertical, ChevronDown, Palette, Info, UtensilsCrossed, Image, CheckCircle2, XCircle } from 'lucide-react';
+
+import ColorPicker from '@/components/common/ColorPicker';
 import { ImageUpload } from '@/components/common/ImageUpload';
 
 // We replicate the schema types locally for the form
@@ -254,36 +256,20 @@ export function MenuForm() {
                             <div>
                                 <label className="block text-sm font-semibold text-slate-700 mb-2">Primary color</label>
                                 <div className="flex items-center gap-2 sm:gap-3">
-                                    <input
-                                        type="color"
-                                        value={watch('styles.primary_color') || '#f97316'}
-                                        onChange={(e) => setValue('styles.primary_color', e.target.value)}
-                                        className="w-12 h-12 rounded-lg border-2 border-slate-200 cursor-pointer flex-shrink-0"
-                                    />
-                                    <input
-                                        type="text"
-                                        value={watch('styles.primary_color') || '#f97316'}
-                                        onChange={(e) => setValue('styles.primary_color', e.target.value)}
-                                        className="flex-1 px-3 sm:px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none font-mono text-sm uppercase min-h-[44px]"
-                                        placeholder="#f97316"
+                                    <input type="hidden" {...register('styles.primary_color')} />
+                                    <ColorPicker
+                                        color={watch('styles.primary_color') || '#f97316'}
+                                        onChange={(v) => setValue('styles.primary_color', v, { shouldDirty: true, shouldTouch: true })}
                                     />
                                 </div>
                             </div>
                             <div>
                                 <label className="block text-sm font-semibold text-slate-700 mb-2">Secondary color</label>
                                 <div className="flex items-center gap-2 sm:gap-3">
-                                    <input
-                                        type="color"
-                                        value={watch('styles.secondary_color') || '#fff7ed'}
-                                        onChange={(e) => setValue('styles.secondary_color', e.target.value)}
-                                        className="w-12 h-12 rounded-lg border-2 border-slate-200 cursor-pointer flex-shrink-0"
-                                    />
-                                    <input
-                                        type="text"
-                                        value={watch('styles.secondary_color') || '#fff7ed'}
-                                        onChange={(e) => setValue('styles.secondary_color', e.target.value)}
-                                        className="flex-1 px-3 sm:px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none font-mono text-sm uppercase min-h-[44px]"
-                                        placeholder="#fff7ed"
+                                    <input type="hidden" {...register('styles.secondary_color')} />
+                                    <ColorPicker
+                                        color={watch('styles.secondary_color') || '#fff7ed'}
+                                        onChange={(v) => setValue('styles.secondary_color', v, { shouldDirty: true, shouldTouch: true })}
                                     />
                                 </div>
                             </div>
@@ -463,16 +449,10 @@ export function MenuForm() {
                             <div>
                                 <label className="block text-sm font-semibold text-slate-700 mb-2">Background Color</label>
                                 <div className="flex items-center gap-2 sm:gap-3">
-                                    <input
-                                        {...register('welcome_screen.background_color')}
-                                        type="color"
-                                        className="w-12 h-12 rounded-lg border-2 border-slate-200 cursor-pointer flex-shrink-0"
-                                    />
-                                    <input
-                                        {...register('welcome_screen.background_color')}
-                                        type="text"
-                                        className="flex-1 px-3 sm:px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none font-mono text-sm min-h-[44px]"
-                                        placeholder="#ffffff"
+                                    <input type="hidden" {...register('welcome_screen.background_color')} />
+                                    <ColorPicker
+                                        color={watch('welcome_screen.background_color') || '#ffffff'}
+                                        onChange={(v) => setValue('welcome_screen.background_color', v, { shouldDirty: true, shouldTouch: true })}
                                     />
                                 </div>
                             </div>

@@ -1,8 +1,10 @@
+
 import { useForm } from 'react-hook-form';
 import { useWizardStore } from '../store';
 import { useEffect, useState, useRef } from 'react';
-import { ChevronDown, MessageCircleHeart, Palette, Mail, Image as ImageIcon, CheckCircle } from 'lucide-react';
+import { ChevronDown, MessageCircleHeart, Palette, Star, User, Mail, Building2, Image as ImageIcon, CheckCircle } from 'lucide-react';
 import { ImageUpload } from '../../common/ImageUpload';
+import ColorPicker from '@/components/common/ColorPicker';
 
 // Form Value Types
 type FormValues = {
@@ -59,7 +61,7 @@ function AccordionSection({
                 className="w-full px-4 sm:px-6 py-4 sm:py-5 flex items-center justify-between hover:bg-slate-50 transition-colors min-h-[60px]"
             >
                 <div className="flex items-center gap-3 sm:gap-4">
-                    <div className={`p-3 sm:p-4 rounded-xl ${color} flex items-center justify-center flex-shrink-0`}>
+                    <div className={`p - 3 sm: p - 4 rounded - xl ${color} flex items - center justify - center flex - shrink - 0`}>
                         {isMounted && <Icon className="w-5 h-5 sm:w-7 sm:h-7" />}
                     </div>
                     <div className="text-left">
@@ -69,15 +71,15 @@ function AccordionSection({
                 </div>
                 {isMounted && (
                     <ChevronDown
-                        className={`w-5 h-5 text-slate-400 transition-transform duration-300 flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}
+                        className={`w - 5 h - 5 text - slate - 400 transition - transform duration - 300 flex - shrink - 0 ${isOpen ? 'rotate-180' : ''} `}
                     />
                 )}
             </button>
 
             {/* Content */}
             <div
-                className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
-                    }`}
+                className={`overflow - hidden transition - all duration - 300 ease -in -out ${isOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
+                    } `}
             >
                 <div className="px-4 sm:px-6 pb-6 pt-2 border-t border-slate-100">
                     {children}
@@ -213,7 +215,7 @@ export function FeedbackForm() {
                                             setValue('styles.secondary_color', palette.secondary);
                                         }}
                                         className="h-10 w-16 flex-shrink-0 rounded-lg border-2 border-slate-200 hover:border-blue-400 transition-all hover:scale-105 shadow-sm overflow-hidden"
-                                        style={{ background: `linear-gradient(to right, ${palette.primary} 50%, ${palette.secondary} 50%)` }}
+                                        style={{ background: `linear - gradient(to right, ${palette.primary} 50 %, ${palette.secondary} 50 %)` }}
                                         title={palette.name}
                                     />
                                 ))}
@@ -225,34 +227,20 @@ export function FeedbackForm() {
                             <div>
                                 <label className="block text-sm font-semibold text-slate-700 mb-2">Primary color</label>
                                 <div className="flex items-center gap-2 sm:gap-3">
-                                    <input
-                                        {...register('styles.primary_color')}
-                                        type="color"
-                                        className="w-12 h-12 rounded-lg border-2 border-slate-200 cursor-pointer flex-shrink-0"
-                                    />
-                                    <input
-                                        value={watch('styles.primary_color') || '#A855F7'}
-                                        onChange={(e) => setValue('styles.primary_color', e.target.value)}
-                                        type="text"
-                                        className="flex-1 px-3 sm:px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none font-mono text-sm uppercase min-h-[44px]"
-                                        placeholder="#A855F7"
+                                    <input type="hidden" {...register('styles.primary_color')} />
+                                    <ColorPicker
+                                        color={watch('styles.primary_color') || '#A855F7'}
+                                        onChange={(v) => setValue('styles.primary_color', v, { shouldDirty: true, shouldTouch: true })}
                                     />
                                 </div>
                             </div>
                             <div>
                                 <label className="block text-sm font-semibold text-slate-700 mb-2">Secondary color</label>
                                 <div className="flex items-center gap-2 sm:gap-3">
-                                    <input
-                                        {...register('styles.secondary_color')}
-                                        type="color"
-                                        className="w-12 h-12 rounded-lg border-2 border-slate-200 cursor-pointer flex-shrink-0"
-                                    />
-                                    <input
-                                        value={watch('styles.secondary_color') || '#F3E8FF'}
-                                        onChange={(e) => setValue('styles.secondary_color', e.target.value)}
-                                        type="text"
-                                        className="flex-1 px-3 sm:px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none font-mono text-sm uppercase min-h-[44px]"
-                                        placeholder="#F3E8FF"
+                                    <input type="hidden" {...register('styles.secondary_color')} />
+                                    <ColorPicker
+                                        color={watch('styles.secondary_color') || '#F3E8FF'}
+                                        onChange={(v) => setValue('styles.secondary_color', v, { shouldDirty: true, shouldTouch: true })}
                                     />
                                 </div>
                             </div>
@@ -280,7 +268,7 @@ export function FeedbackForm() {
                                     maxLength: { value: 60, message: 'Question must be 60 characters or less' }
                                 })}
                                 type="text"
-                                className={`w-full px-3 sm:px-4 py-3 rounded-lg border ${errors.question ? 'border-red-300' : 'border-slate-300'} focus:ring-2 focus:ring-blue-500 outline-none text-base min-h-[44px]`}
+                                className={`w - full px - 3 sm: px - 4 py - 3 rounded - lg border ${errors.question ? 'border-red-300' : 'border-slate-300'} focus: ring - 2 focus: ring - blue - 500 outline - none text - base min - h - [44px]`}
                                 placeholder="How was your experience?"
                             />
                             {errors.question && <span className="text-xs text-red-500 mt-1">{errors.question.message}</span>}
@@ -363,7 +351,7 @@ export function FeedbackForm() {
                                     }
                                 })}
                                 type="email"
-                                className={`w-full px-3 sm:px-4 py-3 rounded-lg border ${errors.email ? 'border-red-300' : 'border-slate-300'} focus:ring-2 focus:ring-blue-500 outline-none text-base min-h-[44px]`}
+                                className={`w - full px - 3 sm: px - 4 py - 3 rounded - lg border ${errors.email ? 'border-red-300' : 'border-slate-300'} focus: ring - 2 focus: ring - blue - 500 outline - none text - base min - h - [44px]`}
                                 placeholder="owner@restaurant.com"
                             />
                             <p className="text-xs text-slate-500 mt-1">

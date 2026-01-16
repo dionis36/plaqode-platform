@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form';
 import { useWizardStore } from '../store';
 import { useEffect, useState, useRef } from 'react';
 import { ChevronDown, Palette, MessageSquare, Mail, Smartphone, Send } from 'lucide-react';
+import ColorPicker from '@/components/common/ColorPicker';
 
 // Form Value Types
 type FormValues = {
@@ -212,34 +213,20 @@ export function MessageForm() {
                             <div>
                                 <label className="block text-sm font-semibold text-slate-700 mb-2">Primary color</label>
                                 <div className="flex items-center gap-2 sm:gap-3">
-                                    <input
-                                        {...register('styles.primary_color')}
-                                        type="color"
-                                        className="w-12 h-12 rounded-lg border-2 border-slate-200 cursor-pointer flex-shrink-0"
-                                    />
-                                    <input
-                                        value={watch('styles.primary_color') || '#10B981'}
-                                        onChange={(e) => setValue('styles.primary_color', e.target.value)}
-                                        type="text"
-                                        className="flex-1 px-3 sm:px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none font-mono text-sm uppercase min-h-[44px]"
-                                        placeholder="#10B981"
+                                    <input type="hidden" {...register('styles.primary_color')} />
+                                    <ColorPicker
+                                        color={watch('styles.primary_color') || '#10B981'}
+                                        onChange={(v) => setValue('styles.primary_color', v, { shouldDirty: true, shouldTouch: true })}
                                     />
                                 </div>
                             </div>
                             <div>
                                 <label className="block text-sm font-semibold text-slate-700 mb-2">Secondary color</label>
                                 <div className="flex items-center gap-2 sm:gap-3">
-                                    <input
-                                        {...register('styles.secondary_color')}
-                                        type="color"
-                                        className="w-12 h-12 rounded-lg border-2 border-slate-200 cursor-pointer flex-shrink-0"
-                                    />
-                                    <input
-                                        value={watch('styles.secondary_color') || '#D1FAE5'}
-                                        onChange={(e) => setValue('styles.secondary_color', e.target.value)}
-                                        type="text"
-                                        className="flex-1 px-3 sm:px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none font-mono text-sm uppercase min-h-[44px]"
-                                        placeholder="#D1FAE5"
+                                    <input type="hidden" {...register('styles.secondary_color')} />
+                                    <ColorPicker
+                                        color={watch('styles.secondary_color') || '#D1FAE5'}
+                                        onChange={(v) => setValue('styles.secondary_color', v, { shouldDirty: true, shouldTouch: true })}
                                     />
                                 </div>
                             </div>

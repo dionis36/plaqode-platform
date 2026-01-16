@@ -4,7 +4,7 @@ import { Download, Upload, Plus, RefreshCw, ChevronDown } from 'lucide-react';
 import Image from 'next/image';
 import { KonvaNodeDefinition, KonvaNodeProps } from '@/types/template';
 import { AVAILABLE_LOGOS, LogoVariant } from '@/lib/logoIndex';
-import ColorPicker from '@/components/editor/ColorPicker';
+import ColorPicker from '@/components/ui/ColorPicker';
 
 interface QRCodeDesignerProps {
     onAddImage: (file: File) => void;

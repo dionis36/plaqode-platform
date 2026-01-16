@@ -4,6 +4,7 @@ import React from 'react';
 import { BackgroundPattern, BackgroundType } from '@/types/template';
 import { GRADIENT_PRESETS, PATTERN_PRESETS, SOLID_PRESETS, TEXTURE_PRESETS, PATTERN_GENERATORS } from '@/lib/backgroundPatterns';
 import { Check, Plus, Trash2 } from 'lucide-react';
+import ColorPicker from "@/components/ui/ColorPicker";
 
 interface BackgroundPanelProps {
   currentBackground: BackgroundPattern;
@@ -127,9 +128,9 @@ const BackgroundPanel: React.FC<BackgroundPanelProps> = ({ currentBackground, on
               {SOLID_PRESETS.map((preset, idx) => renderPreview(preset, idx))}
             </PresetGrid>
             <div className="pt-2">
-              <ColorPickerInput
+              <ColorPicker
                 label="Custom Color"
-                value={currentBackground.color1}
+                color={currentBackground.color1 || '#FFFFFF'}
                 onChange={(v) => onBackgroundChange({ color1: v })}
               />
             </div>
@@ -195,24 +196,23 @@ const BackgroundPanel: React.FC<BackgroundPanelProps> = ({ currentBackground, on
                 {/* Ensure we render stops if they exist, or fallback to 2 inputs for color1/color2 if not (legacy support) */}
                 {(currentBackground.gradientStops || [{ offset: 0, color: currentBackground.color1 }, { offset: 1, color: currentBackground.color2 }]).map((stop, idx) => (
                   <div key={idx} className="flex items-center space-x-2">
-                    <input
-                      type="color"
-                      value={stop.color}
-                      onChange={(e) => {
+                    <ColorPicker
+                      minimal
+                      color={stop.color || '#000000'}
+                      onChange={(v) => {
                         const newStops = currentBackground.gradientStops
                           ? [...currentBackground.gradientStops]
                           : [{ offset: 0, color: currentBackground.color1 || '#000000' }, { offset: 1, color: currentBackground.color2 || '#ffffff' }];
 
-                        newStops[idx].color = e.target.value;
+                        newStops[idx].color = v;
 
                         // Also update legacy fields for backward compat if it's the first/last stop
                         const updates: any = { gradientStops: newStops };
-                        if (idx === 0) updates.color1 = e.target.value;
-                        if (idx === newStops.length - 1) updates.color2 = e.target.value;
+                        if (idx === 0) updates.color1 = v;
+                        if (idx === newStops.length - 1) updates.color2 = v;
 
                         onBackgroundChange(updates);
                       }}
-                      className="w-6 h-6 rounded cursor-pointer border-none p-0"
                     />
                     <input
                       type="range"
@@ -256,15 +256,15 @@ const BackgroundPanel: React.FC<BackgroundPanelProps> = ({ currentBackground, on
 
             <div className="border-t border-gray-200 pt-4 space-y-3">
               <SectionHeader title="Customize Pattern" />
-              <ColorPickerInput
+              <ColorPicker
                 label="Background Color"
-                value={currentBackground.color1}
+                color={currentBackground.color1 || '#FFFFFF'}
                 onChange={(v) => onBackgroundChange({ color1: v })}
               />
               {/* NEW: Pattern Color Picker */}
-              <ColorPickerInput
+              <ColorPicker
                 label="Pattern Color"
-                value={currentBackground.patternColor || '#9C92AC'}
+                color={currentBackground.patternColor || '#9C92AC'}
                 onChange={(v) => updatePatternColor(v)}
               />
               <RangeInput
@@ -298,14 +298,14 @@ const BackgroundPanel: React.FC<BackgroundPanelProps> = ({ currentBackground, on
 
             <div className="border-t border-gray-200 pt-4 space-y-3">
               <SectionHeader title="Customize Texture" />
-              <ColorPickerInput
+              <ColorPicker
                 label="Base Color"
-                value={currentBackground.color1}
+                color={currentBackground.color1 || '#FFFFFF'}
                 onChange={(v) => onBackgroundChange({ color1: v })}
               />
-              <ColorPickerInput
+              <ColorPicker
                 label="Overlay Tint"
-                value={currentBackground.overlayColor || '#000000'}
+                color={currentBackground.overlayColor || '#000000'}
                 onChange={(v) => onBackgroundChange({ overlayColor: v })}
               />
               <RangeInput
@@ -344,34 +344,7 @@ const PresetGrid = ({ title, children }: { title: string, children: React.ReactN
   </div>
 );
 
-const ColorPickerInput = ({ label, value, onChange }: { label: string, value: string, onChange: (val: string) => void }) => (
-  <div className="flex flex-col space-y-2">
-    <span className="text-xs font-semibold text-gray-700">{label}</span>
-    <div className="flex items-center space-x-3 bg-white p-2 rounded-md border border-gray-300 shadow-sm">
-      <div className="w-10 h-10 rounded-md border border-gray-200 overflow-hidden relative flex-shrink-0">
-        <input
-          type="color"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] p-0 m-0 cursor-pointer border-none"
-        />
-      </div>
-      <div className="flex-1">
-        <input
-          type="text"
-          value={value.toUpperCase()}
-          onChange={(e) => {
-            if (/^#[0-9A-F]{0,6}$/i.test(e.target.value)) {
-              onChange(e.target.value);
-            }
-          }}
-          className="w-full text-xs font-mono text-gray-600 border-none focus:ring-0 p-0"
-          placeholder="#000000"
-        />
-      </div>
-    </div>
-  </div>
-);
+// ColorPickerInput replaced by @/components/ui/ColorPicker
 
 interface RangeInputProps {
   label: string;
