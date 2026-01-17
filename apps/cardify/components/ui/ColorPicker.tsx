@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { HexColorPicker } from "react-colorful";
 import { Pipette } from "lucide-react"; // Import icon
 
@@ -20,22 +21,70 @@ interface ColorPickerProps {
 
 export default function ColorPicker({ label, color, onChange, disabled = false, minimal = false }: ColorPickerProps) {
     const [isOpen, setIsOpen] = useState(false);
+    const [coords, setCoords] = useState<{ top?: number; left: number; bottom?: number }>({ left: 0 });
+    const containerRef = useRef<HTMLDivElement>(null);
     const popoverRef = useRef<HTMLDivElement>(null);
+
+    // Calculate position and toggle
+    const togglePicker = () => {
+        if (disabled) return;
+
+        if (!isOpen && containerRef.current) {
+            const rect = containerRef.current.getBoundingClientRect();
+            const POPOVER_HEIGHT = 220; // Estimated height for DECISION only
+            const VIEWPORT_HEIGHT = window.innerHeight;
+
+            // Check if it fits below
+            const spaceBelow = VIEWPORT_HEIGHT - rect.bottom;
+            const shouldFlip = spaceBelow < POPOVER_HEIGHT && rect.top > POPOVER_HEIGHT; // Flip if tight below & space above
+
+            if (shouldFlip) {
+                // FLIP: Position using BOTTOM relative to viewport
+                setCoords({
+                    left: rect.left,
+                    bottom: VIEWPORT_HEIGHT - rect.top + 4, // 4px gap above input
+                    top: undefined
+                });
+            } else {
+                // DEFAULT: Position using TOP relative to viewport
+                setCoords({
+                    left: rect.left,
+                    top: rect.bottom + 4, // 4px gap below input
+                    bottom: undefined
+                });
+            }
+
+            setIsOpen(true);
+        } else {
+            setIsOpen(false);
+        }
+    };
 
     // Close on click outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (popoverRef.current && !popoverRef.current.contains(event.target as Node)) {
+            const target = event.target as Node;
+            if (
+                isOpen &&
+                popoverRef.current &&
+                !popoverRef.current.contains(target) &&
+                containerRef.current &&
+                !containerRef.current.contains(target)
+            ) {
                 setIsOpen(false);
             }
         };
 
         if (isOpen) {
             document.addEventListener("mousedown", handleClickOutside);
+            window.addEventListener("scroll", () => setIsOpen(false), { capture: true }); // Close on ANY scroll (capture)
+            window.addEventListener("resize", () => setIsOpen(false));
         }
 
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
+            window.removeEventListener("scroll", () => setIsOpen(false), { capture: true });
+            window.removeEventListener("resize", () => setIsOpen(false));
         };
     }, [isOpen]);
 
@@ -62,15 +111,40 @@ export default function ColorPicker({ label, color, onChange, disabled = false, 
         }
     };
 
-    const handleClick = (e: React.MouseEvent) => {
-        if (!disabled) setIsOpen(!isOpen);
-    };
+    // Shared Popover Content
+    const PopoverContent = (
+        <div
+            ref={popoverRef}
+            className="fixed z-[9999] bg-white rounded-xl shadow-xl border border-slate-100 p-3 animate-in fade-in zoom-in-95 duration-200 flex flex-col gap-3"
+            style={{
+                top: coords.top,
+                bottom: coords.bottom,
+                left: coords.left,
+                minWidth: '200px'
+            }}
+        >
+            <HexColorPicker
+                color={color}
+                onChange={onChange}
+                style={{ width: "100%", height: "160px" }}
+            />
+            {hasEyeDropper && (
+                <button
+                    onClick={handleEyeDropper}
+                    className="flex items-center justify-center gap-2 w-full py-1.5 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-md transition-colors"
+                >
+                    <Pipette size={14} />
+                    Pick from screen
+                </button>
+            )}
+        </div>
+    );
 
     if (minimal) {
         return (
-            <div className="relative">
+            <div className="relative inline-block" ref={containerRef}>
                 <button
-                    onClick={handleClick}
+                    onClick={togglePicker}
                     className="w-6 h-6 rounded border border-slate-200 shadow-sm flex-shrink-0 relative overflow-hidden group focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                     style={{ backgroundColor: color }}
                     aria-label="Pick color"
@@ -79,41 +153,20 @@ export default function ColorPicker({ label, color, onChange, disabled = false, 
                 >
                     <div className="absolute inset-0 bg-gradient-to-tr from-black/10 to-transparent"></div>
                 </button>
-                {/* Popover */}
-                {isOpen && (
-                    <div
-                        ref={popoverRef}
-                        className="absolute bottom-full left-0 z-50 mb-2 bg-white rounded-xl shadow-xl border border-slate-100 p-3 animate-in fade-in zoom-in-95 duration-200 flex flex-col gap-3"
-                        style={{ minWidth: '200px' }}
-                    >
-                        <HexColorPicker
-                            color={color}
-                            onChange={onChange}
-                            style={{ width: "100%", height: "160px" }}
-                        />
-                        {hasEyeDropper && (
-                            <button
-                                onClick={handleEyeDropper}
-                                className="flex items-center justify-center gap-2 w-full py-1.5 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-md transition-colors"
-                            >
-                                <Pipette size={14} />
-                                Pick from screen
-                            </button>
-                        )}
-                    </div>
-                )}
+                {/* Popover via Portal */}
+                {isOpen && typeof document !== 'undefined' && createPortal(PopoverContent, document.body)}
             </div>
         );
     }
 
     return (
-        <div className="flex flex-col space-y-1.5 w-full relative">
+        <div className="flex flex-col space-y-1.5 w-full relative" ref={containerRef}>
             {label && <label className="text-xs font-semibold text-gray-600">{label}</label>}
 
             <div className={`flex items-center gap-2 border border-slate-200 p-1.5 rounded-lg bg-white transition-all ${disabled ? 'opacity-60 pointer-events-none' : 'hover:border-slate-300'}`}>
                 {/* Visual Swatch (Trigger) */}
                 <button
-                    onClick={() => setIsOpen(!isOpen)}
+                    onClick={togglePicker}
                     className="w-8 h-8 rounded-md border border-slate-200 shadow-sm flex-shrink-0 relative overflow-hidden group focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                     style={{ backgroundColor: color }}
                     aria-label="Pick color"
@@ -149,29 +202,8 @@ export default function ColorPicker({ label, color, onChange, disabled = false, 
                 </div>
             </div>
 
-            {/* Popover */}
-            {isOpen && (
-                <div
-                    ref={popoverRef}
-                    className="absolute top-full left-0 z-50 mt-2 bg-white rounded-xl shadow-xl border border-slate-100 p-3 animate-in fade-in zoom-in-95 duration-200 flex flex-col gap-3"
-                    style={{ minWidth: '200px' }}
-                >
-                    <HexColorPicker
-                        color={color}
-                        onChange={onChange}
-                        style={{ width: "100%", height: "160px" }}
-                    />
-                    {hasEyeDropper && (
-                        <button
-                            onClick={handleEyeDropper}
-                            className="flex items-center justify-center gap-2 w-full py-1.5 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-md transition-colors"
-                        >
-                            <Pipette size={14} />
-                            Pick from screen
-                        </button>
-                    )}
-                </div>
-            )}
+            {/* Popover via Portal */}
+            {isOpen && typeof document !== 'undefined' && createPortal(PopoverContent, document.body)}
         </div>
     );
 }
