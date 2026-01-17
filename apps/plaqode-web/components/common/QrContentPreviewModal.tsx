@@ -11,6 +11,12 @@ import { EmailPreview } from '../qrcodes/preview/EmailPreview';
 import { MessagePreview } from '../qrcodes/preview/MessagePreview';
 import { AppStorePreview } from '../qrcodes/preview/AppStorePreview';
 import { SocialMediaPagePreview } from '../qrcodes/preview/SocialMediaPagePreview';
+import { AudioPreview } from '../qrcodes/preview/AudioPreview';
+import { VideoPreview } from '../qrcodes/preview/VideoPreview';
+import { BusinessPagePreview } from '../qrcodes/preview/BusinessPagePreview';
+import { FeedbackPreview } from '../qrcodes/preview/FeedbackPreview';
+import { CouponPreview } from '../qrcodes/preview/CouponPreview';
+import { ReviewPreview } from '../qrcodes/preview/ReviewPreview';
 import { PreviewProvider } from '../qrcodes/preview/PreviewContext';
 import { EnhancedPreviewModal } from './EnhancedPreviewModal';
 
@@ -59,6 +65,19 @@ export function QrContentPreviewModal({ isOpen, onClose, qrCode }: QrContentPrev
                 return <AppStorePreview data={previewData} />;
             case 'socialmedia':
                 return <SocialMediaPagePreview data={previewData} />;
+            case 'audio':
+                return <AudioPreview data={previewData} />;
+            case 'video':
+                return <VideoPreview data={previewData} />;
+            case 'business':
+                return <BusinessPagePreview data={previewData} />;
+            case 'feedback':
+                return <FeedbackPreview data={previewData} />;
+            case 'coupon':
+                return <CouponPreview data={previewData} />;
+            case 'review':
+                return <ReviewPreview data={previewData} />;
+
             default:
                 return (
                     <div className="flex items-center justify-center h-full bg-slate-100 p-6 text-center">

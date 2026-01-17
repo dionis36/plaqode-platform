@@ -17,6 +17,8 @@ import { BusinessPagePreview } from '../wizard/preview/BusinessPagePreview';
 import { CouponPreview } from '../wizard/preview/CouponPreview';
 import { FeedbackPreview } from '../wizard/preview/FeedbackPreview';
 import { ReviewPreview } from '../wizard/preview/ReviewPreview';
+import { AudioPreview } from '../wizard/preview/AudioPreview';
+import { VideoPreview } from '../wizard/preview/VideoPreview';
 
 interface QrContentPreviewModalProps {
     isOpen: boolean;
@@ -35,37 +37,50 @@ export function QrContentPreviewModal({ isOpen, onClose, qrCode }: QrContentPrev
     const renderPreview = () => {
         const { type, payload } = qrCode;
 
+        // Merge design styles into the payload for preview components that expect 'styles'
+        const previewData = {
+            ...payload,
+            styles: {
+                ...(payload.styles || {}),
+                ...(qrCode.design || {})
+            }
+        };
+
         switch (type.toLowerCase()) {
             case 'menu':
-                return <MenuPreview data={payload} />;
+                return <MenuPreview data={previewData} />;
             case 'vcard':
-                return <VCardPreview data={payload} />;
+                return <VCardPreview data={previewData} />;
             case 'url':
-                return <URLPreview data={payload} />;
+                return <URLPreview data={previewData} />;
             case 'text':
-                return <TextPreview data={payload} />;
+                return <TextPreview data={previewData} />;
             case 'wifi':
-                return <WiFiPreview data={payload} />;
+                return <WiFiPreview data={previewData} />;
             case 'file':
-                return <FilePreview data={payload} />;
+                return <FilePreview data={previewData} />;
             case 'event':
-                return <EventPreview data={payload} />;
+                return <EventPreview data={previewData} />;
             case 'email':
-                return <EmailPreview data={payload} />;
+                return <EmailPreview data={previewData} />;
             case 'message':
-                return <MessagePreview data={payload} />;
+                return <MessagePreview data={previewData} />;
             case 'appstore':
-                return <AppStorePreview data={payload} />;
+                return <AppStorePreview data={previewData} />;
             case 'socialmedia':
-                return <SocialMediaPagePreview data={payload} />;
+                return <SocialMediaPagePreview data={previewData} />;
             case 'business':
-                return <BusinessPagePreview data={payload} />;
+                return <BusinessPagePreview data={previewData} />;
             case 'coupon':
-                return <CouponPreview data={payload} />;
+                return <CouponPreview data={previewData} />;
             case 'feedback':
-                return <FeedbackPreview data={payload} />;
+                return <FeedbackPreview data={previewData} />;
             case 'review':
-                return <ReviewPreview data={payload} />;
+                return <ReviewPreview data={previewData} />;
+            case 'audio':
+                return <AudioPreview data={previewData} />;
+            case 'video':
+                return <VideoPreview data={previewData} />;
             default:
                 return (
                     <div className="flex items-center justify-center h-full p-8 text-center">
