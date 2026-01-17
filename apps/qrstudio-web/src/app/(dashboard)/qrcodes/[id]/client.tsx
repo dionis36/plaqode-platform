@@ -67,43 +67,48 @@ export function QrPageClient({ id }: QrPageClientProps) {
         }
     }
 
+    function getQrOptions(data: QrCodeDetail, width = 300, height = 300) {
+        const baseUrl = process.env.NEXT_PUBLIC_PLATFORM_URL || 'https://plaqode.com';
+        const qrUrl = `${baseUrl}/q/${data.shortcode}`;
+
+        return {
+            width,
+            height,
+            data: qrUrl,
+            margin: data.design.margin ?? 1,
+            qrOptions: {
+                errorCorrectionLevel: 'Q' as const
+            },
+            dotsOptions: {
+                color: data.design.dots?.color ?? '#000000',
+                type: data.design.dots?.style ?? 'square'
+            },
+            cornersSquareOptions: {
+                color: data.design.cornersSquare?.color ?? data.design.dots?.color ?? '#000000',
+                type: data.design.cornersSquare?.style ?? 'square'
+            },
+            cornersDotOptions: {
+                color: data.design.cornersDot?.color ?? data.design.dots?.color ?? '#000000',
+                type: data.design.cornersDot?.style ?? 'square'
+            },
+            backgroundOptions: {
+                color: data.design.background?.color === 'transparent' ? 'rgba(0,0,0,0)' : (data.design.background?.color ?? '#ffffff')
+            },
+            image: data.design.image || undefined,
+            imageOptions: {
+                crossOrigin: 'anonymous',
+                hideBackgroundDots: data.design.imageOptions?.hideBackgroundDots ?? true,
+                imageSize: data.design.imageOptions?.imageSize ?? 0.4,
+                margin: data.design.imageOptions?.margin ?? 10
+            }
+        };
+    }
+
     async function generateQrCode(data: QrCodeDetail) {
         try {
             const QRCodeStyling = (await import('qr-code-styling')).default;
-            const baseUrl = process.env.NEXT_PUBLIC_PLATFORM_URL || 'https://plaqode.com';
-            const qrUrl = `${baseUrl}/q/${data.shortcode}`;
-
-            const qr = new QRCodeStyling({
-                width: 300,
-                height: 300,
-                data: qrUrl,
-                margin: data.design.margin ?? 1,
-                qrOptions: {
-                    errorCorrectionLevel: 'Q'
-                },
-                dotsOptions: {
-                    color: data.design.dots?.color ?? '#000000',
-                    type: data.design.dots?.style ?? 'square'
-                },
-                cornersSquareOptions: {
-                    color: data.design.cornersSquare?.color ?? data.design.dots?.color ?? '#000000',
-                    type: data.design.cornersSquare?.style ?? 'square'
-                },
-                cornersDotOptions: {
-                    color: data.design.cornersDot?.color ?? data.design.dots?.color ?? '#000000',
-                    type: data.design.cornersDot?.style ?? 'square'
-                },
-                backgroundOptions: {
-                    color: data.design.background?.color === 'transparent' ? 'rgba(0,0,0,0)' : (data.design.background?.color ?? '#ffffff')
-                },
-                image: data.design.image || undefined,
-                imageOptions: {
-                    crossOrigin: 'anonymous',
-                    hideBackgroundDots: data.design.imageOptions?.hideBackgroundDots ?? true,
-                    imageSize: data.design.imageOptions?.imageSize ?? 0.4,
-                    margin: data.design.imageOptions?.margin ?? 10
-                }
-            });
+            const options = getQrOptions(data);
+            const qr = new QRCodeStyling(options);
 
             setQrCodeInstance(qr);
         } catch (err) {
@@ -126,13 +131,15 @@ export function QrPageClient({ id }: QrPageClientProps) {
                     URL.revokeObjectURL(url);
                 }
             } else if (format === 'png') {
-                // Force high resolution for PNG
-                const originalOptions = qrCodeInstance._options;
-                qrCodeInstance.update({ width: 2048, height: 2048 });
-                const blob = await qrCodeInstance.getRawData('png');
+                // Generate high-res PNG using a detached instance to avoid UI glitches
+                const QRCodeStyling = (await import('qr-code-styling')).default;
 
-                // Restore original dimensions
-                qrCodeInstance.update({ width: originalOptions.width, height: originalOptions.height });
+                // Create a new instance specifically for download
+                // Use 2048x2048 for high resolution
+                const options = getQrOptions(qrCode, 2048, 2048);
+                const downloadInstance = new QRCodeStyling(options);
+
+                const blob = await downloadInstance.getRawData('png');
 
                 if (blob && blob instanceof Blob) {
                     const url = URL.createObjectURL(blob);
