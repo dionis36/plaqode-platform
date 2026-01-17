@@ -3,17 +3,17 @@
 ## 1. Property Panel
 **File:** `apps/cardify/components/editor/PropertyPanel.tsx`
 
-**Component Used:** `ColorPickerWithSwatch` (Internal Helper Component)
-- Wraps a native `<input type="color" />` and a text input.
+**Component Used:** `ColorPicker` (Unified Component) [x]
+- Replaced `ColorPickerWithSwatch`.
 
 **Usage Locations:**
-- **Text Color:** Label "Color" (line ~380)
-- **Icon Color:** Label "Icon Color" (line ~419, 429)
-- **Icon Background:** Label "Background" (line ~422)
-- **Icon Border:** Label "Border Color" (line ~432)
-- **Shape Fill:** Label "Fill Color" (line ~564)
-- **Shape Stroke/Border:** Label "Stroke Color" / "Border Color" (line ~578)
-- **Shadow:** Label "Shadow Color" (line ~695)
+- [x] **Text Color:** Label "Color" (line ~380)
+- [x] **Icon Color:** Label "Icon Color" (line ~419, 429)
+- [x] **Icon Background:** Label "Background" (line ~422)
+- [x] **Icon Border:** Label "Border Color" (line ~432)
+- [x] **Shape Fill:** Label "Fill Color" (line ~564)
+- [x] **Shape Stroke/Border:** Label "Stroke Color" / "Border Color" (line ~578)
+- [x] **Shadow:** Label "Shadow Color" (line ~695)
 
 ---
 
@@ -23,53 +23,59 @@ The Left Panel in Cardify is composed of multiple sub-panels managed by `EditorS
 ### A. Background Panel
 **File:** `apps/cardify/components/editor/BackgroundPanel.tsx`
 
-**Component Used:** `ColorPickerInput` (Internal Helper Component)
-- Wraps a native `<input type="color" />`.
+**Component Used:** `ColorPicker` (Unified Component) [x]
+- Replaced `ColorPickerInput`.
 
 **Usage Locations:**
-- **Solid Background:** Label "Custom Color" (line ~130)
-- **Gradient Stops:** Inputs in "Color Stops" section (line ~196)
-- **Pattern Background:** Label "Background Color" (line ~259)
-- **Pattern Foreground:** Label "Pattern Color" (line ~265)
-- **Texture Base:** Label "Base Color" (line ~301)
-- **Texture Overlay:** Label "Overlay Tint" (line ~306)
+- [x] **Solid Background:** Label "Custom Color" (line ~130)
+- [x] **Gradient Stops:** Inputs in "Color Stops" section (line ~196)
+- [x] **Pattern Background:** Label "Background Color" (line ~259)
+- [x] **Pattern Foreground:** Label "Pattern Color" (line ~265)
+- [x] **Texture Base:** Label "Base Color" (line ~301)
+- [x] **Texture Overlay:** Label "Overlay Tint" (line ~306)
 
 ### B. QR Code Designer (Sidebar Panel)
 **File:** `apps/cardify/components/editor/QRCodeDesigner.tsx`
 
-**Component Used:** `ColorPicker` (Imported from `@/components/editor/ColorPicker`)
-- **File:** `apps/cardify/components/editor/ColorPicker.tsx`
-- likely wraps native input or a library.
+**Component Used:** `ColorPicker` (Unified Component) [x]
 
 **Usage Locations:**
-- **Foreground:** Label "Foreground Color" (line ~437)
-- **Background:** Label "Background Color" (line ~443)
+- [x] **Foreground:** Label "Foreground Color" (line ~437)
+- [x] **Background:** Label "Background Color" (line ~443)
 
 ---
 
 ## 3. QRTools Pages (Wizard Forms)
 **Files:** `apps/qrstudio-web/src/components/wizard/forms/*.tsx`
-(e.g., `CouponForm.tsx`, `AudioForm.tsx`, `FeedbackForm.tsx`, etc.)
 
-**Component Used:** Native `<input type="color" />`
-- These are implemented directly within the form components, usually paired with a text input.
+**Component Used:** `ColorPicker` (Unified Component) [x]
+- Replaced Native `<input type="color" />`
 
-**Usage Locations (Common across forms):**
-- **Primary Theme Color:** Label "Primary color"
-- **Secondary Theme Color:** Label "Secondary color"
-
-**Example Files:**
-- `apps/qrstudio-web/src/components/wizard/forms/CouponForm.tsx`
-- `apps/qrstudio-web/src/components/wizard/forms/AudioForm.tsx`
-- `apps/qrstudio-web/src/components/wizard/forms/FeedbackForm.tsx`
-- ...and other forms in that directory.
+**Forms Upgraded:**
+- [x] `AppStoreForm.tsx`
+- [x] `AudioForm.tsx`
+- [x] `BusinessPageForm.tsx`
+- [x] `CouponForm.tsx`
+- [x] `EmailForm.tsx`
+- [x] `EventForm.tsx`
+- [x] `FeedbackForm.tsx`
+- [x] `FileForm.tsx`
+- [x] `GalleryForm.tsx`
+- [x] `MenuForm.tsx`
+- [x] `MessageForm.tsx`
+- [x] `ReviewForm.tsx`
+- [x] `SocialMediaPageForm.tsx`
+- [x] `TextForm.tsx` (Note: TextForm might have been renamed or merged, verified existence)
+- [x] `URLForm.tsx`
+- [x] `VCardForm.tsx`
+- [x] `VideoForm.tsx`
+- [x] `WiFiForm.tsx`
 
 ---
 
 ## 4. QRTools QRCode Design Page
 **File:** `apps/qrstudio-web/src/components/wizard/steps/DesignControls.tsx`
+- [x] Uses `HexColorPicker` from `react-colorful` directly (Inline implementation).
 
-**Component Used:** `HexColorPicker` (from `react-colorful` library)
-
-**Usage Locations:**
-- **QR Foreground:** Label "QR Foreground Color" (line ~44)
+**File:** `apps/qrstudio-web/src/app/create/[template]/design/DesignClient.tsx`
+- [x] Upgraded to `ColorPicker` (Unified Component).

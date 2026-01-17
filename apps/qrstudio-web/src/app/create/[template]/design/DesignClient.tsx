@@ -12,6 +12,7 @@ const LiveQrPreview = dynamic(
 import { ArrowLeft, Palette, Grid3x3, Frame, Image as ImageIcon, ChevronDown, CheckCircle2, Copy, Check, AlertTriangle } from 'lucide-react';
 import { PhoneMockup } from '@/components/common/PhoneMockup';
 import { SEO } from '@/components/common/SEO';
+import ColorPicker from '@/components/common/ColorPicker';
 import { env } from "@/lib/env";
 
 const PLATFORM_URL = env.NEXT_PUBLIC_PLATFORM_URL;
@@ -331,43 +332,20 @@ function DesignPageContent({ params }: { params: { template: string } }) {
                                         {/* Foreground Color */}
                                         <div>
                                             <label className="block text-sm font-semibold text-slate-700 mb-2">Dot color</label>
-                                            <div className="flex items-center gap-2 p-3 bg-slate-50 rounded-lg border border-slate-200 min-h-[44px]">
-                                                <input
-                                                    type="color"
-                                                    value={design.dots?.color ?? '#000000'}
-                                                    onChange={(e) => updateDesign({ dots: { ...design.dots, color: e.target.value } })}
-                                                    className="w-10 h-10 rounded border-0 cursor-pointer flex-shrink-0"
-                                                />
-                                                <input
-                                                    type="text"
-                                                    value={design.dots?.color ?? '#000000'}
-                                                    onChange={(e) => updateDesign({ dots: { ...design.dots, color: e.target.value } })}
-                                                    className="flex-1 bg-transparent text-xs sm:text-sm font-mono text-slate-700 focus:outline-none uppercase"
-                                                    placeholder="#000000"
-                                                />
-                                            </div>
+                                            <ColorPicker
+                                                color={design.dots?.color ?? '#000000'}
+                                                onChange={(color) => updateDesign({ dots: { ...design.dots, color } })}
+                                            />
                                         </div>
 
                                         {/* Background Color */}
                                         <div>
                                             <label className="block text-sm font-semibold text-slate-700 mb-2">Background color</label>
-                                            <div className="flex items-center gap-2 p-3 bg-slate-50 rounded-lg border border-slate-200 min-h-[44px]">
-                                                <input
-                                                    type="color"
-                                                    value={design.background?.color ?? '#ffffff'}
-                                                    onChange={(e) => updateDesign({ background: { color: e.target.value } })}
-                                                    className="w-10 h-10 rounded border-0 cursor-pointer flex-shrink-0"
-                                                    disabled={design.background?.color === 'transparent'}
-                                                />
-                                                <input
-                                                    type="text"
-                                                    value={design.background?.color ?? '#ffffff'}
-                                                    onChange={(e) => updateDesign({ background: { color: e.target.value } })}
-                                                    className="flex-1 bg-transparent text-xs sm:text-sm font-mono text-slate-700 focus:outline-none disabled:opacity-50 uppercase"
-                                                    placeholder="#ffffff"
-                                                    disabled={design.background?.color === 'transparent'}
-                                                />
-                                            </div>
+                                            <ColorPicker
+                                                color={design.background?.color ?? '#ffffff'}
+                                                onChange={(color) => updateDesign({ background: { color } })}
+                                                disabled={design.background?.color === 'transparent'}
+                                            />
                                         </div>
                                     </div>
 
@@ -480,30 +458,23 @@ function DesignPageContent({ params }: { params: { template: string } }) {
                                     {/* Corner Square Color */}
                                     <div className="flex-1 pt-4 border-t border-slate-100">
                                         <label className="block text-sm font-semibold text-slate-700 mb-2">Corner square color</label>
-                                        <div className="flex items-center gap-2 p-3 bg-slate-50 rounded-lg border border-slate-200 min-h-[44px]">
-                                            <input
-                                                type="color"
-                                                value={design.cornersSquare?.color ?? design.dots?.color ?? '#000000'}
-                                                onChange={(e) => updateDesign({ cornersSquare: { ...design.cornersSquare, color: e.target.value } })}
-                                                className="w-10 h-10 rounded border-0 cursor-pointer flex-shrink-0"
-                                            />
-                                            <input
-                                                type="text"
-                                                value={design.cornersSquare?.color ?? design.dots?.color ?? '#000000'}
-                                                onChange={(e) => updateDesign({ cornersSquare: { ...design.cornersSquare, color: e.target.value } })}
-                                                className="flex-1 bg-transparent text-xs sm:text-sm font-mono text-slate-700 focus:outline-none uppercase"
-                                                placeholder="#000000"
-                                            />
+                                        <div className="flex items-center gap-2">
+                                            <div className="flex-1">
+                                                <ColorPicker
+                                                    color={design.cornersSquare?.color ?? design.dots?.color ?? '#000000'}
+                                                    onChange={(color) => updateDesign({ cornersSquare: { ...design.cornersSquare, color } })}
+                                                />
+                                            </div>
                                             <button
                                                 type="button"
                                                 onClick={() => copyColor(design.cornersSquare?.color ?? design.dots?.color ?? '#000000', 'square')}
-                                                className="p-1.5 hover:bg-slate-200 rounded transition-colors flex-shrink-0"
+                                                className="p-2 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors flex-shrink-0 h-[44px] w-[44px] flex items-center justify-center bg-white"
                                                 title="Copy color"
                                             >
                                                 {copiedColor === 'square' ? (
-                                                    <Check className="w-4 h-4 text-green-600" />
+                                                    <Check className="w-5 h-5 text-green-600" />
                                                 ) : (
-                                                    <Copy className="w-4 h-4 text-slate-500" />
+                                                    <Copy className="w-5 h-5 text-slate-500" />
                                                 )}
                                             </button>
                                         </div>
@@ -522,30 +493,23 @@ function DesignPageContent({ params }: { params: { template: string } }) {
                                     {/* Corner Dot Color */}
                                     <div className="flex-1 pt-4 border-t border-slate-100">
                                         <label className="block text-sm font-semibold text-slate-700 mb-2">Corner dot color</label>
-                                        <div className="flex items-center gap-2 p-3 bg-slate-50 rounded-lg border border-slate-200 min-h-[44px]">
-                                            <input
-                                                type="color"
-                                                value={design.cornersDot?.color ?? design.dots?.color ?? '#000000'}
-                                                onChange={(e) => updateDesign({ cornersDot: { ...design.cornersDot, color: e.target.value } })}
-                                                className="w-10 h-10 rounded border-0 cursor-pointer flex-shrink-0"
-                                            />
-                                            <input
-                                                type="text"
-                                                value={design.cornersDot?.color ?? design.dots?.color ?? '#000000'}
-                                                onChange={(e) => updateDesign({ cornersDot: { ...design.cornersDot, color: e.target.value } })}
-                                                className="flex-1 bg-transparent text-xs sm:text-sm font-mono text-slate-700 focus:outline-none uppercase"
-                                                placeholder="#000000"
-                                            />
+                                        <div className="flex items-center gap-2">
+                                            <div className="flex-1">
+                                                <ColorPicker
+                                                    color={design.cornersDot?.color ?? design.dots?.color ?? '#000000'}
+                                                    onChange={(color) => updateDesign({ cornersDot: { ...design.cornersDot, color } })}
+                                                />
+                                            </div>
                                             <button
                                                 type="button"
                                                 onClick={() => copyColor(design.cornersDot?.color ?? design.dots?.color ?? '#000000', 'dot')}
-                                                className="p-1.5 hover:bg-slate-200 rounded transition-colors flex-shrink-0"
+                                                className="p-2 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors flex-shrink-0 h-[44px] w-[44px] flex items-center justify-center bg-white"
                                                 title="Copy color"
                                             >
                                                 {copiedColor === 'dot' ? (
-                                                    <Check className="w-4 h-4 text-green-600" />
+                                                    <Check className="w-5 h-5 text-green-600" />
                                                 ) : (
-                                                    <Copy className="w-4 h-4 text-slate-500" />
+                                                    <Copy className="w-5 h-5 text-slate-500" />
                                                 )}
                                             </button>
                                         </div>
