@@ -1,6 +1,5 @@
-'use client';
-
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import { PhoneMockup } from './PhoneMockup';
 
@@ -11,6 +10,12 @@ interface EnhancedPreviewModalProps {
 }
 
 export function EnhancedPreviewModal({ isOpen, onClose, children }: EnhancedPreviewModalProps) {
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
     // Handle escape key
     useEffect(() => {
         const handleEscape = (e: KeyboardEvent) => {
@@ -31,15 +36,20 @@ export function EnhancedPreviewModal({ isOpen, onClose, children }: EnhancedPrev
         };
     }, [isOpen, onClose]);
 
-    if (!isOpen) return null;
+    if (!isOpen || !mounted) return null;
 
-    return (
+    return createPortal(
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fadeIn"
+            className="fixed inset-0 z-[9999] flex items-center justify-center p-4 animate-in fade-in duration-300 ease-out"
             onClick={onClose}
+            style={{
+                backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                backdropFilter: 'blur(4px)',
+                WebkitBackdropFilter: 'blur(4px)'
+            }}
         >
             <div
-                className="relative w-full max-w-md"
+                className="relative w-full max-w-md animate-in zoom-in-95 duration-300 ease-out"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Close button */}
@@ -58,6 +68,7 @@ export function EnhancedPreviewModal({ isOpen, onClose, children }: EnhancedPrev
                     </PhoneMockup>
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 }
