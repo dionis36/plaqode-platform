@@ -25,36 +25,40 @@ export function QrContentPreviewModal({ isOpen, onClose, qrCode }: QrContentPrev
 
     const renderPreview = () => {
         const payload = qrCode.payload || {};
-        const styles = qrCode.design || {}; // Assuming styles might be in design or separate, adjusting based on typical structure
-
-        // Normalize data structure if needed by previews
-        // Most previews expect { ...payload, styles: ... } or just payload
-        // Let's pass the whole object if standard, or construct what they need.
-        // Checking MenuPreview it expects { restaurant_info, content, styles } which matches payload structure usually.
+        // Merge design styles into the payload for preview components that expect 'styles'
+        // This ensures that even if styles are stored in 'design' at the root (which is common for some types),
+        // they are passed down correctly.
+        const previewData = {
+            ...payload,
+            styles: {
+                ...(payload.styles || {}),
+                ...(qrCode.design || {})
+            }
+        };
 
         switch (qrCode.type) {
             case 'menu':
-                return <MenuPreview data={payload} />;
+                return <MenuPreview data={previewData} />;
             case 'vcard':
-                return <VCardPreview data={payload} />;
+                return <VCardPreview data={previewData} />;
             case 'url':
-                return <URLPreview data={payload} />;
+                return <URLPreview data={previewData} />;
             case 'text':
-                return <TextPreview data={payload} />;
+                return <TextPreview data={previewData} />;
             case 'wifi':
-                return <WiFiPreview data={payload} />;
+                return <WiFiPreview data={previewData} />;
             case 'file':
-                return <FilePreview data={payload} />;
+                return <FilePreview data={previewData} />;
             case 'event':
-                return <EventPreview data={payload} />;
+                return <EventPreview data={previewData} />;
             case 'email':
-                return <EmailPreview data={payload} />;
+                return <EmailPreview data={previewData} />;
             case 'message':
-                return <MessagePreview data={payload} />;
+                return <MessagePreview data={previewData} />;
             case 'appstore':
-                return <AppStorePreview data={payload} />;
+                return <AppStorePreview data={previewData} />;
             case 'socialmedia':
-                return <SocialMediaPagePreview data={payload} />;
+                return <SocialMediaPagePreview data={previewData} />;
             default:
                 return (
                     <div className="flex items-center justify-center h-full bg-slate-100 p-6 text-center">

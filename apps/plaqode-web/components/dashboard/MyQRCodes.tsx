@@ -24,6 +24,8 @@ import {
 import { format } from 'date-fns';
 import { UniversalLoader, LoadingBoundary } from '@plaqode-platform/ui';
 
+import { QrContentPreviewModal } from '@/components/common/QrContentPreviewModal';
+
 interface QrItem {
     id: string;
     name: string;
@@ -37,6 +39,8 @@ export function MyQRCodes() {
     const qrStudioUrl = env.NEXT_PUBLIC_QRSTUDIO_URL;
     const [qrcodes, setQrcodes] = useState<QrItem[]>([]);
     const [loading, setLoading] = useState(true);
+    const [previewModalOpen, setPreviewModalOpen] = useState(false);
+    const [qrToPreview, setQrToPreview] = useState<any>(null);
 
     useEffect(() => {
         fetchQrCodes();
@@ -52,6 +56,20 @@ export function MyQRCodes() {
             console.error('Failed to fetch QR codes:', error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handlePreview = async (id: string, e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        try {
+            const response = await qrApi.getById(id);
+            if (response.success && response.data) {
+                setQrToPreview(response.data);
+                setPreviewModalOpen(true);
+            }
+        } catch (error) {
+            console.error('Failed to load QR code for preview:', error);
         }
     };
 
@@ -105,13 +123,22 @@ export function MyQRCodes() {
                         </a>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                         {qrcodes.map((qr) => (
                             <a
                                 key={qr.id}
                                 href={`${qrStudioUrl}/qrcodes/${qr.id}`}
                                 className="group relative bg-gray-50 rounded-lg border border-gray-200 p-4 hover:border-purple-400 hover:shadow-md transition flex flex-col items-center text-center"
                             >
+                                <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <button
+                                        onClick={(e) => handlePreview(qr.id, e)}
+                                        className="p-1.5 bg-white text-purple-600 rounded-lg shadow-sm hover:bg-purple-50 transition-colors border border-gray-100"
+                                        title="Preview"
+                                    >
+                                        <Smartphone className="w-4 h-4" />
+                                    </button>
+                                </div>
                                 <div className="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center mb-3 group-hover:scale-110 transition">
                                     {getTypeIcon(qr.type)}
                                 </div>
@@ -126,6 +153,15 @@ export function MyQRCodes() {
                     </div>
                 )}
             </LoadingBoundary>
+
+            <QrContentPreviewModal
+                isOpen={previewModalOpen}
+                onClose={() => {
+                    setPreviewModalOpen(false);
+                    setQrToPreview(null);
+                }}
+                qrCode={qrToPreview}
+            />
         </div>
     );
 }
