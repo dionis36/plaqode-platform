@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import { ChevronDown, Store, Palette, Clock, MapPin, Globe, Share2, Plus, Trash2 } from 'lucide-react';
 import { ImageUpload } from '@/components/common/ImageUpload';
 import ColorPicker from '@/components/common/ColorPicker';
+import { BusinessHoursInput, BusinessHours } from './BusinessHoursInput';
 
 // Form Value Types
 type FormValues = {
@@ -30,15 +31,8 @@ type FormValues = {
     website?: string;
 
     // Hours (flat structure for form handling)
-    hours: {
-        mon: string;
-        tue: string;
-        wed: string;
-        thu: string;
-        fri: string;
-        sat: string;
-        sun: string;
-    };
+    // Hours
+    hours: BusinessHours;
 
     social_links: { platform: string; url: string }[];
 };
@@ -113,6 +107,44 @@ const SOCIAL_PLATFORMS = [
     { value: 'youtube', label: 'YouTube' },
 ];
 
+const migrateHours = (hours: any): BusinessHours => {
+    const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
+    const defaultHours = {
+        mon: { isOpen: true, start: '09:00', end: '17:00' },
+        tue: { isOpen: true, start: '09:00', end: '17:00' },
+        wed: { isOpen: true, start: '09:00', end: '17:00' },
+        thu: { isOpen: true, start: '09:00', end: '17:00' },
+        fri: { isOpen: true, start: '09:00', end: '17:00' },
+        sat: { isOpen: false, start: '09:00', end: '17:00' },
+        sun: { isOpen: false, start: '09:00', end: '17:00' }
+    };
+
+    if (!hours) return defaultHours;
+
+    const result: any = {};
+    days.forEach(day => {
+        const val = hours[day];
+        if (typeof val === 'string') {
+            // Legacy string data
+            if (val.toLowerCase() === 'closed') {
+                result[day] = { isOpen: false, start: '09:00', end: '17:00' };
+            } else {
+                // If we want to be fancy we could regex match, but safer to default to 9-5 for migration
+                // We'll mark it open though
+                result[day] = { isOpen: true, start: '09:00', end: '17:00' };
+            }
+        } else if (val && typeof val === 'object' && typeof val.isOpen === 'boolean') {
+            // Already new format
+            result[day] = val;
+        } else {
+            // Fallback
+            result[day] = defaultHours[day];
+        }
+    });
+
+    return result as BusinessHours;
+};
+
 export function BusinessPageForm() {
     const { payload, updatePayload, editMode } = useWizardStore();
     const [isMounted, setIsMounted] = useState(false);
@@ -154,15 +186,7 @@ export function BusinessPageForm() {
             email: payload.business?.email || '',
             website: payload.business?.website || '',
 
-            hours: payload.business?.hours || {
-                mon: '9:00 AM - 5:00 PM',
-                tue: '9:00 AM - 5:00 PM',
-                wed: '9:00 AM - 5:00 PM',
-                thu: '9:00 AM - 5:00 PM',
-                fri: '9:00 AM - 5:00 PM',
-                sat: 'Closed',
-                sun: 'Closed'
-            },
+            hours: migrateHours(payload.business?.hours),
 
             social_links: payload.business?.social_links || []
         },
@@ -206,7 +230,8 @@ export function BusinessPageForm() {
             reset({
                 styles: payload.styles || { primary_color: '#2563EB', secondary_color: '#EFF6FF' },
                 platform: 'business',
-                ...payload.business
+                ...payload.business,
+                hours: migrateHours(payload.business?.hours)
             });
         }
         if (!editMode) {
@@ -471,18 +496,11 @@ export function BusinessPageForm() {
                     isOpen={openSections.hours}
                     onToggle={() => toggleSection('hours')}
                 >
-                    <div className="space-y-3 mt-4">
-                        {['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].map((day) => (
-                            <div key={day} className="flex items-center gap-4">
-                                <label className="w-12 text-sm font-bold text-slate-700 uppercase">{day}</label>
-                                <input
-                                    {...register(`hours.${day}` as any)}
-                                    type="text"
-                                    className="flex-1 px-3 py-2 rounded-lg border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none text-sm"
-                                    placeholder="9:00 AM - 5:00 PM"
-                                />
-                            </div>
-                        ))}
+                    <div className="mt-4">
+                        <BusinessHoursInput
+                            value={watch('hours')}
+                            onChange={(val) => setValue('hours', val, { shouldDirty: true, shouldTouch: true })}
+                        />
                     </div>
                 </AccordionSection>
 

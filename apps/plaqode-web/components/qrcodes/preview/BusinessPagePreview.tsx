@@ -58,12 +58,65 @@ export function BusinessPagePreview({ data }: BusinessPagePreviewProps) {
         return `https://${url}`;
     };
 
-    const isOpenNow = (hours: any) => {
-        const today = new Date().toLocaleDateString('en-US', { weekday: 'short' }).toLowerCase();
-        const timeRange = hours?.[today];
-        if (!timeRange || timeRange.toLowerCase() === 'closed') return false;
-        return true;
+    // Helper to format "14:00" -> "2:00 PM" or "14:00"
+    const formatTime = (time: string) => {
+        if (!time) return '';
+        const use24h = bizData.hours?.format === '24h';
+        const [h, m] = time.split(':').map(Number);
+        if (isNaN(h) || isNaN(m)) return time; // Fallback for legacy text
+
+        if (use24h) {
+            return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+        }
+
+        const ampm = h >= 12 ? 'PM' : 'AM';
+        const h12 = h % 12 || 12;
+        return `${h12}:${m.toString().padStart(2, '0')} ${ampm}`;
     };
+
+    const getBusinessStatus = (hours: any) => {
+        const now = new Date();
+        const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+        const todayKey = days[now.getDay()];
+        const todaySchedule = hours?.[todayKey];
+
+        // 1. Legacy string handling
+        if (typeof todaySchedule === 'string') {
+            if (!todaySchedule || todaySchedule.toLowerCase() === 'closed') return 'closed';
+            return 'open'; // Naive open
+        }
+
+        // 2. Structured data handling
+        if (!todaySchedule || !todaySchedule.isOpen) return 'closed';
+
+        // Parse current time in minutes
+        const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+        // Parse start/end
+        const [startH, startM] = (todaySchedule.start || "09:00").split(':').map(Number);
+        const [endH, endM] = (todaySchedule.end || "17:00").split(':').map(Number);
+
+        const startMinutes = startH * 60 + startM;
+        const endMinutes = endH * 60 + endM;
+
+        // Logic
+        if (currentMinutes >= startMinutes && currentMinutes < endMinutes) {
+            // It is currently open. Check if closing soon (within 30 mins)
+            if (endMinutes - currentMinutes <= 30) {
+                return 'closing_soon';
+            }
+            return 'open';
+        }
+
+        // It is closed. Check if opening soon (within 30 mins before open)
+        if (currentMinutes < startMinutes && startMinutes - currentMinutes <= 30) {
+            return 'opening_soon';
+        }
+
+        return 'closed';
+    };
+
+    const status = getBusinessStatus(bizData.hours);
 
     return (
         <div className="absolute inset-0 w-full h-full bg-slate-50 flex flex-col font-sans overflow-hidden">
@@ -154,12 +207,23 @@ export function BusinessPagePreview({ data }: BusinessPagePreviewProps) {
 
                         {/* Status Badge */}
                         <div className="mt-3 flex gap-2">
-                            {isOpenNow(bizData.hours) ? (
-                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border" style={{ backgroundColor: secondaryColor, color: primaryColor, borderColor: `${primaryColor}30` }}>
+                            {status === 'open' && (
+                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border animate-in fade-in" style={{ backgroundColor: secondaryColor, color: primaryColor, borderColor: `${primaryColor}30` }}>
                                     Open Now
                                 </span>
-                            ) : (
-                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">
+                            )}
+                            {status === 'closing_soon' && (
+                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-amber-50 text-amber-600 border-amber-200 animate-pulse">
+                                    Closing Soon
+                                </span>
+                            )}
+                            {status === 'opening_soon' && (
+                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-blue-50 text-blue-600 border-blue-200">
+                                    Opening Soon
+                                </span>
+                            )}
+                            {status === 'closed' && (
+                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-500 border border-slate-200">
                                     Closed
                                 </span>
                             )}
@@ -254,7 +318,11 @@ export function BusinessPagePreview({ data }: BusinessPagePreviewProps) {
                                             {day}
                                         </span>
                                         <div className={`flex-1 mx-4 h-px border-b border-dotted ${isToday ? '' : 'border-slate-200'}`} style={isToday ? { borderColor: `${primaryColor}50` } : {}} />
-                                        <span className={`${isToday ? 'text-slate-900' : 'text-slate-600'}`}>{time || 'Closed'}</span>
+                                        <span className={`${isToday ? 'text-slate-900' : 'text-slate-600'}`}>
+                                            {typeof time === 'string' ? (time || 'Closed') : (
+                                                time?.isOpen ? `${formatTime(time.start)} - ${formatTime(time.end)}` : 'Closed'
+                                            )}
+                                        </span>
                                     </div>
                                 );
                             })}
