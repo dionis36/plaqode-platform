@@ -11,6 +11,26 @@ jobs:
     name: Build & Test
     runs-on: ubuntu-latest
     
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: postgresql://user:password@localhost:5432/test_db
+      JWT_SECRET: supersecret_ci_jwt_key
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
@@ -25,6 +45,12 @@ jobs:
 
       - name: Install Dependencies
         run: npm ci
+
+      - name: Setup Database
+        run: |
+          npx prisma db push --schema=apps/cardify/prisma/schema.prisma
+          npx prisma db push --schema=apps/plaqode-auth/prisma/schema.prisma
+          npx prisma db push --schema=apps/qrstudio-api/prisma/schema.prisma
 
       - name: Lint, Test, and Build
         # Running lint and build (tests added later)
