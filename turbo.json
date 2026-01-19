@@ -17,7 +17,8 @@
         "RESEND_API_KEY",
         "NEXT_PUBLIC_GA_ID",
         "NEXT_PUBLIC_ALLOWED_REDIRECT_HOSTS",
-        "JWT_SECRET"
+        "JWT_SECRET",
+        "PEXELS_API_KEY"
     ],
     "tasks": {
         "build": {
