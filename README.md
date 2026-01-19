@@ -29,7 +29,7 @@
 
 ## ⚡ Overview
 
-**Plaqode** is a high-performance monorepo engine powering a suite of digital connectivity tools. From creating contactless digital business cards to generating advanced dynamic QR codes with analytics, Plaqode unifies these experiences under a single, secure identity layer.
+**Plaqode** is a high-performance monorepo engine powering a suite of digital connectivity tools. From creating business cards to generating advanced dynamic QR codes with analytics, Plaqode unifies these experiences under a single, secure identity layer.
 
 Deployed live at **[plaqode.com](https://plaqode.com)**.
 
