@@ -5,7 +5,7 @@
     "types": "./src/index.tsx",
     "license": "MIT",
     "scripts": {
-        "lint": "eslint ."
+        "lint": "eslint src --ext .ts,.tsx"
     },
     "peerDependencies": {
         "next": "^14",

@@ -424,7 +424,7 @@ export function AudioForm() {
                                     </div>
 
                                     <p className="text-xs text-slate-400 mt-3 leading-relaxed max-w-xs mx-auto">
-                                        We're upgrading our storage infrastructure.<br />
+                                        We&apos;re upgrading our storage infrastructure.<br />
                                         Please use a <strong>Direct URL</strong> or <strong>Streaming Links</strong> below.
                                     </p>
                                 </div>

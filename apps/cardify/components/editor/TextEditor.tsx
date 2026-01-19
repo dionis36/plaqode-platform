@@ -32,6 +32,37 @@ const TextEditor: React.FC<TextEditorProps> = ({
     const [text, setText] = useState(nodeDef.props.text);
     const { props } = nodeDef;
 
+    // --- 3. Handlers ---
+
+    // Handle blur: this is the primary commit mechanism
+    const handleBlur = useCallback(() => {
+        // Remove trailing new lines which can cause layout issues after commit
+        const finalContent = text.replace(/\n+$/, '');
+        onStopEditing(finalContent);
+    }, [text, onStopEditing]);
+
+    // Handle keydown: commit on Enter (unless shift is pressed for multiline)
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        // Commit text on Enter, unless Shift+Enter is pressed for a new line
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault(); // Prevent default behavior (new line in textarea)
+            textareaRef.current?.blur(); // Triggers handleBlur, which commits the text
+        }
+    };
+
+    // --- 4. Focus and Initial Setup ---
+
+    useEffect(() => {
+        if (textareaRef.current) {
+            // Immediately focus the textarea
+            textareaRef.current.focus();
+
+            // Set the selection range to the end of the text for better UX
+            const len = textareaRef.current.value.length;
+            textareaRef.current.setSelectionRange(len, len);
+        }
+    }, []);
+
     // --- 1. Calculate HTML element position and style ---
 
     // Use Konva's internal client rectangle to get the bounding box, which includes
@@ -92,36 +123,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
         zIndex: 100, // Ensure it sits above the canvas
     };
 
-    // --- 3. Handlers ---
 
-    // Handle blur: this is the primary commit mechanism
-    const handleBlur = useCallback(() => {
-        // Remove trailing new lines which can cause layout issues after commit
-        const finalContent = text.replace(/\n+$/, '');
-        onStopEditing(finalContent);
-    }, [text, onStopEditing]);
-
-    // Handle keydown: commit on Enter (unless shift is pressed for multiline)
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-        // Commit text on Enter, unless Shift+Enter is pressed for a new line
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault(); // Prevent default behavior (new line in textarea)
-            textareaRef.current?.blur(); // Triggers handleBlur, which commits the text
-        }
-    };
-
-    // --- 4. Focus and Initial Setup ---
-
-    useEffect(() => {
-        if (textareaRef.current) {
-            // Immediately focus the textarea
-            textareaRef.current.focus();
-
-            // Set the selection range to the end of the text for better UX
-            const len = textareaRef.current.value.length;
-            textareaRef.current.setSelectionRange(len, len);
-        }
-    }, []);
 
 
     // --- 5. Render ---

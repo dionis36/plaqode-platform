@@ -406,7 +406,7 @@ export default function TemplateEditPage({ params }: { params: { id: string } })
                                 </div>
                                 <p className="text-sm text-blue-800 leading-relaxed">
                                     <strong className="font-semibold block mb-1">Advanced Editing</strong>
-                                    To edit template layers, specific colors, and deeper structure, please switch to the "JSON Editor" tab.
+                                    To edit template layers, specific colors, and deeper structure, please switch to the &quot;JSON Editor&quot; tab.
                                 </p>
                             </div>
                         </div>

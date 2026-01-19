@@ -370,7 +370,7 @@ export function CouponForm() {
                                     className="w-full px-3 sm:px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none text-base min-h-[44px]"
                                     placeholder="https://myshop.com/redeem"
                                 />
-                                <p className="text-xs text-slate-500 mt-1">If provided, a "Redeem Now" button will appear.</p>
+                                <p className="text-xs text-slate-500 mt-1">If provided, a &quot;Redeem Now&quot; button will appear.</p>
                             </div>
                         </div>
                     </div>

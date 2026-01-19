@@ -78,6 +78,8 @@ export default function ExportModal({
         return () => document.removeEventListener("keydown", handleEsc);
     }, [isOpen, onClose]);
 
+    const { isAdmin } = useAuth();
+
     if (!isOpen) return null;
 
     const handleExport = async () => {
@@ -161,7 +163,7 @@ export default function ExportModal({
 
 
 
-    const { isAdmin } = useAuth();
+
 
     return (
         <Modal

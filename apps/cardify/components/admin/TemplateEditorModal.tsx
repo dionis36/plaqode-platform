@@ -195,7 +195,7 @@ export default function TemplateEditorModal({ template, isOpen, onClose, onSave 
                             <div className="bg-blue-50 border border-blue-200 rounded-md p-4 mt-6">
                                 <p className="text-sm text-blue-800">
                                     <strong>Note:</strong> To edit template layers, colors, and structure,
-                                    switch to the "Advanced (JSON)" tab.
+                                    switch to the &quot;Advanced (JSON)&quot; tab.
                                 </p>
                             </div>
                         </div>

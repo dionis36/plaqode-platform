@@ -169,6 +169,14 @@ const config = {
         "fromEnvVar": null,
         "value": "windows",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "linux-musl-openssl-3.0.x"
+      },
+      {
+        "fromEnvVar": null,
+        "value": "debian-openssl-3.0.x"
       }
     ],
     "previewFeatures": [],
@@ -176,7 +184,7 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../../.env",
+    "rootEnvPath": null,
     "schemaEnvPath": "../../../.env"
   },
   "relativePath": "../../../prisma",
@@ -195,8 +203,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/client\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel QrCode {\n  id        String   @id @default(cuid())\n  shortcode String   @unique\n  type      String\n  name      String\n  payload   Json\n  design    Json\n  userId    String // Platform user ID (no foreign key)\n  isActive  Boolean  @default(true)\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n  scans     Scan[]\n\n  @@index([userId])\n  @@index([shortcode])\n  @@index([createdAt])\n}\n\nmodel Scan {\n  id        String   @id @default(cuid())\n  qrCodeId  String\n  shortcode String? // Denormalized for faster queries\n  scannedAt DateTime @default(now())\n  country   String?\n  city      String?\n  device    String?\n  os        String?\n  browser   String?\n  ipHash    String?\n  referrer  String? // Referrer URL\n  qrCode    QrCode   @relation(fields: [qrCodeId], references: [id], onDelete: Cascade)\n\n  @@index([qrCodeId])\n  @@index([scannedAt])\n  @@index([shortcode])\n}\n",
-  "inlineSchemaHash": "f1ea6c2c2e731891341d8399cda208b1f175255568d49165d2447f7b63e6e8d7",
+  "inlineSchema": "generator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../src/generated/client\"\n  binaryTargets = [\"native\", \"linux-musl-openssl-3.0.x\", \"debian-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel QrCode {\n  id        String   @id @default(cuid())\n  shortcode String   @unique\n  type      String\n  name      String\n  payload   Json\n  design    Json\n  userId    String // Platform user ID (no foreign key)\n  isActive  Boolean  @default(true)\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n  scans     Scan[]\n\n  @@index([userId])\n  @@index([shortcode])\n  @@index([createdAt])\n}\n\nmodel Scan {\n  id        String   @id @default(cuid())\n  qrCodeId  String\n  shortcode String? // Denormalized for faster queries\n  scannedAt DateTime @default(now())\n  country   String?\n  city      String?\n  device    String?\n  os        String?\n  browser   String?\n  ipHash    String?\n  referrer  String? // Referrer URL\n  qrCode    QrCode   @relation(fields: [qrCodeId], references: [id], onDelete: Cascade)\n\n  @@index([qrCodeId])\n  @@index([scannedAt])\n  @@index([shortcode])\n}\n",
+  "inlineSchemaHash": "f1b6a3286a156c79e6584015960581571c31203f0f86dcdacce61af1f310ccef",
   "copyEngine": true
 }
 config.dirname = '/'

@@ -178,6 +178,17 @@ export default function PropertyPanel({
   shouldFocus, // New prop
   onFocusHandled // New prop
 }: PropertyPanelProps) {
+  // --- Focus Handling ---
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (shouldFocus && textAreaRef.current && onFocusHandled) {
+      textAreaRef.current.focus();
+      textAreaRef.current.select(); // Optional: select all text for easy replacement
+      onFocusHandled();
+    }
+  }, [shouldFocus, onFocusHandled]);
+
   if (!node) {
     return (
       <div className="property-panel flex w-full lg:w-80 lg:border-l bg-gray-50 flex-col items-center justify-center h-full text-gray-400">
@@ -302,16 +313,7 @@ export default function PropertyPanel({
     </SectionContainer>
   );
 
-  // --- Focus Handling ---
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
-  useEffect(() => {
-    if (shouldFocus && textAreaRef.current && onFocusHandled) {
-      textAreaRef.current.focus();
-      textAreaRef.current.select(); // Optional: select all text for easy replacement
-      onFocusHandled();
-    }
-  }, [shouldFocus, onFocusHandled]);
 
   // 3. Text Style
   if (node.type === "Text") {

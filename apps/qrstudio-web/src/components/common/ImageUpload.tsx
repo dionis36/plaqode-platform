@@ -59,8 +59,8 @@ export function ImageUpload({
             Promise.all(promises)
                 .then(base64s => {
                     onUpload(base64s);
-                }) // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                .catch(err => {
+                })
+                .catch(() => {
                     setError('Failed to process some files');
                 });
 

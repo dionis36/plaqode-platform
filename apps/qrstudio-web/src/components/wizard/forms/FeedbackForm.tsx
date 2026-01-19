@@ -355,7 +355,7 @@ export function FeedbackForm() {
                                 placeholder="owner@restaurant.com"
                             />
                             <p className="text-xs text-slate-500 mt-1">
-                                We'll send customer feedback directly to this email address.
+                                We&apos;ll send customer feedback directly to this email address.
                             </p>
                             {errors.email && <span className="text-xs text-red-500 mt-1">{errors.email.message}</span>}
                         </div>

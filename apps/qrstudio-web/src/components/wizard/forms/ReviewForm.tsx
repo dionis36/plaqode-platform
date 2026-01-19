@@ -364,7 +364,7 @@ export function ReviewForm() {
                                 placeholder="https://g.page/r/..."
                             />
                             <p className="text-xs text-slate-500 mt-1">
-                                Tip: Search for your business on Google Maps, click "Share", then copy link.
+                                Tip: Search for your business on Google Maps, click &quot;Share&quot;, then copy link.
                             </p>
                         </div>
 

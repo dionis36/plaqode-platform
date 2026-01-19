@@ -15,7 +15,7 @@ export default function TemplateGrid({ templates }: TemplateGridProps) {
         </div>
         <h3 className="text-lg font-semibold text-gray-900">No templates found</h3>
         <p className="text-gray-500 max-w-sm mt-2">
-          Try adjusting your search or filters to find what you're looking for.
+          Try adjusting your search or filters to find what you&apos;re looking for.
         </p>
       </div>
     );

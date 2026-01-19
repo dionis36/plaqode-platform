@@ -504,7 +504,7 @@ export function VideoForm() {
                                 </div>
 
                                 <p className="text-xs text-slate-400 mt-3 leading-relaxed max-w-xs mx-auto">
-                                    We're upgrading our video infrastructure.<br />
+                                    We&apos;re upgrading our video infrastructure.<br />
                                     Please use a <strong>YouTube</strong> or <strong>Vimeo</strong> URL above for now.
                                 </p>
                             </div>

@@ -41,7 +41,7 @@ export default async function RedirectPage({ params }: RedirectPageProps) {
                     <div className="text-6xl">🔍</div>
                     <h1 className="text-3xl font-bold text-slate-900">QR Code Not Found</h1>
                     <p className="text-slate-600">
-                        This QR code doesn't exist or has been deactivated.
+                        This QR code doesn&apos;t exist or has been deactivated.
                     </p>
                 </div>
             </div>
