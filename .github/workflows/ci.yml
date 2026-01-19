@@ -30,6 +30,12 @@ jobs:
       DATABASE_URL: postgresql://user:password@localhost:5432/test_db
       JWT_SECRET: supersecret_ci_jwt_key
       NEXT_PUBLIC_APP_URL: http://localhost:3000
+      NEXT_PUBLIC_PLATFORM_URL: http://localhost:3000
+      NEXT_PUBLIC_QRSTUDIO_URL: http://localhost:3001
+      NEXT_PUBLIC_CARDIFY_URL: http://localhost:3002
+      NEXT_PUBLIC_AUTH_SERVICE_URL: http://localhost:3003
+      NEXT_PUBLIC_QRSTUDIO_API_URL: http://localhost:3005
+      AUTH_SERVICE_INTERNAL_URL: http://localhost:3003
 
     steps:
       - name: Checkout Repo

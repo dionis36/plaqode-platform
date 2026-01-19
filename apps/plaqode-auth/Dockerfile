@@ -30,6 +30,7 @@ RUN apk -U add openssl
 # 5. Copy only what we need from the Builder
 # We assume 'dist' is where the compiled JS lives
 COPY --from=builder /app/apps/plaqode-auth/dist ./dist
+COPY --from=builder /app/apps/plaqode-auth/src/generated ./dist/src/generated
 COPY --from=builder /app/apps/plaqode-auth/package.json ./package.json
 COPY --from=builder /app/apps/plaqode-auth/keys ./keys
 COPY --from=builder /app/apps/plaqode-auth/prisma ./prisma
