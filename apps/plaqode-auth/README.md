@@ -1,61 +1,43 @@
-# Auth Service
+# Plaqode Auth (`apps/plaqode-auth`)
 
-Central authentication service for the Plaqode Platform.
+**Plaqode Auth** is the centralized authentication service (SSO) for the Plaqode Platform. It handles user identity, JWT issuance, and session management for all applications.
 
-## Features
+## 🛠️ Technology Stack
+- **Runtime**: Node.js (v20+)
+- **Framework**: Fastify
+- **Validation**: Zod
+- **Database**: PostgreSQL (via Prisma)
+- **Auth**: RS256 Asymetric JWT (Keys required)
 
-- JWT-based authentication (RS256)
-- User registration and login
-- Role-based access control
-- Product access management
-- Refresh token rotation
-- httpOnly cookie-based sessions
+## 🚀 Getting Started
 
-## Setup
-
-1. Install dependencies:
-```bash
-npm install
-```
-
-2. Set up environment variables:
+### 1. Environment Setup
 ```bash
 cp .env.example .env
-# Edit .env with your configuration
 ```
+This service runs on **Port 3003**.
 
-3. Generate RSA keys:
+### 2. Generate Keys (Critical)
+You must generate the RSA Keypair for signing tokens:
 ```bash
 npm run keys:generate
 ```
+This creates `keys/private.pem` and `keys/public.pem`.
 
-4. Set up database:
+### 3. Database Migration
 ```bash
-npm run prisma:migrate
+npx prisma migrate dev
 ```
 
-5. Run development server:
+### 4. Run Service
 ```bash
 npm run dev
+# OR from root
+npm run plaqode-auth:dev
 ```
+Runs on **http://localhost:3003**.
 
-## API Endpoints
-
-### Authentication
-- `POST /auth/signup` - User registration
-- `POST /auth/login` - User login
-- `POST /auth/logout` - User logout
-- `POST /auth/refresh` - Refresh access token
-- `GET /auth/me` - Get current user
-
-### Admin
-- `GET /auth/users` - List all users (admin only)
-- `POST /auth/users/:id/roles` - Assign role (admin only)
-- `POST /auth/users/:id/products` - Grant product access (admin only)
-
-### Public
-- `GET /auth/public-key` - Get JWT public key
-
-## Environment Variables
-
-See `.env.example` for all available configuration options.
+## 🔌 API Endpoints
+- `POST /auth/register`: Create new user.
+- `POST /auth/login`: Issue HttpOnly cookie.
+- `GET /auth/me`: Verify session and return user profile.

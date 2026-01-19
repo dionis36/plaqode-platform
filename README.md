@@ -1,140 +1,115 @@
-# Plaqode Platform Monorepo
+<div align="center">
+  <h1>Plaqode</h1>
+  <p>
+    <strong>The Unified Ecosystem for Digital Identity & Dynamic QR Solutions</strong>
+  </p>
 
-Welcome to the **Plaqode Platform Repository**. This monorepo houses the complete ecosystem for **Plaqode**, a next-generation platform for digital connectivity solutions in Tanzania. It unifies multiple interconnected services including digital business cards, dynamic QR code management, and a central identity system.
+  <p>
+    <a href="https://plaqode.com">
+      <img src="https://img.shields.io/badge/Live-plaqode.com-blue?style=for-the-badge&logo=vercel" alt="Live Deployment">
+    </a>
+  </p>
 
-## 🏗️ Architecture Overview
+  <p>
+    <a href="https://nextjs.org"><img src="https://img.shields.io/badge/Next.js-14%2F15-black?style=flat-square&logo=next.js" alt="Next.js"></a>
+    <a href="https://tailwindcss.com"><img src="https://img.shields.io/badge/Tailwind-v4-38B2AC?style=flat-square&logo=tailwind-css" alt="Tailwind"></a>
+    <a href="https://turbo.build"><img src="https://img.shields.io/badge/Turborepo-Monorepo-EF4444?style=flat-square&logo=turborepo" alt="Turborepo"></a>
+    <a href="https://www.typescriptlang.org"><img src="https://img.shields.io/badge/TypeScript-Strict-3178C6?style=flat-square&logo=typescript" alt="TypeScript"></a>
+    <a href="https://prisma.io"><img src="https://img.shields.io/badge/Prisma-ORM-2D3748?style=flat-square&logo=prisma" alt="Prisma"></a>
+  </p>
 
-The platform is architected as a **high-performance monorepo** using **Turborepo** and **npm workspaces**. It consists of distinct, specialized applications that communicate to provide a seamless user experience.
+  <p>
+    <a href="#-the-ecosystem"><strong>Explore the Apps</strong></a> ·
+    <a href="./docs/DEPLOYMENT.md"><strong>Deployment Details</strong></a> ·
+    <a href="./docs/ARCHITECTURE.md"><strong>Architecture</strong></a>
+  </p>
+</div>
 
-### 📦 Applications
+<br />
 
-| Application | Service Name | Path | Tech Stack | Port | Description |
-|:--- |:--- |:--- |:--- |:--- |:--- |
-| **Plaqode Web** | `@plaqode-platform/plaqode-web` | `apps/plaqode-web` | Next.js 15, Tailwind v4, Framer Motion | **3000** | The main landing page, user dashboard, and central hub for the ecosystem. |
-| **QR Studio Web** | `@plaqode-platform/qrstudio-web` | `apps/qrstudio-web` | Next.js 14, React, Tailwind | **3001** | Dedicated frontend interface for advanced QR code generation and analytics. |
-| **Cardify** | `@plaqode-platform/cardify` | `apps/cardify` | Next.js 14, Prisma, PostgreSQL | **3002** | Digital Business Card platform allowing users to create, customize, and share smart profiles. |
-| **Plaqode Auth** | `@plaqode-platform/plaqode-auth` | `apps/plaqode-auth` | Fastify, Node.js, Prisma | **3003** | Centralized Authentication Service (SSO). Handles user identity, JWT issuance, and session management for all apps. |
-| **QR Studio API** | `@plaqode-platform/qrstudio-api` | `apps/qrstudio-api` | Fastify, Node.js, Prisma | **3005** | High-performance API backend for generating, tracking, and managing dynamic QR codes. |
+## ⚡ Overview
 
----
+**Plaqode** is a high-performance monorepo engine powering a suite of digital connectivity tools. From creating contactless digital business cards to generating advanced dynamic QR codes with analytics, Plaqode unifies these experiences under a single, secure identity layer.
 
-## 🛠️ Technology Stack
-
-We use a modern, robust, and scalable technology stack:
-
-*   **Frontend Ecosystem:**
-    *   **Frameworks:** Next.js (v14/v15), React 18/19
-    *   **Styling:** TailwindCSS (v3 & v4), PostCSS
-    *   **Animations:** GSAP, Framer Motion
-    *   **State Management:** React Context, custom hooks
-
-*   **Backend & Data:**
-    *   **Runtime:** Node.js (v20+)
-    *   **Framework:** Fastify (High performance)
-    *   **Database:** PostgreSQL
-    *   **ORM:** Prisma (Isolated clients per microservice)
-    *   **Auth:** JWT (JSON Web Tokens), HttpOnly Cookies
-
-*   **DevOps & Tooling:**
-    *   **Monorepo:** Turborepo
-    *   **Package Manager:** npm workspaces
-    *   **Language:** TypeScript (Strict mode)
+Deployed live at **[plaqode.com](https://plaqode.com)**.
 
 ---
 
-## 🚀 Getting Started
+## 🌍 The Ecosystem
 
-Follow these instructions to set up the Plaqode Platform locally.
-
-### 1. Prerequisites
-
-Ensure you have the following installed:
-*   **Node.js** (v20.0.0 or higher) - [Download](https://nodejs.org/)
-*   **npm** (comes with Node.js)
-*   **PostgreSQL** (Running locally or a cloud URL)
-
-### 2. Installation
-
-Clone the repository and install dependencies from the root directory:
-
-```bash
-git clone https://github.com/your-username/plaqode-platform.git
-cd plaqode-platform
-npm install
-```
-
-### 3. Environment Setup
-
-Access the `apps` directory and configure environment variables for each service.
-**Note:** You must set up a `.env` file in each application folder (`apps/cardify`, `apps/plaqode-auth`, etc.).
-
-Example `.env` structure for **Apps** (refer to `.env.example` in each folder):
-
-```env
-# Database
-DATABASE_URL="postgresql://user:password@localhost:5432/my_db?schema=public"
-
-# Auth
-NEXT_PUBLIC_AUTH_SERVICE_URL="http://localhost:3003"
-NEXT_PUBLIC_PLATFORM_URL="http://localhost:3000"
-```
-
-### 4. Database Setup
-
-To prevent conflicts, each service generates its own isolated Prisma Client.
-
-```bash
-# Generate clients for all services
-npx turbo run prisma:generate
-
-# OR migrate databases individually
-cd apps/cardify && npx prisma migrate dev
-cd apps/plaqode-auth && npx prisma migrate dev
-cd apps/qrstudio-api && npx prisma migrate dev
-```
-
-### 5. Running the Platform
-
-You can run the entire platform concurrently with a single command from the root:
-
-```bash
-npm run dev
-```
-
-This will start:
-*   **Plaqode Web** at [http://localhost:3000](http://localhost:3000)
-*   **QR Studio Web** at [http://localhost:3001](http://localhost:3001)
-*   **Cardify** at [http://localhost:3002](http://localhost:3002)
-*   **Auth Service** at [http://localhost:3003](http://localhost:3003)
-*   **QR API** at [http://localhost:3005](http://localhost:3005)
+| Application | Description | Stack Highlights | Port |
+| :--- | :--- | :--- | :--- |
+| **[🟦 Cardify](./apps/cardify)** | **Digital Business Card Builder**<br>Drag-and-drop editor for professional profiles. | Next.js 14, `react-konva`, Framer Motion | `:3002` |
+| **[🟩 QR Studio](./apps/qrstudio-web)** | **Dynamic QR Creator**<br>Generate, customize, and track QR codes. | Next.js 14, React Context, Tailwind | `:3001` |
+| **[⬛ Plaqode Web](./apps/plaqode-web)** | **Central Dashboard**<br>The main landing and unification hub. | Next.js 15, Tailwind v4, Radix UI | `:3000` |
+| **[🔐 Auth Service](./apps/plaqode-auth)** | **SSO & Identity**<br>Secure, stateless authentication provider. | Fastify, Zod, RS256 JWTs | `:3003` |
+| **[⚙️ QR API](./apps/qrstudio-api)** | **QR Engine**<br>High-speed generation & analytics tracking. | Fastify, Sharp, GeoIP, NanoID | `:3005` |
 
 ---
 
-## 👨‍💻 Development Workflow
+## 🚀 Key Features
 
-### Adding Dependencies
+### 🎨 Visual Excellence
+- **Unified Design System**: Shared UI packages (`@plaqode-platform/ui`) ensure consistent branding across apps.
+- **Modern Interactions**: Powered by **Framer Motion** and **GSAP** for fluid, app-like experiences.
+- **Responsive Builders**: Intricate WYSIWYG editors that work flawlessly on mobile and desktop.
 
-Since this is a monorepo, use the workspace flag to install packages:
+### 🛡️ Robust Architecture
+- **Stateless Authentication**: Uses RS256 Keypairs. The Auth Service signs tokens, and apps verify them independently ensuring zero-latency auth checks.
+- **Type Safety**: End-to-end TypeScript coverage with shared configurations.
+- **Isolated Databases**: Each service manages its own schema, preventing monolithic bottlenecks.
 
-```bash
-# Install to valid workspace (e.g., cardify)
-npm install lucide-react -w apps/cardify
-
-# Install to root (shared dev dependencies)
-npm install turbo -w root
-```
-
-### Prisma Workflow
-
-We use **Isolated Prisma Clients** to manage multiple database schemas in a single repo.
-*   **Cardify Client:** Located in `apps/cardify/lib/generated/client`
-*   **Auth Client:** Located in `apps/plaqode-auth/src/generated/client`
-*   **QR API Client:** Located in `apps/qrstudio-api/src/generated/client`
-
-**Always** restart the development server after running `prisma generate`.
+### 🛠️ Developer Experience
+- **One Command Start**: `npm run dev` boots the entire platform.
+- **Cached Builds**: Turborepo ensures you never build the same code twice.
+- **Standardized Configs**: Shared ESLint, TypeScript, and Tailwind settings.
 
 ---
 
-## 📄 License
+## 💻 Quick Start
 
-This project is proprietary software. All rights reserved by **Plaqode**.
+Ready to dive in?
+
+1.  **Clone & Install**
+    ```bash
+    git clone https://github.com/plaqode/plaqode-platform.git
+    npm install
+    ```
+
+2.  **Configure Environment**
+    See **[DEPLOYMENT.md](./docs/DEPLOYMENT.md)** for exact configurations.
+    ```bash
+    cp apps/plaqode-auth/.env.example apps/plaqode-auth/.env
+    # ... (repeat for other apps)
+    ```
+
+3.  **Ignite the Engine**
+    ```bash
+    # Generate database clients and auth keys
+    npx turbo run prisma:generate
+    npm run keys:generate --workspace=apps/plaqode-auth
+
+    # specific launch
+    npm run dev
+    ```
+
+👉 **[Read the Full Contributing Guide](./CONTRIBUTING.md)** for detailed setup instructions.
+
+---
+
+## 📚 Documentation
+
+- **[System Architecture](./docs/ARCHITECTURE.md)**: Diagrams and deep dive into the Auth flow.
+- **[Deployment](./docs/DEPLOYMENT.md)**: Production secrets and Vercel/Fly.io configurations.
+- **[CI/CD Pipelines](./docs/CI_CD.md)**: GitHub Actions and build workflows.
+
+---
+
+<div align="center">
+  <p>
+    Built with ❤️ by <strong>Dio</strong>
+  </p>
+  <p>
+    Proprietary Software © 2026
+  </p>
+</div>

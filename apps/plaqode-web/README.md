@@ -1,51 +1,30 @@
-# Platform Web
+# Plaqode Web (`apps/plaqode-web`)
 
-Next.js platform for Plaqode - unified dashboard for Cardify and QR Studio.
+**Plaqode Web** is the main landing page and dashboard for the Plaqode ecosystem. It serves as the entry point for users to navigate between Cardify and QR Studio.
 
-## Features
+## 🛠️ Technology Stack
+- **Framework**: Next.js 15
+- **Styling**: TailwindCSS v4
+- **Animation**: Framer Motion / GSAP
+- **Components**: Radix UI
 
-- **Public Pages**: Landing page with Plaqode branding
-- **Authentication**: Login/signup with JWT cookies
-- **User Dashboard**: Product overview and access management
-- **Admin Panel**: User management (admin-only)
-- **Role-based Access**: Public, User, and Admin levels
+## 🚀 Getting Started
 
-## Setup
+### 1. Environment Setup
+```bash
+cp .env.example .env
+```
+Runs on **Port 3000**.
 
-1. Install dependencies:
+### 2. Install Dependencies
 ```bash
 npm install
 ```
 
-2. Set up environment variables:
-```bash
-cp .env.example .env.local
-# Edit .env.local with your configuration
-```
-
-3. Run development server:
+### 3. Run Development Server
 ```bash
 npm run dev
+# OR from root
+npm run plaqode-web:dev
 ```
-
-The app will run on: **http://localhost:3000**
-
-## Structure
-
-- `/` - Public landing page
-- `/auth/login` - Login page
-- `/app` - User dashboard (protected)
-- `/app/admin` - Admin panel (admin-only)
-
-## Authentication Levels
-
-- **Public**: Anyone can access (/, /about, /services)
-- **User**: Requires login (/app, /app/cardify, /app/qrstudio)
-- **Admin**: Requires admin role (/app/admin)
-
-## Integration
-
-The platform integrates with:
-- **Auth Service** (port 3001) - JWT authentication
-- **Cardify** (port 3002) - Business card creator
-- **QR Studio** (port 3004) - QR code generator
+Runs on **http://localhost:3000**.
