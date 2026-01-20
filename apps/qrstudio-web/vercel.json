@@ -1,6 +1,6 @@
 {
     "framework": "nextjs",
     "git": {
-        "ignoreCommand": "exit 1"
+        "ignoreCommand": "if [ \"$VERCEL_GIT_COMMIT_REF\" == \"feature/marquee-ems\" ]; then exit 0; else exit 1; fi"
     }
 }
