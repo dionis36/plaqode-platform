@@ -4,7 +4,7 @@ This document outlines the phased development strategy for the **Marquee Event M
 
 ---
 
-## Phase 1: Foundation & Infrastructure (Weeks 1-2)
+## Phase 1: Foundation & Infrastructure (Weeks 1-2) - DONE ✅
 **Goal:** Establish the technical groundwork, project structure, and core integration points within the monorepo.
 
 ### Deliverables
@@ -23,10 +23,9 @@ This document outlines the phased development strategy for the **Marquee Event M
     - Integrate `plaqode-auth` with `marquee-web` (Client-side auth state).
     - Implement JWT validation middleware in `marquee-api`.
     - Verify end-to-end login flow: Login on Auth App -> Redirect to Marquee -> Valid Session.
-- [ ] **UI Design System Setup**
+- [x] **UI Design System Setup**
     - Configure `packages/ui` support in `marquee-web`.
     - Setup Tailwind CSS and global styles.
-    - Create basic layout shell (Sidebar, Header, Footer).
 
 ---
 
@@ -39,6 +38,9 @@ This document outlines the phased development strategy for the **Marquee Event M
     - API: `GET /events` & `GET /events/:id` (List/Details).
     - API: `PUT /events/:id` (Update) & `DELETE /events/:id` (Cancel).
     - Implement file upload service for Event Banners/Images (using `fastify-multipart`).
+- [ ] **Frontend: Application Shell**
+    - Create basic layout shell (Sidebar, Header, Footer).
+    - Implement Responsive Navigation.
 - [ ] **Frontend: Organizer Dashboard**
     - **Create Event Wizard:** Multi-step form (Details, Date/Time, Location, Media).
     - **My Events:** List view of created events with status indicators (Draft/Published).
