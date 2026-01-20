@@ -97,7 +97,7 @@ export default function AnalyticsPage({ params }: { params: { id: string } }) {
 
     // Prepare chart data
     const scansOverTimeData = Object.entries(analytics.scansByDay).map(([date, count]) => ({
-        date: new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+        date: new Date(date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
         scans: count,
     }));
 
@@ -202,7 +202,7 @@ export default function AnalyticsPage({ params }: { params: { id: string } }) {
                 </div>
 
                 {/* Browser & Geographic */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 gap-8">
                     {/* Browser Breakdown */}
                     <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
                         <h2 className="text-lg font-semibold text-slate-900 mb-4">Browser Distribution</h2>
@@ -231,37 +231,6 @@ export default function AnalyticsPage({ params }: { params: { id: string } }) {
                             </div>
                         ) : (
                             <p className="text-center text-slate-500 py-8">No browser data available</p>
-                        )}
-                    </div>
-
-                    {/* Geographic Distribution */}
-                    <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-                        <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
-                            <Globe className="w-5 h-5 text-green-600" />
-                            Geographic Distribution
-                        </h2>
-                        {analytics.countryBreakdown.length > 0 ? (
-                            <div className="space-y-3">
-                                {analytics.countryBreakdown.slice(0, 5).map((item, index) => {
-                                    const percentage = (item.count / analytics.totalScans) * 100;
-                                    return (
-                                        <div key={index}>
-                                            <div className="flex items-center justify-between mb-1">
-                                                <span className="text-sm font-medium text-slate-700">{item.country}</span>
-                                                <span className="text-sm text-slate-600">{item.count} ({percentage.toFixed(1)}%)</span>
-                                            </div>
-                                            <div className="w-full bg-slate-100 rounded-full h-2">
-                                                <div
-                                                    className="h-2 rounded-full bg-green-600"
-                                                    style={{ width: `${percentage}%` }}
-                                                />
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        ) : (
-                            <p className="text-center text-slate-500 py-8">No geographic data available</p>
                         )}
                     </div>
                 </div>

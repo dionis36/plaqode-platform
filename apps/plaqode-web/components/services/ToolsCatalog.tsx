@@ -55,13 +55,13 @@ export default function ToolsCatalog() {
                         <a
                             key={idx}
                             href={tool.href}
-                            className="group bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-2xl hover:bg-white/10 transition-colors"
+                            className="group bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-2xl md:hover:bg-white/10 transition-colors"
                         >
-                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-secondary/10 to-primary/10 flex items-center justify-center mb-4 text-light group-hover:from-secondary group-hover:to-primary group-hover:text-white transition-all duration-300">
+                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-secondary/10 to-primary/10 flex items-center justify-center mb-4 text-light md:group-hover:from-secondary md:group-hover:to-primary md:group-hover:text-white transition-all duration-300">
                                 <tool.icon size={24} />
                             </div>
                             <h3 className="font-semibold text-white text-sm sm:text-base mb-1">{tool.name}</h3>
-                            <p className="text-xs text-light/50 hidden sm:block group-hover:text-light/80 transition-colors">
+                            <p className="text-xs text-light/50 hidden sm:block md:group-hover:text-light/80 transition-colors">
                                 {tool.desc}
                             </p>
                         </a>

@@ -11,7 +11,7 @@ export function ScansChart({ data }: ScansChartProps) {
         <ResponsiveContainer width="100%" height={300}>
             <LineChart data={data}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                <XAxis dataKey="date" stroke="#64748b" />
+                <XAxis dataKey="date" stroke="#64748b" minTickGap={30} tick={{ fontSize: 12 }} />
                 <YAxis stroke="#64748b" />
                 <Tooltip
                     contentStyle={{
